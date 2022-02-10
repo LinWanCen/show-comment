@@ -1,0 +1,9 @@
+
+**/.idea/*
+!**/.idea/runConfigurations
+!**/.idea/scopes
+
+.gradle
+build
+
+.qodana

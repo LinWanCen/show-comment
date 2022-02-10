@@ -1,0 +1,50 @@
+plugins {
+    id 'org.jetbrains.intellij' version '1.3.1'
+    id 'java'
+}
+
+group 'io.github.linwancen'
+version '1.0.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version = ideaVersion
+    plugins = ['java']
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+}
+
+patchPluginXml {
+    // The performance of 2019.3 has been greatly improved.
+    // change plugins without restarting the IDE in 2020.1.
+    sinceBuild = '201.1'
+    untilBuild = ''
+    changeNotes = """
+      Code optimization | 代码优化
+      """
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishPlugin {
+    token = System.getenv("PUBLISH_TOKEN")
+}

@@ -1,0 +1,37 @@
+<idea-plugin>
+    <id>io.github.linwancen.show-comment</id>
+    <name>Show Comment</name>
+    <vendor email="1498425439@qq.com" url="https://github.com/LinWanCen/show-comment">林万程</vendor>
+
+    <description><![CDATA[
+    English Note:
+    <ul>
+      <li>Show javadoc comments for calling methods at the end of the line.
+      <li>Show javadoc comments in the Project view Tree structure.
+    </ul>
+    Chinese Note:
+    <ul>
+      <li>在行末显示调用方法的文档注释。
+      <li>在结构树显示文档注释。
+    </ul>
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <editor.linePainter implementation="io.github.linwancen.plugin.comment.LineEnd" />
+        <projectViewNodeDecorator implementation="io.github.linwancen.plugin.comment.Tree"/>
+
+        <applicationConfigurable parentId="tools"
+                                 instance="io.github.linwancen.plugin.comment.settings.AppSettingsConfigurable"
+                                 id="io.github.linwancen.plugin.comment.settings.AppSettingsConfigurable"
+                                 displayName="Show Comment"/>
+        <applicationService serviceImplementation="io.github.linwancen.plugin.comment.settings.AppSettingsState"/>
+    </extensions>
+
+    <actions>
+    </actions>
+</idea-plugin>
