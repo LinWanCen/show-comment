@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '1.0.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '1.1.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 apply plugin: 'java'
 
@@ -37,7 +37,7 @@ patchPluginXml {
     sinceBuild = '201.1'
     untilBuild = ''
     changeNotes = """
-      Code optimization | 代码优化
+      1.1 Add end-of-line text color settings | 添加行末文本颜色配置
       """
 }
 

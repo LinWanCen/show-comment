@@ -1,12 +1,9 @@
 package io.github.linwancen.plugin.comment;
 
 import com.intellij.lang.java.JavaLanguage;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
@@ -15,8 +12,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.Gray;
-import com.intellij.ui.JBColor;
 import io.github.linwancen.plugin.comment.settings.AppSettingsState;
 import io.github.linwancen.plugin.comment.utils.CommentFactory;
 import io.github.linwancen.plugin.comment.utils.PsiDocCommentUtils;
@@ -25,15 +20,16 @@ import io.github.linwancen.plugin.comment.utils.SkipUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.Collections;
 
 public class LineEnd extends EditorLinePainter {
+
     @Override
     public @Nullable Collection<LineExtensionInfo> getLineExtensions(@NotNull Project project,
                                                                      @NotNull VirtualFile file, int lineNumber) {
-        if (!AppSettingsState.getInstance().showLineEndComment) {
+        AppSettingsState settings = AppSettingsState.getInstance();
+        if (!settings.showLineEndComment) {
             return null;
         }
         if (DumbService.isDumb(project)) {
@@ -46,7 +42,7 @@ public class LineEnd extends EditorLinePainter {
         if (comment == null) {
             return null;
         }
-        LineExtensionInfo info = new LineExtensionInfo(" //" + comment, getNormalAttributes());
+        LineExtensionInfo info = new LineExtensionInfo(" //" + comment, settings.lineEndTextAttr);
         return Collections.singletonList(info);
     }
 
@@ -169,19 +165,5 @@ public class LineEnd extends EditorLinePainter {
             return code.resolve();
         }
         return null;
-    }
-
-    private static TextAttributes getNormalAttributes() {
-        EditorColorsManager colorsManager = EditorColorsManager.getInstance();
-        TextAttributes attributes = colorsManager.getGlobalScheme()
-                .getAttributes(DefaultLanguageHighlighterColors.LINE_COMMENT);
-        if (attributes == null || attributes.getForegroundColor() == null) {
-            JBColor jbColor = new JBColor(() -> Gray._183);
-            return new TextAttributes(jbColor, null, null, null, Font.ITALIC);
-        } else {
-            // Sometimes it becomes the same color as the end of the line char, so use italic to distinguish
-            attributes.setFontType(Font.ITALIC);
-        }
-        return attributes;
     }
 }
