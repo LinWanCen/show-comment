@@ -2,13 +2,11 @@ package io.github.linwancen.plugin.comment.settings;
 
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.options.Configurable;
-import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class AppSettingsConfigurable implements Configurable {
 
@@ -17,7 +15,7 @@ public class AppSettingsConfigurable implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "Show Comment.";
+        return "Show Comment Global.";
     }
 
     @Override
@@ -37,7 +35,13 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
-        modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndTextAttr.getForegroundColor());
+        if (EditorColorsManager.getInstance().isDarkEditor()) {
+            modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndColorDark);
+        } else {
+            modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndColorBright);
+        }
+        modified |= !mySettingsComponent.getLineEndInclude().equals(settings.lineEndInclude);
+        modified |= !mySettingsComponent.getLineEndExclude().equals(settings.lineEndExclude);
         return modified;
     }
 
@@ -46,15 +50,17 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
-        settings.lineEndTextAttr.setForegroundColor(jbColor());
-    }
-
-    private JBColor jbColor() {
         if (EditorColorsManager.getInstance().isDarkEditor()) {
-            return new JBColor(new Color(98, 151, 85), mySettingsComponent.getLineEndColor());
+            settings.lineEndColorDark = mySettingsComponent.getLineEndColor();
         } else {
-            return new JBColor(mySettingsComponent.getLineEndColor(), Gray._140);
+            settings.lineEndColorBright = mySettingsComponent.getLineEndColor();
         }
+        JBColor jbColor = new JBColor(settings.lineEndColorBright, settings.lineEndColorDark);
+        settings.lineEndTextAttr.setForegroundColor(jbColor);
+        settings.lineEndInclude = mySettingsComponent.getLineEndInclude();
+        settings.lineEndExclude = mySettingsComponent.getLineEndExclude();
+        settings.lineEndIncludeArray = SplitUtils.split(settings.lineEndInclude);
+        settings.lineEndExcludeArray = SplitUtils.split(settings.lineEndExclude);
     }
 
     @Override
@@ -62,7 +68,13 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
-        mySettingsComponent.setLineEndColor(settings.lineEndTextAttr.getForegroundColor());
+        if (EditorColorsManager.getInstance().isDarkEditor()) {
+            mySettingsComponent.setLineEndColor(settings.lineEndColorDark);
+        } else {
+            mySettingsComponent.setLineEndColor(settings.lineEndColorBright);
+        }
+        mySettingsComponent.setLineEndInclude(settings.lineEndInclude);
+        mySettingsComponent.setLineEndExclude(settings.lineEndExclude);
     }
 
     @Override

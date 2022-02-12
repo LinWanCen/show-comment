@@ -53,14 +53,14 @@ public class LineEnd extends EditorLinePainter {
         }
         if (psiElement instanceof PsiClass) {
             PsiClass psiClass = (PsiClass) psiElement;
-            if (SkipUtils.skip(psiClass)) {
+            if (SkipUtils.skip(psiClass, psiClass.getProject())) {
                 return null;
             }
             return CommentFactory.fromSrcOrByteCode(psiClass);
         }
         if (psiElement instanceof PsiMethod) {
             PsiMethod psiMethod = (PsiMethod) psiElement;
-            if (SkipUtils.skip(psiMethod.getContainingClass())) {
+            if (SkipUtils.skip(psiMethod.getContainingClass(), psiMethod.getProject())) {
                 return null;
             }
             return PsiMethodCommentFactory.from(psiMethod);

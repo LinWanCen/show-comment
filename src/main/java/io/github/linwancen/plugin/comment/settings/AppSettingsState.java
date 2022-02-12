@@ -15,16 +15,23 @@ import java.awt.*;
 
 @State(
         name = "io.github.linwancen.plugin.comment.settings.AppSettingsState",
-        storages = @Storage("ShowCommentPlugin.xml")
+        storages = @Storage("ShowCommentGlobal.xml")
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
     public boolean showLineEndComment = true;
     public boolean showTreeComment = true;
 
-    private static final JBColor lineEndColor = new JBColor(new Color(98, 151, 85), Gray._140);
-    public final TextAttributes lineEndTextAttr = new TextAttributes(lineEndColor,
+    @SuppressWarnings("all")
+    public Color lineEndColorBright = new Color(98, 151, 85);
+    public Color lineEndColorDark = Gray._140;
+    public final TextAttributes lineEndTextAttr = new TextAttributes(new JBColor(lineEndColorBright, lineEndColorDark),
             null, null, null, Font.ITALIC);
+
+    public String lineEndInclude = "";
+    public String lineEndExclude = "java.";
+    public String[] lineEndIncludeArray = {};
+    public String[] lineEndExcludeArray = {"java."};
 
     public static AppSettingsState getInstance() {
         return ApplicationManager.getApplication().getService(AppSettingsState.class);
