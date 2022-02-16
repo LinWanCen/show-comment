@@ -30,8 +30,19 @@ public class PsiMethodCommentFactory {
             return superDoc;
         }
 
+
+        PsiClass clazz = psiMethod.getContainingClass();
+        if (clazz == null) {
+            return null;
+        }
+
+        // constructor
+        if (psiMethod.isConstructor()) {
+            return clazz.getDocComment();
+        }
+
         // get/set/is - PropertyDescriptor getReadMethod() getWriteMethod()
-        return propMethodComment(psiMethod, psiMethod.getContainingClass());
+        return propMethodComment(psiMethod, clazz);
     }
 
     @Nullable
@@ -48,9 +59,6 @@ public class PsiMethodCommentFactory {
 
     @Nullable
     public static PsiDocComment propMethodComment(PsiMethod psiMethod, PsiClass psiClass) {
-        if (psiClass == null) {
-            return null;
-        }
         String name = psiMethod.getName();
         if (name.length() > 3 && (name.startsWith("get") || name.startsWith("set"))) {
             name = name.substring(3);

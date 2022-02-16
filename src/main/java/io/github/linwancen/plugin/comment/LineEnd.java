@@ -9,7 +9,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.comment.settings.AppSettingsState;
@@ -65,15 +64,18 @@ public class LineEnd extends EditorLinePainter {
             }
             return PsiMethodCommentFactory.from(psiMethod);
         }
+        if (psiElement instanceof PsiField) {
+            PsiField psiField = (PsiField) psiElement;
+            if (SkipUtils.skip(psiField.getContainingClass(), psiField.getProject())) {
+                return null;
+            }
+            return CommentFactory.fromSrcOrByteCode(psiField);
+        }
         return null;
     }
 
     protected static final String[] KEYS = {
-            "if",
-            "for",
-            "new",
             "=",
-            "return",
     };
 
     private static @Nullable PsiElement psiElementFrom(FileViewProvider viewProvider, int lineNumber) {
@@ -116,17 +118,35 @@ public class LineEnd extends EditorLinePainter {
             startOffset = 0;
         }
         PsiElement element = viewProvider.findElementAt(offset, JavaLanguage.INSTANCE);
-        if (!(element instanceof PsiIdentifier)) {
+        PsiIdentifier psiIdentifier = psiIdentifier(endOffset, element);
+        if (psiIdentifier == null) {
             return null;
         }
-        return parentElementOf(element, startOffset, endOffset);
+        return parentElementOf(psiIdentifier, startOffset, endOffset);
     }
 
     @Nullable
-    private static PsiElement parentElementOf(PsiElement element, int startOffset, int endOffset) {
+    private static PsiIdentifier psiIdentifier(int endOffset, PsiElement element) {
+        if (element == null) {
+            return null;
+        }
+        while (!(element instanceof PsiIdentifier)) {
+            element = PsiTreeUtil.nextVisibleLeaf(element);
+            if (element == null) {
+                return null;
+            }
+            if (element.getTextRange().getEndOffset() > endOffset) {
+                return null;
+            }
+        }
+        return (PsiIdentifier) element;
+    }
+
+    @Nullable
+    private static PsiElement parentElementOf(PsiElement psiIdentifier, int startOffset, int endOffset) {
         // method call
         PsiMethodCallExpression call =
-                PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class, false, startOffset);
+                PsiTreeUtil.getParentOfType(psiIdentifier, PsiMethodCallExpression.class, false, startOffset);
         if (call != null) {
             // skip double comment when method call in new line:
             // someObject // someMethodComment
@@ -141,6 +161,21 @@ public class LineEnd extends EditorLinePainter {
             }
         }
         // new
+        PsiElement newPsiElement = newMethodOrClass(psiIdentifier, startOffset);
+        if (newPsiElement != null) {
+            return newPsiElement;
+        }
+        // ::/class/field
+        PsiReference psiReference = parentPsiReference(psiIdentifier, endOffset);
+        if (psiReference != null) {
+            return psiReference.resolve();
+        }
+        return null;
+    }
+
+    @Nullable
+    private static PsiElement newMethodOrClass(PsiElement element, int startOffset) {
+        // new and Class should same line
         PsiNewExpression newExp = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false, startOffset);
         if (newExp != null) {
             PsiMethod psiMethod = newExp.resolveMethod();
@@ -152,17 +187,20 @@ public class LineEnd extends EditorLinePainter {
                 return classReference.resolve();
             }
         }
-        // ::
-        PsiMethodReferenceExpression ref =
-                PsiTreeUtil.getParentOfType(element, PsiMethodReferenceExpression.class, false, startOffset);
-        if (ref != null) {
-            return ref.resolve();
+        return null;
+    }
+
+    @Nullable
+    private static PsiReference parentPsiReference(PsiElement element, int endOffset) {
+        PsiElement parent;
+        while ((parent = element.getParent()) instanceof PsiReference) {
+            if (parent.getTextRange().getEndOffset() > endOffset) {
+                break;
+            }
+            element = parent;
         }
-        // SomeClass // SomeClassComment
-        PsiJavaCodeReferenceElementImpl code =
-                PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElementImpl.class, false, startOffset);
-        if (code != null) {
-            return code.resolve();
+        if (element instanceof PsiReference) {
+            return (PsiReference) element;
         }
         return null;
     }

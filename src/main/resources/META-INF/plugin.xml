@@ -8,12 +8,12 @@
     <ul>
       <li>Show javadoc comments in the Project view Tree structure.
       <li>Show javadoc comments for calling methods at the end of the line.
-      <li>One of the above features<br>
-          can be turned off in the settings -> Tools -> Show Comment Global.
-      <li>The color of end-of-line comments<br>
-          can be modified in the settings -> Tools -> Show Comment Global.
-      <li>End-of-line comment class prefix filter<br>
-          can be modified in settings -> Tools -> Show Comment Project.
+      <li>One of the above features can be turned off in<br>
+          settings -> Tools -> Show Comment Global
+      <li>The color of end-of-line comments can be modified in <br>
+          settings -> Tools -> Show Comment Global
+      <li>End-of-line comment class prefix filter can be modified in<br>
+          settings -> Tools -> Show Comment Project
     </ul>
     Chinese Note:
     <ul>
