@@ -16,7 +16,7 @@ public class ResolveElementRightToLeftUtils {
         if (startOffset == endOffset) {
             return null;
         }
-        PsiElement element = viewProvider.findElementAt(endOffset, JavaLanguage.INSTANCE);
+        PsiElement element = viewProvider.findElementAt(endOffset - 1, JavaLanguage.INSTANCE);
         if (element == null) {
             return null;
         }
