@@ -28,6 +28,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public final TextAttributes lineEndTextAttr = new TextAttributes(new JBColor(lineEndColorBright, lineEndColorDark),
             null, null, null, Font.ITALIC);
 
+    public boolean findElementRightToLeft = true;
     public String lineEndInclude = "";
     public String lineEndExclude = "java.";
     public String[] lineEndIncludeArray = {};

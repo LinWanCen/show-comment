@@ -15,12 +15,13 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JBCheckBox showTreeComment = new JBCheckBox("Show tree comment ");
     private final JBCheckBox showLineEndComment = new JBCheckBox("Show line end comment ");
     private final ColorPanel lineEndColor = new ColorPanel();
+    private final JBCheckBox findElementRightToLeft = new JBCheckBox("Find element right to left");
 
     public AppSettingsComponent() {
         myMainPanel = FormBuilder.createFormBuilder()
                 .addComponent(showPanel(), 1)
                 .addComponent(colorPanel(), 1)
-                .addComponent(commonLineEndFilter(FormBuilder.createFormBuilder()), 1)
+                .addComponent(lineEndFilterPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -42,6 +43,14 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
                 .getPanel();
         color.setBorder(IdeBorderFactory.createTitledBorder("Color"));
         return color;
+    }
+
+    @NotNull
+    protected JPanel lineEndFilterPanel() {
+        FormBuilder formBuilder = FormBuilder.createFormBuilder()
+                .addComponent(findElementRightToLeft)
+                .addSeparator();
+        return commonLineEndFilter(formBuilder);
     }
 
     public JPanel getPanel() {
@@ -75,5 +84,13 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public void setLineEndColor(Color color) {
         lineEndColor.setSelectedColor(color);
+    }
+
+    public boolean getFindElementRightToLeft() {
+        return findElementRightToLeft.isSelected();
+    }
+
+    public void setFindElementRightToLeft(boolean newStatus) {
+        findElementRightToLeft.setSelected(newStatus);
     }
 }

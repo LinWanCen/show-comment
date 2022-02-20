@@ -6,22 +6,22 @@
     <description><![CDATA[
     English Note:
     <ul>
-      <li>Show javadoc comments in the Project view Tree structure.
-      <li>Show javadoc comments for calling methods at the end of the line.
+      <li>Show javadoc comments at the Project view Tree structure.
+      <li>Show javadoc comments at the end-of-line.
       <li>One of the above features can be turned off in<br>
           settings -> Tools -> Show Comment Global
-      <li>The color of end-of-line comments can be modified in <br>
+      <li>Font color of end-of-line comments can be modified in <br>
           settings -> Tools -> Show Comment Global
-      <li>End-of-line comment class prefix filter can be modified in<br>
+      <li>Class name prefix filter of end-of-line comment can be modified in<br>
           settings -> Tools -> Show Comment Project
     </ul>
     Chinese Note:
     <ul>
-      <li>在结构树显示 当前节点 的文档注释。
-      <li>在行末尾显示 调用方法 的文档注释。
+      <li>在结构树显示 文档注释。
+      <li>在行末尾显示 文档注释。
       <li>可以在设置中 关闭 上面其中一个功能。
-      <li>可以在设置中 修改 行末注释的颜色。
-      <li>可以在设置中 修改 行末注释类前缀过滤。
+      <li>可以在设置中 修改 行末注释 的字体颜色。
+      <li>可以在设置中 修改 行末注释 的类名前缀过滤。
     </ul>
     ]]></description>
 

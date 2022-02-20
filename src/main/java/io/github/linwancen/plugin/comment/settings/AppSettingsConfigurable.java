@@ -40,6 +40,7 @@ public class AppSettingsConfigurable implements Configurable {
         } else {
             modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndColorBright);
         }
+        modified |= mySettingsComponent.getFindElementRightToLeft() != settings.findElementRightToLeft;
         modified |= !mySettingsComponent.getLineEndInclude().equals(settings.lineEndInclude);
         modified |= !mySettingsComponent.getLineEndExclude().equals(settings.lineEndExclude);
         return modified;
@@ -57,6 +58,7 @@ public class AppSettingsConfigurable implements Configurable {
         }
         JBColor jbColor = new JBColor(settings.lineEndColorBright, settings.lineEndColorDark);
         settings.lineEndTextAttr.setForegroundColor(jbColor);
+        settings.findElementRightToLeft = mySettingsComponent.getFindElementRightToLeft();
         settings.lineEndInclude = mySettingsComponent.getLineEndInclude();
         settings.lineEndExclude = mySettingsComponent.getLineEndExclude();
         settings.lineEndIncludeArray = SplitUtils.split(settings.lineEndInclude);
@@ -73,6 +75,7 @@ public class AppSettingsConfigurable implements Configurable {
         } else {
             mySettingsComponent.setLineEndColor(settings.lineEndColorBright);
         }
+        mySettingsComponent.setFindElementRightToLeft(settings.findElementRightToLeft);
         mySettingsComponent.setLineEndInclude(settings.lineEndInclude);
         mySettingsComponent.setLineEndExclude(settings.lineEndExclude);
     }

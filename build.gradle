@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '1.3.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '1.4.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 apply plugin: 'java'
 
@@ -41,6 +41,7 @@ patchPluginXml {
       <li>1.1 Add end-of-line text color settings 添加行末文本颜色配置
       <li>1.2 Add end-of-line comment class prefix filter settings 添加行末注释类前缀配置
       <li>1.3 support class in tree, constructor and field type in line end 支持 class 树节点、构造方法和字段的行末注释
+      <li>1.4 Find element right to left for end-of-line comment 从右往左查找行末注释对象
     </ul>
       """
 }
