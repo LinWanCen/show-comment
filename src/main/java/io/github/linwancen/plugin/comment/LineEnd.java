@@ -53,6 +53,9 @@ public class LineEnd extends EditorLinePainter {
         }
         int startOffset = document.getLineStartOffset(lineNumber);
         int endOffset = document.getLineEndOffset(lineNumber);
+        if (startOffset == endOffset) {
+            return null;
+        }
         if (AppSettingsState.getInstance().findElementRightToLeft) {
             return ResolveElementRightToLeftUtils.resolveElement(viewProvider, startOffset, endOffset);
         }

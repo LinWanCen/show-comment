@@ -11,6 +11,22 @@ public class ResolveElementUtils {
     @Nullable
     public static PsiElement resolveElementOf(PsiElement element, PsiElement psiIdentifier,
                                               int startOffset, int endOffset) {
+        PsiElement newPsiElement = resolveElementForExecutable(element, startOffset, endOffset);
+        if (newPsiElement != null) {
+            return newPsiElement;
+        }
+        PsiReference psiReference = parentPsiReference(psiIdentifier, endOffset);
+        if (psiReference != null) {
+            return psiReference.resolve();
+        }
+        return null;
+    }
+
+    @Nullable
+    private static PsiElement resolveElementForExecutable(PsiElement element, int startOffset, int endOffset) {
+        if (element == null) {
+            return null;
+        }
         // method call
         PsiMethodCallExpression call =
                 PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class, false, startOffset);
@@ -27,21 +43,6 @@ public class ResolveElementUtils {
                 return null;
             }
         }
-        // new
-        PsiElement newPsiElement = newMethodOrClass(element, startOffset);
-        if (newPsiElement != null) {
-            return newPsiElement;
-        }
-        // ::/class/field
-        PsiReference psiReference = parentPsiReference(psiIdentifier, endOffset);
-        if (psiReference != null) {
-            return psiReference.resolve();
-        }
-        return null;
-    }
-
-    @Nullable
-    private static PsiElement newMethodOrClass(PsiElement element, int startOffset) {
         // new and Class should same line
         PsiNewExpression newExp = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class, false, startOffset);
         if (newExp != null) {
@@ -57,8 +58,14 @@ public class ResolveElementUtils {
         return null;
     }
 
+    /**
+     * ::/class/field
+     */
     @Nullable
     private static PsiReference parentPsiReference(PsiElement element, int endOffset) {
+        if (element == null) {
+            return null;
+        }
         PsiElement parent;
         while ((parent = element.getParent()) instanceof PsiReference) {
             if (parent.getTextRange().getEndOffset() > endOffset) {

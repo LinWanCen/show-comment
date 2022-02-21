@@ -18,8 +18,8 @@ public class ResolveElementLeftToRightUtils {
     };
 
     @Nullable
-    public static PsiElement resolveElement(FileViewProvider viewProvider, Document document, int startOffset,
-                                            int endOffset) {
+    public static PsiElement resolveElement(FileViewProvider viewProvider, Document document,
+                                            int startOffset, int endOffset) {
         String text = document.getText(new TextRange(startOffset, endOffset));
         int offset = 0;
         for (String s : KEYS) {
@@ -47,24 +47,18 @@ public class ResolveElementLeftToRightUtils {
             startOffset = 0;
         }
         PsiElement element = viewProvider.findElementAt(offset, JavaLanguage.INSTANCE);
-        PsiIdentifier psiIdentifier = psiIdentifier(endOffset, element);
-        if (psiIdentifier == null) {
-            return null;
-        }
+        PsiIdentifier psiIdentifier = psiIdentifier(element, endOffset);
         return ResolveElementUtils.resolveElementOf(psiIdentifier, psiIdentifier, startOffset, endOffset);
     }
 
     @Nullable
-    private static PsiIdentifier psiIdentifier(int endOffset, PsiElement element) {
+    private static PsiIdentifier psiIdentifier(PsiElement element, int endOffset) {
         if (element == null) {
             return null;
         }
         while (!(element instanceof PsiIdentifier)) {
             element = PsiTreeUtil.nextVisibleLeaf(element);
-            if (element == null) {
-                return null;
-            }
-            if (element.getTextRange().getEndOffset() > endOffset) {
+            if (element == null || element.getTextRange().getEndOffset() > endOffset) {
                 return null;
             }
         }

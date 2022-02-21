@@ -13,10 +13,8 @@ public class ResolveElementRightToLeftUtils {
 
     @Nullable
     public static PsiElement resolveElement(FileViewProvider viewProvider, int startOffset, int endOffset) {
-        if (startOffset == endOffset) {
-            return null;
-        }
-        PsiElement element = viewProvider.findElementAt(endOffset - 1, JavaLanguage.INSTANCE);
+        // End is always white, can not -1 because @see class.name need it
+        PsiElement element = viewProvider.findElementAt(endOffset, JavaLanguage.INSTANCE);
         if (element == null) {
             return null;
         }
@@ -26,6 +24,10 @@ public class ResolveElementRightToLeftUtils {
                 break;
             }
             element = identifier;
+        }
+        // if in prev line, set it null.
+        if (identifier != null && identifier.getTextRange().getStartOffset() < startOffset) {
+            identifier = null;
         }
         return ResolveElementUtils.resolveElementOf(element, identifier, startOffset, endOffset);
     }
