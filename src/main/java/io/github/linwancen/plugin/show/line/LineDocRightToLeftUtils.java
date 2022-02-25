@@ -1,18 +1,19 @@
-package io.github.linwancen.plugin.comment.utils;
+package io.github.linwancen.plugin.show.line;
 
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
 
-public class ResolveElementRightToLeftUtils {
+public class LineDocRightToLeftUtils {
 
-    private ResolveElementRightToLeftUtils() {}
+    private LineDocRightToLeftUtils() {}
 
     @Nullable
-    public static PsiElement resolveElement(FileViewProvider viewProvider, int startOffset, int endOffset) {
+    public static PsiDocComment rightDoc(FileViewProvider viewProvider, int startOffset, int endOffset) {
         // End is always white, can not -1 because @see class.name need it
         PsiElement element = viewProvider.findElementAt(endOffset, JavaLanguage.INSTANCE);
         if (element == null) {
@@ -29,6 +30,6 @@ public class ResolveElementRightToLeftUtils {
         if (identifier != null && identifier.getTextRange().getStartOffset() < startOffset) {
             identifier = null;
         }
-        return ResolveElementUtils.resolveElementOf(element, identifier, startOffset, endOffset);
+        return LineDocUtils.elementDoc(element, identifier, startOffset, endOffset);
     }
 }

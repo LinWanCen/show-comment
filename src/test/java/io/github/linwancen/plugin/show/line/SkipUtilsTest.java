@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.comment.utils;
+package io.github.linwancen.plugin.show.line;
 
 
 import groovy.json.JsonOutput;
@@ -11,7 +11,7 @@ import java.util.function.BiPredicate;
  * @see SkipUtils
  */
 public class SkipUtilsTest {
-    
+
     public static final boolean o = true;
     public static final boolean x = false;
 

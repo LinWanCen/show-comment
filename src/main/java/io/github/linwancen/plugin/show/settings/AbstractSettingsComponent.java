@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.comment.settings;
+package io.github.linwancen.plugin.show.settings;
 
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBLabel;

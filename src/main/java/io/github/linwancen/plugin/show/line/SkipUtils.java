@@ -1,15 +1,15 @@
-package io.github.linwancen.plugin.comment.utils;
+package io.github.linwancen.plugin.show.line;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
-import io.github.linwancen.plugin.comment.settings.AppSettingsState;
-import io.github.linwancen.plugin.comment.settings.ProjectSettingsState;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 
-public class SkipUtils {
+class SkipUtils {
 
     private SkipUtils() {}
 
-    public static boolean skip(PsiClass psiClass, Project project) {
+    static boolean skip(PsiClass psiClass, Project project) {
         if (psiClass == null) {
             return true;
         }
@@ -29,21 +29,21 @@ public class SkipUtils {
         return false;
     }
 
-    protected static boolean skipName(String name, String[] includeArray, String[] excludeArray) {
+    static boolean skipName(String name, String[] includeArray, String[] excludeArray) {
         if (exclude(name, excludeArray)) {
             return true;
         }
         return !include(name, includeArray);
     }
 
-    protected static boolean include(String name, String[] lineEndIncludeArray) {
+    static boolean include(String name, String[] lineEndIncludeArray) {
         if (lineEndIncludeArray.length == 0) {
             return true;
         }
         return exclude(name, lineEndIncludeArray);
     }
 
-    protected static boolean exclude(String name, String[] projectLineEndExcludeArray) {
+    static boolean exclude(String name, String[] projectLineEndExcludeArray) {
         for (String s : projectLineEndExcludeArray) {
             if (name.startsWith(s)) {
                 return true;

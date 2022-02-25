@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.comment.utils;
+package io.github.linwancen.plugin.show.doc;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -7,12 +7,12 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.Nullable;
 
-public class PsiMethodCommentFactory {
+class MethodDocUtils {
 
-    private PsiMethodCommentFactory() {}
+    private MethodDocUtils() {}
 
     @Nullable
-    public static PsiDocComment from(PsiMethod psiMethod) {
+    static PsiDocComment methodSupperNewPropDoc(PsiMethod psiMethod) {
         // .class
         PsiElement navElement = psiMethod.getNavigationElement();
         if (navElement instanceof PsiMethod) {
@@ -25,7 +25,7 @@ public class PsiMethodCommentFactory {
         }
 
         // supper
-        PsiDocComment superDoc = supperMethodComment(psiMethod);
+        PsiDocComment superDoc = supperMethodDoc(psiMethod);
         if (superDoc != null) {
             return superDoc;
         }
@@ -42,14 +42,14 @@ public class PsiMethodCommentFactory {
         }
 
         // get/set/is - PropertyDescriptor getReadMethod() getWriteMethod()
-        return propMethodComment(psiMethod, clazz);
+        return propMethodDoc(psiMethod, clazz);
     }
 
     @Nullable
-    public static PsiDocComment supperMethodComment(PsiMethod psiMethod) {
+    private static PsiDocComment supperMethodDoc(PsiMethod psiMethod) {
         PsiMethod[] superMethods = psiMethod.findSuperMethods();
         for (PsiMethod superMethod : superMethods) {
-            PsiDocComment superDoc = from(superMethod);
+            PsiDocComment superDoc = DocUtils.methodDoc(superMethod);
             if (superDoc != null) {
                 return superDoc;
             }
@@ -58,7 +58,7 @@ public class PsiMethodCommentFactory {
     }
 
     @Nullable
-    public static PsiDocComment propMethodComment(PsiMethod psiMethod, PsiClass psiClass) {
+    private static PsiDocComment propMethodDoc(PsiMethod psiMethod, PsiClass psiClass) {
         String name = psiMethod.getName();
         if (name.length() > 3 && (name.startsWith("get") || name.startsWith("set"))) {
             name = name.substring(3);

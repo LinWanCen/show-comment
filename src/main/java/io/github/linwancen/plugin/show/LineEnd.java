@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.comment;
+package io.github.linwancen.plugin.show;
 
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
@@ -7,10 +7,13 @@ import com.intellij.openapi.editor.LineExtensionInfo;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.javadoc.PsiDocComment;
-import io.github.linwancen.plugin.comment.settings.AppSettingsState;
-import io.github.linwancen.plugin.comment.utils.*;
+import io.github.linwancen.plugin.show.doc.DocTextUtils;
+import io.github.linwancen.plugin.show.line.LineDocLeftToRightUtils;
+import io.github.linwancen.plugin.show.line.LineDocRightToLeftUtils;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,9 +33,8 @@ public class LineEnd extends EditorLinePainter {
             return null;
         }
         FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
-        PsiElement psiElement = resolveElementFrom(viewProvider, lineNumber);
-        PsiDocComment docComment = psiDocCommentFrom(psiElement);
-        String comment = PsiDocCommentUtils.getCommentText(docComment);
+        PsiDocComment docComment = docOwnerFrom(viewProvider, lineNumber);
+        String comment = DocTextUtils.text(docComment);
         if (comment == null) {
             return null;
         }
@@ -40,7 +42,7 @@ public class LineEnd extends EditorLinePainter {
         return Collections.singletonList(info);
     }
 
-    private static @Nullable PsiElement resolveElementFrom(FileViewProvider viewProvider, int lineNumber) {
+    private static @Nullable PsiDocComment docOwnerFrom(FileViewProvider viewProvider, int lineNumber) {
         if (viewProvider == null || !viewProvider.hasLanguage(JavaLanguage.INSTANCE)) {
             return null;
         }
@@ -57,37 +59,8 @@ public class LineEnd extends EditorLinePainter {
             return null;
         }
         if (AppSettingsState.getInstance().findElementRightToLeft) {
-            return ResolveElementRightToLeftUtils.resolveElement(viewProvider, startOffset, endOffset);
+            return LineDocRightToLeftUtils.rightDoc(viewProvider, startOffset, endOffset);
         }
-        return ResolveElementLeftToRightUtils.resolveElement(viewProvider, document, startOffset, endOffset);
-    }
-
-    @Nullable
-    private PsiDocComment psiDocCommentFrom(PsiElement psiElement) {
-        if (psiElement == null) {
-            return null;
-        }
-        if (psiElement instanceof PsiClass) {
-            PsiClass psiClass = (PsiClass) psiElement;
-            if (SkipUtils.skip(psiClass, psiClass.getProject())) {
-                return null;
-            }
-            return CommentFactory.fromSrcOrByteCode(psiClass);
-        }
-        if (psiElement instanceof PsiMethod) {
-            PsiMethod psiMethod = (PsiMethod) psiElement;
-            if (SkipUtils.skip(psiMethod.getContainingClass(), psiMethod.getProject())) {
-                return null;
-            }
-            return PsiMethodCommentFactory.from(psiMethod);
-        }
-        if (psiElement instanceof PsiField) {
-            PsiField psiField = (PsiField) psiElement;
-            if (SkipUtils.skip(psiField.getContainingClass(), psiField.getProject())) {
-                return null;
-            }
-            return CommentFactory.fromSrcOrByteCode(psiField);
-        }
-        return null;
+        return LineDocLeftToRightUtils.leftDoc(viewProvider, document, startOffset, endOffset);
     }
 }

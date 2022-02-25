@@ -1,39 +1,19 @@
-package io.github.linwancen.plugin.comment.utils;
+package io.github.linwancen.plugin.show.doc;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiPackage;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PsiPackageCommentFactory {
+class PackageDocUtils {
 
-    private PsiPackageCommentFactory() {}
-
-    @Nullable
-    public static PsiDocComment from(PsiPackage psiPackage) {
-        PsiDirectory[] psiDirectories = psiPackage.getDirectories();
-        for (PsiDirectory psiDirectory : psiDirectories) {
-            PsiDocComment psiDocComment = from(psiDirectory);
-            if (psiDocComment != null) {
-                return psiDocComment;
-            }
-        }
-        return null;
-    }
+    private PackageDocUtils() {}
 
     @Nullable
-    public static PsiDocComment from(PsiDirectory psiDirectory) {
-        PsiFile packageInfoFile = psiDirectory.findFile(PsiPackage.PACKAGE_INFO_FILE);
-        return fromPackageInfoFile(packageInfoFile);
-    }
-
-    @Nullable
-    public static PsiDocComment fromPackageInfoFile(PsiFile packageInfoFile) {
+    static PsiDocComment fromPackageInfoFile(PsiFile packageInfoFile) {
         if (packageInfoFile == null) {
             return null;
         }

@@ -31,20 +31,20 @@
     <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <editor.linePainter implementation="io.github.linwancen.plugin.comment.LineEnd" />
-        <projectViewNodeDecorator implementation="io.github.linwancen.plugin.comment.Tree"/>
+        <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd" />
+        <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
 
         <applicationConfigurable parentId="tools"
-                                 instance="io.github.linwancen.plugin.comment.settings.AppSettingsConfigurable"
-                                 id="io.github.linwancen.plugin.comment.settings.AppSettingsConfigurable"
+                                 instance="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
+                                 id="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
                                  displayName="Show Comment Global"/>
-        <applicationService serviceImplementation="io.github.linwancen.plugin.comment.settings.AppSettingsState"/>
+        <applicationService serviceImplementation="io.github.linwancen.plugin.show.settings.AppSettingsState"/>
 
         <projectConfigurable parentId="tools"
-                             instance="io.github.linwancen.plugin.comment.settings.ProjectSettingsConfigurable"
-                             id="io.github.linwancen.plugin.comment.settings.ProjectSettingsConfigurable"
+                             instance="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
+                             id="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
                              displayName="Show Comment Project"/>
-        <projectService serviceImplementation="io.github.linwancen.plugin.comment.settings.ProjectSettingsState"/>
+        <projectService serviceImplementation="io.github.linwancen.plugin.show.settings.ProjectSettingsState"/>
     </extensions>
 
     <actions>

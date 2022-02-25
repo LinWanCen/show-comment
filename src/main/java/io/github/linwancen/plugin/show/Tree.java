@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.comment;
+package io.github.linwancen.plugin.show;
 
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
@@ -13,11 +13,9 @@ import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import io.github.linwancen.plugin.comment.settings.AppSettingsState;
-import io.github.linwancen.plugin.comment.utils.CommentFactory;
-import io.github.linwancen.plugin.comment.utils.PsiDocCommentUtils;
-import io.github.linwancen.plugin.comment.utils.PsiMethodCommentFactory;
-import io.github.linwancen.plugin.comment.utils.PsiPackageCommentFactory;
+import io.github.linwancen.plugin.show.doc.DocUtils;
+import io.github.linwancen.plugin.show.doc.DocTextUtils;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -42,7 +40,7 @@ public class Tree implements ProjectViewNodeDecorator {
             return;
         }
 
-        String commentText = PsiDocCommentUtils.getCommentText(docComment);
+        String commentText = DocTextUtils.text(docComment);
         if (commentText == null) {
             return;
         }
@@ -57,33 +55,33 @@ public class Tree implements ProjectViewNodeDecorator {
     private PsiDocComment psiDocCommentOf(ProjectViewNode<?> node, Project project) {
         if (node instanceof PsiFileNode) {
             PsiFile psiFile = ((PsiFileNode) node).getValue();
-            return CommentFactory.from(psiFile);
+            return DocUtils.fileDoc(psiFile);
         }
         if (node instanceof PsiDirectoryNode) {
             PsiDirectory psiDirectory = ((PsiDirectoryNode) node).getValue();
-            return PsiPackageCommentFactory.from(psiDirectory);
+            return DocUtils.dirDoc(psiDirectory);
         }
 
         if (node instanceof PsiMethodNode) {
             // On Show Members
             PsiMethod psiMethod = ((PsiMethodNode) node).getValue();
-            return PsiMethodCommentFactory.from(psiMethod);
+            return DocUtils.methodDoc(psiMethod);
         }
         if (node instanceof PsiFieldNode) {
             // On Show Members
             PsiField psiField = ((PsiFieldNode) node).getValue();
-            return CommentFactory.fromSrcOrByteCode(psiField);
+            return DocUtils.srcOrByteCodeDoc(psiField);
         }
 
         if (node instanceof ClassTreeNode) {
             // On Packages View, Project Files View, Show Members
             PsiClass psiClass = ((ClassTreeNode) node).getValue();
-            return CommentFactory.fromSrcOrByteCode(psiClass);
+            return DocUtils.srcOrByteCodeDoc(psiClass);
         }
         if (node instanceof PackageElementNode) {
             // On Packages View
             PsiPackage psiPackage = ((PackageElementNode) node).getValue().getPackage();
-            return PsiPackageCommentFactory.from(psiPackage);
+            return DocUtils.packageDoc(psiPackage);
         }
 
         // On Packages View, Project Files View
@@ -95,7 +93,7 @@ public class Tree implements ProjectViewNodeDecorator {
         if (psiDirectory == null) {
             return null;
         }
-        return PsiPackageCommentFactory.from(psiDirectory);
+        return DocUtils.dirDoc(psiDirectory);
     }
 
     @Override

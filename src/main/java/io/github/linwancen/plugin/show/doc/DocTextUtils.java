@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.comment.utils;
+package io.github.linwancen.plugin.show.doc;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.javadoc.PsiDocComment;
@@ -9,12 +9,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PsiDocCommentUtils {
+public class DocTextUtils {
 
-    private PsiDocCommentUtils() {}
+    private DocTextUtils() {}
 
     @Nullable
-    public static String getCommentText(@Nullable PsiDocComment psiDocComment) {
+    public static String text(@Nullable PsiDocComment psiDocComment) {
         if (psiDocComment == null) {
             return null;
         }
