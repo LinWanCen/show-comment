@@ -23,4 +23,4 @@ Change Log:
 - 1.2 Add end-of-line comment class prefix filter settings | 添加行末注释类前缀过滤配置
 - 1.3 support class in tree, constructor and field type in line end | 支持 class 树节点、构造方法和字段的行末注释
 - 1.4 Find element right to left for end-of-line comment | 从右往左查找行末注释对象
-- 1.5 Support find next when not comment | 支持没有注释时查找下一个对象
+- 1.5 Support find next loop when not comment | 支持没有注释时循环查找下一个对象

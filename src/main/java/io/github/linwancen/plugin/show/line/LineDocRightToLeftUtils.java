@@ -20,16 +20,22 @@ public class LineDocRightToLeftUtils {
             return null;
         }
         PsiElement identifier;
-        while (!((identifier = PsiTreeUtil.prevVisibleLeaf(element)) instanceof PsiIdentifier)) {
-            if (identifier == null || identifier.getTextRange().getStartOffset() < startOffset) {
-                break;
+        PsiDocComment psiDocComment;
+        while (true) {
+            identifier = PsiTreeUtil.prevVisibleLeaf(element);
+            if (identifier != null && identifier.getTextRange().getStartOffset() < startOffset) {
+                identifier = null;
+            }
+            if (identifier == null || identifier instanceof PsiIdentifier) {
+                psiDocComment = LineDocUtils.elementDoc(element, identifier, startOffset, endOffset);
+                if (psiDocComment != null) {
+                    return psiDocComment;
+                }
+            }
+            if (identifier == null) {
+                return null;
             }
             element = identifier;
         }
-        // if in prev line, set it null.
-        if (identifier != null && identifier.getTextRange().getStartOffset() < startOffset) {
-            identifier = null;
-        }
-        return LineDocUtils.elementDoc(element, identifier, startOffset, endOffset);
     }
 }

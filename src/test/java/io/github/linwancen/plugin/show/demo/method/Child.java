@@ -34,6 +34,9 @@ public class Child extends Parent implements Face {
         return null;
     }
 
+    public Child haveNotDoc(Face face) {
+        return null;
+    }
 
     /**
      * bool

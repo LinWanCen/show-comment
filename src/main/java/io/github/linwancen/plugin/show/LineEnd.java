@@ -50,7 +50,8 @@ public class LineEnd extends EditorLinePainter {
         if (document == null) {
             return null;
         }
-        if (document.getLineCount() < lineNumber) {
+        // lineNumber start 0, as 1 <= 1 should return
+        if (document.getLineCount() <= lineNumber) {
             return null;
         }
         int startOffset = document.getLineStartOffset(lineNumber);

@@ -48,21 +48,20 @@ public class LineDocLeftToRightUtils {
             startOffset = 0;
         }
         PsiElement element = viewProvider.findElementAt(offset, JavaLanguage.INSTANCE);
-        PsiIdentifier psiIdentifier = leftIdentifier(element, endOffset);
-        return LineDocUtils.elementDoc(psiIdentifier, psiIdentifier, startOffset, endOffset);
+        return nextDoc(element, startOffset, endOffset);
     }
 
     @Nullable
-    private static PsiIdentifier leftIdentifier(PsiElement element, int endOffset) {
-        if (element == null) {
-            return null;
-        }
-        while (!(element instanceof PsiIdentifier)) {
-            element = PsiTreeUtil.nextVisibleLeaf(element);
-            if (element == null || element.getTextRange().getEndOffset() > endOffset) {
-                return null;
+    private static PsiDocComment nextDoc(PsiElement element, int startOffset, int endOffset) {
+        while (element != null && element.getTextRange().getEndOffset() < endOffset) {
+            if (element instanceof PsiIdentifier) {
+                PsiDocComment psiDocComment = LineDocUtils.elementDoc(element, element, startOffset, endOffset);
+                if (psiDocComment != null) {
+                    return psiDocComment;
+                }
             }
+            element = PsiTreeUtil.nextVisibleLeaf(element);
         }
-        return (PsiIdentifier) element;
+        return null;
     }
 }
