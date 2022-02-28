@@ -35,6 +35,9 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
+        modified |= mySettingsComponent.getShowLineEndCommentForCall() != settings.showLineEndCommentForCall;
+        modified |= mySettingsComponent.getShowLineEndCommentForNew() != settings.showLineEndCommentForNew;
+        modified |= mySettingsComponent.getShowLineEndCommentForRef() != settings.showLineEndCommentForRef;
         if (EditorColorsManager.getInstance().isDarkEditor()) {
             modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndColorDark);
         } else {
@@ -51,6 +54,9 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
+        settings.showLineEndCommentForCall = mySettingsComponent.getShowLineEndCommentForCall();
+        settings.showLineEndCommentForNew = mySettingsComponent.getShowLineEndCommentForNew();
+        settings.showLineEndCommentForRef = mySettingsComponent.getShowLineEndCommentForRef();
         if (EditorColorsManager.getInstance().isDarkEditor()) {
             settings.lineEndColorDark = mySettingsComponent.getLineEndColor();
         } else {
@@ -70,6 +76,9 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
+        mySettingsComponent.setShowLineEndCommentForCall(settings.showLineEndCommentForCall);
+        mySettingsComponent.setShowLineEndCommentForNew(settings.showLineEndCommentForNew);
+        mySettingsComponent.setShowLineEndCommentForRef(settings.showLineEndCommentForRef);
         if (EditorColorsManager.getInstance().isDarkEditor()) {
             mySettingsComponent.setLineEndColor(settings.lineEndColorDark);
         } else {

@@ -13,8 +13,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import io.github.linwancen.plugin.show.doc.DocUtils;
 import io.github.linwancen.plugin.show.doc.DocTextUtils;
+import io.github.linwancen.plugin.show.doc.DocUtils;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 

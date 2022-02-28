@@ -4,6 +4,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
 class LineDocUtils {
@@ -13,21 +14,37 @@ class LineDocUtils {
     @Nullable
     static PsiDocComment elementDoc(PsiElement element, PsiElement psiIdentifier,
                                     int startOffset, int endOffset) {
+        AppSettingsState instance = AppSettingsState.getInstance();
         if (element != null) {
+            PsiDocComment executableDoc = elementDoc(element, startOffset, endOffset, instance);
+            if (executableDoc != null) {
+                return executableDoc;
+            }
+        }
+        if (instance.showLineEndCommentForRef) {
+            return refDoc(psiIdentifier, endOffset);
+        }
+        return null;
+    }
+
+    @Nullable
+    private static PsiDocComment elementDoc(PsiElement element, int startOffset, int endOffset, AppSettingsState instance) {
+        if (instance.showLineEndCommentForCall) {
             PsiDocComment executableDoc = parentMethodDoc(element, startOffset, endOffset);
             if (executableDoc != null) {
                 return executableDoc;
             }
+        }
+        if (instance.showLineEndCommentForNew) {
             PsiDocComment newDoc = parentNewDoc(element, startOffset);
             if (newDoc != null) {
                 return newDoc;
             }
-            PsiDocComment docRefDoc = docRefDoc(element);
-            if (docRefDoc != null) {
-                return docRefDoc;
-            }
         }
-        return refDoc(psiIdentifier, endOffset);
+        if (instance.showLineEndCommentForRef) {
+            return docRefDoc(element);
+        }
+        return null;
     }
 
     @Nullable

@@ -14,6 +14,9 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox("Show tree comment ");
     private final JBCheckBox showLineEndComment = new JBCheckBox("Show line end comment ");
+    private final JBCheckBox showLineEndCommentForCall = new JBCheckBox("Show line end comment for call ");
+    private final JBCheckBox showLineEndCommentForNew = new JBCheckBox("Show line end comment for new ");
+    private final JBCheckBox showLineEndCommentForRef = new JBCheckBox("Show line end comment for ref ");
     private final ColorPanel lineEndColor = new ColorPanel();
     private final JBCheckBox findElementRightToLeft = new JBCheckBox("Find element right to left");
 
@@ -31,6 +34,10 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         JPanel comment = FormBuilder.createFormBuilder()
                 .addComponent(showTreeComment, 1)
                 .addComponent(showLineEndComment, 1)
+                .addSeparator()
+                .addComponent(showLineEndCommentForCall, 1)
+                .addComponent(showLineEndCommentForNew, 1)
+                .addComponent(showLineEndCommentForRef, 1)
                 .getPanel();
         comment.setBorder(IdeBorderFactory.createTitledBorder("Show"));
         return comment;
@@ -76,6 +83,30 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public void setShowLineEndComment(boolean newStatus) {
         showLineEndComment.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentForCall() {
+        return showLineEndCommentForCall.isSelected();
+    }
+
+    public void setShowLineEndCommentForCall(boolean newStatus) {
+        showLineEndCommentForCall.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentForNew() {
+        return showLineEndCommentForNew.isSelected();
+    }
+
+    public void setShowLineEndCommentForNew(boolean newStatus) {
+        showLineEndCommentForNew.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentForRef() {
+        return showLineEndCommentForRef.isSelected();
+    }
+
+    public void setShowLineEndCommentForRef(boolean newStatus) {
+        showLineEndCommentForRef.setSelected(newStatus);
     }
 
     public Color getLineEndColor() {

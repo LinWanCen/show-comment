@@ -24,3 +24,4 @@ Change Log:
 - 1.3 support class in tree, constructor and field type in line end | 支持 class 树节点、构造方法和字段的行末注释
 - 1.4 Find element right to left for end-of-line comment | 从右往左查找行末注释对象
 - 1.5 Support find next loop when not comment | 支持没有注释时循环查找下一个对象
+- 1.6 Add end-of-line comment independent switch for call,new,ref | 增加行末调用，new，引用注释独立开关

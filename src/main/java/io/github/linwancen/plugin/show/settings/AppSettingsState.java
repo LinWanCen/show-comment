@@ -18,8 +18,12 @@ import java.awt.*;
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
-    public boolean showLineEndComment = true;
     public boolean showTreeComment = true;
+    public boolean showLineEndComment = true;
+
+    public boolean showLineEndCommentForCall = true;
+    public boolean showLineEndCommentForNew = true;
+    public boolean showLineEndCommentForRef = true;
 
     @SuppressWarnings("all")
     public Color lineEndColorBright = new Color(98, 151, 85);
