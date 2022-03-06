@@ -11,20 +11,14 @@ package io.github.linwancen.plugin.show.demo;
  * @see InDoc
  */
 public class InDoc {
-    /**
-     * field
-     */
+    /** field */
     public String field;
 
-    /**
-     * method()
-     */
+    /** method() */
     public void method1() {
     }
 
-    /**
-     * method(InDoc)
-     */
+    /** method(InDoc) */
     public void method2(InDoc inDoc) {
     }
 }

@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocToken;
 import com.intellij.psi.javadoc.PsiInlineDocTag;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class DocTextUtils {
         if (psiDocComment == null) {
             return null;
         }
+        AppSettingsState appSettings = AppSettingsState.getInstance();
         List<String> comments = new ArrayList<>();
         PsiElement[] elements = psiDocComment.getDescriptionElements();
         for (PsiElement element : elements) {
@@ -31,22 +33,17 @@ public class DocTextUtils {
                     comments.add(children[2].getText());
                 }
             }
-            if (comments.size() > 1) {
+            if (appSettings.lineEndCount > 0 && comments.size() >= appSettings.lineEndCount) {
                 break;
             }
         }
         if (comments.isEmpty()) {
             return null;
         }
-        StringBuilder sb = new StringBuilder(comments.get(0).trim());
-        if (sb.length() == 0) {
-            return null;
+        StringBuilder sb = new StringBuilder(" ");
+        for (String s : comments) {
+            sb.append(s.trim().replace("<br>", "")).append("  ");
         }
-        if (comments.size() > 1) {
-            sb.append("  ").append(comments.get(1).trim().replace("<br>", ""));
-        }
-        sb.insert(0, " ");
-        sb.append("  ");
         return sb.toString();
     }
 }

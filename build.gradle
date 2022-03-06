@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '1.6.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '1.8.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 apply plugin: 'java'
 
@@ -37,14 +37,29 @@ patchPluginXml {
     sinceBuild = '201.1'
     untilBuild = ''
     changeNotes = """
-    <ul>
-      <li>1.1 Add end-of-line text color settings | 添加行末文本颜色配置
-      <li>1.2 Add end-of-line comment class prefix filter settings | 添加行末注释类前缀配置
-      <li>1.3 Support class in tree, constructor and field type in line end | 支持 class 树节点、构造方法和字段的行末注释
-      <li>1.4 Find element right to left for end-of-line comment | 从右往左查找行末注释对象
-      <li>1.5 Support find next loop when not comment | 支持没有注释时循环查找下一个对象
-      <li>1.6 Add end-of-line comment independent switch for call,new,ref | 增加行末调用，new，引用注释独立开关
-    </ul>
+      English Change Notes:
+      <ul>
+      <li>1.8 Add line-end-comment  for json
+      <li>1.7 Add line-end-comment  setting for prefix and count
+      <li>1.6 Add line-end-comment  independent switch for call, new, ref
+      <li>1.5 Add line-end-comment  find next loop when none
+      <li>1.4 Add line-end-comment  find element right to left
+      <li>1.3 Add project-view-tree-comment
+      <li>1.2 Add line-end-comment  settings fro class prefix filter
+      <li>1.1 Add line-end-comment  settings for text color
+      </ul>
+
+      Chinese Change Notes:
+      <ul>
+      <li>1.8 增加 从同后缀的类中读取 json 行末注释
+      <li>1.7 增加 行末注释前缀和对象数设置
+      <li>1.6 增加 行末调用，new，引用注释独立开关
+      <li>1.5 增加 没有注释时循环查找下一个对象
+      <li>1.4 增加 从右往左查找行末注释对象
+      <li>1.3 增加 项目导航栏注释
+      <li>1.2 增加 行末注释类前缀配置
+      <li>1.1 增加 行末文本颜色配置
+      </ul>
       """
 }
 

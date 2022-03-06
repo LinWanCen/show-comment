@@ -1,6 +1,6 @@
 package io.github.linwancen.plugin.show.line;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.FileViewProvider;
@@ -8,6 +8,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
+import io.github.linwancen.plugin.show.doc.JsonDocUtils;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
 public class LineDocLeftToRightUtils {
@@ -44,16 +46,23 @@ public class LineDocLeftToRightUtils {
             offset++;
         }
         offset += startOffset;
+        PsiElement element = viewProvider.findElementAt(offset);
+        if (element == null) {
+            return null;
+        }
+        AppSettingsState instance = AppSettingsState.getInstance();
+        if (instance.inJson && element.getLanguage().is(JsonLanguage.INSTANCE)) {
+            return JsonDocUtils.jsonDoc(element, startOffset, endOffset);
+        }
         if (startWithSymbol) {
             startOffset = 0;
         }
-        PsiElement element = viewProvider.findElementAt(offset, JavaLanguage.INSTANCE);
         return nextDoc(element, startOffset, endOffset);
     }
 
     @Nullable
     private static PsiDocComment nextDoc(PsiElement element, int startOffset, int endOffset) {
-        while (element != null && element.getTextRange().getEndOffset() < endOffset) {
+        while (element.getTextRange().getEndOffset() < endOffset) {
             if (element instanceof PsiIdentifier) {
                 PsiDocComment psiDocComment = LineDocUtils.elementDoc(element, element, startOffset, endOffset);
                 if (psiDocComment != null) {
@@ -61,6 +70,9 @@ public class LineDocLeftToRightUtils {
                 }
             }
             element = PsiTreeUtil.nextVisibleLeaf(element);
+            if (element == null) {
+                return null;
+            }
         }
         return null;
     }

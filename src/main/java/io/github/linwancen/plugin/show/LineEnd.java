@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show;
 
-import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
@@ -33,17 +32,17 @@ public class LineEnd extends EditorLinePainter {
             return null;
         }
         FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
-        PsiDocComment docComment = docOwnerFrom(viewProvider, lineNumber);
+        PsiDocComment docComment = doc(project, viewProvider, lineNumber);
         String comment = DocTextUtils.text(docComment);
         if (comment == null) {
             return null;
         }
-        LineExtensionInfo info = new LineExtensionInfo(" //" + comment, settings.lineEndTextAttr);
+        LineExtensionInfo info = new LineExtensionInfo(settings.lineEndPrefix + comment, settings.lineEndTextAttr);
         return Collections.singletonList(info);
     }
 
-    private static @Nullable PsiDocComment docOwnerFrom(FileViewProvider viewProvider, int lineNumber) {
-        if (viewProvider == null || !viewProvider.hasLanguage(JavaLanguage.INSTANCE)) {
+    private static @Nullable PsiDocComment doc(Project project, FileViewProvider viewProvider, int lineNumber) {
+        if (viewProvider == null) {
             return null;
         }
         Document document = viewProvider.getDocument();

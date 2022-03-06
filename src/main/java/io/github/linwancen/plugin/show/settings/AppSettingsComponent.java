@@ -3,6 +3,8 @@ package io.github.linwancen.plugin.show.settings;
 import com.intellij.ui.ColorPanel;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBCheckBox;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,16 +16,18 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox("Show tree comment ");
     private final JBCheckBox showLineEndComment = new JBCheckBox("Show line end comment ");
-    private final JBCheckBox showLineEndCommentForCall = new JBCheckBox("Show line end comment for call ");
-    private final JBCheckBox showLineEndCommentForNew = new JBCheckBox("Show line end comment for new ");
-    private final JBCheckBox showLineEndCommentForRef = new JBCheckBox("Show line end comment for ref ");
+    private final JBCheckBox fromCall = new JBCheckBox("call ");
+    private final JBCheckBox fromNew = new JBCheckBox("new ");
+    private final JBCheckBox fromRef = new JBCheckBox("ref ");
+    private final JBCheckBox inJson = new JBCheckBox("in json ");
     private final ColorPanel lineEndColor = new ColorPanel();
     private final JBCheckBox findElementRightToLeft = new JBCheckBox("Find element right to left");
+    protected final JBTextField lineEndPrefix = new JBTextField();
+    protected final JBTextField lineEndCount = new JBTextField();
 
     public AppSettingsComponent() {
         myMainPanel = FormBuilder.createFormBuilder()
                 .addComponent(showPanel(), 1)
-                .addComponent(colorPanel(), 1)
                 .addComponent(lineEndFilterPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
@@ -34,28 +38,23 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         JPanel comment = FormBuilder.createFormBuilder()
                 .addComponent(showTreeComment, 1)
                 .addComponent(showLineEndComment, 1)
-                .addSeparator()
-                .addComponent(showLineEndCommentForCall, 1)
-                .addComponent(showLineEndCommentForNew, 1)
-                .addComponent(showLineEndCommentForRef, 1)
                 .getPanel();
         comment.setBorder(IdeBorderFactory.createTitledBorder("Show"));
         return comment;
     }
 
     @NotNull
-    private JPanel colorPanel() {
-        JPanel color = FormBuilder.createFormBuilder()
-                .addLabeledComponent(new JLabel("line end text color:"), lineEndColor)
-                .getPanel();
-        color.setBorder(IdeBorderFactory.createTitledBorder("Color"));
-        return color;
-    }
-
-    @NotNull
     protected JPanel lineEndFilterPanel() {
+        JPanel text = JPanelFactory.of(
+                new JBLabel("object count: "), lineEndCount,
+                new JBLabel("text color: "), lineEndColor,
+                new JBLabel("prefix: "), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
-                .addComponent(findElementRightToLeft)
+                .addComponent(JPanelFactory.of(findElementRightToLeft))
+                .addSeparator()
+                .addComponent(JPanelFactory.of(fromCall, fromNew, fromRef, inJson), 1)
+                .addSeparator()
+                .addComponent(text)
                 .addSeparator();
         return commonLineEndFilter(formBuilder);
     }
@@ -85,28 +84,36 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         showLineEndComment.setSelected(newStatus);
     }
 
-    public boolean getShowLineEndCommentForCall() {
-        return showLineEndCommentForCall.isSelected();
+    public boolean getFromCall() {
+        return fromCall.isSelected();
     }
 
-    public void setShowLineEndCommentForCall(boolean newStatus) {
-        showLineEndCommentForCall.setSelected(newStatus);
+    public void setFromCall(boolean newStatus) {
+        fromCall.setSelected(newStatus);
     }
 
-    public boolean getShowLineEndCommentForNew() {
-        return showLineEndCommentForNew.isSelected();
+    public boolean getFromNew() {
+        return fromNew.isSelected();
     }
 
-    public void setShowLineEndCommentForNew(boolean newStatus) {
-        showLineEndCommentForNew.setSelected(newStatus);
+    public void setFromNew(boolean newStatus) {
+        fromNew.setSelected(newStatus);
     }
 
-    public boolean getShowLineEndCommentForRef() {
-        return showLineEndCommentForRef.isSelected();
+    public boolean getFromRef() {
+        return fromRef.isSelected();
     }
 
-    public void setShowLineEndCommentForRef(boolean newStatus) {
-        showLineEndCommentForRef.setSelected(newStatus);
+    public void setFromRef(boolean newStatus) {
+        fromRef.setSelected(newStatus);
+    }
+
+    public boolean getInJson() {
+        return inJson.isSelected();
+    }
+
+    public void setInJson(boolean newStatus) {
+        inJson.setSelected(newStatus);
     }
 
     public Color getLineEndColor() {
@@ -123,5 +130,23 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public void setFindElementRightToLeft(boolean newStatus) {
         findElementRightToLeft.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getLineEndPrefix() {
+        return lineEndPrefix.getText();
+    }
+
+    public void setLineEndPrefix(@NotNull String newText) {
+        lineEndPrefix.setText(newText);
+    }
+
+    @NotNull
+    public String getLineEndCount() {
+        return lineEndCount.getText();
+    }
+
+    public void setLineEndCount(@NotNull String newText) {
+        lineEndCount.setText(newText);
     }
 }

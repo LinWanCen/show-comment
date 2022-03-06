@@ -21,10 +21,6 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showTreeComment = true;
     public boolean showLineEndComment = true;
 
-    public boolean showLineEndCommentForCall = true;
-    public boolean showLineEndCommentForNew = true;
-    public boolean showLineEndCommentForRef = true;
-
     @SuppressWarnings("all")
     public Color lineEndColorBright = new Color(98, 151, 85);
     @SuppressWarnings("all")
@@ -33,6 +29,13 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
             null, null, null, Font.ITALIC);
 
     public boolean findElementRightToLeft = true;
+    public String lineEndPrefix = "  //";
+    public int lineEndCount = 2;
+    public boolean fromCall = true;
+    public boolean fromNew = true;
+    public boolean fromRef = true;
+    public boolean inJson = true;
+
     public String lineEndInclude = "";
     public String lineEndExclude = "java.";
     public String[] lineEndIncludeArray = {};

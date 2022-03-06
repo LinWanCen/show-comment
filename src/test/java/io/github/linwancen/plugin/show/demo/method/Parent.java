@@ -1,12 +1,8 @@
 package io.github.linwancen.plugin.show.demo.method;
 
-/**
- * Parent
- */
+/** Parent */
 public class Parent {
-    /**
-     * parentMethod
-     */
+    /** parentMethod */
     public Parent parentMethod() {
         return null;
     }

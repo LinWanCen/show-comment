@@ -10,7 +10,7 @@ import java.util.function.BiPredicate;
 /**
  * @see SkipUtils
  */
-public class SkipUtilsTest {
+class SkipUtilsTest {
 
     public static final boolean o = true;
     public static final boolean x = false;
@@ -30,7 +30,7 @@ public class SkipUtilsTest {
     };
 
     @Test
-    public void skipName() {
+    void skipName() {
         // o include, x skip
         boolean[][][] results = {{
                 // "java" -- name
@@ -77,7 +77,7 @@ public class SkipUtilsTest {
     }
 
     @Test
-    public void include() {
+    void include() {
         boolean[][] results = {
                 // {"java", "io.a", "io.b"} -- name
                 {o, o, o}, // {},
@@ -89,7 +89,7 @@ public class SkipUtilsTest {
     }
 
     @Test
-    public void exclude() {
+    void exclude() {
         boolean[][] results = {
                 // {"java", "io.a", "io.b"} ... names
                 {x, x, x}, // {},

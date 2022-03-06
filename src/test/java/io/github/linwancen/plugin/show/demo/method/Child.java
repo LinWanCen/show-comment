@@ -1,16 +1,12 @@
 package io.github.linwancen.plugin.show.demo.method;
 
-/**
- * Child
- */
+/** Child */
 public class Child extends Parent implements Face {
 
     public Child() {
     }
 
-    /**
-     * Child(boolean bool)
-     */
+    /** Child(boolean bool) */
     public Child(boolean bool) {
         this.bool = bool;
     }
@@ -27,9 +23,7 @@ public class Child extends Parent implements Face {
     }
 
 
-    /**
-     * fun
-     */
+    /** fun */
     public static Face fun(Face face) {
         return null;
     }
@@ -38,9 +32,7 @@ public class Child extends Parent implements Face {
         return null;
     }
 
-    /**
-     * bool
-     */
+    /** bool */
     public boolean bool;
 
     public boolean isBool() {
@@ -48,9 +40,7 @@ public class Child extends Parent implements Face {
     }
 
 
-    /**
-     * field
-     */
+    /** field */
     public Child field;
 
     public Child getField() {

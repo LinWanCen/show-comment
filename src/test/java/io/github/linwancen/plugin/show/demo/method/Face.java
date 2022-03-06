@@ -1,12 +1,7 @@
 package io.github.linwancen.plugin.show.demo.method;
 
-/**
- * Face
- */
-//@FunctionalInterface
+/** Face */
 public interface Face {
-    /**
-     * faceMethod
-     */
+    /** faceMethod */
     Face faceMethod(Face face);
 }

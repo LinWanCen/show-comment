@@ -35,14 +35,14 @@ public class DocUtils {
 
     @Nullable
     public static PsiDocComment fileDoc(PsiFile psiFile) {
-        if (!(psiFile instanceof PsiJavaFile)) {
+        if (!(psiFile instanceof PsiClassOwner)) {
             return null;
         }
-        PsiJavaFile psiJavaFile = (PsiJavaFile) psiFile;
+        PsiClassOwner psiClassOwner = (PsiClassOwner) psiFile;
         if (PsiPackage.PACKAGE_INFO_FILE.equals(psiFile.getName())) {
             return PackageDocUtils.fromPackageInfoFile(psiFile);
         }
-        PsiClass[] classes = psiJavaFile.getClasses();
+        PsiClass[] classes = psiClassOwner.getClasses();
         if (classes.length == 0) {
             return null;
         }

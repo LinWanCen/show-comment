@@ -35,9 +35,10 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
-        modified |= mySettingsComponent.getShowLineEndCommentForCall() != settings.showLineEndCommentForCall;
-        modified |= mySettingsComponent.getShowLineEndCommentForNew() != settings.showLineEndCommentForNew;
-        modified |= mySettingsComponent.getShowLineEndCommentForRef() != settings.showLineEndCommentForRef;
+        modified |= mySettingsComponent.getFromCall() != settings.fromCall;
+        modified |= mySettingsComponent.getFromNew() != settings.fromNew;
+        modified |= mySettingsComponent.getFromRef() != settings.fromRef;
+        modified |= mySettingsComponent.getInJson() != settings.inJson;
         if (EditorColorsManager.getInstance().isDarkEditor()) {
             modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndColorDark);
         } else {
@@ -46,6 +47,8 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getFindElementRightToLeft() != settings.findElementRightToLeft;
         modified |= !mySettingsComponent.getLineEndInclude().equals(settings.lineEndInclude);
         modified |= !mySettingsComponent.getLineEndExclude().equals(settings.lineEndExclude);
+        modified |= !mySettingsComponent.getLineEndPrefix().equals(settings.lineEndPrefix);
+        modified |= !mySettingsComponent.getLineEndCount().equals(String.valueOf(settings.lineEndCount));
         return modified;
     }
 
@@ -54,9 +57,10 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
-        settings.showLineEndCommentForCall = mySettingsComponent.getShowLineEndCommentForCall();
-        settings.showLineEndCommentForNew = mySettingsComponent.getShowLineEndCommentForNew();
-        settings.showLineEndCommentForRef = mySettingsComponent.getShowLineEndCommentForRef();
+        settings.fromCall = mySettingsComponent.getFromCall();
+        settings.fromNew = mySettingsComponent.getFromNew();
+        settings.fromRef = mySettingsComponent.getFromRef();
+        settings.inJson = mySettingsComponent.getInJson();
         if (EditorColorsManager.getInstance().isDarkEditor()) {
             settings.lineEndColorDark = mySettingsComponent.getLineEndColor();
         } else {
@@ -69,6 +73,12 @@ public class AppSettingsConfigurable implements Configurable {
         settings.lineEndExclude = mySettingsComponent.getLineEndExclude();
         settings.lineEndIncludeArray = SplitUtils.split(settings.lineEndInclude);
         settings.lineEndExcludeArray = SplitUtils.split(settings.lineEndExclude);
+        settings.lineEndPrefix = mySettingsComponent.getLineEndPrefix();
+        try {
+            settings.lineEndCount = Integer.parseInt(mySettingsComponent.getLineEndCount());
+        } catch (NumberFormatException e) {
+            mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
+        }
     }
 
     @Override
@@ -76,9 +86,10 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
-        mySettingsComponent.setShowLineEndCommentForCall(settings.showLineEndCommentForCall);
-        mySettingsComponent.setShowLineEndCommentForNew(settings.showLineEndCommentForNew);
-        mySettingsComponent.setShowLineEndCommentForRef(settings.showLineEndCommentForRef);
+        mySettingsComponent.setFromCall(settings.fromCall);
+        mySettingsComponent.setFromNew(settings.fromNew);
+        mySettingsComponent.setFromRef(settings.fromRef);
+        mySettingsComponent.setInJson(settings.inJson);
         if (EditorColorsManager.getInstance().isDarkEditor()) {
             mySettingsComponent.setLineEndColor(settings.lineEndColorDark);
         } else {
@@ -87,6 +98,8 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setFindElementRightToLeft(settings.findElementRightToLeft);
         mySettingsComponent.setLineEndInclude(settings.lineEndInclude);
         mySettingsComponent.setLineEndExclude(settings.lineEndExclude);
+        mySettingsComponent.setLineEndPrefix(settings.lineEndPrefix);
+        mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
     }
 
     @Override

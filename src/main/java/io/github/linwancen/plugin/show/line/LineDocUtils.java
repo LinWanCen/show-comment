@@ -16,32 +16,33 @@ class LineDocUtils {
                                     int startOffset, int endOffset) {
         AppSettingsState instance = AppSettingsState.getInstance();
         if (element != null) {
-            PsiDocComment executableDoc = elementDoc(element, startOffset, endOffset, instance);
-            if (executableDoc != null) {
-                return executableDoc;
+            PsiDocComment elementDoc = elementDoc(element, startOffset, endOffset, instance);
+            if (elementDoc != null) {
+                return elementDoc;
             }
         }
-        if (instance.showLineEndCommentForRef) {
+        if (instance.fromRef) {
             return refDoc(psiIdentifier, endOffset);
         }
         return null;
     }
 
     @Nullable
-    private static PsiDocComment elementDoc(PsiElement element, int startOffset, int endOffset, AppSettingsState instance) {
-        if (instance.showLineEndCommentForCall) {
+    private static PsiDocComment elementDoc(PsiElement element, int startOffset, int endOffset,
+                                            AppSettingsState instance) {
+        if (instance.fromCall) {
             PsiDocComment executableDoc = parentMethodDoc(element, startOffset, endOffset);
             if (executableDoc != null) {
                 return executableDoc;
             }
         }
-        if (instance.showLineEndCommentForNew) {
+        if (instance.fromNew) {
             PsiDocComment newDoc = parentNewDoc(element, startOffset);
             if (newDoc != null) {
                 return newDoc;
             }
         }
-        if (instance.showLineEndCommentForRef) {
+        if (instance.fromRef) {
             return docRefDoc(element);
         }
         return null;

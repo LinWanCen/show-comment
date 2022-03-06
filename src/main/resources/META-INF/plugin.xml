@@ -4,7 +4,7 @@
     <vendor email="1498425439@qq.com" url="https://github.com/LinWanCen/show-comment">林万程</vendor>
 
     <description><![CDATA[
-    English Note:
+    English Notes:
     <ul>
       <li>Show javadoc comments at the Project view Tree structure.
       <li>Show javadoc comments at the end-of-line.
@@ -15,7 +15,7 @@
       <li>Class name prefix filter of end-of-line comment can be modified in<br>
           settings -> Tools -> Show Comment Project
     </ul>
-    Chinese Note:
+    Chinese Notes:
     <ul>
       <li>在结构树显示 文档注释。
       <li>在行末尾显示 文档注释。
