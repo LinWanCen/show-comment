@@ -62,7 +62,7 @@ public class LineDocLeftToRightUtils {
 
     @Nullable
     private static PsiDocComment nextDoc(PsiElement element, int startOffset, int endOffset) {
-        while (element.getTextRange().getEndOffset() < endOffset) {
+        while (element.getTextRange().getEndOffset() <= endOffset) {
             if (element instanceof PsiIdentifier) {
                 PsiDocComment psiDocComment = LineDocUtils.elementDoc(element, element, startOffset, endOffset);
                 if (psiDocComment != null) {
