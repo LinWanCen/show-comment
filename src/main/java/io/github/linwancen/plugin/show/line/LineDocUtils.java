@@ -107,10 +107,6 @@ class LineDocUtils {
                 return SkipDocUtils.refDoc(((PsiDocCommentOwner) resolve));
             }
         }
-        // for right to left field
-        if (parent instanceof PsiDocCommentOwner) {
-            return SkipDocUtils.refDoc(((PsiDocCommentOwner) parent));
-        }
         // for right to left for
         if (parent instanceof PsiForeachStatement) {
             PsiParameter iterationParameter = ((PsiForeachStatement) parent).getIterationParameter();
