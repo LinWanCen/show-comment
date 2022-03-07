@@ -2,25 +2,30 @@
 IDEA 智能注释插件
 
 English Notes:
-- Show javadoc comments in the Project view Tree structure.
-- Show javadoc comments for calling methods at the end of the line.
-- One of the above features  
-  can be turned off in the settings -> Tools -> Show Comment Global.
-- The color of end-of-line comments  
-  can be modified in the settings -> Tools -> Show Comment Global.
-- End-of-line comment class prefix filter  
-  can be modified in settings -> Tools -> Show Comment Project.
-
+<ul>
+<li>Show javadoc comments at the Project view Tree structure.
+<li>Show javadoc comments at the end-of-line.
+<li>Show javadoc comments at "xx ClassNameOrSimpleName.json" end-of-line.
+<li>One of the above features can be turned off in<br>
+    settings -> Tools -> Show Comment Global
+<li>Font color of end-of-line comments can be modified in <br>
+    settings -> Tools -> Show Comment Global
+<li>Class name prefix filter of end-of-line comment can be modified in<br>
+    settings -> Tools -> Show Comment Project
+</ul>
 Chinese Notes:
-- 在结构树显示 当前节点 的文档注释。
-- 在行末尾显示 调用方法 的文档注释。
-- 可以在设置中 关闭 上面其中一个功能。
-- 可以在设置中 修改 行末注释的颜色。
-- 可以在设置中 修改 行末注释类前缀过滤。
+<ul>
+<li>在结构树显示 文档注释。
+<li>在行末尾显示 文档注释。
+<li>行末注释支持 "xx 类全名或简名.json"。
+<li>可以在设置中 关闭 上面其中一个功能。
+<li>可以在设置中 修改 行末注释 的字体颜色。
+<li>可以在设置中 修改 行末注释 的类名前缀过滤。
+</ul>
 
 English Change Notes:
 <ul>
-<li>1.8 Add line-end-comment  for json
+<li>1.8 Add line-end-comment  for "xx ClassNameOrSimpleName.json"
 <li>1.7 Add line-end-comment  setting for prefix and count
 <li>1.6 Add line-end-comment  independent switch for call, new, ref
 <li>1.5 Add line-end-comment  find next loop when none
@@ -32,7 +37,7 @@ English Change Notes:
 
 Chinese Change Notes:
 <ul>
-<li>1.8 增加 从同后缀的类中读取 json 行末注释
+<li>1.8 增加 "xx 类全名或简名.json" 行末注释
 <li>1.7 增加 行末注释前缀和对象数设置
 <li>1.6 增加 行末调用，new，引用注释独立开关
 <li>1.5 增加 没有注释时循环查找下一个对象
