@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.doc;
 
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.Nullable;
@@ -36,12 +37,26 @@ public class DocUtils {
     @Nullable
     public static PsiDocComment fileDoc(PsiFile psiFile) {
         if (!(psiFile instanceof PsiClassOwner)) {
+            // for SPI
+            PsiClass[] psiClasses = PsiClassUtils.nameToClass(psiFile.getName(), psiFile.getProject());
+            // for "xxx ClassName.xxx"
+            if (psiClasses.length == 0) {
+                VirtualFile virtualFile = psiFile.getVirtualFile();
+                psiClasses = PsiClassUtils.encClass(virtualFile, psiFile.getProject());
+            }
+            for (PsiClass psiClass : psiClasses) {
+                PsiDocComment docComment = srcOrByteCodeDoc(psiClass);
+                if (docComment != null) {
+                    // Inaccurate when there are classes with the same name
+                    return docComment;
+                }
+            }
             return null;
         }
-        PsiClassOwner psiClassOwner = (PsiClassOwner) psiFile;
         if (PsiPackage.PACKAGE_INFO_FILE.equals(psiFile.getName())) {
             return PackageDocUtils.fromPackageInfoFile(psiFile);
         }
+        PsiClassOwner psiClassOwner = (PsiClassOwner) psiFile;
         PsiClass[] classes = psiClassOwner.getClasses();
         if (classes.length == 0) {
             return null;

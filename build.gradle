@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '1.8.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '1.9.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 apply plugin: 'java'
 
@@ -39,6 +39,7 @@ patchPluginXml {
     changeNotes = """
 English Change Notes:
 <ul>
+<li>1.9 Add project-view-tree-comment  for "xx ClassNameOrSimpleName.json" and SPI file
 <li>1.8 Add line-end-comment  for "xx ClassNameOrSimpleName.json"
 <li>1.7 Add line-end-comment  setting for prefix and count
 <li>1.6 Add line-end-comment  independent switch for call, new, ref
@@ -51,6 +52,7 @@ English Change Notes:
 
 Chinese Change Notes:
 <ul>
+<li>1.9 增加 "xx 类全名或简名.json" 和 SPI 项目导航栏注释
 <li>1.8 增加 "xx 类全名或简名.json" 行末注释
 <li>1.7 增加 行末注释前缀和对象数设置
 <li>1.6 增加 行末调用，new，引用注释独立开关

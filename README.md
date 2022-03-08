@@ -5,7 +5,7 @@ English Notes:
 <ul>
 <li>Show javadoc comments at the Project view Tree structure.
 <li>Show javadoc comments at the end-of-line.
-<li>Show javadoc comments at "xx ClassNameOrSimpleName.json" end-of-line.
+<li>Show javadoc comments at "xx ClassNameOrSimpleName.json".
 <li>One of the above features can be turned off in<br>
     settings -> Tools -> Show Comment Global
 <li>Font color of end-of-line comments can be modified in <br>
@@ -17,7 +17,7 @@ Chinese Notes:
 <ul>
 <li>在结构树显示 文档注释。
 <li>在行末尾显示 文档注释。
-<li>行末注释支持 "xx 类全名或简名.json"。
+<li>支持 "xx 类全名或简名.json"。
 <li>可以在设置中 关闭 上面其中一个功能。
 <li>可以在设置中 修改 行末注释 的字体颜色。
 <li>可以在设置中 修改 行末注释 的类名前缀过滤。
@@ -25,6 +25,7 @@ Chinese Notes:
 
 English Change Notes:
 <ul>
+<li>1.9 Add project-view-tree-comment  for "xx ClassNameOrSimpleName.json" and SPI file
 <li>1.8 Add line-end-comment  for "xx ClassNameOrSimpleName.json"
 <li>1.7 Add line-end-comment  setting for prefix and count
 <li>1.6 Add line-end-comment  independent switch for call, new, ref
@@ -37,6 +38,7 @@ English Change Notes:
 
 Chinese Change Notes:
 <ul>
+<li>1.9 增加 "xx 类全名或简名.json" 和 SPI 项目导航栏注释
 <li>1.8 增加 "xx 类全名或简名.json" 行末注释
 <li>1.7 增加 行末注释前缀和对象数设置
 <li>1.6 增加 行末调用，new，引用注释独立开关
