@@ -1,7 +1,7 @@
-package io.github.linwancen.plugin.show.demo;
+package io.github.linwancen.plugin.show.demo.java;
 
-import io.github.linwancen.plugin.show.demo.method.Child;
-import io.github.linwancen.plugin.show.demo.method.Parent;
+import io.github.linwancen.plugin.show.demo.java.obj.Child;
+import io.github.linwancen.plugin.show.demo.java.obj.Parent;
 
 @SuppressWarnings("all")
 public class Loop {

@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.demo.method;
+package io.github.linwancen.plugin.show.demo.java.obj;
 
 /** Child */
 public class Child extends Parent implements Face {

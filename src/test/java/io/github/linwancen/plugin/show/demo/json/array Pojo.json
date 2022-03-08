@@ -1,0 +1,14 @@
+{
+  "nestedClassArr": [
+    {
+      "nestedClass2": {
+        "a": ""
+      }
+    },
+    {
+      "nestedClass2": {
+        "a": ""
+      }
+    }
+  ]
+}

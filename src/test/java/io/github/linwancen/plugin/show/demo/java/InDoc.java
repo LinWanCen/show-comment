@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.demo;
+package io.github.linwancen.plugin.show.demo.java;
 
 /**
  * InDoc

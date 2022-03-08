@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.demo.method;
+package io.github.linwancen.plugin.show.demo.java.obj;
 
 /** Face */
 public interface Face {
