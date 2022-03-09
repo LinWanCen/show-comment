@@ -43,7 +43,7 @@ public class JsonDocUtils {
         for (PsiClass psiClass : psiClasses) {
             PsiField psiField = psiClass.findFieldByName(name, true);
             if (psiField == null) {
-                return null;
+                continue;
             }
             if (level == 0) {
                 return DocUtils.srcOrByteCodeDoc(psiField);
@@ -60,6 +60,11 @@ public class JsonDocUtils {
 
     @NotNull
     private static String toClassFullName(PsiField psiField) {
+        // <> only in .java
+        PsiElement navElement = psiField.getNavigationElement();
+        if (navElement instanceof PsiField) {
+            psiField = (PsiField) navElement;
+        }
         PsiTypeElement typeElement = psiField.getTypeElement();
         if (typeElement != null) {
             PsiJavaCodeReferenceElement code = typeElement.getInnermostComponentReferenceElement();

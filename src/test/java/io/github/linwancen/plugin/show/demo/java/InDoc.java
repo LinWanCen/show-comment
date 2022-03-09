@@ -14,11 +14,11 @@ public class InDoc {
     /** field */
     public String field;
 
-    /** method() */
+    /** method1() */
     public void method1() {
     }
 
-    /** method(InDoc) */
+    /** method2(InDoc) */
     public void method2(InDoc inDoc) {
     }
 }

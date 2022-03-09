@@ -1,14 +1,8 @@
 {
-  "nestedClassList": [
-    {
-      "nestedClass2": {
-        "a": ""
-      }
-    },
+  "nestedClass":
     {
       "nestedClass2": {
         "a": ""
       }
     }
-  ]
 }
