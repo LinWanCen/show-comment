@@ -6,21 +6,14 @@ English Notes:
 <li>Show javadoc comments at the Project view Tree structure.
 <li>Show javadoc comments at the end-of-line.
 <li>Show javadoc comments at "xx ClassNameOrSimpleName.json".
-<li>One of the above features can be turned off in<br>
-    settings -> Tools -> Show Comment Global
-<li>Font color of end-of-line comments can be modified in <br>
-    settings -> Tools -> Show Comment Global
-<li>Class name prefix filter of end-of-line comment can be modified in<br>
-    settings -> Tools -> Show Comment Project
+<li>Config: settings -> Tools -> Show Comment Global/Project
 </ul>
 Chinese Notes:
 <ul>
 <li>在结构树显示 文档注释。
 <li>在行末尾显示 文档注释。
 <li>支持 "xx 类全名或简名.json"。
-<li>可以在设置中 关闭 上面其中一个功能。
-<li>可以在设置中 修改 行末注释 的字体颜色。
-<li>可以在设置中 修改 行末注释 的类名前缀过滤。
+<li>修改配置：设置 -> 工具 -> Show Comment Global/Project
 </ul>
 
 English Change Notes:

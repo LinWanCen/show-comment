@@ -46,13 +46,17 @@ public class JsonDocUtils {
                 continue;
             }
             if (level == 0) {
-                return DocUtils.srcOrByteCodeDoc(psiField);
-            }
-            String classFullName = toClassFullName(psiField);
-            PsiClass[] classes = PsiClassUtils.fullNameToClass(classFullName, project);
-            PsiDocComment docComment = doc(classes, project, jsonPath, level - 1);
-            if (docComment != null) {
-                return docComment;
+                PsiDocComment docComment = DocUtils.srcOrByteCodeDoc(psiField);
+                if (docComment != null) {
+                    return docComment;
+                }
+            } else {
+                String classFullName = toClassFullName(psiField);
+                PsiClass[] classes = PsiClassUtils.fullNameToClass(classFullName, project);
+                PsiDocComment docComment = doc(classes, project, jsonPath, level - 1);
+                if (docComment != null) {
+                    return docComment;
+                }
             }
         }
         return null;
