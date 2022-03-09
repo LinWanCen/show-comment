@@ -21,6 +21,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JBCheckBox fromRef = new JBCheckBox("ref ");
     private final JBCheckBox inJson = new JBCheckBox("in json ");
     private final ColorPanel lineEndColor = new ColorPanel();
+    private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBCheckBox findElementRightToLeft = new JBCheckBox("Find element right to left");
     protected final JBTextField lineEndPrefix = new JBTextField();
     protected final JBTextField lineEndCount = new JBTextField();
@@ -48,6 +49,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         JPanel text = JPanelFactory.of(
                 new JBLabel("object count: "), lineEndCount,
                 new JBLabel("text color: "), lineEndColor,
+                new JBLabel("json text color: "), lineEndJsonColor,
                 new JBLabel("prefix: "), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(findElementRightToLeft))
@@ -122,6 +124,14 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public void setLineEndColor(Color color) {
         lineEndColor.setSelectedColor(color);
+    }
+
+    public Color getLineEndJsonColor() {
+        return lineEndJsonColor.getSelectedColor();
+    }
+
+    public void setLineEndJsonColor(Color color) {
+        lineEndJsonColor.setSelectedColor(color);
     }
 
     public boolean getFindElementRightToLeft() {

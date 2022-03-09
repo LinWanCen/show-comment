@@ -5,6 +5,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     @SuppressWarnings("all")
     public Color lineEndColorDark = new Color(98, 151, 85);
     public final TextAttributes lineEndTextAttr = new TextAttributes(new JBColor(lineEndColorBright, lineEndColorDark),
+            null, null, null, Font.ITALIC);
+    public final TextAttributes lineEndJsonTextAttr = new TextAttributes(new JBColor(Gray._140, Gray._140),
             null, null, null, Font.ITALIC);
 
     public boolean findElementRightToLeft = true;

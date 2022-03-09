@@ -1,8 +1,10 @@
 package io.github.linwancen.plugin.show;
 
+import com.intellij.json.JsonFileType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
+import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -37,7 +39,10 @@ public class LineEnd extends EditorLinePainter {
         if (comment == null) {
             return null;
         }
-        LineExtensionInfo info = new LineExtensionInfo(settings.lineEndPrefix + comment, settings.lineEndTextAttr);
+        TextAttributes textAttr = file.getFileType().equals(JsonFileType.INSTANCE)
+                ? settings.lineEndJsonTextAttr
+                : settings.lineEndTextAttr;
+        LineExtensionInfo info = new LineExtensionInfo(settings.lineEndPrefix + comment, textAttr);
         return Collections.singletonList(info);
     }
 

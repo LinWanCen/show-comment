@@ -1,6 +1,8 @@
 # Show Comment Plugin
 IDEA 智能注释插件
 
+https://plugins.jetbrains.com/plugin/18553-show-comment
+
 English Notes:
 <ul>
 <li>Show javadoc comments at the Project view Tree structure.
