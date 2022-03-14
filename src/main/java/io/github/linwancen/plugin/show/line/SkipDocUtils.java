@@ -22,6 +22,9 @@ class SkipDocUtils {
         if (skip(docOwner)) {
             return null;
         }
+        if (docOwner instanceof PsiMethod) {
+            return DocUtils.methodDoc(((PsiMethod) docOwner));
+        }
         return DocUtils.srcOrByteCodeDoc(docOwner);
     }
 

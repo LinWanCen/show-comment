@@ -22,9 +22,10 @@ public class Child extends Parent implements Face {
         return null;
     }
 
+    /** String fun */
+    public String fun;
 
-    /** fun */
-    public static Face fun(Face face) {
+    public static Face setFun(Face face) {
         return null;
     }
 

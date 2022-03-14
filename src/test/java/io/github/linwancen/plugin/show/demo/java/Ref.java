@@ -11,9 +11,9 @@ public class Ref implements Face {
         Child child = new Child(true);
         Child field = child.field.field;
         boolean bool = child.field.bool;
-        Face fun = Child::fun;
+        Face fun = Child::setFun;
         child
-                .faceMethod(face1 -> Child::fun);
+                .faceMethod(face1 -> Child::setFun);
     }
 
     @Override
