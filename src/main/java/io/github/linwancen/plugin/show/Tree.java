@@ -35,7 +35,7 @@ public class Tree implements ProjectViewNodeDecorator {
             return;
         }
 
-        PsiDocComment docComment = psiDocCommentOf(node, project);
+        PsiDocComment docComment = nodeDoc(node, project);
         if (docComment == null) {
             return;
         }
@@ -52,14 +52,14 @@ public class Tree implements ProjectViewNodeDecorator {
     }
 
     @Nullable
-    private PsiDocComment psiDocCommentOf(ProjectViewNode<?> node, Project project) {
+    private PsiDocComment nodeDoc(ProjectViewNode<?> node, Project project) {
         if (node instanceof PsiFileNode) {
             PsiFile psiFile = ((PsiFileNode) node).getValue();
             return DocUtils.fileDoc(psiFile);
         }
         if (node instanceof PsiDirectoryNode) {
             PsiDirectory psiDirectory = ((PsiDirectoryNode) node).getValue();
-            return DocUtils.dirDoc(psiDirectory);
+            return dirDoc(psiDirectory);
         }
 
         if (node instanceof PsiMethodNode) {
@@ -81,7 +81,7 @@ public class Tree implements ProjectViewNodeDecorator {
         if (node instanceof PackageElementNode) {
             // On Packages View
             PsiPackage psiPackage = ((PackageElementNode) node).getValue().getPackage();
-            return DocUtils.packageDoc(psiPackage);
+            return packageDoc(psiPackage);
         }
 
         // On Packages View, Project Files View
@@ -93,7 +93,43 @@ public class Tree implements ProjectViewNodeDecorator {
         if (psiDirectory == null) {
             return null;
         }
-        return DocUtils.dirDoc(psiDirectory);
+        return dirDoc(psiDirectory);
+    }
+
+    @Nullable
+    private PsiDocComment dirDoc(PsiDirectory child) {
+        while (true) {
+            PsiDocComment docComment = DocUtils.dirDoc(child);
+            if (docComment != null) {
+                return docComment;
+            }
+            PsiDirectory parent = child.getParent();
+            if (parent == null) {
+                return null;
+            }
+            if (parent.getChildren().length != 1) {
+                return null;
+            }
+            child = parent;
+        }
+    }
+
+    @Nullable
+    private PsiDocComment packageDoc(PsiPackage child) {
+        while (true) {
+            PsiDocComment docComment = DocUtils.packageDoc(child);
+            if (docComment != null) {
+                return docComment;
+            }
+            PsiPackage parent = child.getParentPackage();
+            if (parent == null) {
+                return null;
+            }
+            if (parent.getChildren().length != 1) {
+                return null;
+            }
+            child = parent;
+        }
     }
 
     @Override

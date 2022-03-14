@@ -23,10 +23,18 @@ public class DocUtils {
     }
 
     @Nullable
-    public static PsiDocComment packageDoc(PsiPackage psiPackage) {
+    public static PsiDocComment packageDoc(@Nullable PsiPackage psiPackage) {
+        if (psiPackage == null) {
+            return null;
+        }
+        String name = psiPackage.getName();
+        if (name == null || name.length() == 0) {
+            return null;
+        }
         PsiDirectory[] psiDirectories = psiPackage.getDirectories();
         for (PsiDirectory psiDirectory : psiDirectories) {
-            PsiDocComment psiDocComment = dirDoc(psiDirectory);
+            PsiFile file = psiDirectory.findFile(PsiPackage.PACKAGE_INFO_FILE);
+            PsiDocComment psiDocComment = PackageDocUtils.fromPackageInfoFile(file);
             if (psiDocComment != null) {
                 return psiDocComment;
             }
@@ -67,7 +75,7 @@ public class DocUtils {
 
     @Nullable
     public static PsiDocComment dirDoc(PsiDirectory psiDirectory) {
-        PsiFile file = psiDirectory.findFile(PsiPackage.PACKAGE_INFO_FILE);
-        return PackageDocUtils.fromPackageInfoFile(file);
+        PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
+        return packageDoc(psiPackage);
     }
 }
