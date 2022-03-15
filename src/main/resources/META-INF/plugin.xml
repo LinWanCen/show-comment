@@ -6,16 +6,16 @@
     <description><![CDATA[
 English Notes:
 <ul>
-<li>Show javadoc comments at the Project view Tree structure.
-<li>Show javadoc comments at the end-of-line.
-<li>Show javadoc comments at "xx ClassNameOrSimpleName.json".
+<li>Show javadoc comments at the Project view Tree structure
+<li>Show javadoc comments at the end-of-line
+<li>Show javadoc comments at "xx ClassNameOrSimpleName.json" and jump to field
 <li>Config: settings -> Tools -> Show Comment Global/Project
 </ul>
 Chinese Notes:
 <ul>
-<li>在结构树显示 文档注释。
-<li>在行末尾显示 文档注释。
-<li>支持 "xx 类全名或简名.json"。
+<li>在结构树显示 文档注释
+<li>在行末尾显示 文档注释
+<li>支持 "xx 类全名或简名.json" 文档注释与跳转到字段
 <li>修改配置：设置 -> 工具 -> Show Comment Global/Project
 </ul>
     ]]></description>
@@ -40,6 +40,8 @@ Chinese Notes:
                              id="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
                              displayName="Show Comment Project"/>
         <projectService serviceImplementation="io.github.linwancen.plugin.show.settings.ProjectSettingsState"/>
+
+        <psi.referenceContributor implementation="io.github.linwancen.plugin.show.JsonJump"/>
     </extensions>
 
     <actions>

@@ -2,8 +2,7 @@ package io.github.linwancen.plugin.show.doc;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiShortNamesCache;
 import org.jetbrains.annotations.NotNull;
@@ -50,5 +49,19 @@ public class PsiClassUtils {
     public static PsiClass[] fullNameToClass(@NotNull String className, @NotNull Project project) {
         JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
         return javaPsiFacade.findClasses(className, GlobalSearchScope.allScope(project));
+    }
+
+    @NotNull
+    public static String toClassFullName(PsiField psiField) {
+        // Array
+        // use replace simpler than getDeepComponentType()
+        String typeName = psiField.getType().getCanonicalText().replace("[]", "");
+        // List
+        // use substring() because clsFieldImpl.getInnermostComponentReferenceElement() == null
+        int index = typeName.indexOf("<");
+        if (index >= 0) {
+            return typeName.substring(index + 1, typeName.length() - 1);
+        }
+        return typeName;
     }
 }
