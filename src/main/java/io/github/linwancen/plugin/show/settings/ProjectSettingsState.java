@@ -1,13 +1,14 @@
 package io.github.linwancen.plugin.show.settings;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.regex.Pattern;
 
 @State(
         name = "io.github.linwancen.plugin.comment.settings.ProjectSettingsState",
@@ -21,9 +22,11 @@ public class ProjectSettingsState implements PersistentStateComponent<ProjectSet
     public String lineEndExclude = "";
     public String[] lineEndIncludeArray = {};
     public String[] lineEndExcludeArray = {};
+    public Pattern extReplaceToSpace = Pattern.compile("");
+    public int extDocColumn = 2;
 
     public static ProjectSettingsState getInstance(Project project) {
-        return ServiceManager.getService(project, ProjectSettingsState.class);
+        return project.getService(ProjectSettingsState.class);
     }
 
     @Nullable

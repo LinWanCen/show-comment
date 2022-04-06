@@ -1,0 +1,20 @@
+COBOL-file.tsv.tree.tsv	📝 COBOL 相关文件注释
+
+COBOL.cbl.key.tsv	COBOL 必要【关键字】
+
+COBOL-struct.cbl.doc.tsv	COBOL 文件结构【关键字】
+
+COBOL-data.cbl.key.tsv	COBOL 数据部必要【关键字】
+COBOL-data-layout.cbl.key.tsv	COBOL 数据布局【关键字】
+COBOL-data-type.cbl.key.tsv	COBOL 数据类型【关键字】
+
+COBOL-compute.cbl.key.tsv	COBOL 算数符号【关键字】
+COBOL-compute-word.cbl.key.tsv	COBOL 算数词汇【关键字】
+
+COBOL-accept.cbl.doc.tsv	COBOL 获取词汇(非必要）
+COBOL-accept.cbl.key.tsv	COBOL 获取【关键字】(非必要）
+COBOL-loop.cbl.key.tsv	COBOL 循环【关键字】(非必要）
+COBOL-string.cbl.key.tsv	COBOL 字符串【关键字】(非必要）
+
+COBOL_IDEA.md	COBOL IDEA 高亮设置
+COBOL_keyword1.md	COBOL COBOL IDEA 高亮 普通关键字

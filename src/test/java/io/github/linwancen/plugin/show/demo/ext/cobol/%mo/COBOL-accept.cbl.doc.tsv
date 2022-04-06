@@ -1,0 +1,6 @@
+	COBOL 获取词汇(非必要）
+DATE	系统日期
+DATE YYYYMMDD	系统日期
+TIME	系统时间
+SYSIN	系统输入
+CONSOLE	控制台

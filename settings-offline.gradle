@@ -1,0 +1,29 @@
+// gradle/init.d/init.gradle use allprojects {
+// settings.gradle use pluginManagement {
+pluginManagement {
+    repositories {
+        all { ArtifactRepository repo ->
+            if (repo instanceof MavenArtifactRepository) {
+                def url = repo.url.toString()
+                if (url.startsWith("https://repo1.maven.org/maven2")
+                || url.startsWith("https://jcenter.bintray.com/")
+                || url.startsWith("https://cache-redirector.jetbrains.com")) {
+                    project.logger.lifecycle("remove Repository ${repo.url}.")
+                    remove(repo)
+                }
+            }
+        }
+        mavenLocal()
+        maven { name "jetbrains-cache"; url "" }
+        maven { name "maven-cache"; url "" }
+    }
+    buildscript {
+        repositories {
+            mavenLocal()
+            maven { name "jetbrains-cache"; url "" }
+        }
+    }
+}
+
+rootProject.name = 'show-comment'
+

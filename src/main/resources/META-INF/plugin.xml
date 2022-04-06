@@ -4,19 +4,45 @@
     <vendor email="1498425439@qq.com" url="https://github.com/LinWanCen/show-comment">林万程</vendor>
 
     <description><![CDATA[
-English Notes:
+<h2>English Notes:</h2>
 <ul>
 <li>Show javadoc comments at the Project view Tree structure
 <li>Show javadoc comments at the end-of-line
 <li>Show javadoc comments at "xx ClassNameOrSimpleName.json" and jump to field
-<li>Config: settings -> Tools -> Show Comment Global/Project
+<li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
-Chinese Notes:
+
+<h3>External Comment:</h3>
+<ul>
+<li>Reload: Tools -> 🔄 // Reload External Comment
+<li>path/[any][filename.]ext.tree.tsv // file and folder tree comment 📝 📁
+<li>path/[any][filename.]ext.key.tsv  // line keywords to split and comment
+<li>path/[any][filename.]ext.doc.tsv  // line words comment
+<li>In path, "doc" can replace any, and can use % like in SQL
+<li>The line in key.tsv would concat lines with `|` to regexp, longer str should in front, startWith `?` to exclude
+<li>Chang tsv file in find pop window would not reload!
+<li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
+</ul>
+
+
+<h2>中文说明:</h2>
 <ul>
 <li>在结构树显示 文档注释
 <li>在行末尾显示 文档注释
 <li>支持 "xx 类全名或简名.json" 文档注释与跳转到字段
-<li>修改配置：设置 -> 工具 -> Show Comment Global/Project
+<li>修改配置：设置 -> 工具 -> // Show Comment Global/Project
+</ul>
+
+<h3>外部注释：</h3>
+<ul>
+<li>重新加载：工具 -> "🔄 // Reload External Comment"
+<li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁
+<li>path/[any][filename.]ext.key.tsv  // 切割关键字与注释
+<li>path/[any][filename.]ext.doc.tsv  // 词注释
+<li>key.tsv 的每一行将会用`|`连接起来形成正则表达式，较长的关键字应该放在前面，用 `?` 开头排除
+<li>doc 文件夹可以替换任何一层文件夹，可以像 SQL 那样用 % 模糊匹配
+<li>在搜索弹出窗中修改 tsv 文件将不会被重加载
+<li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
     ]]></description>
 
@@ -25,6 +51,21 @@ Chinese Notes:
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
 
+    <applicationListeners>
+        <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileListener"
+                  topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
+    </applicationListeners>
+
+    <applicationListeners>
+        <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileChangeListener"
+                  topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+    </applicationListeners>
+
+    <projectListeners>
+        <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileInitListener"
+                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    </projectListeners>
+
     <extensions defaultExtensionNs="com.intellij">
         <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd" />
         <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
@@ -32,18 +73,24 @@ Chinese Notes:
         <applicationConfigurable parentId="tools"
                                  instance="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
                                  id="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
-                                 displayName="Show Comment Global"/>
+                                 displayName="// Show Comment Global"/>
         <applicationService serviceImplementation="io.github.linwancen.plugin.show.settings.AppSettingsState"/>
 
         <projectConfigurable parentId="tools"
                              instance="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
                              id="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
-                             displayName="Show Comment Project"/>
+                             displayName="// Show Comment Project"/>
         <projectService serviceImplementation="io.github.linwancen.plugin.show.settings.ProjectSettingsState"/>
 
         <psi.referenceContributor implementation="io.github.linwancen.plugin.show.JsonJump"/>
     </extensions>
 
     <actions>
+        <action
+            id="io.github.linwancen.plugin.show.ext.conf.ReLoadExtDocAction"
+            class="io.github.linwancen.plugin.show.ext.conf.ReloadExtDocAction"
+            text="🔄 // Reload External Comment">
+            <add-to-group group-id="ToolsMenu"/>
+        </action>
     </actions>
 </idea-plugin>

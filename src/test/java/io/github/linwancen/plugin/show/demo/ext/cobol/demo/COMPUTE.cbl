@@ -1,0 +1,10 @@
+
+        COMPUTE HELLO-WORLD = (A - B) * 100 / (C + D)
+        END-COMPUTE
+        ADD A TO B
+        ADD A B   TO C D
+        SUBTRACT A FROM C
+        SUBTRACT A B FROM C D
+        MULTIPLY A BY B C
+        MULTIPLY A BY B GIVING C
+        DIVIDE A BY B GIVING C REMAINDER D

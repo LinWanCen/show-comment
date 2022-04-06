@@ -7,9 +7,6 @@ import com.intellij.psi.javadoc.PsiInlineDocTag;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DocTextUtils {
 
     private DocTextUtils() {}
@@ -20,30 +17,40 @@ public class DocTextUtils {
             return null;
         }
         AppSettingsState appSettings = AppSettingsState.getInstance();
-        List<String> comments = new ArrayList<>();
+        int lineCount = 0;
+        StringBuilder sb = new StringBuilder();
         PsiElement[] elements = psiDocComment.getDescriptionElements();
         for (PsiElement element : elements) {
-            if (element instanceof PsiDocToken) {
-                PsiDocToken psiDocToken = (PsiDocToken) element;
-                comments.add(psiDocToken.getText());
-            } else if (element instanceof PsiInlineDocTag) {
-                PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
-                PsiElement[] children = psiInlineDocTag.getChildren();
-                if (children.length > 2) {
-                    comments.add(children[2].getText());
-                }
+            if (appendElementText(sb, element)) {
+                lineCount++;
             }
-            if (appSettings.lineEndCount > 0 && comments.size() >= appSettings.lineEndCount) {
+            if (appSettings.lineEndCount > 0
+                    && lineCount >= appSettings.lineEndCount
+                    || appSettings.lineEndLen > 0
+                    && sb.length() >= appSettings.lineEndLen) {
                 break;
             }
         }
-        if (comments.isEmpty()) {
+        if (sb.length() == 0) {
             return null;
         }
-        StringBuilder sb = new StringBuilder(" ");
-        for (String s : comments) {
-            sb.append(s.trim().replace("<br>", "")).append("  ");
-        }
+        sb.insert(0, " ");
         return sb.toString();
+    }
+
+    private static boolean appendElementText(StringBuilder sb, PsiElement element) {
+        if (element instanceof PsiDocToken) {
+            PsiDocToken psiDocToken = (PsiDocToken) element;
+            sb.append(psiDocToken.getText().trim().replace("<br>", "")).append("  ");
+            return true;
+        }
+        if (element instanceof PsiInlineDocTag) {
+            PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
+            PsiElement[] children = psiInlineDocTag.getChildren();
+            if (children.length > 2) {
+                sb.append(children[2].getText().trim().replace("<br>", "")).append("  ");
+            }
+        }
+        return false;
     }
 }

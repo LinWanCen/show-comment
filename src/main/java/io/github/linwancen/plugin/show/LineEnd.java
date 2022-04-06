@@ -14,6 +14,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.doc.DocTextUtils;
 import io.github.linwancen.plugin.show.line.LineDocLeftToRightUtils;
 import io.github.linwancen.plugin.show.line.LineDocRightToLeftUtils;
+import io.github.linwancen.plugin.show.ext.LineExtUtils;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,20 +34,23 @@ public class LineEnd extends EditorLinePainter {
         if (DumbService.isDumb(project)) {
             return null;
         }
-        FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
-        PsiDocComment docComment = doc(project, viewProvider, lineNumber);
-        String comment = DocTextUtils.text(docComment);
-        if (comment == null) {
+        if (!file.exists()) {
+            return null;
+        }
+        String doc = doc(project, file, lineNumber);
+        if (doc == null) {
             return null;
         }
         TextAttributes textAttr = file.getFileType().equals(JsonFileType.INSTANCE)
                 ? settings.lineEndJsonTextAttr
                 : settings.lineEndTextAttr;
-        LineExtensionInfo info = new LineExtensionInfo(settings.lineEndPrefix + comment, textAttr);
+        LineExtensionInfo info = new LineExtensionInfo(settings.lineEndPrefix + doc, textAttr);
         return Collections.singletonList(info);
     }
 
-    private static @Nullable PsiDocComment doc(Project project, FileViewProvider viewProvider, int lineNumber) {
+    private static @Nullable String doc(@NotNull Project project,
+                                        @NotNull VirtualFile file, int lineNumber) {
+        FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
         if (viewProvider == null) {
             return null;
         }
@@ -63,9 +67,13 @@ public class LineEnd extends EditorLinePainter {
         if (startOffset == endOffset) {
             return null;
         }
-        if (AppSettingsState.getInstance().findElementRightToLeft) {
-            return LineDocRightToLeftUtils.rightDoc(viewProvider, startOffset, endOffset);
+        String ext = LineExtUtils.extDoc(project, file, document, startOffset, endOffset);
+        if (ext != null) {
+            return ext;
         }
-        return LineDocLeftToRightUtils.leftDoc(viewProvider, document, startOffset, endOffset);
+        PsiDocComment docComment = AppSettingsState.getInstance().findElementRightToLeft
+                ? LineDocRightToLeftUtils.rightDoc(viewProvider, startOffset, endOffset)
+                : LineDocLeftToRightUtils.leftDoc(viewProvider, document, startOffset, endOffset);
+        return DocTextUtils.text(docComment);
     }
 }

@@ -5,6 +5,7 @@ import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ProjectViewNodeDecorator;
 import com.intellij.ide.projectView.impl.nodes.*;
 import com.intellij.ide.util.treeView.PresentableNodeDescriptor.ColoredFragment;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -15,6 +16,7 @@ import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import io.github.linwancen.plugin.show.doc.DocTextUtils;
 import io.github.linwancen.plugin.show.doc.DocUtils;
+import io.github.linwancen.plugin.show.ext.TreeExtUtils;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,25 +36,43 @@ public class Tree implements ProjectViewNodeDecorator {
         if (DumbService.isDumb(project)) {
             return;
         }
-
-        PsiDocComment docComment = nodeDoc(node, project);
-        if (docComment == null) {
-            return;
-        }
-
-        String commentText = DocTextUtils.text(docComment);
-        if (commentText == null) {
-            return;
-        }
-        List<ColoredFragment> coloredText = data.getColoredText();
-        if (coloredText.isEmpty()) {
-            data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
-        }
-        data.addText(commentText, SimpleTextAttributes.GRAY_ATTRIBUTES);
+        ApplicationManager.getApplication().runReadAction(() -> {
+            String doc = doc(node, project);
+            if (doc == null) {
+                return;
+            }
+            List<ColoredFragment> coloredText = data.getColoredText();
+            if (coloredText.isEmpty()) {
+                data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
+            }
+            data.addText(doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
+        });
     }
 
     @Nullable
-    private PsiDocComment nodeDoc(ProjectViewNode<?> node, Project project) {
+    private String doc(ProjectViewNode<?> node, Project project) {
+        String extDoc = extDoc(node, project);
+        if (extDoc != null) {
+            return extDoc;
+        }
+        PsiDocComment docComment = nodeDoc(node, project);
+        if (docComment == null) {
+            return null;
+        }
+        return DocTextUtils.text(docComment);
+    }
+
+    @Nullable
+    public static String extDoc(ProjectViewNode<?> node, Project project) {
+        VirtualFile file = node.getVirtualFile();
+        if (file == null) {
+            return null;
+        }
+        return TreeExtUtils.extDoc(project, file);
+    }
+
+    @Nullable
+    private static PsiDocComment nodeDoc(ProjectViewNode<?> node, Project project) {
         if (node instanceof PsiFileNode) {
             PsiFile psiFile = ((PsiFileNode) node).getValue();
             return DocUtils.fileDoc(psiFile);
@@ -97,7 +117,7 @@ public class Tree implements ProjectViewNodeDecorator {
     }
 
     @Nullable
-    private PsiDocComment dirDoc(PsiDirectory child) {
+    private static PsiDocComment dirDoc(PsiDirectory child) {
         while (true) {
             PsiDocComment docComment = DocUtils.dirDoc(child);
             if (docComment != null) {
@@ -115,7 +135,7 @@ public class Tree implements ProjectViewNodeDecorator {
     }
 
     @Nullable
-    private PsiDocComment packageDoc(PsiPackage child) {
+    private static PsiDocComment packageDoc(PsiPackage child) {
         while (true) {
             PsiDocComment docComment = DocUtils.packageDoc(child);
             if (docComment != null) {

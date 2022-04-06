@@ -22,9 +22,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showTreeComment = true;
     public boolean showLineEndComment = true;
 
-    @SuppressWarnings("all")
+    @SuppressWarnings("UseJBColor")
     public Color lineEndColorBright = new Color(98, 151, 85);
-    @SuppressWarnings("all")
+    @SuppressWarnings("UseJBColor")
     public Color lineEndColorDark = new Color(98, 151, 85);
     public final TextAttributes lineEndTextAttr = new TextAttributes(new JBColor(lineEndColorBright, lineEndColorDark),
             null, null, null, Font.ITALIC);
@@ -34,6 +34,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean findElementRightToLeft = true;
     public String lineEndPrefix = "  //";
     public int lineEndCount = 2;
+    public int lineEndLen = 0;
     public boolean fromCall = true;
     public boolean fromNew = true;
     public boolean fromRef = true;

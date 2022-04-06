@@ -1,0 +1,6 @@
+folder.tsv.tree.tsv	📁 本目录文件夹注释
+demo	📝 示例
+%em%	前后 %s 匹配
+%mo	前 %s 匹配
+de%	后 %s 匹配
+doc	doc 匹配

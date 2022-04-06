@@ -13,7 +13,9 @@ import io.github.linwancen.plugin.show.json.JsonRef;
 import io.github.linwancen.plugin.show.json.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class JsonJump extends PsiReferenceContributor {
 
