@@ -22,7 +22,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 <li>path/[any][filename.]ext.key.tsv  // line keywords to split and comment
 <li>path/[any][filename.]ext.doc.tsv  // line words comment
 <li>In path, "doc" can replace any, and can use % like in SQL
-<li>The line in key.tsv would concat lines with `|` to regexp, longer str should in front, startWith `?` to exclude
+<li>The lines in key.tsv will be concatenated with `|` to regexp; longer str should in front; startWith `?` to exclude
 <li>Chang tsv file in find pop window would not reload!
 <li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
 </ul>
