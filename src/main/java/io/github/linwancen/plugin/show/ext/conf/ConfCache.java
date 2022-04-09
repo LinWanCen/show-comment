@@ -13,11 +13,9 @@ import com.intellij.psi.search.FilenameIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.regex.Pattern;
 
 /**
@@ -32,6 +30,7 @@ public class ConfCache {
     static final String DOC_MID_EXT = ".doc";
     static final String TREE_MID_EXT = ".tree";
 
+    private static final ConcurrentSkipListSet<String> EXT_IN_KEY_CACHE = new ConcurrentSkipListSet<>();
     private static final Map<VirtualFile, Map<String, List<String>>> KEY_CACHE = new ConcurrentHashMap<>();
     private static final Map<VirtualFile, Map<String, List<String>>> DOC_CACHE = new ConcurrentHashMap<>();
     private static final Map<VirtualFile, Map<String, List<String>>> TREE_CACHE = new ConcurrentHashMap<>();
@@ -46,6 +45,12 @@ public class ConfCache {
 
     @NotNull
     public static Map<String, Map<String, List<String>>> keyMap(@Nullable Project project, @NotNull VirtualFile file) {
+        String ext = file.getExtension();
+        // file witch not ext can have itself ext doc
+        if (ext != null && !EXT_IN_KEY_CACHE.contains(ext)) {
+            // faster than find in KEY_CACHE
+            return Collections.emptyMap();
+        }
         return ConfCacheGetUtils.get(file, KEY_MID_EXT, KEY_CACHE);
     }
 
@@ -60,6 +65,7 @@ public class ConfCache {
     }
 
     static void clearAll() {
+        EXT_IN_KEY_CACHE.clear();
         KEY_CACHE.clear();
         DOC_CACHE.clear();
         TREE_CACHE.clear();
@@ -137,6 +143,11 @@ public class ConfCache {
         // this pattern would skip empty line
         String[] lines = LINE_PATTERN.split(text);
         if (name.endsWith(KEY_MID_EXT)) {
+            String matchName = name.substring(0, name.length() - KEY_MID_EXT.length());
+            int i = matchName.lastIndexOf(".");
+            if (i > 0) {
+                EXT_IN_KEY_CACHE.add(matchName.substring(i + 1));
+            }
             KEY_CACHE.put(file, ConfFactory.buildMap(project, file.getPath(), lines, true));
         } else if (name.endsWith(DOC_MID_EXT)) {
             DOC_CACHE.put(file, ConfFactory.buildMap(project, file.getPath(), lines, false));
