@@ -92,5 +92,11 @@
             text="🔄 // Reload External Comment">
             <add-to-group group-id="ToolsMenu"/>
         </action>
+        <action
+            id="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
+            class="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
+            text="🆑 // Clear External Comment">
+            <add-to-group group-id="ToolsMenu"/>
+        </action>
     </actions>
 </idea-plugin>

@@ -59,6 +59,12 @@ public class ConfCache {
         return ConfCacheGetUtils.get(file, TREE_MID_EXT, TREE_CACHE);
     }
 
+    static void clearAll() {
+        KEY_CACHE.clear();
+        DOC_CACHE.clear();
+        TREE_CACHE.clear();
+    }
+
     static void remove(@NotNull VirtualFile file, String name) {
         if (name != null) {
             int i = name.lastIndexOf('.');
@@ -102,9 +108,6 @@ public class ConfCache {
                 DumbService.getInstance(project).runReadActionInSmartMode(() -> {
                     Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, EXT);
                     StringBuilder sb = new StringBuilder();
-                    KEY_CACHE.clear();
-                    DOC_CACHE.clear();
-                    TREE_CACHE.clear();
                     for (VirtualFile file : files) {
                         load(project, file);
                         sb.append(file.getPath()).append("\n");
