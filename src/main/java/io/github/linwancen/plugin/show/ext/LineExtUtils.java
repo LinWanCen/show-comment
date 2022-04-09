@@ -34,9 +34,32 @@ public class LineExtUtils {
         }
         Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(project, file);
         String text = document.getText(new TextRange(startOffset, endOffset));
+        if ("cbl".equals(file.getExtension())) {
+            text = cblNotAndOr(text);
+        }
         String[] words = pattern.split(text);
         Matcher matcher = pattern.matcher(text);
         return extDoc(keyMap, matcher, docMap, words, treeMap, project);
+    }
+
+    private static final Pattern DICT_PATTERN = Pattern.compile("([\\w-]++) ?(NOT)? ?= ?'");
+    private static final Pattern AND_OR_PATTERN = Pattern.compile("(AND|OR) ?'");
+
+    @NotNull
+    private static String cblNotAndOr(String text) {
+        // maybe faster than regexp
+        if (!text.contains("=")) {
+            return text;
+        }
+        Matcher matcher = DICT_PATTERN.matcher(text);
+        if (!matcher.find()) {
+            return text;
+        }
+        String key = matcher.group(1);
+        // put NOT first
+        text = matcher.replaceAll("$2 ( $1 = '");
+        // add key after AND/OR
+        return AND_OR_PATTERN.matcher(text).replaceAll("$1 "+ key + " = '");
     }
 
     @Nullable
