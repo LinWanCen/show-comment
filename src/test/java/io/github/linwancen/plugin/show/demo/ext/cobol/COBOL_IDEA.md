@@ -1,4 +1,4 @@
-# IDEA COBOL 高亮配置
+# COBOL IDEA 高亮配置
 
 - File -> Settings -> Editor -> File Types
 - 文件 -> 设置 -> 编辑器 -> 文件类型

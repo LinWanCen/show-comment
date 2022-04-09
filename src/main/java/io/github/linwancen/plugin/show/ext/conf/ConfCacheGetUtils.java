@@ -28,15 +28,12 @@ class ConfCacheGetUtils {
      * @return {@code <sortKey, T>}
      */
     @NotNull
-    static <T> TreeMap<String, T> get(@NotNull VirtualFile file,
-                                      @NotNull String confMidExt,
-                                      @NotNull Map<VirtualFile, T> cache) {
+    static <T> TreeMap<String, T> filterPathNameExt(@NotNull VirtualFile file,
+                                                    @NotNull String confMidExt,
+                                                    @NotNull Map<VirtualFile, T> cache) {
         String path = file.getPath();
         String name = file.getName();
         String ext = file.getExtension();
-        if (ext == null) {
-            ext = "";
-        }
         TreeMap<String, T> map = new TreeMap<>();
         int max = path.length();
         int length = String.valueOf(max).length();
@@ -53,11 +50,44 @@ class ConfCacheGetUtils {
                 map.put(levelStr + "\b" + confPath, entry.getValue());
             } else if (confName.endsWith((name + confMidExt))) {
                 map.put(levelStr + "\t" + confPath, entry.getValue());
-            } else if ((ext + confMidExt).equals(confName)) {
-                map.put(levelStr + "\n" + confPath, entry.getValue());
-            } else if (confName.endsWith((ext + confMidExt))) {
-                map.put(levelStr + "\f" + confPath, entry.getValue());
+            } else if (ext != null) {
+                if ((ext + confMidExt).equals(confName)) {
+                    map.put(levelStr + "\n" + confPath, entry.getValue());
+                } else if (confName.endsWith((ext + confMidExt))) {
+                    map.put(levelStr + "\f" + confPath, entry.getValue());
+                }
             }
+        }
+        return map;
+    }
+
+    /**
+     * <br>file:
+     * <br>a/b/c.ext
+     * <br>
+     * <br>configure file priority:
+     * <br>a/b/any.tree.tsv
+     * <br>a/any.tree.tsv
+     *
+     * @return {@code <sortKey, T>}
+     */
+    @NotNull
+    static <T> TreeMap<String, T> filterPath(@NotNull VirtualFile file,
+                                             @SuppressWarnings("SameParameterValue")
+                                             @NotNull Map<VirtualFile, T> cache) {
+        String path = file.getPath();
+        TreeMap<String, T> map = new TreeMap<>();
+        int max = path.length();
+        int length = String.valueOf(max).length();
+        for (Map.Entry<VirtualFile, T> entry : cache.entrySet()) {
+            VirtualFile confFile = entry.getKey();
+            String confPath = confFile.getPath();
+            int level = level(path, confPath);
+            if (level == 0) {
+                continue;
+            }
+            String levelStr = StringUtils.leftPad(String.valueOf(max - level), length, '0');
+            map.put(levelStr + confPath, entry.getValue());
         }
         return map;
     }

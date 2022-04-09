@@ -51,17 +51,17 @@ public class ConfCache {
             // faster than find in KEY_CACHE
             return Collections.emptyMap();
         }
-        return ConfCacheGetUtils.get(file, KEY_MID_EXT, KEY_CACHE);
+        return ConfCacheGetUtils.filterPathNameExt(file, KEY_MID_EXT, KEY_CACHE);
     }
 
     @NotNull
     public static Map<String, Map<String, List<String>>> docMap(@Nullable Project project, @NotNull VirtualFile file) {
-        return ConfCacheGetUtils.get(file, DOC_MID_EXT, DOC_CACHE);
+        return ConfCacheGetUtils.filterPathNameExt(file, DOC_MID_EXT, DOC_CACHE);
     }
 
     @NotNull
     public static Map<String, Map<String, List<String>>> treeMap(@Nullable Project project, @NotNull VirtualFile file) {
-        return ConfCacheGetUtils.get(file, TREE_MID_EXT, TREE_CACHE);
+        return ConfCacheGetUtils.filterPath(file, TREE_CACHE);
     }
 
     static void clearAll() {
