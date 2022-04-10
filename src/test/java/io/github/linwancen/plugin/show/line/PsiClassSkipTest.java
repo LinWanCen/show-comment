@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.util.function.BiPredicate;
 
 /**
- * @see SkipUtils
+ * @see PsiClassSkip
  */
-class SkipUtilsTest {
+class PsiClassSkipTest {
 
     public static final boolean o = true;
     public static final boolean x = false;
@@ -65,7 +65,7 @@ class SkipUtilsTest {
             String[] include = includes[includeIndex];
             for (int excludeIndex = 0, excludesLength = excludes.length; excludeIndex < excludesLength; excludeIndex++) {
                 String[] exclude = excludes[excludeIndex];
-                boolean isSkip = SkipUtils.skipName(name, include, exclude);
+                boolean isSkip = PsiClassSkip.skipName(name, include, exclude);
                 String tip =
                         name + "==" + JsonOutput.toJson(include) + "!=" + JsonOutput.toJson(exclude) + "=>" + isSkip;
                 System.out.println(tip);
@@ -85,7 +85,7 @@ class SkipUtilsTest {
                 {x, o, o}, // {"io"},
                 {o, o, o}, // {"java", "io"},
         };
-        loopTest(SkipUtils::include, results);
+        loopTest(PsiClassSkip::include, results);
     }
 
     @Test
@@ -97,7 +97,7 @@ class SkipUtilsTest {
                 {x, o, o}, // {"io"},
                 {o, o, o}, // {"java", "io"},
         };
-        loopTest(SkipUtils::exclude, results);
+        loopTest(PsiClassSkip::exclude, results);
     }
 
     private void loopTest(BiPredicate<String, String[]> biPredicate, boolean[][] results) {

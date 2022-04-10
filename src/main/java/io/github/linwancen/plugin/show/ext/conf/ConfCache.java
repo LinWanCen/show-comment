@@ -38,30 +38,33 @@ public class ConfCache {
     private ConfCache() {}
 
     @Nullable
-    public static Pattern pattern(@Nullable Project project, @NotNull VirtualFile file,
-                                  @NotNull Map<String, Map<String, List<String>>> keyMap) {
-        return ConfFactory.buildPattern(project, file.getPath(), keyMap);
+    public static Pattern pattern(@Nullable Project project,
+                                  @NotNull Map<String, Map<String, List<String>>> keyMap, @NotNull String path) {
+        return ConfFactory.buildPattern(project, path, keyMap);
     }
 
     @NotNull
-    public static Map<String, Map<String, List<String>>> keyMap(@Nullable Project project, @NotNull VirtualFile file) {
-        String ext = file.getExtension();
+    public static Map<String, Map<String, List<String>>> keyMap(@NotNull String path,
+                                                                @NotNull String name,
+                                                                @Nullable String ext) {
         // file witch not ext can have itself ext doc
         if (ext != null && !EXT_IN_KEY_CACHE.contains(ext)) {
             // faster than find in KEY_CACHE
             return Collections.emptyMap();
         }
-        return ConfCacheGetUtils.filterPathNameExt(file, KEY_MID_EXT, KEY_CACHE);
+        return ConfCacheGetUtils.filterPathNameExt(KEY_MID_EXT, KEY_CACHE, path, name, ext);
     }
 
     @NotNull
-    public static Map<String, Map<String, List<String>>> docMap(@Nullable Project project, @NotNull VirtualFile file) {
-        return ConfCacheGetUtils.filterPathNameExt(file, DOC_MID_EXT, DOC_CACHE);
+    public static Map<String, Map<String, List<String>>> docMap(@NotNull String path,
+                                                                @NotNull String name,
+                                                                @Nullable String ext) {
+        return ConfCacheGetUtils.filterPathNameExt(DOC_MID_EXT, DOC_CACHE, path, name, ext);
     }
 
     @NotNull
-    public static Map<String, Map<String, List<String>>> treeMap(@Nullable Project project, @NotNull VirtualFile file) {
-        return ConfCacheGetUtils.filterPath(file, TREE_CACHE);
+    public static Map<String, Map<String, List<String>>> treeMap(@NotNull String path) {
+        return ConfCacheGetUtils.filterPath(TREE_CACHE, path);
     }
 
     static void clearAll() {

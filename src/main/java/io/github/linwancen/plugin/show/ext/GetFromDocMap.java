@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.ext;
 
-import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -8,16 +7,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-class DocMapUtils {
+class GetFromDocMap {
 
-    private DocMapUtils() {}
+    private GetFromDocMap() {}
 
     @Nullable
-    static String get(@NotNull Map<String, Map<String, List<String>>> docMap,
-                      @NotNull ProjectSettingsState set, @NotNull String... words) {
+    static String get(@NotNull Map<String, Map<String, List<String>>> docMap, @NotNull String... words) {
         List<String> keywordDoc = list(docMap, words);
-        if (keywordDoc.size() >= set.extDocColumn) {
-            return keywordDoc.get(set.extDocColumn - 1);
+        if (keywordDoc.size() >= 2) {
+            return keywordDoc.get(1);
         }
         return null;
     }

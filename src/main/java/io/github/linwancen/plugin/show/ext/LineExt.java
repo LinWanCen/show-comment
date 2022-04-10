@@ -1,11 +1,7 @@
 package io.github.linwancen.plugin.show.ext;
 
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
 import io.github.linwancen.plugin.show.ext.conf.ConfCache;
-import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,32 +10,32 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LineExtUtils {
+public class LineExt {
 
-    private LineExtUtils() {}
+    private LineExt() {}
 
-    public static String extDoc(@NotNull Project project, @NotNull VirtualFile file,
-                                @NotNull Document document, int startOffset, int endOffset) {
-        Map<String, Map<String, List<String>>> keyMap = ConfCache.keyMap(project, file);
+    public static String extDoc(@Nullable Project project,
+                                @NotNull String path, @NotNull String name, @Nullable String ext,
+                                @NotNull String text) {
+        Map<String, Map<String, List<String>>> keyMap = ConfCache.keyMap(path, name, ext);
         if (keyMap.isEmpty()) {
             return null;
         }
-        Pattern pattern = ConfCache.pattern(project, file, keyMap);
+        Pattern pattern = ConfCache.pattern(project, keyMap, path);
         if (pattern == null || pattern.pattern().length() == 0) {
             return null;
         }
-        Map<String, Map<String, List<String>>> docMap = ConfCache.docMap(project, file);
+        Map<String, Map<String, List<String>>> docMap = ConfCache.docMap(path, name, ext);
         if (docMap.isEmpty()) {
             return null;
         }
-        Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(project, file);
-        String text = document.getText(new TextRange(startOffset, endOffset));
-        if ("cbl".equals(file.getExtension())) {
+        Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path);
+        if ("cbl".equals(ext)) {
             text = cblNotAndOr(text);
         }
         String[] words = pattern.split(text);
         Matcher matcher = pattern.matcher(text);
-        return extDoc(keyMap, matcher, docMap, words, treeMap, project);
+        return extDoc(keyMap, matcher, docMap, words, treeMap);
     }
 
     private static final Pattern DICT_PATTERN = Pattern.compile("([\\w-]++) ?(NOT)? ?= ?'");
@@ -59,23 +55,20 @@ public class LineExtUtils {
         // put NOT first
         text = matcher.replaceAll("$2 ( $1 = '");
         // add key after AND/OR
-        return AND_OR_PATTERN.matcher(text).replaceAll("$1 "+ key + " = '");
+        return AND_OR_PATTERN.matcher(text).replaceAll("$1 " + key + " = '");
     }
 
     @Nullable
     private static String extDoc(@NotNull Map<String, Map<String, List<String>>> keyMap, @NotNull Matcher matcher,
                                  @NotNull Map<String, Map<String, List<String>>> docMap, @NotNull String[] words,
-                                 @NotNull Map<String, Map<String, List<String>>> treeMap, @NotNull Project project) {
-        ProjectSettingsState set = ProjectSettingsState.getInstance(project);
-        Pattern extReplaceToSpace = set.extReplaceToSpace;
-        boolean isReplaceToSpace = extReplaceToSpace.pattern().length() != 0;
+                                 @NotNull Map<String, Map<String, List<String>>> treeMap) {
         boolean haveDoc = false;
         StringBuilder sb = new StringBuilder();
         for (String s : words) {
-            if (appendDoc(set, sb, docMap, treeMap, extReplaceToSpace, isReplaceToSpace, s)) {
+            if (appendDoc(sb, s, docMap, treeMap)) {
                 haveDoc = true;
             }
-            appendKeyDoc(set, sb, keyMap, matcher);
+            appendKeyDoc(sb, matcher, keyMap);
         }
         if (!haveDoc) {
             return null;
@@ -83,23 +76,19 @@ public class LineExtUtils {
         return sb.toString();
     }
 
-    private static boolean appendDoc(ProjectSettingsState set, StringBuilder sb,
+    private static boolean appendDoc(@NotNull StringBuilder sb, @NotNull String word,
                                      @NotNull Map<String, Map<String, List<String>>> docMap,
-                                     @NotNull Map<String, Map<String, List<String>>> treeMap,
-                                     Pattern extReplaceToSpace, boolean isReplaceToSpace, String word) {
+                                     @NotNull Map<String, Map<String, List<String>>> treeMap) {
         word = word.trim();
-        if (isReplaceToSpace) {
-            word = extReplaceToSpace.matcher(word).replaceAll(" ");
-        }
         if (word.length() == 0) {
             return false;
         }
-        String wordDoc = DocMapUtils.get(docMap, set, word);
+        String wordDoc = GetFromDocMap.get(docMap, word);
         if (wordDoc != null) {
             sb.append(wordDoc);
             return true;
         }
-        String treeDoc = DocMapUtils.get(treeMap, set, word);
+        String treeDoc = GetFromDocMap.get(treeMap, word);
         if (treeDoc != null) {
             sb.append(treeDoc);
             return true;
@@ -108,15 +97,15 @@ public class LineExtUtils {
         return false;
     }
 
-    private static void appendKeyDoc(@NotNull ProjectSettingsState set, @NotNull StringBuilder sb,
-                                     @NotNull Map<String, Map<String, List<String>>> keyMap,
-                                     @NotNull Matcher matcher) {
+    private static void appendKeyDoc(@NotNull StringBuilder sb,
+                                     @NotNull Matcher matcher,
+                                     @NotNull Map<String, Map<String, List<String>>> keyMap) {
         if (!matcher.find()) {
             return;
         }
         String keyword = matcher.group();
         // "" if no doc
-        String keyDoc = DocMapUtils.get(keyMap, set, keyword);
+        String keyDoc = GetFromDocMap.get(keyMap, keyword);
         if (keyDoc != null) {
             sb.append(" ").append(keyDoc);
         }

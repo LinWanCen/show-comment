@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.json;
+package io.github.linwancen.plugin.show.jump;
 
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;

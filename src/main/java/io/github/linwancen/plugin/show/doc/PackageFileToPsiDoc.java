@@ -8,9 +8,9 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class PackageDocUtils {
+class PackageFileToPsiDoc {
 
-    private PackageDocUtils() {}
+    private PackageFileToPsiDoc() {}
 
     @Nullable
     static PsiDocComment fromPackageInfoFile(PsiFile packageInfoFile) {

@@ -98,5 +98,17 @@
             text="🆑 // Clear External Comment">
             <add-to-group group-id="ToolsMenu"/>
         </action>
+        <action
+            id="io.github.linwancen.plugin.show.LineEndCopy"
+            class="io.github.linwancen.plugin.show.LineEndCopy"
+            text="// Copy With Line Comment">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action
+            id="io.github.linwancen.plugin.show.LineEndAdd"
+            class="io.github.linwancen.plugin.show.LineEndAdd"
+            text="// Add Line Comment">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>

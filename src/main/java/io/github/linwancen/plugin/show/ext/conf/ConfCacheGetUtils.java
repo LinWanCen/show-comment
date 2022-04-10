@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show.ext.conf;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,12 +29,9 @@ class ConfCacheGetUtils {
      * @return {@code <sortKey, T>}
      */
     @NotNull
-    static <T> TreeMap<String, T> filterPathNameExt(@NotNull VirtualFile file,
-                                                    @NotNull String confMidExt,
-                                                    @NotNull Map<VirtualFile, T> cache) {
-        String path = file.getPath();
-        String name = file.getName();
-        String ext = file.getExtension();
+    static <T> TreeMap<String, T> filterPathNameExt(@NotNull String confMidExt,
+                                                    @NotNull Map<VirtualFile, T> cache,
+                                                    @NotNull String path, @NotNull String name, @Nullable String ext) {
         TreeMap<String, T> map = new TreeMap<>();
         int max = path.length();
         int length = String.valueOf(max).length();
@@ -72,10 +70,9 @@ class ConfCacheGetUtils {
      * @return {@code <sortKey, T>}
      */
     @NotNull
-    static <T> TreeMap<String, T> filterPath(@NotNull VirtualFile file,
-                                             @SuppressWarnings("SameParameterValue")
-                                             @NotNull Map<VirtualFile, T> cache) {
-        String path = file.getPath();
+    static <T> TreeMap<String, T> filterPath(@SuppressWarnings("SameParameterValue")
+                                             @NotNull Map<VirtualFile, T> cache,
+                                             @NotNull String path) {
         TreeMap<String, T> map = new TreeMap<>();
         int max = path.length();
         int length = String.valueOf(max).length();

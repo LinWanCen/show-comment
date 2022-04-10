@@ -8,8 +8,6 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.regex.Pattern;
-
 @State(
         name = "io.github.linwancen.plugin.comment.settings.ProjectSettingsState",
         storages = @Storage("ShowCommentProject.xml")
@@ -22,8 +20,6 @@ public class ProjectSettingsState implements PersistentStateComponent<ProjectSet
     public String lineEndExclude = "";
     public String[] lineEndIncludeArray = {};
     public String[] lineEndExcludeArray = {};
-    public Pattern extReplaceToSpace = Pattern.compile("");
-    public int extDocColumn = 2;
 
     public static ProjectSettingsState getInstance(Project project) {
         return project.getService(ProjectSettingsState.class);

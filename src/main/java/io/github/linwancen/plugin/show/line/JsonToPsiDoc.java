@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.doc;
+package io.github.linwancen.plugin.show.line;
 
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.psi.PsiDocCommentOwner;
@@ -6,11 +6,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
+import io.github.linwancen.plugin.show.doc.OwnerToPsiDocUtils;
 import org.jetbrains.annotations.Nullable;
 
-public class JsonDocUtils {
+public class JsonToPsiDoc {
 
-    private JsonDocUtils() {}
+    private JsonToPsiDoc() {}
 
     /**
      * depend on JsonJump
@@ -25,7 +26,7 @@ public class JsonDocUtils {
             PsiElement resolve = reference.resolve();
             if (resolve instanceof PsiDocCommentOwner) {
                 PsiDocCommentOwner owner = (PsiDocCommentOwner) resolve;
-                PsiDocComment docComment = DocUtils.srcOrByteCodeDoc(owner);
+                PsiDocComment docComment = OwnerToPsiDocUtils.srcOrByteCodeDoc(owner);
                 if (docComment != null) {
                     return docComment;
                 }

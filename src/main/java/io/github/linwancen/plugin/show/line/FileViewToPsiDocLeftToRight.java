@@ -8,20 +8,23 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
-import io.github.linwancen.plugin.show.doc.JsonDocUtils;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LineDocLeftToRightUtils {
+/**
+ * call JsonToPsiDoc, NewCallRefToPsiDoc
+ */
+public class FileViewToPsiDocLeftToRight {
 
-    private LineDocLeftToRightUtils() {}
+    private FileViewToPsiDocLeftToRight() {}
 
     static final String[] KEYS = {
             "=",
     };
 
     @Nullable
-    public static PsiDocComment leftDoc(FileViewProvider viewProvider, Document document,
+    public static PsiDocComment leftDoc(@NotNull FileViewProvider viewProvider, @NotNull Document document,
                                         int startOffset, int endOffset) {
         String text = document.getText(new TextRange(startOffset, endOffset));
         int offset = 0;
@@ -52,7 +55,7 @@ public class LineDocLeftToRightUtils {
         }
         AppSettingsState instance = AppSettingsState.getInstance();
         if (instance.inJson && element.getLanguage().is(JsonLanguage.INSTANCE)) {
-            return JsonDocUtils.jsonDoc(element, startOffset, endOffset);
+            return JsonToPsiDoc.jsonDoc(element, startOffset, endOffset);
         }
         if (startWithSymbol) {
             startOffset = 0;
@@ -61,10 +64,10 @@ public class LineDocLeftToRightUtils {
     }
 
     @Nullable
-    private static PsiDocComment nextDoc(PsiElement element, int startOffset, int endOffset) {
+    private static PsiDocComment nextDoc(@NotNull PsiElement element, int startOffset, int endOffset) {
         while (element.getTextRange().getEndOffset() <= endOffset) {
             if (element instanceof PsiIdentifier) {
-                PsiDocComment psiDocComment = LineDocUtils.elementDoc(element, element, startOffset, endOffset);
+                PsiDocComment psiDocComment = NewCallRefToPsiDoc.elementDoc(element, element, startOffset, endOffset);
                 if (psiDocComment != null) {
                     return psiDocComment;
                 }

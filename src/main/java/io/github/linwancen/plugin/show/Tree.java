@@ -14,9 +14,9 @@ import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import io.github.linwancen.plugin.show.doc.DocTextUtils;
-import io.github.linwancen.plugin.show.doc.DocUtils;
-import io.github.linwancen.plugin.show.ext.TreeExtUtils;
+import io.github.linwancen.plugin.show.doc.PsiDocToStrDoc;
+import io.github.linwancen.plugin.show.doc.OwnerToPsiDocUtils;
+import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +51,7 @@ public class Tree implements ProjectViewNodeDecorator {
 
     @Nullable
     private String doc(ProjectViewNode<?> node, Project project) {
-        String extDoc = extDoc(node, project);
+        String extDoc = extDoc(node);
         if (extDoc != null) {
             return extDoc;
         }
@@ -59,23 +59,23 @@ public class Tree implements ProjectViewNodeDecorator {
         if (docComment == null) {
             return null;
         }
-        return DocTextUtils.text(docComment);
+        return PsiDocToStrDoc.text(docComment);
     }
 
     @Nullable
-    public static String extDoc(ProjectViewNode<?> node, Project project) {
+    public static String extDoc(ProjectViewNode<?> node) {
         VirtualFile file = node.getVirtualFile();
         if (file == null) {
             return null;
         }
-        return TreeExtUtils.extDoc(project, file);
+        return TreeExt.extDoc(file);
     }
 
     @Nullable
     private static PsiDocComment nodeDoc(ProjectViewNode<?> node, Project project) {
         if (node instanceof PsiFileNode) {
             PsiFile psiFile = ((PsiFileNode) node).getValue();
-            return DocUtils.fileDoc(psiFile);
+            return OwnerToPsiDocUtils.fileDoc(psiFile);
         }
         if (node instanceof PsiDirectoryNode) {
             PsiDirectory psiDirectory = ((PsiDirectoryNode) node).getValue();
@@ -85,18 +85,18 @@ public class Tree implements ProjectViewNodeDecorator {
         if (node instanceof PsiMethodNode) {
             // On Show Members
             PsiMethod psiMethod = ((PsiMethodNode) node).getValue();
-            return DocUtils.methodDoc(psiMethod);
+            return OwnerToPsiDocUtils.methodDoc(psiMethod);
         }
         if (node instanceof PsiFieldNode) {
             // On Show Members
             PsiField psiField = ((PsiFieldNode) node).getValue();
-            return DocUtils.srcOrByteCodeDoc(psiField);
+            return OwnerToPsiDocUtils.srcOrByteCodeDoc(psiField);
         }
 
         if (node instanceof ClassTreeNode) {
             // On Packages View, Project Files View, Show Members
             PsiClass psiClass = ((ClassTreeNode) node).getValue();
-            return DocUtils.srcOrByteCodeDoc(psiClass);
+            return OwnerToPsiDocUtils.srcOrByteCodeDoc(psiClass);
         }
         if (node instanceof PackageElementNode) {
             // On Packages View
@@ -119,7 +119,7 @@ public class Tree implements ProjectViewNodeDecorator {
     @Nullable
     private static PsiDocComment dirDoc(PsiDirectory child) {
         while (true) {
-            PsiDocComment docComment = DocUtils.dirDoc(child);
+            PsiDocComment docComment = OwnerToPsiDocUtils.dirDoc(child);
             if (docComment != null) {
                 return docComment;
             }
@@ -137,7 +137,7 @@ public class Tree implements ProjectViewNodeDecorator {
     @Nullable
     private static PsiDocComment packageDoc(PsiPackage child) {
         while (true) {
-            PsiDocComment docComment = DocUtils.packageDoc(child);
+            PsiDocComment docComment = OwnerToPsiDocUtils.packageDoc(child);
             if (docComment != null) {
                 return docComment;
             }

@@ -7,9 +7,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
-class LineDocUtils {
+/**
+ * call OwnerToPsiDocSkip
+ */
+class NewCallRefToPsiDoc {
 
-    private LineDocUtils() {}
+    private NewCallRefToPsiDoc() {}
 
     @Nullable
     static PsiDocComment elementDoc(PsiElement element, PsiElement psiIdentifier,
@@ -60,7 +63,7 @@ class LineDocUtils {
             return null;
         }
         try {
-            PsiDocComment methodComment = SkipDocUtils.methodDoc(call.resolveMethod());
+            PsiDocComment methodComment = OwnerToPsiDocSkip.methodDoc(call.resolveMethod());
             if (methodComment != null) {
                 return methodComment;
             }
@@ -77,7 +80,7 @@ class LineDocUtils {
         if (newExp == null) {
             return null;
         }
-        PsiDocComment methodComment = SkipDocUtils.methodDoc(newExp.resolveMethod());
+        PsiDocComment methodComment = OwnerToPsiDocSkip.methodDoc(newExp.resolveMethod());
         if (methodComment != null) {
             return methodComment;
         }
@@ -104,7 +107,7 @@ class LineDocUtils {
         if (element instanceof PsiReference) {
             PsiElement resolve = ((PsiReference) element).resolve();
             if (resolve instanceof PsiDocCommentOwner) {
-                return SkipDocUtils.refDoc(((PsiDocCommentOwner) resolve));
+                return OwnerToPsiDocSkip.refDoc(((PsiDocCommentOwner) resolve));
             }
         }
         // for right to left for
@@ -128,7 +131,7 @@ class LineDocUtils {
         }
         PsiElement resolve = ref.resolve();
         if (resolve instanceof PsiDocCommentOwner) {
-            return SkipDocUtils.refDoc(((PsiDocCommentOwner) resolve));
+            return OwnerToPsiDocSkip.refDoc(((PsiDocCommentOwner) resolve));
         }
         return null;
     }
@@ -146,10 +149,10 @@ class LineDocUtils {
             }
             PsiElement resolve = reference.resolve();
             if (resolve instanceof PsiMethod) {
-                return SkipDocUtils.methodDoc(((PsiMethod) resolve));
+                return OwnerToPsiDocSkip.methodDoc(((PsiMethod) resolve));
             }
             if (resolve instanceof PsiDocCommentOwner) {
-                return SkipDocUtils.refDoc(((PsiDocCommentOwner) resolve));
+                return OwnerToPsiDocSkip.refDoc(((PsiDocCommentOwner) resolve));
             }
         }
         return null;

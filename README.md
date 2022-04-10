@@ -54,6 +54,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.13  Add Copy With Line Comment & Add Line Comment
 <li>1.12   ★  External Comment for COBOL etc
 <li>1.11  Add json key jump to field
 <li>1.10  Add project-view-tree-comment  for package from parent or other project
@@ -70,6 +71,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.12  增加 带行末注释复制 和 添加行末注释
 <li>1.12   ★  外部注释用于 COBOL 等
 <li>1.11  增加 json 跳转到字段
 <li>1.10  增加 在父包和其他项目的包中获取 项目导航栏注释

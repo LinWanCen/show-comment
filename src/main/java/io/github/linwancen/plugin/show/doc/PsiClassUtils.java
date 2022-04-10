@@ -40,7 +40,7 @@ public class PsiClassUtils {
     }
 
     @NotNull
-    public static PsiClass[] simpleNameToClass(@NotNull String className, @NotNull Project project) {
+    private static PsiClass[] simpleNameToClass(@NotNull String className, @NotNull Project project) {
         PsiShortNamesCache namesCache = PsiShortNamesCache.getInstance(project);
         return namesCache.getClassesByName(className, GlobalSearchScope.allScope(project));
     }

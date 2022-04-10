@@ -7,9 +7,9 @@ import com.intellij.psi.javadoc.PsiInlineDocTag;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
-public class DocTextUtils {
+public class PsiDocToStrDoc {
 
-    private DocTextUtils() {}
+    private PsiDocToStrDoc() {}
 
     @Nullable
     public static String text(@Nullable PsiDocComment psiDocComment) {

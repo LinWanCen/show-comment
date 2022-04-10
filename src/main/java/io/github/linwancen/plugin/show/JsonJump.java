@@ -9,8 +9,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import io.github.linwancen.plugin.show.doc.PsiClassUtils;
-import io.github.linwancen.plugin.show.json.JsonRef;
-import io.github.linwancen.plugin.show.json.JsonUtils;
+import io.github.linwancen.plugin.show.jump.JsonRef;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class JsonJump extends PsiReferenceContributor {
                         List<PsiField> psiFields = new ArrayList<>();
                         List<PsiField> tips = new ArrayList<>();
                         PsiClass[] psiClasses = PsiClassUtils.encClass(virtualFile, project);
-                        List<String> jsonPath = JsonUtils.jsonPath(jsonProp);
+                        List<String> jsonPath = jsonPath(jsonProp);
                         put(project, psiFields, tips, psiClasses, jsonPath, jsonPath.size() - 1);
 
                         List<PsiReference> list = new ArrayList<>();
@@ -49,6 +48,15 @@ public class JsonJump extends PsiReferenceContributor {
                         return list.toArray(new PsiReference[0]);
                     }
                 });
+    }
+
+    @NotNull
+    private static List<String> jsonPath(JsonProperty jsonProp) {
+        ArrayList<String> jsonPath = new ArrayList<>();
+        do {
+            jsonPath.add(jsonProp.getName());
+        } while ((jsonProp = PsiTreeUtil.getParentOfType(jsonProp, JsonProperty.class)) != null);
+        return jsonPath;
     }
 
     private static void put(Project project, List<PsiField> psiFields, List<PsiField> tips,

@@ -5,9 +5,12 @@ import com.intellij.psi.*;
 import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.Nullable;
 
-public class DocUtils {
+/**
+ * call PackageFileToPsiDoc, PsiMethodToPsiDoc, PsiClassUtils
+ */
+public class OwnerToPsiDocUtils {
 
-    private DocUtils() {}
+    private OwnerToPsiDocUtils() {}
 
     public static PsiDocComment srcOrByteCodeDoc(PsiDocCommentOwner psiDocCommentOwner) {
         PsiElement navElement = psiDocCommentOwner.getNavigationElement();
@@ -19,7 +22,7 @@ public class DocUtils {
 
     @Nullable
     public static PsiDocComment methodDoc(PsiMethod psiMethod) {
-        return MethodDocUtils.methodSupperNewPropDoc(psiMethod);
+        return PsiMethodToPsiDoc.methodSupperNewPropDoc(psiMethod);
     }
 
     @Nullable
@@ -34,7 +37,7 @@ public class DocUtils {
         PsiDirectory[] psiDirectories = psiPackage.getDirectories();
         for (PsiDirectory psiDirectory : psiDirectories) {
             PsiFile file = psiDirectory.findFile(PsiPackage.PACKAGE_INFO_FILE);
-            PsiDocComment psiDocComment = PackageDocUtils.fromPackageInfoFile(file);
+            PsiDocComment psiDocComment = PackageFileToPsiDoc.fromPackageInfoFile(file);
             if (psiDocComment != null) {
                 return psiDocComment;
             }
@@ -62,7 +65,7 @@ public class DocUtils {
             return null;
         }
         if (PsiPackage.PACKAGE_INFO_FILE.equals(psiFile.getName())) {
-            return PackageDocUtils.fromPackageInfoFile(psiFile);
+            return PackageFileToPsiDoc.fromPackageInfoFile(psiFile);
         }
         PsiClassOwner psiClassOwner = (PsiClassOwner) psiFile;
         PsiClass[] classes = psiClassOwner.getClasses();

@@ -7,9 +7,9 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.Nullable;
 
-class MethodDocUtils {
+class PsiMethodToPsiDoc {
 
-    private MethodDocUtils() {}
+    private PsiMethodToPsiDoc() {}
 
     @Nullable
     static PsiDocComment methodSupperNewPropDoc(PsiMethod psiMethod) {
@@ -49,7 +49,7 @@ class MethodDocUtils {
     private static PsiDocComment supperMethodDoc(PsiMethod psiMethod) {
         PsiMethod[] superMethods = psiMethod.findSuperMethods();
         for (PsiMethod superMethod : superMethods) {
-            PsiDocComment superDoc = DocUtils.methodDoc(superMethod);
+            PsiDocComment superDoc = OwnerToPsiDocUtils.methodDoc(superMethod);
             if (superDoc != null) {
                 return superDoc;
             }

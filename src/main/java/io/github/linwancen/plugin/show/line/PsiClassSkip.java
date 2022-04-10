@@ -5,9 +5,9 @@ import com.intellij.psi.PsiClass;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 
-class SkipUtils {
+class PsiClassSkip {
 
-    private SkipUtils() {}
+    private PsiClassSkip() {}
 
     static boolean skip(PsiClass psiClass, Project project) {
         if (psiClass == null) {
