@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-        name = "io.github.linwancen.plugin.comment.settings.ProjectSettingsState",
+        name = "io.github.linwancen.plugin.show.settings.ProjectSettingsState",
         storages = @Storage("ShowCommentProject.xml")
 )
 public class ProjectSettingsState implements PersistentStateComponent<ProjectSettingsState> {
@@ -21,8 +21,12 @@ public class ProjectSettingsState implements PersistentStateComponent<ProjectSet
     public String[] lineEndIncludeArray = {};
     public String[] lineEndExcludeArray = {};
 
-    public static ProjectSettingsState getInstance(Project project) {
-        return project.getService(ProjectSettingsState.class);
+    public static ProjectSettingsState getInstance(@NotNull Project project) {
+        ProjectSettingsState service = project.getService(ProjectSettingsState.class);
+        if (service == null) {
+            return new ProjectSettingsState();
+        }
+        return service;
     }
 
     @Nullable

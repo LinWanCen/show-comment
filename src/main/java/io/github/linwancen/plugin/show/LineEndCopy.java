@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -24,6 +25,10 @@ public class LineEndCopy extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
+        ApplicationManager.getApplication().runReadAction(() -> copyWithDoc(event));
+    }
+
+    private void copyWithDoc(@NotNull AnActionEvent event) {
         Project project = event.getProject();
         VirtualFile file = event.getData(CommonDataKeys.VIRTUAL_FILE);
         if (file == null) {

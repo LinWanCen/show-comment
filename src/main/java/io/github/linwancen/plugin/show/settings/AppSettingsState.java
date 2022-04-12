@@ -12,9 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.math.BigInteger;
 
 @State(
-        name = "io.github.linwancen.plugin.comment.settings.AppSettingsState",
+        name = "io.github.linwancen.plugin.show.settings.AppSettingsState",
         storages = @Storage("ShowCommentGlobal.xml")
 )
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
@@ -22,11 +23,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showTreeComment = true;
     public boolean showLineEndComment = true;
 
-    @SuppressWarnings("UseJBColor")
-    public Color lineEndColorBright = new Color(98, 151, 85);
-    @SuppressWarnings("UseJBColor")
-    public Color lineEndColorDark = new Color(98, 151, 85);
-    public final TextAttributes lineEndTextAttr = new TextAttributes(new JBColor(lineEndColorBright, lineEndColorDark),
+    public final TextAttributes lineEndTextAttr = new TextAttributes(
+            new JBColor(new Color(98, 151, 85), new Color(98, 151, 85)),
             null, null, null, Font.ITALIC);
     public final TextAttributes lineEndJsonTextAttr = new TextAttributes(new JBColor(Gray._140, Gray._140),
             null, null, null, Font.ITALIC);
@@ -46,7 +44,11 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public String[] lineEndExcludeArray = {"java."};
 
     public static AppSettingsState getInstance() {
-        return ApplicationManager.getApplication().getService(AppSettingsState.class);
+        AppSettingsState service = ApplicationManager.getApplication().getService(AppSettingsState.class);
+        if (service == null) {
+            return new AppSettingsState();
+        }
+        return service;
     }
 
     @Nullable
@@ -58,5 +60,23 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     @Override
     public void loadState(@NotNull AppSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
+    }
+
+    public String getLineEndColor() {
+        return Integer.toHexString(lineEndTextAttr.getForegroundColor().getRGB()).toUpperCase();
+    }
+
+    public void setLineEndColor(String s) {
+        int rgb = new BigInteger(s, 16).intValue();
+        lineEndTextAttr.setForegroundColor(new JBColor(new Color(rgb), new Color(rgb)));
+    }
+
+    public String getLineEndJsonColor() {
+        return Integer.toHexString(lineEndJsonTextAttr.getForegroundColor().getRGB()).toUpperCase();
+    }
+
+    public void setLineEndJsonColor(String s) {
+        int rgb = new BigInteger(s, 16).intValue();
+        lineEndJsonTextAttr.setForegroundColor(new JBColor(new Color(rgb), new Color(rgb)));
     }
 }

@@ -4,12 +4,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
+import org.jetbrains.annotations.NotNull;
 
 class PsiClassSkip {
 
     private PsiClassSkip() {}
 
-    static boolean skip(PsiClass psiClass, Project project) {
+    static boolean skip(PsiClass psiClass, @NotNull Project project) {
         if (psiClass == null) {
             return true;
         }

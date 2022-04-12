@@ -1,8 +1,6 @@
 package io.github.linwancen.plugin.show.settings;
 
-import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.options.Configurable;
-import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,11 +37,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getFromNew() != settings.fromNew;
         modified |= mySettingsComponent.getFromRef() != settings.fromRef;
         modified |= mySettingsComponent.getInJson() != settings.inJson;
-        if (EditorColorsManager.getInstance().isDarkEditor()) {
-            modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndColorDark);
-        } else {
-            modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndColorBright);
-        }
+        modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndTextAttr.getForegroundColor());
         modified |= !mySettingsComponent.getLineEndJsonColor().equals(settings.lineEndJsonTextAttr.getForegroundColor());
         modified |= mySettingsComponent.getFindElementRightToLeft() != settings.findElementRightToLeft;
         modified |= !mySettingsComponent.getLineEndInclude().equals(settings.lineEndInclude);
@@ -62,13 +56,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.fromNew = mySettingsComponent.getFromNew();
         settings.fromRef = mySettingsComponent.getFromRef();
         settings.inJson = mySettingsComponent.getInJson();
-        if (EditorColorsManager.getInstance().isDarkEditor()) {
-            settings.lineEndColorDark = mySettingsComponent.getLineEndColor();
-        } else {
-            settings.lineEndColorBright = mySettingsComponent.getLineEndColor();
-        }
-        JBColor jbColor = new JBColor(settings.lineEndColorBright, settings.lineEndColorDark);
-        settings.lineEndTextAttr.setForegroundColor(jbColor);
+        settings.lineEndTextAttr.setForegroundColor(mySettingsComponent.getLineEndColor());
         settings.lineEndJsonTextAttr.setForegroundColor(mySettingsComponent.getLineEndJsonColor());
         settings.findElementRightToLeft = mySettingsComponent.getFindElementRightToLeft();
         settings.lineEndInclude = mySettingsComponent.getLineEndInclude();
@@ -92,11 +80,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setFromNew(settings.fromNew);
         mySettingsComponent.setFromRef(settings.fromRef);
         mySettingsComponent.setInJson(settings.inJson);
-        if (EditorColorsManager.getInstance().isDarkEditor()) {
-            mySettingsComponent.setLineEndColor(settings.lineEndColorDark);
-        } else {
-            mySettingsComponent.setLineEndColor(settings.lineEndColorBright);
-        }
+        mySettingsComponent.setLineEndColor(settings.lineEndTextAttr.getForegroundColor());
         mySettingsComponent.setLineEndJsonColor(settings.lineEndJsonTextAttr.getForegroundColor());
         mySettingsComponent.setFindElementRightToLeft(settings.findElementRightToLeft);
         mySettingsComponent.setLineEndInclude(settings.lineEndInclude);

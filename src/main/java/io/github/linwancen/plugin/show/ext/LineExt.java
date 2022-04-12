@@ -70,6 +70,11 @@ public class LineExt {
             }
             appendKeyDoc(sb, matcher, keyMap);
         }
+        int before;
+        do {
+            before = sb.length();
+            appendKeyDoc(sb, matcher, keyMap);
+        } while (sb.length() != before);
         if (!haveDoc) {
             return null;
         }

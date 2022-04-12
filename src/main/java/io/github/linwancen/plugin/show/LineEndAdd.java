@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -34,7 +35,7 @@ public class LineEndAdd extends AnAction {
         }
         ListPopup confirmation = JBPopupFactory.getInstance().createConfirmation(
                 "Add Line Comment?", "Add and replace files!", "Don't add.",
-                () -> addDocAll(project, files), 2);
+                () -> ApplicationManager.getApplication().runReadAction(() -> addDocAll(project, files)), 2);
         confirmation.showInFocusCenter();
     }
 
@@ -45,7 +46,7 @@ public class LineEndAdd extends AnAction {
                 @Override
                 public boolean visitFile(@NotNull VirtualFile file) {
                     if (!file.isDirectory()) {
-                        addDoc(project, file, settings);
+                        ApplicationManager.getApplication().runReadAction(() -> addDoc(project, file, settings));
                     }
                     return true;
                 }
