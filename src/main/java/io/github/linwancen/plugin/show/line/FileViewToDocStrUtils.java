@@ -51,8 +51,14 @@ public class FileViewToDocStrUtils {
                                      @Nullable FileViewProvider viewProvider) {
         StringBuilder sb = new StringBuilder();
         for (int i = startLine; i <= endLine; i++) {
-            int startOffset = document.getLineStartOffset(i);
-            int endOffset = document.getLineEndOffset(i);
+            int startOffset;
+            int endOffset;
+            try {
+                startOffset = document.getLineStartOffset(i);
+                endOffset = document.getLineEndOffset(i);
+            } catch (Exception e) {
+                continue;
+            }
             if (startOffset != endOffset) {
                 String text = document.getText(new TextRange(startOffset, endOffset));
                 sb.append(text);

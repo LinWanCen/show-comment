@@ -65,8 +65,14 @@ public class LineEnd extends EditorLinePainter {
         if (document.getLineCount() <= lineNumber) {
             return null;
         }
-        int startOffset = document.getLineStartOffset(lineNumber);
-        int endOffset = document.getLineEndOffset(lineNumber);
+        int startOffset;
+        int endOffset;
+        try {
+            startOffset = document.getLineStartOffset(lineNumber);
+            endOffset = document.getLineEndOffset(lineNumber);
+        } catch (Exception e) {
+            return null;
+        }
         if (startOffset == endOffset) {
             return null;
         }
