@@ -52,10 +52,8 @@ public class LineEndCopy extends AnAction {
             Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
             int start = primaryCaret.getSelectionStart();
             int end = primaryCaret.getSelectionEnd();
-            if (start != end) {
-                startLine = document.getLineNumber(start);
-                endLine = document.getLineNumber(end);
-            }
+            startLine = document.getLineNumber(start);
+            endLine = document.getLineNumber(end);
         }
 
         AppSettingsState settings = AppSettingsState.getInstance();
