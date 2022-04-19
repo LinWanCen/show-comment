@@ -145,9 +145,7 @@ public class Tree implements ProjectViewNodeDecorator {
             if (parent == null) {
                 return null;
             }
-            if (parent.getChildren().length != 1) {
-                return null;
-            }
+            // PsiPackage not implemented getChildren()
             child = parent;
         }
     }
