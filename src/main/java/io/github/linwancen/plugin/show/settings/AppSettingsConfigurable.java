@@ -37,6 +37,8 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getFromNew() != settings.fromNew;
         modified |= mySettingsComponent.getFromRef() != settings.fromRef;
         modified |= mySettingsComponent.getInJson() != settings.inJson;
+        modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
+        modified |= mySettingsComponent.getSkipAscii() != settings.skipAscii;
         modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndTextAttr.getForegroundColor());
         modified |= !mySettingsComponent.getLineEndJsonColor().equals(settings.lineEndJsonTextAttr.getForegroundColor());
         modified |= mySettingsComponent.getFindElementRightToLeft() != settings.findElementRightToLeft;
@@ -56,6 +58,8 @@ public class AppSettingsConfigurable implements Configurable {
         settings.fromNew = mySettingsComponent.getFromNew();
         settings.fromRef = mySettingsComponent.getFromRef();
         settings.inJson = mySettingsComponent.getInJson();
+        settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
+        settings.skipAscii = mySettingsComponent.getSkipAscii();
         settings.lineEndTextAttr.setForegroundColor(mySettingsComponent.getLineEndColor());
         settings.lineEndJsonTextAttr.setForegroundColor(mySettingsComponent.getLineEndJsonColor());
         settings.findElementRightToLeft = mySettingsComponent.getFindElementRightToLeft();
@@ -80,6 +84,8 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setFromNew(settings.fromNew);
         mySettingsComponent.setFromRef(settings.fromRef);
         mySettingsComponent.setInJson(settings.inJson);
+        mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
+        mySettingsComponent.setSkipAscii(settings.skipAscii);
         mySettingsComponent.setLineEndColor(settings.lineEndTextAttr.getForegroundColor());
         mySettingsComponent.setLineEndJsonColor(settings.lineEndJsonTextAttr.getForegroundColor());
         mySettingsComponent.setFindElementRightToLeft(settings.findElementRightToLeft);

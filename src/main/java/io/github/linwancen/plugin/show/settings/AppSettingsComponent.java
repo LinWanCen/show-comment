@@ -20,6 +20,8 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JBCheckBox fromNew = new JBCheckBox("new ");
     private final JBCheckBox fromRef = new JBCheckBox("ref ");
     private final JBCheckBox inJson = new JBCheckBox("in json ");
+    private final JBCheckBox skipAnnotation = new JBCheckBox("skip @ ");
+    private final JBCheckBox skipAscii = new JBCheckBox("skip English ");
     private final ColorPanel lineEndColor = new ColorPanel();
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBCheckBox findElementRightToLeft = new JBCheckBox("Find element right to left");
@@ -54,7 +56,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(findElementRightToLeft))
                 .addSeparator()
-                .addComponent(JPanelFactory.of(fromCall, fromNew, fromRef, inJson), 1)
+                .addComponent(JPanelFactory.of(fromCall, fromNew, fromRef, inJson, skipAnnotation, skipAscii), 1)
                 .addSeparator()
                 .addComponent(text)
                 .addSeparator();
@@ -116,6 +118,22 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public void setInJson(boolean newStatus) {
         inJson.setSelected(newStatus);
+    }
+
+    public boolean getSkipAnnotation() {
+        return skipAnnotation.isSelected();
+    }
+
+    public void setSkipAnnotation(boolean newStatus) {
+        skipAnnotation.setSelected(newStatus);
+    }
+
+    public boolean getSkipAscii() {
+        return skipAscii.isSelected();
+    }
+
+    public void setSkipAscii(boolean newStatus) {
+        skipAscii.setSelected(newStatus);
     }
 
     public Color getLineEndColor() {

@@ -18,8 +18,11 @@ class PsiClassSkip {
         if (name == null) {
             return true;
         }
-        ProjectSettingsState projectSettings = ProjectSettingsState.getInstance(project);
         AppSettingsState appSettings = AppSettingsState.getInstance();
+        if (appSettings.skipAnnotation && psiClass.isAnnotationType()) {
+            return true;
+        }
+        ProjectSettingsState projectSettings = ProjectSettingsState.getInstance(project);
         if (projectSettings.globalFilterEffective
                 && skipName(name, appSettings.lineEndIncludeArray, appSettings.lineEndExcludeArray)) {
             return true;
@@ -30,22 +33,22 @@ class PsiClassSkip {
         return false;
     }
 
-    static boolean skipName(String name, String[] includeArray, String[] excludeArray) {
-        if (exclude(name, excludeArray)) {
+    static boolean skipName(String name, String[] include, String[] exclude) {
+        if (exclude(name, exclude)) {
             return true;
         }
-        return !include(name, includeArray);
+        return !include(name, include);
     }
 
-    static boolean include(String name, String[] lineEndIncludeArray) {
-        if (lineEndIncludeArray.length == 0) {
+    static boolean include(String name, String[] include) {
+        if (include.length == 0) {
             return true;
         }
-        return exclude(name, lineEndIncludeArray);
+        return exclude(name, include);
     }
 
-    static boolean exclude(String name, String[] projectLineEndExcludeArray) {
-        for (String s : projectLineEndExcludeArray) {
+    static boolean exclude(String name, String[] exclude) {
+        for (String s : exclude) {
             if (name.startsWith(s)) {
                 return true;
             }

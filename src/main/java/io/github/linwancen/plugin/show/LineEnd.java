@@ -58,7 +58,7 @@ public class LineEnd extends EditorLinePainter {
 
     @Nullable
     private static String doc(@NotNull Document document, int lineNumber,
-                              @Nullable Project project,
+                              @NotNull Project project,
                               @Nullable VirtualFile file,
                               @Nullable FileViewProvider viewProvider) {
         // lineNumber start 0, as 1 <= 1 should return

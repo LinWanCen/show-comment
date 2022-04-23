@@ -20,8 +20,8 @@ public abstract class AbstractSettingsComponent {
                 .addComponent(new JBLabel("Separated by ',' or ' ' etc."))
                 .addComponent(new JBLabel("Use '' to include all or exclude none."))
                 .addSeparator()
-                .addLabeledComponent(new JBLabel("line end include start with: "), lineEndInclude, 1, true)
-                .addLabeledComponent(new JBLabel("line end exclude start with: "), lineEndExclude, 1, true)
+                .addLabeledComponent(new JBLabel("line end include className start with: "), lineEndInclude, 1, true)
+                .addLabeledComponent(new JBLabel("line end exclude className start with: "), lineEndExclude, 1, true)
                 .getPanel();
         lineEndFilter.setBorder(IdeBorderFactory.createTitledBorder(
                 "Line End Comment"));

@@ -37,11 +37,13 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean fromNew = true;
     public boolean fromRef = true;
     public boolean inJson = true;
+    public boolean skipAnnotation = true;
+    public boolean skipAscii = false;
 
     public String lineEndInclude = "";
-    public String lineEndExclude = "java.";
+    public String lineEndExclude = "java";
     public String[] lineEndIncludeArray = {};
-    public String[] lineEndExcludeArray = {"java."};
+    public String[] lineEndExcludeArray = {"java"};
 
     public static AppSettingsState getInstance() {
         AppSettingsState service = ApplicationManager.getApplication().getService(AppSettingsState.class);

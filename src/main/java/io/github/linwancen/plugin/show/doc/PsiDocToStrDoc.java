@@ -7,6 +7,8 @@ import com.intellij.psi.javadoc.PsiInlineDocTag;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Pattern;
+
 public class PsiDocToStrDoc {
 
     private PsiDocToStrDoc() {}
@@ -24,10 +26,9 @@ public class PsiDocToStrDoc {
             if (appendElementText(sb, element)) {
                 lineCount++;
             }
-            if (appSettings.lineEndCount > 0
-                    && lineCount >= appSettings.lineEndCount
-                    || appSettings.lineEndLen > 0
-                    && sb.length() >= appSettings.lineEndLen) {
+            boolean countOver = appSettings.lineEndCount > 0 && lineCount >= appSettings.lineEndCount;
+            boolean lenOver = appSettings.lineEndLen > 0 && sb.length() >= appSettings.lineEndLen;
+            if (countOver || lenOver) {
                 break;
             }
         }
@@ -41,16 +42,24 @@ public class PsiDocToStrDoc {
     private static boolean appendElementText(StringBuilder sb, PsiElement element) {
         if (element instanceof PsiDocToken) {
             PsiDocToken psiDocToken = (PsiDocToken) element;
-            sb.append(psiDocToken.getText().trim().replace("<br>", "")).append("  ");
+            sb.append(deleteHtml(psiDocToken.getText()));
+            sb.append("  ");
             return true;
         }
         if (element instanceof PsiInlineDocTag) {
             PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
             PsiElement[] children = psiInlineDocTag.getChildren();
             if (children.length > 2) {
-                sb.append(children[2].getText().trim().replace("<br>", "")).append("  ");
+                sb.append(deleteHtml(children[2].getText()));
+                sb.append("  ");
             }
         }
         return false;
+    }
+
+    private static final Pattern HTML_PATTERN = Pattern.compile("<[^>]++>");
+
+    private static String deleteHtml(String s) {
+        return HTML_PATTERN.matcher(s.trim()).replaceAll("");
     }
 }

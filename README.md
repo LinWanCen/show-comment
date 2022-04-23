@@ -12,6 +12,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 <li>Show javadoc comments at the Project view Tree structure
 <li>Show javadoc comments at the end-of-line
 <li>Show javadoc comments at "xx ClassNameOrSimpleName.json" and jump to field
+<li>Show comments from External Conf for folder, resources, COBOL etc.
 <li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
 
@@ -33,6 +34,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 <li>在结构树显示 文档注释
 <li>在行末尾显示 文档注释
 <li>支持 "xx 类全名或简名.json" 文档注释与跳转到字段
+<li>支持 从配置文件获取外部注释用于文件夹、资源、COBOL 等
 <li>修改配置：设置 -> 工具 -> // Show Comment Global/Project
 </ul>
 
@@ -54,6 +56,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.14  Add line-end-comment  skip Annotation, skip only English (ASCII)
 <li>1.13  Add Copy With Line Comment & Add Line Comment
 <li>1.12   ★  External Comment for COBOL etc
 <li>1.11  Add json key jump to field
@@ -71,6 +74,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.14  增加 行末注释 忽略注解 与 忽略纯英文
 <li>1.13  增加 带行末注释复制 和 添加行末注释
 <li>1.12   ★  外部注释用于 COBOL 等
 <li>1.11  增加 json 跳转到字段

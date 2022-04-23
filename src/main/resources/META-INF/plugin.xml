@@ -9,6 +9,7 @@
 <li>Show javadoc comments at the Project view Tree structure
 <li>Show javadoc comments at the end-of-line
 <li>Show javadoc comments at "xx ClassNameOrSimpleName.json" and jump to field
+<li>Show comments from External Conf for folder, resources, COBOL etc.
 <li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
 
@@ -30,6 +31,7 @@
 <li>在结构树显示 文档注释
 <li>在行末尾显示 文档注释
 <li>支持 "xx 类全名或简名.json" 文档注释与跳转到字段
+<li>支持 从配置文件获取外部注释用于文件夹、资源、COBOL 等
 <li>修改配置：设置 -> 工具 -> // Show Comment Global/Project
 </ul>
 

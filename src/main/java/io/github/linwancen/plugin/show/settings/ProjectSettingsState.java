@@ -16,6 +16,7 @@ public class ProjectSettingsState implements PersistentStateComponent<ProjectSet
 
     public boolean globalFilterEffective = true;
     public boolean projectFilterEffective = false;
+
     public String lineEndInclude = "";
     public String lineEndExclude = "";
     public String[] lineEndIncludeArray = {};
