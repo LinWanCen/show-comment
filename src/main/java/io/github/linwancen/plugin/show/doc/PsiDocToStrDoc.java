@@ -35,7 +35,6 @@ public class PsiDocToStrDoc {
         if (sb.length() == 0) {
             return null;
         }
-        sb.insert(0, " ");
         return sb.toString();
     }
 

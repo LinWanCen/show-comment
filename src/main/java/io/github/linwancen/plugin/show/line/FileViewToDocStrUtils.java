@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * call LineExt, ~LeftToRight, ~RightToLeft
  */
 public class FileViewToDocStrUtils {
-    
+
     public static final Pattern NOT_ASCII_PATTERN = Pattern.compile("[^\u0000-\u007f]");
 
     private FileViewToDocStrUtils() {}
@@ -32,21 +32,34 @@ public class FileViewToDocStrUtils {
                              @Nullable VirtualFile file,
                              @Nullable FileViewProvider viewProvider,
                              int startOffset, int endOffset, @NotNull String text) {
+        AppSettingsState setting = AppSettingsState.getInstance();
         if (file != null) {
-            String extDoc = LineExt.extDoc(project, file.getPath(), file.getName(), file.getExtension(), text);
+            int i = text.indexOf(setting.lineEndPrefix);
+            String code = i <= 0 ? text : text.substring(0, i);
+            String extDoc = LineExt.extDoc(project, file.getPath(), file.getName(), file.getExtension(), code);
             if (extDoc != null) {
+                extDoc = extDoc.trim();
+                if (text.endsWith(extDoc)) {
+                    return null;
+                }
                 return extDoc;
             }
         }
         if (viewProvider == null) {
             return null;
         }
-        AppSettingsState setting = AppSettingsState.getInstance();
         PsiDocComment docComment = setting.findElementRightToLeft
                 ? FileViewToPsiDocRightToLeft.rightDoc(viewProvider, startOffset, endOffset)
                 : FileViewToPsiDocLeftToRight.leftDoc(viewProvider, document, startOffset, endOffset);
         String strDoc = PsiDocToStrDoc.text(docComment);
-        if (setting.skipAscii && strDoc != null && !NOT_ASCII_PATTERN.matcher(strDoc).find()) {
+        if (strDoc == null) {
+            return null;
+        }
+        strDoc = strDoc.trim();
+        if (text.endsWith(strDoc)) {
+            return null;
+        }
+        if (setting.skipAscii && !NOT_ASCII_PATTERN.matcher(strDoc).find()) {
             return null;
         }
         return strDoc;
@@ -72,7 +85,7 @@ public class FileViewToDocStrUtils {
                 String text = document.getText(new TextRange(startOffset, endOffset));
                 sb.append(text);
                 String doc = doc(document, project, file, viewProvider, startOffset, endOffset, text);
-                if (doc != null) {
+                if (doc != null && !text.endsWith(doc)) {
                     sb.append(settings.lineEndPrefix).append(doc);
                 }
             }

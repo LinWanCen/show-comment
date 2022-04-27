@@ -30,7 +30,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
             null, null, null, Font.ITALIC);
 
     public boolean findElementRightToLeft = true;
-    public String lineEndPrefix = "  //";
+    public String lineEndPrefix = "   // ";
     public int lineEndCount = 2;
     public int lineEndLen = 0;
     public boolean fromCall = true;

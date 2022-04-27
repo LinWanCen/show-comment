@@ -3,7 +3,7 @@ IDEA 智能注释插件
 
 https://plugins.jetbrains.com/plugin/18553-show-comment
 
-
+Thanks JetBrains Licenses for Open Source.
 
 ## Notes 说明
 
@@ -56,6 +56,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.16  Add line-end-comment  skip when comments have been added
 <li>1.15  Add line-end-comment  support COBOL ext '', 'cbl', 'cob', 'cobol'
 <li>1.14  Add line-end-comment  skip Annotation, skip only English (ASCII)
 <li>1.13  Add Copy With Line Comment & Add Line Comment
@@ -75,6 +76,7 @@ https://plugins.jetbrains.com/plugin/18553-show-comment
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.16  增加 行末注释 已经添加行末注释时跳过
 <li>1.15  增加 行末注释 COBOL 拓展名支持 无拓展名、cbl、cob、cobol
 <li>1.14  增加 行末注释 忽略注解 与 忽略纯英文
 <li>1.13  增加 带行末注释复制 和 添加行末注释

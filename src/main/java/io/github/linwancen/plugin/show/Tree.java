@@ -45,7 +45,7 @@ public class Tree implements ProjectViewNodeDecorator {
             if (coloredText.isEmpty()) {
                 data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
             }
-            data.addText(doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
+            data.addText(" " + doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
         });
     }
 
