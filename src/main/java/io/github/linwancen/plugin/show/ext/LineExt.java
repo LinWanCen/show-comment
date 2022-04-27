@@ -53,7 +53,9 @@ public class LineExt {
         }
         String key = matcher.group(1);
         // put NOT first
-        text = matcher.replaceAll(" $2 ( $1 = '");
+        if (matcher.group(2) != null) {
+            text = matcher.replaceAll(" $2 ( $1 = '");
+        }
         // add key after AND/OR
         return AND_OR_PATTERN.matcher(text).replaceAll("$1 " + key + " = '");
     }
