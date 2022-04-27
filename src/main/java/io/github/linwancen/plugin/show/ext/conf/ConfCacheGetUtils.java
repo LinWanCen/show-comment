@@ -48,7 +48,10 @@ class ConfCacheGetUtils {
                 map.put(levelStr + "\b" + confPath, entry.getValue());
             } else if (confName.endsWith((name + confMidExt))) {
                 map.put(levelStr + "\t" + confPath, entry.getValue());
-            } else if (ext != null) {
+            } else{
+                if (ext == null) {
+                    ext = "";
+                }
                 if ((ext + confMidExt).equals(confName)) {
                     map.put(levelStr + "\n" + confPath, entry.getValue());
                 } else if (confName.endsWith((ext + confMidExt))) {

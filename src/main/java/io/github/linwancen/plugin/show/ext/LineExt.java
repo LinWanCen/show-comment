@@ -30,7 +30,7 @@ public class LineExt {
             return null;
         }
         Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path);
-        if ("cbl".equals(ext)) {
+        if (ext == null || "cbl".equals(ext) || "cob".equals(ext) || "cobol".equals(ext)) {
             text = cblNotAndOr(text);
         }
         String[] words = pattern.split(text);
@@ -53,7 +53,7 @@ public class LineExt {
         }
         String key = matcher.group(1);
         // put NOT first
-        text = matcher.replaceAll("$2 ( $1 = '");
+        text = matcher.replaceAll(" $2 ( $1 = '");
         // add key after AND/OR
         return AND_OR_PATTERN.matcher(text).replaceAll("$1 " + key + " = '");
     }
