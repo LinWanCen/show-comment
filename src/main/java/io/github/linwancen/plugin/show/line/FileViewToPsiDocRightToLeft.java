@@ -43,8 +43,8 @@ public class FileViewToPsiDocRightToLeft {
     }
 
     private static PsiDocComment psiDoc(AppSettingsState setting,
-                                       PsiElement identifier, PsiElement element,
-                                       int startOffset, int endOffset) {
+                                        PsiElement identifier, PsiElement element,
+                                        int startOffset, int endOffset) {
         if (identifier != null && !(identifier instanceof PsiIdentifier)) {
             return null;
         }
