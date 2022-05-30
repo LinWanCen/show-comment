@@ -90,7 +90,15 @@ public class Tree implements ProjectViewNodeDecorator {
         if (node instanceof PsiFieldNode) {
             // On Show Members
             PsiField psiField = ((PsiFieldNode) node).getValue();
-            return OwnerToPsiDocUtils.srcOrByteCodeDoc(psiField);
+            PsiDocComment docComment = OwnerToPsiDocUtils.srcOrByteCodeDoc(psiField);
+            if (docComment != null) {
+                return docComment;
+            }
+            PsiClass psiClass = psiField.getContainingClass();
+            if (psiClass != null) {
+                return OwnerToPsiDocUtils.srcOrByteCodeDoc(psiClass);
+            }
+            return null;
         }
 
         if (node instanceof ClassTreeNode) {
