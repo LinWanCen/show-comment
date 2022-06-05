@@ -12,14 +12,10 @@ import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.regex.Pattern;
-
 /**
  * call LineExt, ~LeftToRight, ~RightToLeft
  */
 public class FileViewToDocStrUtils {
-
-    public static final Pattern NOT_ASCII_PATTERN = Pattern.compile("[^\u0000-\u007f]");
 
     private FileViewToDocStrUtils() {}
 
@@ -57,9 +53,6 @@ public class FileViewToDocStrUtils {
         }
         strDoc = strDoc.trim();
         if (text.endsWith(strDoc)) {
-            return null;
-        }
-        if (setting.skipAscii && !NOT_ASCII_PATTERN.matcher(strDoc).find()) {
             return null;
         }
         return strDoc;

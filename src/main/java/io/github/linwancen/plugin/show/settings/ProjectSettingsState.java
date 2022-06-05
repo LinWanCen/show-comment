@@ -12,15 +12,10 @@ import org.jetbrains.annotations.Nullable;
         name = "io.github.linwancen.plugin.show.settings.ProjectSettingsState",
         storages = @Storage("ShowCommentProject.xml")
 )
-public class ProjectSettingsState implements PersistentStateComponent<ProjectSettingsState> {
+public class ProjectSettingsState extends AbstractSettingsState  implements PersistentStateComponent<ProjectSettingsState> {
 
     public boolean globalFilterEffective = true;
     public boolean projectFilterEffective = false;
-
-    public String lineEndInclude = "";
-    public String lineEndExclude = "";
-    public String[] lineEndIncludeArray = {};
-    public String[] lineEndExcludeArray = {};
 
     public static ProjectSettingsState getInstance(@NotNull Project project) {
         ProjectSettingsState service = project.getService(ProjectSettingsState.class);

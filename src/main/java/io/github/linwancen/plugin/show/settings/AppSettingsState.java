@@ -18,7 +18,7 @@ import java.math.BigInteger;
         name = "io.github.linwancen.plugin.show.settings.AppSettingsState",
         storages = @Storage("ShowCommentGlobal.xml")
 )
-public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
+public class AppSettingsState extends AbstractSettingsState implements PersistentStateComponent<AppSettingsState> {
 
     public boolean showTreeComment = true;
     public boolean showLineEndComment = true;
@@ -39,11 +39,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean inJson = true;
     public boolean skipAnnotation = true;
     public boolean skipAscii = false;
-
-    public String lineEndInclude = "";
-    public String lineEndExclude = "java";
-    public String[] lineEndIncludeArray = {};
-    public String[] lineEndExcludeArray = {"java"};
+    public boolean skipBlank = true;
 
     public static AppSettingsState getInstance() {
         AppSettingsState service = ApplicationManager.getApplication().getService(AppSettingsState.class);

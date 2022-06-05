@@ -63,7 +63,7 @@ class NewCallRefToPsiDoc {
             return null;
         }
         try {
-            PsiDocComment methodComment = OwnerToPsiDocSkip.methodDoc(call.resolveMethod());
+            PsiDocComment methodComment = OwnerToPsiDocSkip.refDoc(call.resolveMethod());
             if (methodComment != null) {
                 return methodComment;
             }
@@ -80,7 +80,7 @@ class NewCallRefToPsiDoc {
         if (newExp == null) {
             return null;
         }
-        PsiDocComment methodComment = OwnerToPsiDocSkip.methodDoc(newExp.resolveMethod());
+        PsiDocComment methodComment = OwnerToPsiDocSkip.refDoc(newExp.resolveMethod());
         if (methodComment != null) {
             return methodComment;
         }
@@ -149,7 +149,7 @@ class NewCallRefToPsiDoc {
             }
             PsiElement resolve = reference.resolve();
             if (resolve instanceof PsiMethod) {
-                return OwnerToPsiDocSkip.methodDoc(((PsiMethod) resolve));
+                return OwnerToPsiDocSkip.refDoc(((PsiMethod) resolve));
             }
             if (resolve instanceof PsiDocCommentOwner) {
                 return OwnerToPsiDocSkip.refDoc(((PsiDocCommentOwner) resolve));

@@ -10,18 +10,22 @@ import javax.swing.*;
 
 public abstract class AbstractSettingsComponent {
 
-    protected final JBTextField lineEndInclude = new JBTextField();
-    protected final JBTextField lineEndExclude = new JBTextField();
+    protected final JBTextField lineInclude = new JBTextField();
+    protected final JBTextField lineExclude = new JBTextField();
 
+    public final JBTextField docInclude = new JBTextField();
+    public final JBTextField docExclude = new JBTextField();
 
     @NotNull
     protected JPanel commonLineEndFilter(FormBuilder formBuilder) {
         JPanel lineEndFilter = formBuilder
-                .addComponent(new JBLabel("Separated by ',' or ' ' etc."))
-                .addComponent(new JBLabel("Use '' to include all or exclude none."))
+                .addComponent(new JBLabel("Separated by '|' (Regexp), use '' to include all or exclude none."))
                 .addSeparator()
-                .addLabeledComponent(new JBLabel("line end include className start with: "), lineEndInclude, 1, true)
-                .addLabeledComponent(new JBLabel("line end exclude className start with: "), lineEndExclude, 1, true)
+                .addLabeledComponent(new JBLabel("className include Regexp: "), lineInclude, 1, true)
+                .addLabeledComponent(new JBLabel("className include Regexp: "), lineExclude, 1, true)
+                .addSeparator()
+                .addLabeledComponent(new JBLabel("comment include Regexp: "), docInclude, 1, true)
+                .addLabeledComponent(new JBLabel("comment include Regexp: "), docExclude, 1, true)
                 .getPanel();
         lineEndFilter.setBorder(IdeBorderFactory.createTitledBorder(
                 "Line End Comment"));
@@ -29,20 +33,39 @@ public abstract class AbstractSettingsComponent {
     }
 
     @NotNull
-    public String getLineEndInclude() {
-        return lineEndInclude.getText();
+    public String getLineInclude() {
+        return lineInclude.getText();
     }
 
-    public void setLineEndInclude(@NotNull String newText) {
-        lineEndInclude.setText(newText);
+    public void setLineInclude(@NotNull String newText) {
+        lineInclude.setText(newText);
     }
 
     @NotNull
-    public String getLineEndExclude() {
-        return lineEndExclude.getText();
+    public String getLineExclude() {
+        return lineExclude.getText();
     }
 
-    public void setLineEndExclude(@NotNull String newText) {
-        lineEndExclude.setText(newText);
+    public void setLineExclude(@NotNull String newText) {
+        lineExclude.setText(newText);
+    }
+
+
+    @NotNull
+    public String getDocInclude() {
+        return docInclude.getText();
+    }
+
+    public void setDocInclude(@NotNull String newText) {
+        docInclude.setText(newText);
+    }
+
+    @NotNull
+    public String getDocExclude() {
+        return docExclude.getText();
+    }
+
+    public void setDocExclude(@NotNull String newText) {
+        docExclude.setText(newText);
     }
 }

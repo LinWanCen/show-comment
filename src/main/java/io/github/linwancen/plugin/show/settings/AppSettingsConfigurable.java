@@ -33,19 +33,24 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
+
+        modified |= !mySettingsComponent.getLineEndCount().equals(String.valueOf(settings.lineEndCount));
+        modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndTextAttr.getForegroundColor());
+        modified |= !mySettingsComponent.getLineEndJsonColor().equals(settings.lineEndJsonTextAttr.getForegroundColor());
+        modified |= !mySettingsComponent.getLineEndPrefix().equals(settings.lineEndPrefix);
+
+        modified |= mySettingsComponent.getFindElementRightToLeft() != settings.findElementRightToLeft;
+
         modified |= mySettingsComponent.getFromCall() != settings.fromCall;
         modified |= mySettingsComponent.getFromNew() != settings.fromNew;
         modified |= mySettingsComponent.getFromRef() != settings.fromRef;
         modified |= mySettingsComponent.getInJson() != settings.inJson;
         modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
         modified |= mySettingsComponent.getSkipAscii() != settings.skipAscii;
-        modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndTextAttr.getForegroundColor());
-        modified |= !mySettingsComponent.getLineEndJsonColor().equals(settings.lineEndJsonTextAttr.getForegroundColor());
-        modified |= mySettingsComponent.getFindElementRightToLeft() != settings.findElementRightToLeft;
-        modified |= !mySettingsComponent.getLineEndInclude().equals(settings.lineEndInclude);
-        modified |= !mySettingsComponent.getLineEndExclude().equals(settings.lineEndExclude);
-        modified |= !mySettingsComponent.getLineEndPrefix().equals(settings.lineEndPrefix);
-        modified |= !mySettingsComponent.getLineEndCount().equals(String.valueOf(settings.lineEndCount));
+        modified |= mySettingsComponent.getSkipBlank() != settings.skipBlank;
+
+        modified = AbstractSettingsConfigurable.isModified(settings, mySettingsComponent, modified);
+
         return modified;
     }
 
@@ -54,25 +59,27 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
+
+        try {
+            settings.lineEndCount = Integer.parseInt(mySettingsComponent.getLineEndCount());
+        } catch (NumberFormatException e) {
+            mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
+        }
+        settings.lineEndTextAttr.setForegroundColor(mySettingsComponent.getLineEndColor());
+        settings.lineEndJsonTextAttr.setForegroundColor(mySettingsComponent.getLineEndJsonColor());
+        settings.lineEndPrefix = mySettingsComponent.getLineEndPrefix();
+
+        settings.findElementRightToLeft = mySettingsComponent.getFindElementRightToLeft();
+
         settings.fromCall = mySettingsComponent.getFromCall();
         settings.fromNew = mySettingsComponent.getFromNew();
         settings.fromRef = mySettingsComponent.getFromRef();
         settings.inJson = mySettingsComponent.getInJson();
         settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
         settings.skipAscii = mySettingsComponent.getSkipAscii();
-        settings.lineEndTextAttr.setForegroundColor(mySettingsComponent.getLineEndColor());
-        settings.lineEndJsonTextAttr.setForegroundColor(mySettingsComponent.getLineEndJsonColor());
-        settings.findElementRightToLeft = mySettingsComponent.getFindElementRightToLeft();
-        settings.lineEndInclude = mySettingsComponent.getLineEndInclude();
-        settings.lineEndExclude = mySettingsComponent.getLineEndExclude();
-        settings.lineEndIncludeArray = SplitUtils.split(settings.lineEndInclude);
-        settings.lineEndExcludeArray = SplitUtils.split(settings.lineEndExclude);
-        settings.lineEndPrefix = mySettingsComponent.getLineEndPrefix();
-        try {
-            settings.lineEndCount = Integer.parseInt(mySettingsComponent.getLineEndCount());
-        } catch (NumberFormatException e) {
-            mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
-        }
+        settings.skipBlank = mySettingsComponent.getSkipBlank();
+
+        AbstractSettingsConfigurable.apply(settings, mySettingsComponent);
     }
 
     @Override
@@ -80,19 +87,23 @@ public class AppSettingsConfigurable implements Configurable {
         AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
+
+        mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
+        mySettingsComponent.setLineEndColor(settings.lineEndTextAttr.getForegroundColor());
+        mySettingsComponent.setLineEndJsonColor(settings.lineEndJsonTextAttr.getForegroundColor());
+        mySettingsComponent.setLineEndPrefix(settings.lineEndPrefix);
+
+        mySettingsComponent.setFindElementRightToLeft(settings.findElementRightToLeft);
+
         mySettingsComponent.setFromCall(settings.fromCall);
         mySettingsComponent.setFromNew(settings.fromNew);
         mySettingsComponent.setFromRef(settings.fromRef);
         mySettingsComponent.setInJson(settings.inJson);
         mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
         mySettingsComponent.setSkipAscii(settings.skipAscii);
-        mySettingsComponent.setLineEndColor(settings.lineEndTextAttr.getForegroundColor());
-        mySettingsComponent.setLineEndJsonColor(settings.lineEndJsonTextAttr.getForegroundColor());
-        mySettingsComponent.setFindElementRightToLeft(settings.findElementRightToLeft);
-        mySettingsComponent.setLineEndInclude(settings.lineEndInclude);
-        mySettingsComponent.setLineEndExclude(settings.lineEndExclude);
-        mySettingsComponent.setLineEndPrefix(settings.lineEndPrefix);
-        mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
+        mySettingsComponent.setSkipBlank(settings.skipBlank);
+
+        AbstractSettingsConfigurable.reset(settings, mySettingsComponent);
     }
 
     @Override

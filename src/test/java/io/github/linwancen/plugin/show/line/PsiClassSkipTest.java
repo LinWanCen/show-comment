@@ -6,9 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.BiPredicate;
+import java.util.regex.Pattern;
 
 /**
- * @see PsiClassSkip
+ * @see SkipUtils
  */
 class PsiClassSkipTest {
 
@@ -16,17 +17,17 @@ class PsiClassSkipTest {
     public static final boolean x = false;
 
     String[] names = {"java", "io.a", "io.b"};
-    String[][] includes = {
-            {},
-            {"java"},
-            {"io"},
-            {"java", "io"},
+    Pattern[] includes = {
+            Pattern.compile(""),
+            Pattern.compile("java"),
+            Pattern.compile("io"),
+            Pattern.compile("java|io"),
     };
-    String[][] excludes = {
-            {},
-            {"java"},
-            {"io.b"},
-            {"java", "io.b"},
+    Pattern[] excludes = {
+            Pattern.compile(""),
+            Pattern.compile("java"),
+            Pattern.compile("io\\.b"),
+            Pattern.compile("java|io\\.b"),
     };
 
     @Test
@@ -62,10 +63,10 @@ class PsiClassSkipTest {
 
     private void loopTest(String name, boolean[][] results) {
         for (int includeIndex = 0, includesLength = includes.length; includeIndex < includesLength; includeIndex++) {
-            String[] include = includes[includeIndex];
+            Pattern include = includes[includeIndex];
             for (int excludeIndex = 0, excludesLength = excludes.length; excludeIndex < excludesLength; excludeIndex++) {
-                String[] exclude = excludes[excludeIndex];
-                boolean isSkip = PsiClassSkip.skipName(name, include, exclude);
+                Pattern exclude = excludes[excludeIndex];
+                boolean isSkip = SkipUtils.skipText(name, include, exclude);
                 String tip =
                         name + "==" + JsonOutput.toJson(include) + "!=" + JsonOutput.toJson(exclude) + "=>" + isSkip;
                 System.out.println(tip);
@@ -85,7 +86,7 @@ class PsiClassSkipTest {
                 {x, o, o}, // {"io"},
                 {o, o, o}, // {"java", "io"},
         };
-        loopTest(PsiClassSkip::include, results);
+        loopTest(SkipUtils::include, results);
     }
 
     @Test
@@ -97,12 +98,12 @@ class PsiClassSkipTest {
                 {x, o, o}, // {"io"},
                 {o, o, o}, // {"java", "io"},
         };
-        loopTest(PsiClassSkip::exclude, results);
+        loopTest(SkipUtils::exclude, results);
     }
 
-    private void loopTest(BiPredicate<String, String[]> biPredicate, boolean[][] results) {
+    private void loopTest(BiPredicate<String, Pattern> biPredicate, boolean[][] results) {
         for (int includeIndex = 0, includesLength = includes.length; includeIndex < includesLength; includeIndex++) {
-            String[] include = includes[includeIndex];
+            Pattern include = includes[includeIndex];
             for (int nameIndex = 0, namesLength = names.length; nameIndex < namesLength; nameIndex++) {
                 String name = names[nameIndex];
                 boolean result = biPredicate.test(name, include);

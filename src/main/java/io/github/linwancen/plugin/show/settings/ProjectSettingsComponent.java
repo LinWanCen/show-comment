@@ -33,7 +33,7 @@ public class ProjectSettingsComponent extends AbstractSettingsComponent {
     }
 
     public JComponent getPreferredFocusedComponent() {
-        return lineEndInclude;
+        return lineInclude;
     }
 
 

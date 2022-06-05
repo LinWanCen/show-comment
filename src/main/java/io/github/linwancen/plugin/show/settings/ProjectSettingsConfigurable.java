@@ -46,20 +46,16 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
         ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
         boolean modified = mySettingsComponent.getGlobalFilterEffective() != settings.globalFilterEffective;
         modified |= mySettingsComponent.getProjectFilterEffective() != settings.projectFilterEffective;
-        modified |= !mySettingsComponent.getLineEndExclude().equals(settings.lineEndInclude);
-        modified |= !mySettingsComponent.getLineEndInclude().equals(settings.lineEndExclude);
+        modified = AbstractSettingsConfigurable.isModified(settings, mySettingsComponent, modified);
         return modified;
     }
 
     @Override
     public void apply() {
         ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
-        settings.lineEndInclude = mySettingsComponent.getLineEndInclude();
-        settings.lineEndExclude = mySettingsComponent.getLineEndExclude();
         settings.globalFilterEffective = mySettingsComponent.getGlobalFilterEffective();
         settings.projectFilterEffective = mySettingsComponent.getProjectFilterEffective();
-        settings.lineEndIncludeArray = SplitUtils.split(settings.lineEndInclude);
-        settings.lineEndExcludeArray = SplitUtils.split(settings.lineEndExclude);
+        AbstractSettingsConfigurable.apply(settings, mySettingsComponent);
     }
 
     @Override
@@ -67,8 +63,7 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
         ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
         mySettingsComponent.setGlobalFilterEffective(settings.globalFilterEffective);
         mySettingsComponent.setProjectFilterEffective(settings.projectFilterEffective);
-        mySettingsComponent.setLineEndInclude(settings.lineEndInclude);
-        mySettingsComponent.setLineEndExclude(settings.lineEndExclude);
+        AbstractSettingsConfigurable.reset(settings, mySettingsComponent);
     }
 
     @Override

@@ -56,6 +56,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.17  Add line-end-comment  skip doc text or class/member name by regexp
 <li>1.16  Add line-end-comment  skip when comments have been added
 <li>1.15  Add line-end-comment  support COBOL ext '', 'cbl', 'cob', 'cobol'
 <li>1.14  Add line-end-comment  skip Annotation, skip only English (ASCII)
@@ -76,6 +77,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.17  增加 行末注释 根据正则表达式跳过指定注释文本或类成员名字的注释
 <li>1.16  增加 行末注释 已经添加行末注释时跳过
 <li>1.15  增加 行末注释 COBOL 拓展名支持 无拓展名、cbl、cob、cobol
 <li>1.14  增加 行末注释 忽略注解 与 忽略纯英文
