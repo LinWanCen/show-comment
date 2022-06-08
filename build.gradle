@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '1.17.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '1.18.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 apply plugin: 'java'
 
@@ -39,6 +39,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.18  Add External Comment  effect at previous layer when folder named -1
 <li>1.17  Add line-end-comment  skip doc text or class/member name by regexp
 <li>1.16  Add line-end-comment  skip when comments have been added
 <li>1.15  Add line-end-comment  support COBOL ext '', 'cbl', 'cob', 'cobol'
@@ -60,6 +61,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.18  增加 外部注释 文件夹名为 -1 时配置在上一层文件夹生效
 <li>1.17  增加 行末注释 根据正则表达式跳过指定注释文本或类成员名字的注释
 <li>1.16  增加 行末注释 已经添加行末注释时跳过
 <li>1.15  增加 行末注释 COBOL 拓展名支持 无拓展名、cbl、cob、cobol

@@ -22,7 +22,7 @@ Thanks JetBrains Licenses for Open Source.
 <li>path/[any][filename.]ext.tree.tsv // file and folder tree comment 📝 📁
 <li>path/[any][filename.]ext.key.tsv  // line keywords to split and comment
 <li>path/[any][filename.]ext.doc.tsv  // line words comment
-<li>In path, "doc" can replace any, and can use % like in SQL
+<li>In path, "doc" can replace any, and can use % like in SQL, effect at previous layer when folder named -1
 <li>The lines in key.tsv will be concatenated with `|` to regexp; longer str should in front; startWith `?` to exclude
 <li>Chang tsv file in find pop window would not reload!
 <li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
@@ -45,7 +45,7 @@ Thanks JetBrains Licenses for Open Source.
 <li>path/[any][filename.]ext.key.tsv  // 切割关键字与注释
 <li>path/[any][filename.]ext.doc.tsv  // 词注释
 <li>key.tsv 的每一行将会用`|`连接起来形成正则表达式，较长的关键字应该放在前面，用 `?` 开头排除
-<li>doc 文件夹可以替换任何一层文件夹，可以像 SQL 那样用 % 模糊匹配
+<li>doc 文件夹可以替换任何一层文件夹，可以像 SQL 那样用 % 模糊匹配，文件夹名为 -1 时在上一层文件夹生效
 <li>在搜索弹出窗中修改 tsv 文件将不会被重加载
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
@@ -56,6 +56,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.18  Add External Comment  effect at previous layer when folder named -1
 <li>1.17  Add line-end-comment  skip doc text or class/member name by regexp
 <li>1.16  Add line-end-comment  skip when comments have been added
 <li>1.15  Add line-end-comment  support COBOL ext '', 'cbl', 'cob', 'cobol'
@@ -77,6 +78,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.18  增加 外部注释 文件夹名为 -1 时配置在上一层文件夹生效
 <li>1.17  增加 行末注释 根据正则表达式跳过指定注释文本或类成员名字的注释
 <li>1.16  增加 行末注释 已经添加行末注释时跳过
 <li>1.15  增加 行末注释 COBOL 拓展名支持 无拓展名、cbl、cob、cobol
