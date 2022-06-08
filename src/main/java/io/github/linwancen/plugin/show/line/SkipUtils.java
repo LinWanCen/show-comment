@@ -23,7 +23,7 @@ class SkipUtils {
             text = ((PsiClass) psiElement).getQualifiedName();
         } else if (psiElement instanceof PsiMember) {
             PsiMember psiMember = (PsiMember) psiElement;
-            text = psiMember.getContainingClass() + "." + psiMember.getName();
+            text = psiMember.getContainingClass() + "#" + psiMember.getName();
         } else {
             return true;
         }

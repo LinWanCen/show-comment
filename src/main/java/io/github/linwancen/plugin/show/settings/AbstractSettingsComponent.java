@@ -21,11 +21,11 @@ public abstract class AbstractSettingsComponent {
         JPanel lineEndFilter = formBuilder
                 .addComponent(new JBLabel("Separated by '|' (Regexp), use '' to include all or exclude none."))
                 .addSeparator()
-                .addLabeledComponent(new JBLabel("className include Regexp: "), lineInclude, 1, true)
-                .addLabeledComponent(new JBLabel("className include Regexp: "), lineExclude, 1, true)
+                .addLabeledComponent(new JBLabel("className#memberName include Regexp: "), lineInclude, 1, true)
+                .addLabeledComponent(new JBLabel("className#memberName exclude Regexp: "), lineExclude, 1, true)
                 .addSeparator()
                 .addLabeledComponent(new JBLabel("comment include Regexp: "), docInclude, 1, true)
-                .addLabeledComponent(new JBLabel("comment include Regexp: "), docExclude, 1, true)
+                .addLabeledComponent(new JBLabel("comment exclude Regexp: "), docExclude, 1, true)
                 .getPanel();
         lineEndFilter.setBorder(IdeBorderFactory.createTitledBorder(
                 "Line End Comment"));
