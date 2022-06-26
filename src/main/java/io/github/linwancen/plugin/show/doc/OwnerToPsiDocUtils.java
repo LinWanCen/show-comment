@@ -26,6 +26,11 @@ public class OwnerToPsiDocUtils {
     }
 
     @Nullable
+    public static PsiDocComment supperMethodDoc(PsiMethod psiMethod) {
+        return PsiMethodToPsiDoc.supperMethodDoc(psiMethod);
+    }
+
+    @Nullable
     public static PsiDocComment packageDoc(@Nullable PsiPackage psiPackage) {
         if (psiPackage == null) {
             return null;

@@ -46,7 +46,7 @@ class PsiMethodToPsiDoc {
     }
 
     @Nullable
-    private static PsiDocComment supperMethodDoc(PsiMethod psiMethod) {
+    static PsiDocComment supperMethodDoc(PsiMethod psiMethod) {
         PsiMethod[] superMethods = psiMethod.findSuperMethods();
         for (PsiMethod superMethod : superMethods) {
             PsiDocComment superDoc = OwnerToPsiDocUtils.methodDoc(superMethod);

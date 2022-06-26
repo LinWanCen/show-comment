@@ -4,7 +4,9 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
+import io.github.linwancen.plugin.show.doc.OwnerToPsiDocUtils;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -18,6 +20,12 @@ class NewCallRefToPsiDoc {
     static PsiDocComment elementDoc(PsiElement element, PsiElement psiIdentifier,
                                     int startOffset, int endOffset) {
         AppSettingsState instance = AppSettingsState.getInstance();
+        if (psiIdentifier != null && "Override".equals(psiIdentifier.getText())) {
+            ProjectSettingsState projectSettings = ProjectSettingsState.getInstance(psiIdentifier.getProject());
+            PsiMethod psiMethod = PsiTreeUtil.getParentOfType(psiIdentifier, PsiMethod.class);
+            PsiDocComment docComment = OwnerToPsiDocUtils.supperMethodDoc(psiMethod);
+            return SkipUtils.skipDoc(docComment, instance, projectSettings);
+        }
         if (element != null) {
             PsiDocComment elementDoc = elementDoc(element, startOffset, endOffset, instance);
             if (elementDoc != null) {
