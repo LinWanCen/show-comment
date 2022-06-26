@@ -59,7 +59,7 @@ public class Tree implements ProjectViewNodeDecorator {
         if (docComment == null) {
             return null;
         }
-        return PsiDocToStrDoc.text(docComment);
+        return PsiDocToStrDoc.text(docComment, true);
     }
 
     @Nullable

@@ -1,10 +1,10 @@
 package io.github.linwancen.plugin.show.doc;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocToken;
-import com.intellij.psi.javadoc.PsiInlineDocTag;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.javadoc.*;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -14,7 +14,7 @@ public class PsiDocToStrDoc {
     private PsiDocToStrDoc() {}
 
     @Nullable
-    public static String text(@Nullable PsiDocComment psiDocComment) {
+    public static String text(@Nullable PsiDocComment psiDocComment, boolean isTree) {
         if (psiDocComment == null) {
             return null;
         }
@@ -32,33 +32,61 @@ public class PsiDocToStrDoc {
                 break;
             }
         }
+        StringBuilder tags = tags(psiDocComment, isTree, appSettings);
+        if (tags.length() > 0) {
+            if (sb.length() > 0) {
+                sb.append("@ ");
+            }
+            sb.append(tags);
+        }
         if (sb.length() == 0) {
             return null;
         }
         return sb.toString();
     }
 
+    @NotNull
+    private static StringBuilder tags(@NotNull PsiDocComment psiDocComment, boolean isTree,
+                                                  AppSettingsState appSettings) {
+        StringBuilder sb = new StringBuilder();
+        PsiDocTag[] tags = psiDocComment.getTags();
+        for (PsiDocTag tag : tags) {
+            String name = tag.getName();
+            if (isTree ? appSettings.treeTags.contains(name) : appSettings.lineTags.contains(name)) {
+                // @see @param should use getDataElements()
+                PsiDocTagValue value = tag.getValueElement();
+                if (value != null) {
+                    addHtml(sb, value.getText());
+                }
+            }
+        }
+        return sb;
+    }
+
+    /**
+     * @return is new line
+     */
     private static boolean appendElementText(StringBuilder sb, PsiElement element) {
         if (element instanceof PsiDocToken) {
             PsiDocToken psiDocToken = (PsiDocToken) element;
-            sb.append(deleteHtml(psiDocToken.getText()));
-            sb.append("  ");
-            return true;
+            addHtml(sb, psiDocToken.getText());
         }
         if (element instanceof PsiInlineDocTag) {
             PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
             PsiElement[] children = psiInlineDocTag.getChildren();
-            if (children.length > 2) {
-                sb.append(deleteHtml(children[2].getText()));
-                sb.append("  ");
+            if (children.length > 3) {
+                addHtml(sb, children[3].getText());
             }
         }
-        return false;
+        return element instanceof PsiWhiteSpace && sb.length() > 0;
     }
 
     private static final Pattern HTML_PATTERN = Pattern.compile("<[^>]++>");
 
-    private static String deleteHtml(String s) {
-        return HTML_PATTERN.matcher(s.trim()).replaceAll("");
+    private static void addHtml(StringBuilder sb, String s) {
+        String deleteHtml = HTML_PATTERN.matcher(s.trim()).replaceAll("");
+        if (deleteHtml.length() > 0) {
+            sb.append(deleteHtml).append(" ");
+        }
     }
 }

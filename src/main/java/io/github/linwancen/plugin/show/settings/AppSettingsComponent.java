@@ -15,7 +15,9 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox("Show tree comment ");
+    private final JBTextField treeTags = new JBTextField();
     private final JBCheckBox showLineEndComment = new JBCheckBox("Show line end comment ");
+    private final JBTextField lineTags = new JBTextField();
     private final JBCheckBox fromCall = new JBCheckBox("call ");
     private final JBCheckBox fromNew = new JBCheckBox("new ");
     private final JBCheckBox fromRef = new JBCheckBox("ref ");
@@ -26,8 +28,8 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final ColorPanel lineEndColor = new ColorPanel();
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBCheckBox findElementRightToLeft = new JBCheckBox("Find element right to left");
-    protected final JBTextField lineEndPrefix = new JBTextField();
-    protected final JBTextField lineEndCount = new JBTextField();
+    private final JBTextField lineEndPrefix = new JBTextField();
+    private final JBTextField lineEndCount = new JBTextField();
 
     public AppSettingsComponent() {
         myMainPanel = FormBuilder.createFormBuilder()
@@ -42,6 +44,8 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         JPanel comment = FormBuilder.createFormBuilder()
                 .addComponent(showTreeComment, 1)
                 .addComponent(showLineEndComment, 1)
+                .addLabeledComponent(new JBLabel("tree tags"), treeTags, 1, true)
+                .addLabeledComponent(new JBLabel("line tags"), lineTags, 1, true)
                 .getPanel();
         comment.setBorder(IdeBorderFactory.createTitledBorder("Show"));
         return comment;
@@ -81,12 +85,30 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         showTreeComment.setSelected(newStatus);
     }
 
+    @NotNull
+    public String getTreeTags() {
+        return treeTags.getText();
+    }
+
+    public void setTreeTags(@NotNull String newText) {
+        treeTags.setText(newText);
+    }
+
     public boolean getShowLineEndComment() {
         return showLineEndComment.isSelected();
     }
 
     public void setShowLineEndComment(boolean newStatus) {
         showLineEndComment.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getLineTags() {
+        return lineTags.getText();
+    }
+
+    public void setLineTags(@NotNull String newText) {
+        lineTags.setText(newText);
     }
 
     public boolean getFromCall() {

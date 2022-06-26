@@ -47,7 +47,7 @@ public class FileViewToDocStrUtils {
         PsiDocComment docComment = setting.findElementRightToLeft
                 ? FileViewToPsiDocRightToLeft.rightDoc(viewProvider, startOffset, endOffset)
                 : FileViewToPsiDocLeftToRight.leftDoc(viewProvider, document, startOffset, endOffset);
-        String strDoc = PsiDocToStrDoc.text(docComment);
+        String strDoc = PsiDocToStrDoc.text(docComment, false);
         if (strDoc == null) {
             return null;
         }
