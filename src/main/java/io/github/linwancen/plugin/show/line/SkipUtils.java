@@ -20,7 +20,11 @@ class SkipUtils {
         }
         String text;
         if (psiElement instanceof PsiClass) {
-            text = ((PsiClass) psiElement).getQualifiedName();
+            PsiClass psiClass = (PsiClass) psiElement;
+            if (appSettings.skipAnnotation && psiClass.isAnnotationType()) {
+                return true;
+            }
+            text = psiClass.getQualifiedName();
         } else if (psiElement instanceof PsiMember) {
             PsiMember psiMember = (PsiMember) psiElement;
             text = psiMember.getContainingClass() + "#" + psiMember.getName();
