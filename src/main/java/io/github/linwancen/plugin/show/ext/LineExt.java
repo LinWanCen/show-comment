@@ -38,7 +38,7 @@ public class LineExt {
         return extDoc(keyMap, matcher, docMap, words, treeMap);
     }
 
-    private static final Pattern DICT_PATTERN = Pattern.compile("([\\w-]++) ?(NOT)? ?= ?'");
+    private static final Pattern DICT_PATTERN = Pattern.compile("([\\w-]++) ?(NOT)? ?= ?\\(? ?'");
     private static final Pattern AND_OR_PATTERN = Pattern.compile("(AND|OR) ?'");
 
     @NotNull
