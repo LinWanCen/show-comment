@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.settings;
 
+import com.google.common.base.Splitter;
 import com.intellij.openapi.options.Configurable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -32,9 +33,9 @@ public class AppSettingsConfigurable implements Configurable {
     public boolean isModified() {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
-        modified |= !mySettingsComponent.getTreeTags().equals(settings.treeTags);
+        modified |= !mySettingsComponent.getTreeTags().equals(String.join("|", settings.treeTags));
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
-        modified |= !mySettingsComponent.getLineTags().equals(settings.lineTags);
+        modified |= !mySettingsComponent.getLineTags().equals(String.join("|", settings.lineTags));
 
         modified |= !mySettingsComponent.getLineEndCount().equals(String.valueOf(settings.lineEndCount));
         modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndTextAttr.getForegroundColor());
@@ -60,9 +61,9 @@ public class AppSettingsConfigurable implements Configurable {
     public void apply() {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
-        settings.treeTags = mySettingsComponent.getTreeTags();
+        settings.treeTags = Splitter.on('|').splitToList(mySettingsComponent.getTreeTags()).toArray(new String[0]);
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
-        settings.lineTags = mySettingsComponent.getLineTags();
+        settings.lineTags = Splitter.on('|').splitToList(mySettingsComponent.getLineTags()).toArray(new String[0]);
 
         try {
             settings.lineEndCount = Integer.parseInt(mySettingsComponent.getLineEndCount());
@@ -90,9 +91,9 @@ public class AppSettingsConfigurable implements Configurable {
     public void reset() {
         AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
-        mySettingsComponent.setTreeTags(settings.treeTags);
+        mySettingsComponent.setTreeTags(String.join("|", settings.treeTags));
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
-        mySettingsComponent.setLineTags(settings.lineTags);
+        mySettingsComponent.setLineTags(String.join("|", settings.lineTags));
 
         mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
         mySettingsComponent.setLineEndColor(settings.lineEndTextAttr.getForegroundColor());

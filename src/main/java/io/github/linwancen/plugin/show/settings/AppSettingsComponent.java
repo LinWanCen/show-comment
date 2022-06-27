@@ -44,8 +44,8 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         JPanel comment = FormBuilder.createFormBuilder()
                 .addComponent(showTreeComment, 1)
                 .addComponent(showLineEndComment, 1)
-                .addLabeledComponent(new JBLabel("tree tags"), treeTags, 1, true)
-                .addLabeledComponent(new JBLabel("line tags"), lineTags, 1, true)
+                .addLabeledComponent(new JBLabel("tree tags split by |:"), treeTags, 1, true)
+                .addLabeledComponent(new JBLabel("line tags split by |:"), lineTags, 1, true)
                 .getPanel();
         comment.setBorder(IdeBorderFactory.createTitledBorder("Show"));
         return comment;

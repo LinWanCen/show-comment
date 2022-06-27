@@ -78,10 +78,10 @@ public class PsiDocToStrDoc {
     private static StringBuilder tags(@NotNull PsiDocComment psiDocComment, boolean isTree,
                                       AppSettingsState appSettings) {
         StringBuilder sb = new StringBuilder();
-        PsiDocTag[] tags = psiDocComment.getTags();
-        for (PsiDocTag tag : tags) {
-            String name = tag.getName();
-            if (isTree ? appSettings.treeTags.contains(name) : appSettings.lineTags.contains(name)) {
+        String[] names = isTree ? appSettings.treeTags : appSettings.lineTags;
+        for (String name : names) {
+            PsiDocTag[] tags = psiDocComment.findTagsByName(name);
+            for (PsiDocTag tag : tags) {
                 // @see @param should use getDataElements()
                 PsiDocTagValue value = tag.getValueElement();
                 if (value != null) {
