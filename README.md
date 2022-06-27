@@ -56,6 +56,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.20  Add get doc first sentence checkbox
 <li>1.19  Add supper doc at @Override, support doc tag like @author
 <li>1.18  Add External Comment  effect at previous layer when folder named -1
 <li>1.17  Add line-end-comment  skip doc text or class/member name by regexp
@@ -79,6 +80,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.20  增加 获取第一句注释选项
 <li>1.19  增加 @Override 显示父方法注释，支持 @author 等注释标签
 <li>1.18  增加 外部注释 文件夹名为 -1 时配置在上一层文件夹生效
 <li>1.17  增加 行末注释 根据正则表达式跳过指定注释文本或类成员名字的注释

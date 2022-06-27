@@ -4,9 +4,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.javadoc.*;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PsiDocToStrDoc {
@@ -39,15 +41,42 @@ public class PsiDocToStrDoc {
             }
             sb.append(tags);
         }
-        if (sb.length() == 0) {
+        String text = sb.toString();
+        if (text.trim().length() == 0) {
             return null;
         }
-        return sb.toString();
+        ProjectSettingsState projectSettings = ProjectSettingsState.getInstance(psiDocComment.getProject());
+        return getDocBySetting(text, appSettings, projectSettings);
+    }
+
+    @Nullable
+    private static String getDocBySetting(String text,
+                                          AppSettingsState appSettings,
+                                          ProjectSettingsState projectSettings) {
+        // docGetEffect first because default false
+        if (appSettings.docGetEffect && projectSettings.globalFilterEffective) {
+            return getDoc(text, appSettings.docGet);
+        } else if (projectSettings.docGetEffect && projectSettings.projectFilterEffective) {
+            return getDoc(text, projectSettings.docGet);
+        } else {
+            return text;
+        }
+    }
+
+    @Nullable
+    static String getDoc(String text, Pattern docGet) {
+        // if effect skip check empty
+        Matcher m = docGet.matcher(text);
+        if (m.find()) {
+            return m.group(m.groupCount());
+        }
+        // one line
+        return text;
     }
 
     @NotNull
     private static StringBuilder tags(@NotNull PsiDocComment psiDocComment, boolean isTree,
-                                                  AppSettingsState appSettings) {
+                                      AppSettingsState appSettings) {
         StringBuilder sb = new StringBuilder();
         PsiDocTag[] tags = psiDocComment.getTags();
         for (PsiDocTag tag : tags) {

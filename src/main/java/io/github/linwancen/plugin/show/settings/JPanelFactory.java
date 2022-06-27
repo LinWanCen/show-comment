@@ -10,7 +10,9 @@ public class JPanelFactory {
     public static JPanel of(Component... components) {
         JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         for (Component component : components) {
-            jPanel.add(component);
+            if (component != null) {
+                jPanel.add(component);
+            }
         }
         return jPanel;
     }

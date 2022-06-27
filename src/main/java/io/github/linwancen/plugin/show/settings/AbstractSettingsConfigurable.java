@@ -9,6 +9,8 @@ public class AbstractSettingsConfigurable {
         modified |= !component.getLineExclude().equals(settings.getLineExclude());
         modified |= !component.getDocInclude().equals(settings.getDocInclude());
         modified |= !component.getDocExclude().equals(settings.getDocExclude());
+        modified |= component.getDocGetEffect() != settings.docGetEffect;
+        modified |= !component.getDocGet().equals(settings.getDocGet());
         return modified;
     }
 
@@ -17,6 +19,8 @@ public class AbstractSettingsConfigurable {
         settings.setLineExclude(component.getLineExclude());
         settings.setDocInclude(component.getDocInclude());
         settings.setDocExclude(component.getDocExclude());
+        settings.docGetEffect = component.getDocGetEffect();
+        settings.setDocGet(component.getDocGet());
     }
 
     static void reset(AbstractSettingsState settings, AbstractSettingsComponent component) {
@@ -24,5 +28,7 @@ public class AbstractSettingsConfigurable {
         component.setLineExclude(settings.getLineExclude());
         component.setDocInclude(settings.getDocInclude());
         component.setDocExclude(settings.getDocExclude());
+        component.setDocGetEffect(settings.docGetEffect);
+        component.setDocGet(settings.getDocGet());
     }
 }
