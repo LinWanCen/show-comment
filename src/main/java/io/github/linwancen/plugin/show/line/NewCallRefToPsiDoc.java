@@ -23,6 +23,9 @@ class NewCallRefToPsiDoc {
         if (psiIdentifier != null && "Override".equals(psiIdentifier.getText())) {
             ProjectSettingsState projectSettings = ProjectSettingsState.getInstance(psiIdentifier.getProject());
             PsiMethod psiMethod = PsiTreeUtil.getParentOfType(psiIdentifier, PsiMethod.class);
+            if (psiMethod == null) {
+                return null;
+            }
             PsiDocComment docComment = OwnerToPsiDocUtils.supperMethodDoc(psiMethod);
             return SkipUtils.skipDoc(docComment, instance, projectSettings);
         }
