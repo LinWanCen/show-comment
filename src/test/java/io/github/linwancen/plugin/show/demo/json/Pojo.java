@@ -20,12 +20,12 @@ public class Pojo {
     private List<NestedClass> nestedClassList;
 
     /** NestedClass */
-    public static class NestedClass{
+    public static class NestedClass {
         /** nestedClass2 */
         private NestedClass2 nestedClass2;
 
         /** NestedClass2 */
-        public static class NestedClass2{
+        public static class NestedClass2 {
             /** a */
             private String a;
         }

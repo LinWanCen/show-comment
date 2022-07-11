@@ -1,5 +1,5 @@
 
-        COMPUTE HELLO-WORLD = (A - B) * 100 / (C + D)
+        COMPUTE WS-HELLO-WORLD = (A - B) * 100 / (C + D)
         END-COMPUTE
         ADD A TO B
         ADD A B   TO C D
