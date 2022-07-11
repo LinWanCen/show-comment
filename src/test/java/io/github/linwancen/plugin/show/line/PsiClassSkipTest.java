@@ -13,17 +13,17 @@ import java.util.regex.Pattern;
  */
 class PsiClassSkipTest {
 
-    public static final boolean o = true;
-    public static final boolean x = false;
+    private static final boolean o = true;
+    private static final boolean x = false;
 
-    String[] names = {"java", "io.a", "io.b"};
-    Pattern[] includes = {
+    private static final String[] names = {"java", "io.a", "io.b"};
+    private static final Pattern[] includes = {
             Pattern.compile(""),
             Pattern.compile("java"),
             Pattern.compile("io"),
             Pattern.compile("java|io"),
     };
-    Pattern[] excludes = {
+    private static final Pattern[] excludes = {
             Pattern.compile(""),
             Pattern.compile("java"),
             Pattern.compile("io\\.b"),
