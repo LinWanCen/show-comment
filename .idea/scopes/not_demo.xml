@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="not demo" pattern="(src:*..*||test:*..*)&amp;&amp;!test[show-comment.test]:io.github.linwancen.plugin.show.demo..*" />
+</component>
