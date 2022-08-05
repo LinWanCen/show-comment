@@ -7,6 +7,8 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
@@ -15,25 +17,40 @@ class SkipUtils {
     private SkipUtils() {}
 
     static boolean skipSign(PsiElement psiElement, AppSettingsState appSettings, ProjectSettingsState projectSettings) {
-        if (psiElement == null) {
-            return true;
-        }
-        String text;
-        if (psiElement instanceof PsiClass) {
-            PsiClass psiClass = (PsiClass) psiElement;
-            if (appSettings.skipAnnotation && psiClass.isAnnotationType()) {
-                return true;
-            }
-            text = psiClass.getQualifiedName();
-        } else if (psiElement instanceof PsiMember) {
-            PsiMember psiMember = (PsiMember) psiElement;
-            text = psiMember.getContainingClass() + "#" + psiMember.getName();
-        } else {
+        String text = psiName(psiElement, appSettings);
+        if (text == null) {
             return true;
         }
         return skipText(text,
                 projectSettings.globalFilterEffective, appSettings.lineInclude, appSettings.lineExclude,
                 projectSettings.projectFilterEffective, projectSettings.lineInclude, projectSettings.lineExclude);
+    }
+
+    private static @Nullable String psiName(@Nullable PsiElement psiElement, AppSettingsState appSettings) {
+        if (psiElement instanceof PsiClass) {
+            PsiClass psiClass = (PsiClass) psiElement;
+            if (appSettings.skipAnnotation && psiClass.isAnnotationType()) {
+                return null;
+            }
+            return psiClass.getQualifiedName();
+        } else if (psiElement instanceof PsiMember) {
+            PsiMember psiMember = (PsiMember) psiElement;
+            StringBuilder sb = new StringBuilder();
+            PsiClass psiClass = psiMember.getContainingClass();
+            if (psiClass != null) {
+                String className = psiClass.getQualifiedName();
+                if (className != null) {
+                    sb.append(className);
+                }
+            }
+            sb.append("#");
+            String name = psiMember.getName();
+            if (name != null) {
+                sb.append(name);
+            }
+            return sb.toString();
+        }
+        return null;
     }
 
     public static final Pattern NOT_ASCII_PATTERN = Pattern.compile("[^\u0000-\u007f]");
@@ -83,21 +100,21 @@ class SkipUtils {
         return false;
     }
 
-    static boolean skipText(String text, Pattern include, Pattern exclude) {
+    static boolean skipText(@NotNull String text, Pattern include, Pattern exclude) {
         if (exclude(text, exclude)) {
             return true;
         }
         return !include(text, include);
     }
 
-    static boolean include(String text, Pattern include) {
+    static boolean include(@NotNull String text, Pattern include) {
         if (include.pattern().length() == 0) {
             return true;
         }
         return include.matcher(text).find();
     }
 
-    static boolean exclude(String text, Pattern exclude) {
+    static boolean exclude(@NotNull String text, Pattern exclude) {
         if (exclude.pattern().length() == 0) {
             return false;
         }

@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '1.20.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '1.20.1.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 apply plugin: 'java'
 
