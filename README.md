@@ -58,6 +58,8 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.01  Add line-end-comment  show before doc for `isA(xxx)` and `a.set(b.get)`
+<li>2.00  ★★ Support all JetBrains IDE and Golang, Python, JavaScript
 <li>1.21  Add line-end-comment  default skip only English when system lang is not `en`
 <li>1.20  Add get doc first sentence checkbox
 <li>1.19  Add supper doc at @Override, support doc tag like @author
@@ -83,6 +85,8 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.01  增加 行末注释 `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释
+<li>2.00  ★★ 支持所有 JetBrains 软件和 Golang, Python, JavaScript
 <li>1.21  增加 行末注释 系统语言非英文时 默认 忽略纯英文
 <li>1.20  增加 获取第一句注释选项
 <li>1.19  增加 @Override 显示父方法注释，支持 @author 等注释标签
@@ -113,6 +117,6 @@ Thanks JetBrains Licenses for Open Source.
 See in IDEA with this plugin | 安装插件后用 IDEA 查看
 
 - [Java Doc Comment Demo | Java 文档注释](src/test/java/io/github/linwancen/plugin/show/demo/java/Call.java)
-- [JSON Doc Comment Demo | JSON 文档注释](src/test/java/io/github/linwancen/plugin/show/demo/json/base Pojo.json)
+- [JSON Doc Comment Demo | JSON 文档注释](src/test/java/io/github/linwancen/plugin/show/demo/json/base-Pojo.json)
 - [External Comment Demo For COBOL | 外部注释 Demo](src/test/java/io/github/linwancen/plugin/show/demo/ext/cobol/demo/BASE.cbl)  
-  [COBOL Highlighting | COBOL 高亮配置](src/test/java/io/github/linwancen/plugin/show/demo/ext/cobol/cobol/COBOL_IDEA.md)
+- [COBOL Highlighting | COBOL 高亮配置](src/test/java/io/github/linwancen/plugin/show/demo/ext/cobol/cobol/COBOL_IDEA.md)
