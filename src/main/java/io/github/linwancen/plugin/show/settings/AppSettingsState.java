@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.math.BigInteger;
+import java.util.Locale;
 
 @State(
         name = "io.github.linwancen.plugin.show.settings.AppSettingsState",
@@ -40,7 +41,7 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
     public boolean fromRef = true;
     public boolean inJson = true;
     public boolean skipAnnotation = true;
-    public boolean skipAscii = false;
+    public boolean skipAscii = !"en".equals(Locale.getDefault().getLanguage());
     public boolean skipBlank = true;
 
     public static AppSettingsState getInstance() {

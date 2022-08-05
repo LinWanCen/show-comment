@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '1.20.1.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '1.21.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 apply plugin: 'java'
 
@@ -39,6 +39,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.21  Add line-end-comment  default skip only English when system lang is not `en`
 <li>1.20  Add get doc first sentence checkbox
 <li>1.19  Add supper doc at @Override, support doc tag like @author
 <li>1.18  Add External Comment  effect at previous layer when folder named -1
@@ -63,6 +64,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.21  增加 行末注释 系统语言非英文时 默认 忽略纯英文
 <li>1.20  增加 获取第一句注释选项
 <li>1.19  增加 @Override 显示父方法注释，支持 @author 等注释标签
 <li>1.18  增加 外部注释 文件夹名为 -1 时配置在上一层文件夹生效

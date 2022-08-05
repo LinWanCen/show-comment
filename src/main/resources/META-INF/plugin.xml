@@ -14,6 +14,7 @@
 </ul>
 
 <h3>External Comment:</h3>
+<a href="https://github.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">Demo(GitHub)</a>
 <ul>
 <li>Reload: Tools -> 🔄 // Reload External Comment
 <li>path/[any][filename.]ext.tree.tsv // file and folder tree comment 📝 📁
@@ -36,6 +37,7 @@
 </ul>
 
 <h3>外部注释：</h3>
+<a href="https://gitee.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">示例(Gitee)</a>
 <ul>
 <li>重新加载：工具 -> "🔄 // Reload External Comment"
 <li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁
