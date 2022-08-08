@@ -11,7 +11,7 @@ Thanks JetBrains Licenses for Open Source.
 <ul>
 <li>Show javadoc comments at the Project view Tree structure
 <li>Show javadoc comments at the end-of-line
-<li>Show javadoc comments at "xx ClassNameOrSimpleName.json" and jump to field
+<li>Show javadoc comments at "xx-ClassNameOrSimpleName.json" and jump to field
 <li>Show comments from External Conf for folder, resources, COBOL etc.
 <li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
@@ -34,7 +34,7 @@ Thanks JetBrains Licenses for Open Source.
 <ul>
 <li>在结构树显示 文档注释
 <li>在行末尾显示 文档注释
-<li>支持 "xx 类全名或简名.json" 文档注释与跳转到字段
+<li>支持 "xx-类全名或简名.json" 文档注释与跳转到字段
 <li>支持 从配置文件获取外部注释用于文件夹、资源、COBOL 等
 <li>修改配置：设置 -> 工具 -> // Show Comment Global/Project
 </ul>
@@ -58,8 +58,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>English Change Notes:</h2>
 <ul>
-<li>2.01  Add line-end-comment  show before doc for `isA(xxx)` and `a.set(b.get)`
-<li>2.00  ★★ Support all JetBrains IDE and Golang, Python, JavaScript
+<li>1.22  Add PopupMenu Copy ClassName.MethodName
 <li>1.21  Add line-end-comment  default skip only English when system lang is not `en`
 <li>1.20  Add get doc first sentence checkbox
 <li>1.19  Add supper doc at @Override, support doc tag like @author
@@ -72,8 +71,8 @@ Thanks JetBrains Licenses for Open Source.
 <li>1.12   ★  External Comment for COBOL etc
 <li>1.11  Add json key jump to field
 <li>1.10  Add project-view-tree-comment  for package from parent or other project
-<li>1.9   Add project-view-tree-comment  for "xx ClassNameOrSimpleName.json" and SPI file
-<li>1.8    ★  line-end-comment  for "xx ClassNameOrSimpleName.json"
+<li>1.9   Add project-view-tree-comment  for "xx-ClassNameOrSimpleName.json" and SPI file
+<li>1.8    ★  line-end-comment  for "xx-ClassNameOrSimpleName.json"
 <li>1.7   Add line-end-comment  setting for prefix and count
 <li>1.6   Add line-end-comment  independent switch for call, new, ref
 <li>1.5   Add line-end-comment  find next loop when none
@@ -85,8 +84,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>中文更新说明:</h2>
 <ul>
-<li>2.01  增加 行末注释 `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释
-<li>2.00  ★★ 支持所有 JetBrains 软件和 Golang, Python, JavaScript
+<li>1.22  增加 右键菜单 复制 类名.方法名
 <li>1.21  增加 行末注释 系统语言非英文时 默认 忽略纯英文
 <li>1.20  增加 获取第一句注释选项
 <li>1.19  增加 @Override 显示父方法注释，支持 @author 等注释标签
@@ -99,8 +97,8 @@ Thanks JetBrains Licenses for Open Source.
 <li>1.12   ★  外部注释用于 COBOL 等
 <li>1.11  增加 json 跳转到字段
 <li>1.10  增加 在父包和其他项目的包中获取 项目导航栏注释
-<li>1.9   增加 "xx 类全名或简名.json" 和 SPI 项目导航栏注释
-<li>1.8    ★  "xx 类全名或简名.json" 行末注释
+<li>1.9   增加 "xx-类全名或简名.json" 和 SPI 项目导航栏注释
+<li>1.8    ★  "xx-类全名或简名.json" 行末注释
 <li>1.7   增加 行末注释前缀和对象数设置
 <li>1.6   增加 行末调用，new，引用注释独立开关
 <li>1.5   增加 没有注释时循环查找下一个对象
