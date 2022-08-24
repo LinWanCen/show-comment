@@ -58,6 +58,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.23  Add project-view-tree-comment setting for show when compact middle packages
 <li>1.22  Add PopupMenu Copy ClassName.MethodName
 <li>1.21  Add line-end-comment  default skip only English when system lang is not `en`
 <li>1.20  Add get doc first sentence checkbox
@@ -84,6 +85,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.23  增加 项目导航栏注释 折叠中间包时显示中间包注释设置
 <li>1.22  增加 右键菜单 复制 类名.方法名
 <li>1.21  增加 行末注释 系统语言非英文时 默认 忽略纯英文
 <li>1.20  增加 获取第一句注释选项

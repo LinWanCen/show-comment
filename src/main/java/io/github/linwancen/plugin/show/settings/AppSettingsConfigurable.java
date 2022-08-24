@@ -33,6 +33,7 @@ public class AppSettingsConfigurable implements Configurable {
     public boolean isModified() {
         AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
+        modified |= mySettingsComponent.getCompact() != settings.compact;
         modified |= !mySettingsComponent.getTreeTags().equals(String.join("|", settings.treeTags));
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
         modified |= !mySettingsComponent.getLineTags().equals(String.join("|", settings.lineTags));
@@ -61,6 +62,7 @@ public class AppSettingsConfigurable implements Configurable {
     public void apply() {
         AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
+        settings.compact = mySettingsComponent.getCompact();
         settings.treeTags = Splitter.on('|').splitToList(mySettingsComponent.getTreeTags()).toArray(new String[0]);
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
         settings.lineTags = Splitter.on('|').splitToList(mySettingsComponent.getLineTags()).toArray(new String[0]);
@@ -91,6 +93,7 @@ public class AppSettingsConfigurable implements Configurable {
     public void reset() {
         AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
+        mySettingsComponent.setCompact(settings.compact);
         mySettingsComponent.setTreeTags(String.join("|", settings.treeTags));
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
         mySettingsComponent.setLineTags(String.join("|", settings.lineTags));

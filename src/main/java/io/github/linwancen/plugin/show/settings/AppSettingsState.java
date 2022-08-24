@@ -22,9 +22,10 @@ import java.util.Locale;
 public class AppSettingsState extends AbstractSettingsState implements PersistentStateComponent<AppSettingsState> {
 
     public boolean showTreeComment = true;
+    public boolean compact = true;
     public String[] treeTags = {"author"};
     public boolean showLineEndComment = true;
-    public String[] lineTags = {"author"};
+    public String[] lineTags = {};
 
     public final TextAttributes lineEndTextAttr = new TextAttributes(
             new JBColor(new Color(98, 151, 85), new Color(98, 151, 85)),

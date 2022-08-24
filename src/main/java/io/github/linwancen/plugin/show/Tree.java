@@ -131,6 +131,10 @@ public class Tree implements ProjectViewNodeDecorator {
             if (docComment != null) {
                 return docComment;
             }
+            AppSettingsState instance = AppSettingsState.getInstance();
+            if (!instance.compact) {
+                return null;
+            }
             PsiDirectory parent = child.getParent();
             if (parent == null) {
                 return null;

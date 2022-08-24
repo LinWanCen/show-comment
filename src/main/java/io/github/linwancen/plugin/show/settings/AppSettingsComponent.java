@@ -15,6 +15,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox("Show tree comment ");
+    private final JBCheckBox compact = new JBCheckBox("compact ");
     private final JBTextField treeTags = new JBTextField();
     private final JBCheckBox showLineEndComment = new JBCheckBox("Show line end comment ");
     private final JBTextField lineTags = new JBTextField();
@@ -59,7 +60,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
                 new JBLabel("json text color: "), lineEndJsonColor,
                 new JBLabel("prefix: "), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
-                .addComponent(JPanelFactory.of(findElementRightToLeft))
+                .addComponent(JPanelFactory.of(findElementRightToLeft, compact))
                 .addSeparator()
                 .addComponent(JPanelFactory.of(fromCall, fromNew, fromRef, inJson, skipAnnotation, skipAscii, skipBlank), 1)
                 .addSeparator()
@@ -83,6 +84,14 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public void setShowTreeComment(boolean newStatus) {
         showTreeComment.setSelected(newStatus);
+    }
+
+    public boolean getCompact() {
+        return compact.isSelected();
+    }
+
+    public void setCompact(boolean newStatus) {
+        compact.setSelected(newStatus);
     }
 
     @NotNull
