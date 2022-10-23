@@ -23,8 +23,18 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
 
     public boolean showTreeComment = true;
     public boolean compact = true;
-    public String[] treeTags = {"author"};
+
     public boolean showLineEndComment = true;
+    public boolean showLineEndCommentJava = true;
+    public boolean showLineEndCommentSql = true;
+    public boolean showLineEndCommentJson = true;
+    public boolean showLineEndCommentJs = true;
+    public boolean jsDoc = true;
+    public boolean showLineEndCommentPy = true;
+    public boolean showLineEndCommentGo = true;
+    public boolean showLineEndCommentKotlin = true;
+
+    public String[] treeTags = {"author"};
     public String[] lineTags = {};
 
     public final TextAttributes lineEndTextAttr = new TextAttributes(
@@ -37,10 +47,13 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
     public String lineEndPrefix = "   // ";
     public int lineEndCount = 2;
     public int lineEndLen = 0;
+    public boolean getToSet = true;
+    @Deprecated
     public boolean fromCall = true;
     public boolean fromNew = true;
+    @Deprecated
     public boolean fromRef = true;
-    public boolean inJson = true;
+    public boolean fromParam = false;
     public boolean skipAnnotation = true;
     public boolean skipAscii = !"en".equals(Locale.getDefault().getLanguage());
     public boolean skipBlank = true;

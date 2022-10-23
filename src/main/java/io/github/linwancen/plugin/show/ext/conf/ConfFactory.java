@@ -94,8 +94,6 @@ class ConfFactory {
                 map.put(key, words);
             }
         }
-        DATA_LOG.createNotification("Ext doc file load complete", map.size() + " lines",
-                "\n" + path, NotificationType.INFORMATION).notify(project);
         return map;
     }
 }

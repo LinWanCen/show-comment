@@ -16,6 +16,9 @@ public class Ref implements Face {
                 .faceMethod(face1 -> Child::setFun);
     }
 
+    /**
+     * do not show this after @Override
+     */
     @Override
     public Face faceMethod(Face face) {
         return null;

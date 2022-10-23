@@ -6,12 +6,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class JsonRef extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
+public class JsonRef<T extends PsiElement> extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
 
-    final PsiField psiField;
-    final List<PsiField> tips;
+    final T psiField;
+    final List<T> tips;
 
-    public JsonRef(@NotNull PsiElement element, @NotNull PsiField psiField, @NotNull List<PsiField> tips) {
+    public JsonRef(@NotNull PsiElement element, @NotNull T psiField, @NotNull List<T> tips) {
         super(element);
         this.psiField = psiField;
         this.tips = tips;
@@ -21,13 +21,12 @@ public class JsonRef extends PsiReferenceBase<PsiElement> implements PsiPolyVari
      * do not use it because PsiReference.resolveReference() is @Experimental
      */
     @Override
-    public ResolveResult @NotNull [] multiResolve(boolean incompleteCode) {
+    public @NotNull ResolveResult[] multiResolve(boolean incompleteCode) {
         return new ResolveResult[]{new PsiElementResolveResult(psiField)};
     }
 
-    @Nullable
     @Override
-    public PsiElement resolve() {
+    public @Nullable PsiElement resolve() {
         return psiField;
     }
 
@@ -35,7 +34,7 @@ public class JsonRef extends PsiReferenceBase<PsiElement> implements PsiPolyVari
      * I don't know how to use it
      */
     @Override
-    public Object @NotNull [] getVariants() {
+    public @NotNull Object[] getVariants() {
         return tips.toArray();
     }
 }

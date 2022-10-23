@@ -1,18 +1,17 @@
 package io.github.linwancen.plugin.show;
 
 import com.intellij.json.JsonFileType;
-import com.intellij.openapi.editor.Document;
+import com.intellij.json.json5.Json5FileType;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
 import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiManager;
-import io.github.linwancen.plugin.show.line.FileViewToDocStrUtils;
+import io.github.linwancen.plugin.show.bean.FileInfo;
+import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.ext.LineExt;
+import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,48 +34,62 @@ public class LineEnd extends EditorLinePainter {
         if (!file.exists()) {
             return null;
         }
-        String doc = doc(project, file, lineNumber);
+        LineInfo lineInfo = LineInfo.of(file, project, lineNumber);
+        String doc = lineDocSkipHave(lineInfo);
         if (doc == null) {
             return null;
         }
         TextAttributes textAttr = file.getFileType().equals(JsonFileType.INSTANCE)
+                || file.getFileType().equals(Json5FileType.INSTANCE)
                 ? settings.lineEndJsonTextAttr
                 : settings.lineEndTextAttr;
         LineExtensionInfo info = new LineExtensionInfo(settings.lineEndPrefix + doc, textAttr);
         return Collections.singletonList(info);
     }
 
-    private static @Nullable String doc(@NotNull Project project,
-                                        @NotNull VirtualFile file, int lineNumber) {
-        FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
-        Document document = FileDocumentManager.getInstance().getDocument(file);
-        if (document == null) {
-            return null;
+    @NotNull
+    public static String textWithDoc(@NotNull FileInfo fileInfo, int startLine, int endLine) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = startLine; i <= endLine; i++) {
+            LineInfo lineInfo = LineInfo.of(fileInfo, i);
+            if (lineInfo == null) {
+                sb.append("\n");
+                continue;
+            }
+            sb.append(lineInfo.text);
+            String doc = lineDocSkipHave(lineInfo);
+            if (doc != null) {
+                sb.append(lineInfo.appSettings.lineEndPrefix).append(doc);
+            }
+            sb.append("\n");
         }
-        return doc(document, lineNumber, project, file, viewProvider);
+        if (sb.length() > 0) {
+            sb.delete(sb.length() - 1, sb.length());
+        }
+        return sb.toString();
     }
 
-    @Nullable
-    private static String doc(@NotNull Document document, int lineNumber,
-                              @NotNull Project project,
-                              @Nullable VirtualFile file,
-                              @Nullable FileViewProvider viewProvider) {
-        // lineNumber start 0, as 1 <= 1 should return
-        if (document.getLineCount() <= lineNumber) {
+    private static @Nullable String lineDocSkipHave(@Nullable LineInfo lineInfo) {
+        String doc = lineDoc(lineInfo);
+        if (doc == null) {
             return null;
         }
-        int startOffset;
-        int endOffset;
-        try {
-            startOffset = document.getLineStartOffset(lineNumber);
-            endOffset = document.getLineEndOffset(lineNumber);
-        } catch (Exception e) {
+        String trimDoc = doc.trim();
+        if (lineInfo.text.trim().endsWith(trimDoc)) {
             return null;
         }
-        if (startOffset == endOffset) {
+        return trimDoc;
+    }
+
+    private static @Nullable String lineDoc(@Nullable LineInfo lineInfo) {
+        if (lineInfo == null) {
             return null;
         }
-        String text = document.getText(new TextRange(startOffset, endOffset));
-        return FileViewToDocStrUtils.doc(document, project, file, viewProvider, startOffset, endOffset, text);
+        // override some text
+        String doc = LineExt.doc(lineInfo);
+        if (doc != null) {
+            return doc;
+        }
+        return BaseLangDoc.langDoc(lineInfo);
     }
 }

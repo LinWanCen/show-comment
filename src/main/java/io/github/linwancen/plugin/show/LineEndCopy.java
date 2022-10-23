@@ -1,19 +1,13 @@
 package io.github.linwancen.plugin.show;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiFile;
-import io.github.linwancen.plugin.show.line.FileViewToDocStrUtils;
-import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import com.intellij.openapi.project.DumbAwareAction;
+import io.github.linwancen.plugin.show.bean.FileInfo;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.datatransfer.StringSelection;
@@ -21,7 +15,7 @@ import java.awt.datatransfer.StringSelection;
 /**
  * on EditorPopupMenu
  */
-public class LineEndCopy extends AnAction {
+public class LineEndCopy extends DumbAwareAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
@@ -29,37 +23,26 @@ public class LineEndCopy extends AnAction {
     }
 
     private void copyWithDoc(@NotNull AnActionEvent event) {
-        Project project = event.getProject();
-        VirtualFile file = event.getData(CommonDataKeys.VIRTUAL_FILE);
-        if (file == null) {
-            return;
-        }
-        PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
-        if (psiFile == null) {
-            return;
-        }
-        FileViewProvider viewProvider = psiFile.getViewProvider();
-        Document document = viewProvider.getDocument();
-        if (document == null) {
+        FileInfo fileInfo = FileInfo.of(event);
+        if (fileInfo == null) {
             return;
         }
         int startLine = 0;
-        int endLine = document.getLineCount() - 1;
-
+        int endLine = fileInfo.document.getLineCount() - 1;
         // if select
         Editor editor = event.getData(CommonDataKeys.EDITOR);
         if (editor != null) {
             Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
             int start = primaryCaret.getSelectionStart();
             int end = primaryCaret.getSelectionEnd();
-            startLine = document.getLineNumber(start);
-            endLine = document.getLineNumber(end);
+            try {
+                startLine = fileInfo.document.getLineNumber(start);
+                endLine = fileInfo.document.getLineNumber(end);
+            } catch (Exception e) {
+                return;
+            }
         }
-
-        AppSettingsState settings = AppSettingsState.getInstance();
-
-        String textWithDoc = FileViewToDocStrUtils.textWithDoc(settings, document,
-                startLine, endLine, project, file, viewProvider);
+        String textWithDoc = LineEnd.textWithDoc(fileInfo, startLine, endLine);
         StringSelection content = new StringSelection(textWithDoc);
         CopyPasteManager.getInstance().setContents(content);
     }

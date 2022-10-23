@@ -63,8 +63,10 @@ public class ConfCache {
     }
 
     @NotNull
-    public static Map<String, Map<String, List<String>>> treeMap(@NotNull String path) {
-        return ConfCacheGetUtils.filterPath(TREE_CACHE, path);
+    public static Map<String, Map<String, List<String>>> treeMap(@NotNull String path,
+                                                                 @NotNull String name,
+                                                                 @Nullable String ext) {
+        return ConfCacheGetUtils.filterPath(TREE_CACHE, path, name, ext);
     }
 
     static void clearAll() {
@@ -113,13 +115,13 @@ public class ConfCache {
             new NotificationGroup("Ext Doc Conf Load All", NotificationDisplayType.BALLOON, true);
 
     static void loadAll(@NotNull Project project) {
-        ApplicationManager.getApplication().runReadAction(() ->
-                DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+        DumbService.getInstance(project).runReadActionInSmartMode(() ->
+                ApplicationManager.getApplication().runReadAction(() -> {
                     Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, EXT);
                     StringBuilder sb = new StringBuilder();
                     for (VirtualFile file : files) {
                         load(project, file);
-                        sb.append(file.getPath()).append("\n");
+                        sb.append(file.getName()).append("\n");
                     }
                     if (files.isEmpty()) {
                         return;

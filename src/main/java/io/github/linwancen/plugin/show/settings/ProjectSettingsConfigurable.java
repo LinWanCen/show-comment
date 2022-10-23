@@ -3,7 +3,6 @@ package io.github.linwancen.plugin.show.settings;
 import com.intellij.application.options.ModuleAwareProjectConfigurable;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +22,6 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
 
     private ProjectSettingsComponent mySettingsComponent;
 
-    @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
         return "Show Comment Project.";

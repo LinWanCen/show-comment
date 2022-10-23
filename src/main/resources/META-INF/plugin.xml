@@ -55,15 +55,18 @@ Show doc comment at the Project view Tree, line End, json etc.
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
-    <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java</depends>
+    <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
+    <depends optional="true" config-file="sql.xml">com.intellij.database</depends>
+    <depends optional="true" config-file="js.xml">JavaScript</depends>
+    <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
+    <depends optional="true" config-file="go.xml">org.jetbrains.plugins.go</depends>
+    <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
+    <!--suppress PluginXmlValidity, MybatisMapperXmlInspection -->
+    <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
 
     <applicationListeners>
         <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileListener"
                   topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
-    </applicationListeners>
-
-    <applicationListeners>
         <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileChangeListener"
                   topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
@@ -74,22 +77,21 @@ Show doc comment at the Project view Tree, line End, json etc.
     </projectListeners>
 
     <extensions defaultExtensionNs="com.intellij">
-        <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd" />
+        <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd"/>
         <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
+        <defaultLiveTemplates file="/liveTemplates/show-comment-doc.xml"/>
+        <defaultLiveTemplates file="/liveTemplates/show-comment-xml.xml"/>
 
         <applicationConfigurable parentId="tools"
                                  instance="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
                                  id="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
                                  displayName="// Show Comment Global"/>
         <applicationService serviceImplementation="io.github.linwancen.plugin.show.settings.AppSettingsState"/>
-
         <projectConfigurable parentId="tools"
                              instance="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
                              id="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
                              displayName="// Show Comment Project"/>
         <projectService serviceImplementation="io.github.linwancen.plugin.show.settings.ProjectSettingsState"/>
-
-        <psi.referenceContributor implementation="io.github.linwancen.plugin.show.JsonJump"/>
     </extensions>
 
     <actions>

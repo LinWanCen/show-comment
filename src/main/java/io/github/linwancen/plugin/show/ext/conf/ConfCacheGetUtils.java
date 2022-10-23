@@ -75,7 +75,7 @@ class ConfCacheGetUtils {
     @NotNull
     static <T> TreeMap<String, T> filterPath(@SuppressWarnings("SameParameterValue")
                                              @NotNull Map<VirtualFile, T> cache,
-                                             @NotNull String path) {
+                                             @NotNull String path, String name, String ext) {
         TreeMap<String, T> map = new TreeMap<>();
         int max = path.length();
         int length = String.valueOf(max).length();

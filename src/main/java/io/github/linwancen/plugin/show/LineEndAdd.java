@@ -1,27 +1,23 @@
 package io.github.linwancen.plugin.show;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiManager;
-import io.github.linwancen.plugin.show.line.FileViewToDocStrUtils;
-import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.bean.FileInfo;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * on ProjectViewPopupMenu
  */
-public class LineEndAdd extends AnAction {
+public class LineEndAdd extends DumbAwareAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
@@ -40,13 +36,12 @@ public class LineEndAdd extends AnAction {
     }
 
     private void addDocAll(@NotNull Project project, @NotNull VirtualFile[] files) {
-        AppSettingsState settings = AppSettingsState.getInstance();
         for (VirtualFile file : files) {
             VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor<Void>() {
                 @Override
                 public boolean visitFile(@NotNull VirtualFile file) {
                     if (!file.isDirectory()) {
-                        ApplicationManager.getApplication().runReadAction(() -> addDoc(project, file, settings));
+                        ApplicationManager.getApplication().runReadAction(() -> addDoc(project, file));
                     }
                     return true;
                 }
@@ -54,21 +49,16 @@ public class LineEndAdd extends AnAction {
         }
     }
 
-    private void addDoc(@NotNull Project project, @NotNull VirtualFile file, @NotNull AppSettingsState settings) {
-        FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
-        if (viewProvider == null) {
-            return;
-        }
-        Document document = viewProvider.getDocument();
-        if (document == null) {
+    private void addDoc(@NotNull Project project, @NotNull VirtualFile file) {
+        FileInfo fileInfo = FileInfo.of(file, project);
+        if (fileInfo == null) {
             return;
         }
         int startLine = 0;
-        int endLine = document.getLineCount() - 1;
-        String textWithDoc = FileViewToDocStrUtils.textWithDoc(settings, document,
-                startLine, endLine, project, file, viewProvider);
+        int endLine = fileInfo.document.getLineCount() - 1;
+        String textWithDoc = LineEnd.textWithDoc(fileInfo, startLine, endLine);
         WriteCommandAction.runWriteCommandAction(project, () ->
-                document.replaceString(0, document.getTextLength() - 1, textWithDoc)
+                fileInfo.document.replaceString(0, fileInfo.document.getTextLength() - 1, textWithDoc)
         );
     }
 }

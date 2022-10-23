@@ -1,7 +1,7 @@
 package io.github.linwancen.plugin.show.ext;
 
-import com.intellij.openapi.project.Project;
 import io.github.linwancen.plugin.show.ext.conf.ConfCache;
+import io.github.linwancen.plugin.show.bean.LineInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,27 +14,42 @@ public class LineExt {
 
     private LineExt() {}
 
-    public static String extDoc(@Nullable Project project,
-                                @NotNull String path, @NotNull String name, @Nullable String ext,
-                                @NotNull String text) {
+    public static @Nullable String doc(@NotNull LineInfo lineInfo) {
+        int i = lineInfo.text.indexOf(lineInfo.appSettings.lineEndPrefix);
+        String code = i <= 0 ? lineInfo.text : lineInfo.text.substring(0, i);
+        String extDoc = LineExt.extDoc(lineInfo, code);
+        if (extDoc == null) {
+            return null;
+        }
+        extDoc = extDoc.trim();
+        if (lineInfo.text.endsWith(extDoc)) {
+            return null;
+        }
+        return extDoc;
+    }
+
+    public static String extDoc(@NotNull LineInfo lineInfo, @NotNull String code) {
+        String path = lineInfo.file.getPath();
+        String name = lineInfo.file.getName();
+        String ext = lineInfo.file.getExtension();
         Map<String, Map<String, List<String>>> keyMap = ConfCache.keyMap(path, name, ext);
         if (keyMap.isEmpty()) {
             return null;
         }
-        Pattern pattern = ConfCache.pattern(project, keyMap, path);
+        Pattern pattern = ConfCache.pattern(lineInfo.project, keyMap, path);
         if (pattern == null || pattern.pattern().length() == 0) {
             return null;
         }
         Map<String, Map<String, List<String>>> docMap = ConfCache.docMap(path, name, ext);
-        if (docMap.isEmpty()) {
+        Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path, name, ext);
+        if (docMap.isEmpty() && treeMap.isEmpty()) {
             return null;
         }
-        Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path);
         if (ext == null || "cbl".equals(ext) || "cob".equals(ext) || "cobol".equals(ext)) {
-            text = cblNotAndOr(text);
+            code = cblNotAndOr(code);
         }
-        String[] words = pattern.split(text);
-        Matcher matcher = pattern.matcher(text);
+        String[] words = pattern.split(code);
+        Matcher matcher = pattern.matcher(code);
         return extDoc(keyMap, matcher, docMap, words, treeMap);
     }
 
@@ -65,18 +80,15 @@ public class LineExt {
                                  @NotNull Map<String, Map<String, List<String>>> docMap, @NotNull String[] words,
                                  @NotNull Map<String, Map<String, List<String>>> treeMap) {
         boolean haveDoc = false;
+        boolean haveKey = false;
         StringBuilder sb = new StringBuilder();
         for (String s : words) {
-            if (appendDoc(sb, s, docMap, treeMap)) {
-                haveDoc = true;
-            }
-            appendKeyDoc(sb, matcher, keyMap);
+            haveDoc |= appendDoc(sb, s, docMap, treeMap);
+            haveKey = appendKeyDoc(sb, matcher, keyMap);
         }
-        int before;
-        do {
-            before = sb.length();
-            appendKeyDoc(sb, matcher, keyMap);
-        } while (sb.length() != before);
+        while (haveKey) {
+            haveKey =  appendKeyDoc(sb, matcher, keyMap);
+        }
         if (!haveDoc) {
             return null;
         }
@@ -100,15 +112,16 @@ public class LineExt {
             sb.append(treeDoc);
             return true;
         }
+        // not word doc ues word
         sb.append(word);
         return false;
     }
 
-    private static void appendKeyDoc(@NotNull StringBuilder sb,
+    private static boolean appendKeyDoc(@NotNull StringBuilder sb,
                                      @NotNull Matcher matcher,
                                      @NotNull Map<String, Map<String, List<String>>> keyMap) {
         if (!matcher.find()) {
-            return;
+            return false;
         }
         String keyword = matcher.group();
         // "" if no doc
@@ -120,5 +133,6 @@ public class LineExt {
         if (sb.length() != 1) {
             sb.append(" ");
         }
+        return true;
     }
 }

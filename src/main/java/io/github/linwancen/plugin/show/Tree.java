@@ -3,23 +3,23 @@ package io.github.linwancen.plugin.show;
 import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ProjectViewNodeDecorator;
-import com.intellij.ide.projectView.impl.nodes.*;
 import com.intellij.ide.util.treeView.PresentableNodeDescriptor.ColoredFragment;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.packageDependencies.ui.PackageDependenciesNode;
-import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.psi.PsiElement;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import io.github.linwancen.plugin.show.doc.OwnerToPsiDocUtils;
-import io.github.linwancen.plugin.show.doc.PsiDocToStrDoc;
+import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.ext.TreeExt;
+import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class Tree implements ProjectViewNodeDecorator {
@@ -37,7 +37,7 @@ public class Tree implements ProjectViewNodeDecorator {
             return;
         }
         ApplicationManager.getApplication().runReadAction(() -> {
-            String doc = doc(node, project);
+            String doc = treeDoc(node, project);
             if (doc == null) {
                 return;
             }
@@ -50,116 +50,28 @@ public class Tree implements ProjectViewNodeDecorator {
     }
 
     @Nullable
-    private String doc(ProjectViewNode<?> node, Project project) {
-        String extDoc = extDoc(node);
-        if (extDoc != null) {
-            return extDoc;
+    private String treeDoc(ProjectViewNode<?> node, @NotNull Project project) {
+        String doc = TreeExt.doc(node);
+        if (doc != null) {
+            return doc;
         }
-        PsiDocComment docComment = nodeDoc(node, project);
-        if (docComment == null) {
-            return null;
-        }
-        return PsiDocToStrDoc.text(docComment, true);
-    }
-
-    @Nullable
-    public static String extDoc(ProjectViewNode<?> node) {
-        VirtualFile file = node.getVirtualFile();
-        if (file == null) {
-            return null;
-        }
-        return TreeExt.extDoc(file);
-    }
-
-    @Nullable
-    private static PsiDocComment nodeDoc(ProjectViewNode<?> node, Project project) {
-        if (node instanceof PsiFileNode) {
-            PsiFile psiFile = ((PsiFileNode) node).getValue();
-            return OwnerToPsiDocUtils.fileDoc(psiFile);
-        }
-        if (node instanceof PsiDirectoryNode) {
-            PsiDirectory psiDirectory = ((PsiDirectoryNode) node).getValue();
-            return dirDoc(psiDirectory);
-        }
-
-        if (node instanceof PsiMethodNode) {
-            // On Show Members
-            PsiMethod psiMethod = ((PsiMethodNode) node).getValue();
-            return OwnerToPsiDocUtils.methodDoc(psiMethod);
-        }
-        if (node instanceof PsiFieldNode) {
-            // On Show Members
-            PsiField psiField = ((PsiFieldNode) node).getValue();
-            PsiDocComment docComment = OwnerToPsiDocUtils.srcOrByteCodeDoc(psiField);
-            if (docComment != null) {
-                return docComment;
+        SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.TREE);
+        Object value = node.getValue();
+        if (value instanceof PsiElement) {
+            PsiElement psiElement = (PsiElement) value;
+            String docPrint = BaseLangDoc.resolveDoc(settingsInfo, psiElement);
+            if (docPrint != null) {
+                return docPrint;
             }
-            PsiClass psiClass = psiField.getContainingClass();
-            if (psiClass != null) {
-                return OwnerToPsiDocUtils.srcOrByteCodeDoc(psiClass);
-            }
-            return null;
         }
-
-        if (node instanceof ClassTreeNode) {
-            // On Packages View, Project Files View, Show Members
-            PsiClass psiClass = ((ClassTreeNode) node).getValue();
-            return OwnerToPsiDocUtils.srcOrByteCodeDoc(psiClass);
-        }
-        if (node instanceof PackageElementNode) {
-            // On Packages View
-            PsiPackage psiPackage = ((PackageElementNode) node).getValue().getPackage();
-            return packageDoc(psiPackage);
-        }
-
-        // On Packages View, Project Files View
-        VirtualFile virtualFile = node.getVirtualFile();
-        if (virtualFile == null || !virtualFile.isDirectory()) {
-            return null;
-        }
-        PsiDirectory psiDirectory = PsiManager.getInstance(project).findDirectory(virtualFile);
-        if (psiDirectory == null) {
-            return null;
-        }
-        return dirDoc(psiDirectory);
-    }
-
-    @Nullable
-    private static PsiDocComment dirDoc(PsiDirectory child) {
-        while (true) {
-            PsiDocComment docComment = OwnerToPsiDocUtils.dirDoc(child);
-            if (docComment != null) {
-                return docComment;
+        Collection<BaseLangDoc> langDocs = BaseLangDoc.LANG_DOC_MAP.values();
+        for (BaseLangDoc langDoc : langDocs) {
+            String s = langDoc.treeDoc(settingsInfo, node, project);
+            if (s != null) {
+                return s;
             }
-            AppSettingsState instance = AppSettingsState.getInstance();
-            if (!instance.compact) {
-                return null;
-            }
-            PsiDirectory parent = child.getParent();
-            if (parent == null) {
-                return null;
-            }
-            if (parent.getChildren().length != 1) {
-                return null;
-            }
-            child = parent;
         }
-    }
-
-    @Nullable
-    private static PsiDocComment packageDoc(PsiPackage child) {
-        while (true) {
-            PsiDocComment docComment = OwnerToPsiDocUtils.packageDoc(child);
-            if (docComment != null) {
-                return docComment;
-            }
-            PsiPackage parent = child.getParentPackage();
-            if (parent == null) {
-                return null;
-            }
-            // PsiPackage not implemented getChildren()
-            child = parent;
-        }
+        return null;
     }
 
     @Override
