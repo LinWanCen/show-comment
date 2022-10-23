@@ -43,16 +43,11 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
     public final TextAttributes lineEndJsonTextAttr = new TextAttributes(new JBColor(Gray._140, Gray._140),
             null, null, null, Font.ITALIC);
 
-    public boolean findElementRightToLeft = true;
     public String lineEndPrefix = "   // ";
     public int lineEndCount = 2;
     public int lineEndLen = 0;
     public boolean getToSet = true;
-    @Deprecated
-    public boolean fromCall = true;
     public boolean fromNew = true;
-    @Deprecated
-    public boolean fromRef = true;
     public boolean fromParam = false;
     public boolean skipAnnotation = true;
     public boolean skipAscii = !"en".equals(Locale.getDefault().getLanguage());

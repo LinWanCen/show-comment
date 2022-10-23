@@ -40,23 +40,9 @@ public class JavaTree {
             return dirDoc(psiDirectory);
         }
 
-        // if (node instanceof PsiMethodNode) {
-        //     // On Show Members
-        //     PsiMethod psiMethod = ((PsiMethodNode) node).getValue();
-        //     PsiDocComment psiDocComment = OwnerToPsiDocUtils.methodDoc(psiMethod);
-        //     if (psiDocComment != null) {
-        //         System.out.println("PsiMethodNode" + PsiDocToStrDoc.text(psiDocComment, true));
-        //     }
-        //     return psiDocComment;
-        // }
         if (node instanceof PsiFieldNode) {
             // On Show Members
             PsiField psiField = ((PsiFieldNode) node).getValue();
-            // PsiDocComment docComment = OwnerToPsiDocUtils.srcOrByteCodeDoc(psiField);
-            // if (docComment != null) {
-            //     System.out.println("PsiFieldNode" + PsiDocToStrDoc.text(docComment, true));
-            //     return docComment;
-            // }
             // for @Autowire Bean
             PsiType type = psiField.getType();
             if (type instanceof PsiClassReferenceType) {
@@ -66,15 +52,6 @@ public class JavaTree {
             }
         }
 
-        // if (node instanceof ClassTreeNode) {
-        //     // On Packages View, Project Files View, Show Members
-        //     PsiClass psiClass = ((ClassTreeNode) node).getValue();
-        //     PsiDocComment psiDocComment = OwnerToPsiDocUtils.srcOrByteCodeDoc(psiClass);
-        //     if (psiDocComment != null) {
-        //         System.out.println("ClassTreeNode" + PsiDocToStrDoc.text(psiDocComment, true));
-        //     }
-        //     return psiDocComment;
-        // }
         if (node instanceof PackageElementNode) {
             // On Packages View
             PsiPackage psiPackage = ((PackageElementNode) node).getValue().getPackage();

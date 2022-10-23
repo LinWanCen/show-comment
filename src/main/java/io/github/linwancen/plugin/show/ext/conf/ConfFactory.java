@@ -23,8 +23,6 @@ class ConfFactory {
     private static final Map<String, Pattern> PATTERN_CACHE = new ConcurrentHashMap<>();
     private static final NotificationGroup REGEXP_LOG =
             new NotificationGroup("Ext Doc Keyword Regexp Compile", NotificationDisplayType.TOOL_WINDOW, true);
-    private static final NotificationGroup DATA_LOG =
-            new NotificationGroup("Ext Doc Data", NotificationDisplayType.BALLOON, true);
 
     private ConfFactory() {}
 
