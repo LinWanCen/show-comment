@@ -23,8 +23,12 @@ public class CopyReferenceSimple extends CopyReferenceAction {
 
     private static final Pattern QUALIFIED_PATTERN = Pattern.compile("[\\w.]+\\.");
 
+    @Override
     protected String getQualifiedName(Editor editor, List<PsiElement> elements) {
         String qualifiedName = super.getQualifiedName(editor, elements);
+        if (qualifiedName == null) {
+            return null;
+        }
         int i = qualifiedName.indexOf("(");
         if (i > 0) {
             return QUALIFIED_PATTERN.matcher(qualifiedName).replaceAll("").replace('#', '.');

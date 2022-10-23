@@ -78,7 +78,7 @@ class NewCallRefToPsiDoc {
             if (methodComment != null) {
                 return methodComment;
             }
-        } catch (Exception ignored) {
+        } catch (Throwable ignored) {
             // ignored
         }
         return null;

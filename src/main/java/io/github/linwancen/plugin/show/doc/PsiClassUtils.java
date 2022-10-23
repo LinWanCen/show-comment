@@ -50,7 +50,11 @@ public class PsiClassUtils {
     @NotNull
     public static PsiClass[] fullNameToClass(@NotNull String className, @NotNull Project project) {
         JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
-        return javaPsiFacade.findClasses(className, GlobalSearchScope.allScope(project));
+        try {
+            return javaPsiFacade.findClasses(className, GlobalSearchScope.allScope(project));
+        } catch (Throwable e) {
+            return PsiClass.EMPTY_ARRAY;
+        }
     }
 
     @NotNull
