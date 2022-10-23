@@ -16,17 +16,21 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
 
     @NotNull
     @Override
-    protected ProjectSettingsConfigurable createModuleConfigurable(Module module) {
+    protected ProjectSettingsConfigurable createModuleConfigurable(@NotNull Module module) {
         return new ProjectSettingsConfigurable(module.getProject());
     }
 
+    @SuppressWarnings("NotNullFieldNotInitialized")
+    @NotNull
     private ProjectSettingsComponent mySettingsComponent;
 
+    @NotNull
     @Override
     public String getDisplayName() {
         return "Show Comment Project.";
     }
 
+    @NotNull
     @Override
     public JComponent getPreferredFocusedComponent() {
         return mySettingsComponent.getPreferredFocusedComponent();
@@ -41,7 +45,7 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
 
     @Override
     public boolean isModified() {
-        ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
+        @NotNull ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
         boolean modified = mySettingsComponent.getGlobalFilterEffective() != settings.globalFilterEffective;
         modified |= mySettingsComponent.getProjectFilterEffective() != settings.projectFilterEffective;
         modified = AbstractSettingsConfigurable.isModified(settings, mySettingsComponent, modified);
@@ -50,7 +54,7 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
 
     @Override
     public void apply() {
-        ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
+        @NotNull ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
         settings.globalFilterEffective = mySettingsComponent.getGlobalFilterEffective();
         settings.projectFilterEffective = mySettingsComponent.getProjectFilterEffective();
         AbstractSettingsConfigurable.apply(settings, mySettingsComponent);
@@ -58,7 +62,7 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
 
     @Override
     public void reset() {
-        ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
+        @NotNull ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
         mySettingsComponent.setGlobalFilterEffective(settings.globalFilterEffective);
         mySettingsComponent.setProjectFilterEffective(settings.projectFilterEffective);
         AbstractSettingsConfigurable.reset(settings, mySettingsComponent);
@@ -66,6 +70,7 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
 
     @Override
     public void disposeUIResources() {
+        //noinspection ConstantConditions
         mySettingsComponent = null;
     }
 

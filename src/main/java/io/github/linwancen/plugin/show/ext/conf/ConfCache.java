@@ -76,7 +76,7 @@ public class ConfCache {
         TREE_CACHE.clear();
     }
 
-    static void remove(@NotNull VirtualFile file, String name) {
+    static void remove(@NotNull VirtualFile file, @Nullable String name) {
         if (name != null) {
             int i = name.lastIndexOf('.');
             name = name.substring(0, i);
@@ -93,7 +93,7 @@ public class ConfCache {
     }
 
     static void copy(@NotNull VirtualFile file, @NotNull VirtualFile newFile) {
-        String name = file.getNameWithoutExtension();
+        @NotNull String name = file.getNameWithoutExtension();
         if (name.endsWith(KEY_MID_EXT)) {
             copyCache(file, newFile, KEY_CACHE);
         } else if (name.endsWith(DOC_MID_EXT)) {
@@ -117,9 +117,9 @@ public class ConfCache {
     static void loadAll(@NotNull Project project) {
         DumbService.getInstance(project).runReadActionInSmartMode(() ->
                 ApplicationManager.getApplication().runReadAction(() -> {
-                    Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, EXT);
-                    StringBuilder sb = new StringBuilder();
-                    for (VirtualFile file : files) {
+                    @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, EXT);
+                    @NotNull StringBuilder sb = new StringBuilder();
+                    for (@NotNull VirtualFile file : files) {
                         load(project, file);
                         sb.append(file.getName()).append("\n");
                     }
@@ -139,16 +139,16 @@ public class ConfCache {
         if (!ConfCache.EXT.equals(file.getExtension())) {
             return;
         }
-        Document document = FileDocumentManager.getInstance().getDocument(file);
+        @Nullable Document document = FileDocumentManager.getInstance().getDocument(file);
         if (document == null) {
             return;
         }
-        String text = document.getText();
-        String name = file.getNameWithoutExtension();
+        @NotNull String text = document.getText();
+        @NotNull String name = file.getNameWithoutExtension();
         // this pattern would skip empty line
         String[] lines = LINE_PATTERN.split(text);
         if (name.endsWith(KEY_MID_EXT)) {
-            String matchName = name.substring(0, name.length() - KEY_MID_EXT.length());
+            @NotNull String matchName = name.substring(0, name.length() - KEY_MID_EXT.length());
             int i = matchName.lastIndexOf(".");
             if (i > 0) {
                 EXT_IN_KEY_CACHE.add(matchName.substring(i + 1));

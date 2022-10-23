@@ -25,11 +25,11 @@ import java.util.List;
 public class Tree implements ProjectViewNodeDecorator {
 
     @Override
-    public void decorate(ProjectViewNode node, PresentationData data) {
+    public void decorate(@NotNull ProjectViewNode node, @NotNull PresentationData data) {
         if (!AppSettingsState.getInstance().showTreeComment) {
             return;
         }
-        Project project = node.getProject();
+        @Nullable Project project = node.getProject();
         if (project == null) {
             return;
         }
@@ -37,11 +37,11 @@ public class Tree implements ProjectViewNodeDecorator {
             return;
         }
         ApplicationManager.getApplication().runReadAction(() -> {
-            String doc = treeDoc(node, project);
+            @Nullable String doc = treeDoc(node, project);
             if (doc == null) {
                 return;
             }
-            List<ColoredFragment> coloredText = data.getColoredText();
+            @NotNull List<ColoredFragment> coloredText = data.getColoredText();
             if (coloredText.isEmpty()) {
                 data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
             }
@@ -50,23 +50,23 @@ public class Tree implements ProjectViewNodeDecorator {
     }
 
     @Nullable
-    private String treeDoc(ProjectViewNode<?> node, @NotNull Project project) {
-        String doc = TreeExt.doc(node);
+    private String treeDoc(@NotNull ProjectViewNode<?> node, @NotNull Project project) {
+        @Nullable String doc = TreeExt.doc(node);
         if (doc != null) {
             return doc;
         }
-        SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.TREE);
+        @NotNull SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.TREE);
         Object value = node.getValue();
         if (value instanceof PsiElement) {
-            PsiElement psiElement = (PsiElement) value;
-            String docPrint = BaseLangDoc.resolveDoc(settingsInfo, psiElement);
+            @NotNull PsiElement psiElement = (PsiElement) value;
+            @Nullable String docPrint = BaseLangDoc.resolveDoc(settingsInfo, psiElement);
             if (docPrint != null) {
                 return docPrint;
             }
         }
-        Collection<BaseLangDoc> langDocs = BaseLangDoc.LANG_DOC_MAP.values();
-        for (BaseLangDoc langDoc : langDocs) {
-            String s = langDoc.treeDoc(settingsInfo, node, project);
+        @NotNull Collection<BaseLangDoc> langDocs = BaseLangDoc.LANG_DOC_MAP.values();
+        for (@NotNull BaseLangDoc langDoc : langDocs) {
+            @Nullable String s = langDoc.treeDoc(settingsInfo, node, project);
             if (s != null) {
                 return s;
             }

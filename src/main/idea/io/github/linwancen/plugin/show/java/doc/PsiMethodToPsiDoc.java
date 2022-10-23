@@ -20,19 +20,19 @@ class PsiMethodToPsiDoc {
             psiMethod = (PsiMethod) navElement;
         }
 
-        PsiDocComment docComment = psiMethod.getDocComment();
+        @Nullable PsiDocComment docComment = psiMethod.getDocComment();
         if (docComment != null) {
             return docComment;
         }
 
         // supper
-        PsiDocComment superDoc = supperMethodDoc(psiMethod);
+        @Nullable PsiDocComment superDoc = supperMethodDoc(psiMethod);
         if (superDoc != null) {
             return superDoc;
         }
 
 
-        PsiClass clazz = psiMethod.getContainingClass();
+        @Nullable PsiClass clazz = psiMethod.getContainingClass();
         if (clazz == null) {
             return null;
         }
@@ -47,10 +47,10 @@ class PsiMethodToPsiDoc {
     }
 
     @Nullable
-    static PsiDocComment supperMethodDoc(PsiMethod psiMethod) {
-        PsiMethod[] superMethods = psiMethod.findSuperMethods();
-        for (PsiMethod superMethod : superMethods) {
-            PsiDocComment superDoc = OwnerToPsiDocUtils.methodDoc(superMethod);
+    static PsiDocComment supperMethodDoc(@NotNull PsiMethod psiMethod) {
+        @NotNull PsiMethod[] superMethods = psiMethod.findSuperMethods();
+        for (@NotNull PsiMethod superMethod : superMethods) {
+            @Nullable PsiDocComment superDoc = OwnerToPsiDocUtils.methodDoc(superMethod);
             if (superDoc != null) {
                 return superDoc;
             }
@@ -59,8 +59,8 @@ class PsiMethodToPsiDoc {
     }
 
     @Nullable
-    private static PsiDocComment propMethodDoc(PsiMethod psiMethod, PsiClass psiClass) {
-        String name = psiMethod.getName();
+    private static PsiDocComment propMethodDoc(@NotNull PsiMethod psiMethod, @NotNull PsiClass psiClass) {
+        @NotNull String name = psiMethod.getName();
         if (name.length() > 3 && (name.startsWith("get") || name.startsWith("set"))) {
             name = name.substring(3);
         } else if (name.length() > 2 && name.startsWith("is")) {
@@ -68,10 +68,10 @@ class PsiMethodToPsiDoc {
         } else {
             return null;
         }
-        char[] chars = name.toCharArray();
+        @NotNull char[] chars = name.toCharArray();
         chars[0] += 32;
         name = String.valueOf(chars);
-        PsiField fieldByName = psiClass.findFieldByName(name, false);
+        @Nullable PsiField fieldByName = psiClass.findFieldByName(name, false);
         if (fieldByName == null) {
             return null;
         }

@@ -15,6 +15,7 @@ public class Prev {
 
     private Prev() {}
 
+    @Nullable
     public static PsiElement prevRefChild(@NotNull LineInfo lineInfo, @NotNull PsiElement element,
                                           @NotNull Class<? extends PsiElement> refClass) {
         PsiElement prevParent = element.getParent();
@@ -22,7 +23,7 @@ public class Prev {
             if (element.getTextRange().getEndOffset() < lineInfo.startOffset) {
                 return null;
             }
-            PsiElement parent = refClassParent(element, refClass);
+            @Nullable PsiElement parent = refClassParent(element, refClass);
             if (parent != null) {
                 // skip b in a.b.c
                 if (prevParent.getTextRange().getEndOffset() < lineInfo.endOffset
@@ -42,6 +43,7 @@ public class Prev {
             "{-~" +
             "]++");
 
+    @Nullable
     private static PsiElement refClassParent(@NotNull PsiElement element,
                                              @NotNull Class<? extends PsiElement> refClass) {
         String text = element.getText();
@@ -67,7 +69,7 @@ public class Prev {
 
     public static @Nullable <T extends SettingsInfo> PsiElement prevCompactElement(
             @SuppressWarnings("unused") @NotNull T lineInfo, @NotNull PsiElement resolve, @NotNull Document document) {
-        PsiElement element = PsiTreeUtil.prevVisibleLeaf(resolve);
+        @Nullable PsiElement element = PsiTreeUtil.prevVisibleLeaf(resolve);
         if (element == null) {
             return null;
         }
@@ -79,7 +81,7 @@ public class Prev {
         } catch (Exception e) {
             return null;
         }
-        String replace = spaceText.replace("\n", "");
+        @NotNull String replace = spaceText.replace("\n", "");
         if (spaceText.length() - replace.length() > 1) {
             return null;
         }

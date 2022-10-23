@@ -39,7 +39,7 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
         if (resolve instanceof PsiPackageBase) {
             return null;
         }
-        KDoc kDoc = PsiTreeUtil.getChildOfType(resolve, KDoc.class);
+        @Nullable KDoc kDoc = PsiTreeUtil.getChildOfType(resolve, KDoc.class);
         if (kDoc == null) {
             return null;
         }
@@ -48,18 +48,18 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
 
     @NotNull
     @Override
-    protected  <T extends SettingsInfo> String descDoc(@NotNull T lineInfo, @NotNull KDocSection kDocSection) {
-        String content = kDocSection.getContent();
+    protected <T extends SettingsInfo> String descDoc(@NotNull T lineInfo, @NotNull KDocSection kDocSection) {
+        @NotNull String content = kDocSection.getContent();
         return DocFilter.cutDoc(content, lineInfo.appSettings, false);
     }
 
     @Override
     protected <T extends SettingsInfo> void appendTag(@NotNull T lineInfo, @NotNull StringBuilder tagStrBuilder,
                                                       @NotNull KDocSection kDocSection, @NotNull String name) {
-        List<KDocTag> tags = kDocSection.findTagsByName(name);
-        for (KDocTag tag : tags) {
-            String content = tag.getContent();
-            String cutDoc = DocFilter.cutDoc(content, lineInfo.appSettings, false);
+        @NotNull List<KDocTag> tags = kDocSection.findTagsByName(name);
+        for (@NotNull KDocTag tag : tags) {
+            @NotNull String content = tag.getContent();
+            @NotNull String cutDoc = DocFilter.cutDoc(content, lineInfo.appSettings, false);
             tagStrBuilder.append(cutDoc);
         }
     }

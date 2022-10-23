@@ -38,7 +38,8 @@ public abstract class AbstractSettingsComponent {
         return lineEndFilter;
     }
 
-    protected FormBuilder add(FormBuilder formBuilder, JBCheckBox jbCheckBox, JBTextField jbTextField, String tip) {
+    protected FormBuilder add(@NotNull FormBuilder formBuilder, JBCheckBox jbCheckBox,
+                              @NotNull JBTextField jbTextField, @NotNull String tip) {
         return formBuilder.addLabeledComponent(JPanelFactory.of(jbCheckBox, new JBLabel(tip)), jbTextField, 1, true);
     }
 

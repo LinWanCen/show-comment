@@ -4,6 +4,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.newvfs.BulkFileListener;
 import com.intellij.openapi.vfs.newvfs.events.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -14,18 +15,18 @@ public class ConfFileListener implements BulkFileListener {
 
     @Override
     public void after(@NotNull List<? extends VFileEvent> events) {
-        for (VFileEvent event : events) {
+        for (@NotNull VFileEvent event : events) {
             forEvent(event);
         }
     }
 
-    private static void forEvent(VFileEvent event) {
-        VirtualFile file = event.getFile();
+    private static void forEvent(@NotNull VFileEvent event) {
+        @Nullable VirtualFile file = event.getFile();
         if (file == null) {
             return;
         }
         if (event instanceof VFilePropertyChangeEvent) {
-            VFilePropertyChangeEvent changeEvent = (VFilePropertyChangeEvent) event;
+            @NotNull VFilePropertyChangeEvent changeEvent = (VFilePropertyChangeEvent) event;
             if ("name".equals(changeEvent.getPropertyName())) {
                 String oldName = changeEvent.getOldValue().toString();
                 if (oldName.endsWith(ConfCache.EXT)) {
@@ -45,8 +46,8 @@ public class ConfFileListener implements BulkFileListener {
             return;
         }
         if (event instanceof VFileCopyEvent) {
-            VFileCopyEvent copyEvent = (VFileCopyEvent) event;
-            VirtualFile newFile = copyEvent.findCreatedFile();
+            @NotNull VFileCopyEvent copyEvent = (VFileCopyEvent) event;
+            @Nullable VirtualFile newFile = copyEvent.findCreatedFile();
             if (newFile == null) {
                 return;
             }

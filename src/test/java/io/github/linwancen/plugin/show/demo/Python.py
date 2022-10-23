@@ -13,6 +13,7 @@ class Type:
     # Type init
     def __init__(self):
         pass
+
     # field1
     field = ""
 

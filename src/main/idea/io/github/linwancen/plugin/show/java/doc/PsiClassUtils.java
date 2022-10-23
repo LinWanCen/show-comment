@@ -21,8 +21,8 @@ public class PsiClassUtils {
 
     @NotNull
     public static PsiClass[] encClass(@NotNull VirtualFile virtualFile, @NotNull Project project) {
-        String fileName = virtualFile.getNameWithoutExtension();
-        Matcher matcher = JSON_PATTERN.matcher(fileName);
+        @NotNull String fileName = virtualFile.getNameWithoutExtension();
+        @NotNull Matcher matcher = JSON_PATTERN.matcher(fileName);
         if (!matcher.find()) {
             return new PsiClass[0];
         }
@@ -58,10 +58,10 @@ public class PsiClassUtils {
     }
 
     @NotNull
-    public static String toClassFullName(PsiField psiField) {
+    public static String toClassFullName(@NotNull PsiField psiField) {
         // Array
         // use replace simpler than getDeepComponentType()
-        String typeName = psiField.getType().getCanonicalText().replace("[]", "");
+        @NotNull String typeName = psiField.getType().getCanonicalText().replace("[]", "");
         // List
         // use substring() because clsFieldImpl.getInnermostComponentReferenceElement() == null
         int index = typeName.indexOf("<");

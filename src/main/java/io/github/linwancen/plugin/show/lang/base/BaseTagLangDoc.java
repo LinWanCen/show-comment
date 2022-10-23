@@ -9,7 +9,7 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
 
     @Override
     public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        DocElement docElement = toDocElement(resolve);
+        @Nullable DocElement docElement = toDocElement(resolve);
         if (docElement == null) {
             return null;
         }
@@ -22,12 +22,12 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
             return null;
         }
         // desc
-        String descDoc = descDoc(lineInfo, docElement).trim();
-        String desc = DocFilter.filterDoc(descDoc, lineInfo.appSettings, lineInfo.projectSettings);
+        @NotNull String descDoc = descDoc(lineInfo, docElement).trim();
+        @NotNull String desc = DocFilter.filterDoc(descDoc, lineInfo.appSettings, lineInfo.projectSettings);
         // tag
-        StringBuilder tagStrBuilder = new StringBuilder();
-        String[] names = lineInfo.tagNames();
-        for (String name : names) {
+        @NotNull StringBuilder tagStrBuilder = new StringBuilder();
+        @NotNull String[] names = lineInfo.tagNames();
+        for (@NotNull String name : names) {
             appendTag(lineInfo, tagStrBuilder, docElement, name);
         }
         if (desc.length() > 0) {
@@ -36,7 +36,7 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
             }
             tagStrBuilder.insert(0, desc);
         }
-        String text = tagStrBuilder.toString().trim();
+        @NotNull String text = tagStrBuilder.toString().trim();
         if (text.length() == 0) {
             return null;
         }

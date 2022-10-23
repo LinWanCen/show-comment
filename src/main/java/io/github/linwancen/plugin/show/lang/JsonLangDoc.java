@@ -25,7 +25,7 @@ public class JsonLangDoc extends BaseLangDoc {
 
     @Override
     public @Nullable String findRefDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement element) {
-        PsiElement start = lineInfo.viewProvider.findElementAt(lineInfo.startOffset);
+        @Nullable PsiElement start = lineInfo.viewProvider.findElementAt(lineInfo.startOffset);
         if (start == null) {
             return null;
         }
@@ -41,10 +41,10 @@ public class JsonLangDoc extends BaseLangDoc {
         if (!(ref instanceof JsonProperty)) {
             return null;
         }
-        JsonProperty jsonProperty = (JsonProperty) ref;
-        PsiReference[] references = jsonProperty.getNameElement().getReferences();
-        for (PsiReference reference : references) {
-            PsiElement resolve = null;
+        @NotNull JsonProperty jsonProperty = (JsonProperty) ref;
+        @NotNull PsiReference[] references = jsonProperty.getNameElement().getReferences();
+        for (@NotNull PsiReference reference : references) {
+            @Nullable PsiElement resolve = null;
             try {
                 resolve = reference.resolve();
             } catch (Throwable ignore) {
@@ -53,7 +53,7 @@ public class JsonLangDoc extends BaseLangDoc {
             if (resolve == null) {
                 continue;
             }
-            String doc = BaseLangDoc.resolveDoc(lineInfo, resolve);
+            @Nullable String doc = BaseLangDoc.resolveDoc(lineInfo, resolve);
             if (doc != null) {
                 return doc;
             }

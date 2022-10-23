@@ -29,11 +29,11 @@ class ConfFactory {
     @Nullable
     static Pattern buildPattern(@Nullable Project project, @NotNull String path,
                                 @NotNull Map<String, Map<String, List<String>>> map) {
-        Set<String> exclude = new LinkedSet<>();
-        StringBuilder sb = new StringBuilder();
-        for (Map<String, List<String>> keyMap : map.values()) {
+        @NotNull Set<String> exclude = new LinkedSet<>();
+        @NotNull StringBuilder sb = new StringBuilder();
+        for (@NotNull Map<String, List<String>> keyMap : map.values()) {
             // key() is escape
-            for (List<String> list : keyMap.values()) {
+            for (@NotNull List<String> list : keyMap.values()) {
                 String key = list.get(0);
                 if (key.startsWith("?")) {
                     exclude.add(key.substring(1));
@@ -45,7 +45,7 @@ class ConfFactory {
         if (sb.length() > 0) {
             sb.delete(sb.length() - 1, sb.length());
         }
-        String regex = sb.toString();
+        @NotNull String regex = sb.toString();
         Pattern pattern = PATTERN_CACHE.get(regex);
         if (pattern != null) {
             return pattern;
@@ -54,7 +54,7 @@ class ConfFactory {
         sb.insert(0, path);
         sb.insert(0, "\n");
         try {
-            Pattern compile = Pattern.compile(regex);
+            @NotNull Pattern compile = Pattern.compile(regex);
             PATTERN_CACHE.put(regex, compile);
             REGEXP_LOG.createNotification("Ext doc keyword regexp compile success", regex.length() + " chars",
                     sb.toString(), NotificationType.INFORMATION).notify(project);
@@ -74,9 +74,9 @@ class ConfFactory {
     @NotNull
     static Map<String, List<String>> buildMap(@Nullable Project project, @NotNull String path,
                                               @NotNull String[] lines, boolean isKey) {
-        Map<String, List<String>> map = new LinkedHashMap<>();
-        for (String line : lines) {
-            List<String> words = Splitter.on('\t').splitToList(line);
+        @NotNull Map<String, List<String>> map = new LinkedHashMap<>();
+        for (@NotNull String line : lines) {
+            @NotNull List<String> words = Splitter.on('\t').splitToList(line);
             if (!words.isEmpty()) {
                 String key = words.get(0);
                 if (key.length() == 0) {

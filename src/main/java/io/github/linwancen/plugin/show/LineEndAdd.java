@@ -13,6 +13,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
 import io.github.linwancen.plugin.show.bean.FileInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * on ProjectViewPopupMenu
@@ -21,22 +22,22 @@ public class LineEndAdd extends DumbAwareAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        Project project = event.getProject();
+        @Nullable Project project = event.getProject();
         if (project == null) {
             return;
         }
-        VirtualFile[] files = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
+        @Nullable VirtualFile[] files = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY);
         if (files == null) {
             return;
         }
-        ListPopup confirmation = JBPopupFactory.getInstance().createConfirmation(
+        @NotNull ListPopup confirmation = JBPopupFactory.getInstance().createConfirmation(
                 "Add Line Comment?", "Add and replace files!", "Don't add.",
                 () -> ApplicationManager.getApplication().runReadAction(() -> addDocAll(project, files)), 2);
         confirmation.showInFocusCenter();
     }
 
     private void addDocAll(@NotNull Project project, @NotNull VirtualFile[] files) {
-        for (VirtualFile file : files) {
+        for (@NotNull VirtualFile file : files) {
             VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor<Void>() {
                 @Override
                 public boolean visitFile(@NotNull VirtualFile file) {
@@ -50,13 +51,13 @@ public class LineEndAdd extends DumbAwareAction {
     }
 
     private void addDoc(@NotNull Project project, @NotNull VirtualFile file) {
-        FileInfo fileInfo = FileInfo.of(file, project);
+        @Nullable FileInfo fileInfo = FileInfo.of(file, project);
         if (fileInfo == null) {
             return;
         }
         int startLine = 0;
         int endLine = fileInfo.document.getLineCount() - 1;
-        String textWithDoc = LineEnd.textWithDoc(fileInfo, startLine, endLine);
+        @NotNull String textWithDoc = LineEnd.textWithDoc(fileInfo, startLine, endLine);
         WriteCommandAction.runWriteCommandAction(project, () ->
                 fileInfo.document.replaceString(0, fileInfo.document.getTextLength() - 1, textWithDoc)
         );

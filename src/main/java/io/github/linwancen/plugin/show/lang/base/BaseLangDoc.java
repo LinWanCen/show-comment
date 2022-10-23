@@ -41,7 +41,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     public static @Nullable String langDoc(@NotNull LineInfo lineInfo) {
-        PsiElement element = lineInfo.viewProvider.findElementAt(lineInfo.endOffset);
+        @Nullable PsiElement element = lineInfo.viewProvider.findElementAt(lineInfo.endOffset);
         if (element == null) {
             // file end
             element = lineInfo.viewProvider.findElementAt(lineInfo.endOffset - 1);
@@ -49,7 +49,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 return null;
             }
         }
-        Language language = PsiElementTo.language(element);
+        @NotNull Language language = PsiElementTo.language(element);
         BaseLangDoc lineEnd = LANG_DOC_MAP.get(language.getID());
         if (lineEnd != null && lineEnd.show(lineInfo)) {
             return lineEnd.findRefDoc(lineInfo, element);
@@ -64,15 +64,15 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      */
     @Nullable
     public String findRefDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement element) {
-        Class<? extends PsiElement> refClass = getRefClass();
+        @Nullable Class<? extends PsiElement> refClass = getRefClass();
         if (refClass == null) {
             return null;
         }
-        String doc = null;
-        PsiElement refElement = element;
+        @Nullable String doc = null;
+        @Nullable PsiElement refElement = element;
         while ((refElement = Prev.prevRefChild(lineInfo, refElement, refClass)) != null) {
             PsiElement parent = refElement.getParent();
-            String filterDoc = refElementDoc(lineInfo, parent);
+            @Nullable String filterDoc = refElementDoc(lineInfo, parent);
             if (filterDoc != null) {
                 doc = filterDoc;
                 refElement = parent;
@@ -90,7 +90,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         String text = refElement.getText();
         boolean set = text.startsWith("set");
         PsiElement parent = refElement.getParent();
-        String before = refElementDoc(lineInfo, parent);
+        @Nullable String before = refElementDoc(lineInfo, parent);
         if (before != null) {
             doc = mergeDoc(set, lineInfo.appSettings.getToSet, before, doc);
         }
@@ -115,9 +115,10 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     /**
      * Override like SQL
      */
+    @Nullable
     protected <T extends SettingsInfo> String refElementDoc(@NotNull T lineInfo,
                                                             @NotNull PsiElement refElement) {
-        String refDoc = refDoc(lineInfo, refElement);
+        @Nullable String refDoc = refDoc(lineInfo, refElement);
         if (refDoc != null && !DocSkip.skipDoc(lineInfo.appSettings, lineInfo.projectSettings, refDoc)) {
             return refDoc;
         }
@@ -130,22 +131,23 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     @Nullable
     protected <T extends SettingsInfo> String refDoc(@NotNull T lineInfo, @NotNull PsiElement ref) {
         // kotlin ref.getReference() == null but ref.getReferences().length == 2
-        PsiReference[] references = ref.getReferences();
+        @NotNull PsiReference[] references = ref.getReferences();
         if (references.length < 1) {
             return null;
         }
-        for (PsiReference reference : references) {
-            PsiElement resolve;
+        for (@NotNull PsiReference reference : references) {
+            @Nullable PsiElement resolve;
             try {
                 resolve = reference.resolve();
             } catch (Throwable e) {
-                // 2021.3: Slow operations are prohibited on EDT. See SlowOperations.assertSlowOperationsAreAllowed javadoc.
+                // 2021.3: Slow operations are prohibited on EDT.
+                // See SlowOperations.assertSlowOperationsAreAllowed javadoc.
                 return null;
             }
             if (resolve == null) {
                 return null;
             }
-            String resolveDoc = resolveDoc(lineInfo, resolve);
+            @Nullable String resolveDoc = resolveDoc(lineInfo, resolve);
             if (resolveDoc != null) {
                 return resolveDoc;
             }
@@ -153,9 +155,10 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         return null;
     }
 
-    public static @Nullable <T extends SettingsInfo> String resolveDoc(T settingsInfo, PsiElement psiElement) {
+    public static @Nullable <T extends SettingsInfo> String resolveDoc(@NotNull T settingsInfo,
+                                                                       @NotNull PsiElement psiElement) {
         // support like java <-> kotlin
-        Language language = PsiElementTo.language(psiElement);
+        @NotNull Language language = PsiElementTo.language(psiElement);
         BaseLangDoc lineEnd = LANG_DOC_MAP.get(language.getID());
         if (lineEnd == null) {
             return null;
@@ -168,12 +171,12 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      */
     @Nullable
     protected <T extends SettingsInfo> String resolveDocPrint(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        String s = resolveDocRaw(lineInfo, resolve);
+        @Nullable String s = resolveDocRaw(lineInfo, resolve);
         if (s == null) {
             return null;
         }
-        String cutDoc = DocFilter.cutDoc(s, lineInfo.appSettings, true);
-        String filterDoc = DocFilter.filterDoc(cutDoc, lineInfo.appSettings, lineInfo.projectSettings);
+        @NotNull String cutDoc = DocFilter.cutDoc(s, lineInfo.appSettings, true);
+        @NotNull String filterDoc = DocFilter.filterDoc(cutDoc, lineInfo.appSettings, lineInfo.projectSettings);
         if (filterDoc.trim().length() == 0) {
             return null;
         }
@@ -185,17 +188,18 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      */
     @Nullable
     protected <T extends SettingsInfo> String resolveDocRaw(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        FileViewProvider viewProvider = PsiElementTo.viewProvider(resolve);
+        @Nullable FileViewProvider viewProvider = PsiElementTo.viewProvider(resolve);
         if (viewProvider == null) {
             return null;
         }
-        String doc = ResolveDoc.fromLineEnd(lineInfo, resolve, viewProvider);
+        @Nullable String doc = ResolveDoc.fromLineEnd(lineInfo, resolve, viewProvider);
         if (doc != null) {
             return doc;
         }
         return ResolveDoc.fromLineUp(lineInfo, resolve, viewProvider, keywords());
     }
 
+    @NotNull
     protected List<String> keywords() {
         return Collections.emptyList();
     }

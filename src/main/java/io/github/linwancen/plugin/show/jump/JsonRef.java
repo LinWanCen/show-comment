@@ -8,7 +8,9 @@ import java.util.List;
 
 public class JsonRef<T extends PsiElement> extends PsiReferenceBase<PsiElement> implements PsiPolyVariantReference {
 
+    @NotNull
     final T psiField;
+    @NotNull
     final List<T> tips;
 
     public JsonRef(@NotNull PsiElement element, @NotNull T psiField, @NotNull List<T> tips) {

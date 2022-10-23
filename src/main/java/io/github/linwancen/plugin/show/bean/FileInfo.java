@@ -27,30 +27,30 @@ public class FileInfo extends SettingsInfo {
         this.document = document;
     }
 
-    public static @Nullable FileInfo of(@NotNull VirtualFile file, @NotNull Project project){
-        Document document = FileDocumentManager.getInstance().getDocument(file);
+    public static @Nullable FileInfo of(@NotNull VirtualFile file, @NotNull Project project) {
+        @Nullable Document document = FileDocumentManager.getInstance().getDocument(file);
         if (document == null) {
             return null;
         }
-        FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
+        @Nullable FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
         if (viewProvider == null) {
             return null;
         }
         return new FileInfo(file, document, project, viewProvider, FuncEnum.LINE);
     }
 
-    public static @Nullable FileInfo of(@NotNull AnActionEvent event){
-        PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
+    public static @Nullable FileInfo of(@NotNull AnActionEvent event) {
+        @Nullable PsiFile psiFile = event.getData(CommonDataKeys.PSI_FILE);
         if (psiFile == null) {
             return null;
         }
-        FileViewProvider viewProvider = psiFile.getViewProvider();
-        Document document = viewProvider.getDocument();
+        @NotNull FileViewProvider viewProvider = psiFile.getViewProvider();
+        @Nullable Document document = viewProvider.getDocument();
         if (document == null) {
             return null;
         }
-        VirtualFile file = viewProvider.getVirtualFile();
-        Project project = psiFile.getProject();
+        @NotNull VirtualFile file = viewProvider.getVirtualFile();
+        @NotNull Project project = psiFile.getProject();
         return new FileInfo(file, document, project, viewProvider, FuncEnum.LINE);
     }
 }

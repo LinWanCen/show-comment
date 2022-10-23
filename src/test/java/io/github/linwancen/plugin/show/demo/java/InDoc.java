@@ -2,7 +2,7 @@ package io.github.linwancen.plugin.show.demo.java;
 
 /**
  * InDoc
- *
+ * <p>
  * {@link InDoc}
  * {@link InDoc#field}
  * {@link InDoc#method1}

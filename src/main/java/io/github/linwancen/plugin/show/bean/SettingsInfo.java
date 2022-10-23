@@ -16,11 +16,12 @@ public class SettingsInfo {
         this.projectSettings = ProjectSettingsState.getInstance(project);
     }
 
-    public static @NotNull SettingsInfo of(@NotNull Project project, FuncEnum funcEnum) {
+    public static @NotNull SettingsInfo of(@NotNull Project project, @NotNull FuncEnum funcEnum) {
         return new SettingsInfo(project, funcEnum);
     }
 
     /** treeTags/lineTags */
+    @NotNull
     public String[] tagNames() {
         return funcEnum == FuncEnum.TREE
                 ? appSettings.treeTags

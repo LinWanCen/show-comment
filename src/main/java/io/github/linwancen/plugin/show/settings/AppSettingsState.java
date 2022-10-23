@@ -34,7 +34,9 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
     public boolean showLineEndCommentGo = true;
     public boolean showLineEndCommentKotlin = true;
 
+    @NotNull
     public String[] treeTags = {"author"};
+    @NotNull
     public String[] lineTags = {};
 
     public final TextAttributes lineEndTextAttr = new TextAttributes(
@@ -43,6 +45,7 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
     public final TextAttributes lineEndJsonTextAttr = new TextAttributes(new JBColor(Gray._140, Gray._140),
             null, null, null, Font.ITALIC);
 
+    @NotNull
     public String lineEndPrefix = "   // ";
     public int lineEndCount = 2;
     public int lineEndLen = 0;
@@ -53,6 +56,7 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
     public boolean skipAscii = !"en".equals(Locale.getDefault().getLanguage());
     public boolean skipBlank = true;
 
+    @NotNull
     public static AppSettingsState getInstance() {
         AppSettingsState service = ApplicationManager.getApplication().getService(AppSettingsState.class);
         if (service == null) {
@@ -72,20 +76,22 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
         XmlSerializerUtil.copyBean(state, this);
     }
 
+    @NotNull
     public String getLineEndColor() {
         return Integer.toHexString(lineEndTextAttr.getForegroundColor().getRGB()).toUpperCase();
     }
 
-    public void setLineEndColor(String s) {
+    public void setLineEndColor(@NotNull String s) {
         int rgb = new BigInteger(s, 16).intValue();
         lineEndTextAttr.setForegroundColor(new JBColor(new Color(rgb), new Color(rgb)));
     }
 
+    @NotNull
     public String getLineEndJsonColor() {
         return Integer.toHexString(lineEndJsonTextAttr.getForegroundColor().getRGB()).toUpperCase();
     }
 
-    public void setLineEndJsonColor(String s) {
+    public void setLineEndJsonColor(@NotNull String s) {
         int rgb = new BigInteger(s, 16).intValue();
         lineEndJsonTextAttr.setForegroundColor(new JBColor(new Color(rgb), new Color(rgb)));
     }

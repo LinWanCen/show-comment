@@ -13,7 +13,8 @@ public class OwnerToPsiDocUtils {
 
     private OwnerToPsiDocUtils() {}
 
-    public static PsiDocComment srcOrByteCodeDoc(PsiDocCommentOwner psiDocCommentOwner) {
+    @Nullable
+    public static PsiDocComment srcOrByteCodeDoc(@NotNull PsiDocCommentOwner psiDocCommentOwner) {
         PsiElement navElement = psiDocCommentOwner.getNavigationElement();
         if (navElement instanceof PsiDocCommentOwner) {
             psiDocCommentOwner = (PsiDocCommentOwner) navElement;
@@ -27,7 +28,7 @@ public class OwnerToPsiDocUtils {
     }
 
     @Nullable
-    public static PsiDocComment supperMethodDoc(PsiMethod psiMethod) {
+    public static PsiDocComment supperMethodDoc(@NotNull PsiMethod psiMethod) {
         return PsiMethodToPsiDoc.supperMethodDoc(psiMethod);
     }
 
@@ -36,14 +37,14 @@ public class OwnerToPsiDocUtils {
         if (psiPackage == null) {
             return null;
         }
-        String name = psiPackage.getName();
+        @Nullable String name = psiPackage.getName();
         if (name == null || name.length() == 0) {
             return null;
         }
-        PsiDirectory[] psiDirectories = psiPackage.getDirectories();
-        for (PsiDirectory psiDirectory : psiDirectories) {
-            PsiFile file = psiDirectory.findFile(PsiPackage.PACKAGE_INFO_FILE);
-            PsiDocComment psiDocComment = PackageFileToPsiDoc.fromPackageInfoFile(file);
+        @NotNull PsiDirectory[] psiDirectories = psiPackage.getDirectories();
+        for (@NotNull PsiDirectory psiDirectory : psiDirectories) {
+            @Nullable PsiFile file = psiDirectory.findFile(PsiPackage.PACKAGE_INFO_FILE);
+            @Nullable PsiDocComment psiDocComment = PackageFileToPsiDoc.fromPackageInfoFile(file);
             if (psiDocComment != null) {
                 return psiDocComment;
             }
@@ -55,14 +56,14 @@ public class OwnerToPsiDocUtils {
     public static PsiDocComment fileDoc(PsiFile psiFile) {
         if (!(psiFile instanceof PsiClassOwner)) {
             // for SPI
-            PsiClass[] psiClasses = PsiClassUtils.nameToClass(psiFile.getName(), psiFile.getProject());
+            @NotNull PsiClass[] psiClasses = PsiClassUtils.nameToClass(psiFile.getName(), psiFile.getProject());
             // for "xxx ClassName.xxx"
             if (psiClasses.length == 0) {
                 VirtualFile virtualFile = psiFile.getVirtualFile();
                 psiClasses = PsiClassUtils.encClass(virtualFile, psiFile.getProject());
             }
-            for (PsiClass psiClass : psiClasses) {
-                PsiDocComment docComment = srcOrByteCodeDoc(psiClass);
+            for (@NotNull PsiClass psiClass : psiClasses) {
+                @Nullable PsiDocComment docComment = srcOrByteCodeDoc(psiClass);
                 if (docComment != null) {
                     // Inaccurate when there are classes with the same name
                     return docComment;
@@ -73,8 +74,8 @@ public class OwnerToPsiDocUtils {
         if (PsiPackage.PACKAGE_INFO_FILE.equals(psiFile.getName())) {
             return PackageFileToPsiDoc.fromPackageInfoFile(psiFile);
         }
-        PsiClassOwner psiClassOwner = (PsiClassOwner) psiFile;
-        PsiClass[] classes = psiClassOwner.getClasses();
+        @NotNull PsiClassOwner psiClassOwner = (PsiClassOwner) psiFile;
+        @NotNull PsiClass[] classes = psiClassOwner.getClasses();
         if (classes.length == 0) {
             return null;
         }
@@ -83,8 +84,8 @@ public class OwnerToPsiDocUtils {
     }
 
     @Nullable
-    public static PsiDocComment dirDoc(PsiDirectory psiDirectory) {
-        PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
+    public static PsiDocComment dirDoc(@NotNull PsiDirectory psiDirectory) {
+        @Nullable PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
         return packageDoc(psiPackage);
     }
 }

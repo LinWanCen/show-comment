@@ -39,8 +39,8 @@ public class SqlLangDoc extends BaseLangDoc {
         } catch (Throwable e) {
             return null;
         }
-        for (DbElement dbElement : relatedDbElements) {
-            String refDoc = dbElement.getComment();
+        for (@NotNull DbElement dbElement : relatedDbElements) {
+            @Nullable String refDoc = dbElement.getComment();
             if (refDoc != null && !DocSkip.skipDoc(lineInfo.appSettings, lineInfo.projectSettings, refDoc)) {
                 return refDoc;
             }

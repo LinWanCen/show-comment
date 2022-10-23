@@ -14,6 +14,7 @@ import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
 import io.github.linwancen.plugin.show.java.line.NewCallRefToPsiDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class JavaTree {
@@ -21,8 +22,9 @@ public class JavaTree {
     private JavaTree() {}
 
     @Nullable
-    public static <T extends SettingsInfo> String treeDoc(T settingsInfo, ProjectViewNode<?> node, Project project) {
-        PsiDocComment docComment = nodeDoc(node, project);
+    public static <T extends SettingsInfo> String treeDoc(@NotNull T settingsInfo, ProjectViewNode<?> node,
+                                                          @NotNull Project project) {
+        @Nullable PsiDocComment docComment = nodeDoc(node, project);
         if (docComment == null) {
             return null;
         }
@@ -30,7 +32,7 @@ public class JavaTree {
     }
 
     @Nullable
-    static PsiDocComment nodeDoc(ProjectViewNode<?> node, Project project) {
+    static PsiDocComment nodeDoc(ProjectViewNode<?> node, @NotNull Project project) {
         if (node instanceof PsiFileNode) {
             PsiFile psiFile = ((PsiFileNode) node).getValue();
             return OwnerToPsiDocUtils.fileDoc(psiFile);
@@ -44,26 +46,26 @@ public class JavaTree {
             // On Show Members
             PsiField psiField = ((PsiFieldNode) node).getValue();
             // for @Autowire Bean
-            PsiType type = psiField.getType();
+            @NotNull PsiType type = psiField.getType();
             if (type instanceof PsiClassReferenceType) {
-                PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) type;
-                PsiJavaCodeReferenceElement reference = psiClassReferenceType.getReference();
+                @NotNull PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) type;
+                @NotNull PsiJavaCodeReferenceElement reference = psiClassReferenceType.getReference();
                 return NewCallRefToPsiDoc.javaCodeDoc(reference);
             }
         }
 
         if (node instanceof PackageElementNode) {
             // On Packages View
-            PsiPackage psiPackage = ((PackageElementNode) node).getValue().getPackage();
+            @NotNull PsiPackage psiPackage = ((PackageElementNode) node).getValue().getPackage();
             return packageDoc(psiPackage);
         }
 
         // On Packages View, Project Files View
-        VirtualFile virtualFile = node.getVirtualFile();
+        @Nullable VirtualFile virtualFile = node.getVirtualFile();
         if (virtualFile == null || !virtualFile.isDirectory()) {
             return null;
         }
-        PsiDirectory psiDirectory = PsiManager.getInstance(project).findDirectory(virtualFile);
+        @Nullable PsiDirectory psiDirectory = PsiManager.getInstance(project).findDirectory(virtualFile);
         if (psiDirectory == null) {
             return null;
         }
@@ -71,17 +73,17 @@ public class JavaTree {
     }
 
     @Nullable
-    static PsiDocComment dirDoc(PsiDirectory child) {
+    static PsiDocComment dirDoc(@NotNull PsiDirectory child) {
         while (true) {
-            PsiDocComment docComment = OwnerToPsiDocUtils.dirDoc(child);
+            @Nullable PsiDocComment docComment = OwnerToPsiDocUtils.dirDoc(child);
             if (docComment != null) {
                 return docComment;
             }
-            AppSettingsState instance = AppSettingsState.getInstance();
+            @NotNull AppSettingsState instance = AppSettingsState.getInstance();
             if (!instance.compact) {
                 return null;
             }
-            PsiDirectory parent = child.getParent();
+            @Nullable PsiDirectory parent = child.getParent();
             if (parent == null) {
                 return null;
             }
@@ -93,13 +95,13 @@ public class JavaTree {
     }
 
     @Nullable
-    static PsiDocComment packageDoc(PsiPackage child) {
+    static PsiDocComment packageDoc(@NotNull PsiPackage child) {
         while (true) {
-            PsiDocComment docComment = OwnerToPsiDocUtils.packageDoc(child);
+            @Nullable PsiDocComment docComment = OwnerToPsiDocUtils.packageDoc(child);
             if (docComment != null) {
                 return docComment;
             }
-            PsiPackage parent = child.getParentPackage();
+            @Nullable PsiPackage parent = child.getParentPackage();
             if (parent == null) {
                 return null;
             }

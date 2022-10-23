@@ -22,7 +22,7 @@ public class LineInfo extends FileInfo {
     }
 
     public static @Nullable LineInfo of(@NotNull VirtualFile file, @NotNull Project project, int lineNumber) {
-        FileInfo fileInfo = of(file, project);
+        @Nullable FileInfo fileInfo = of(file, project);
         if (fileInfo == null) {
             return null;
         }
@@ -40,7 +40,7 @@ public class LineInfo extends FileInfo {
             if (startOffset == endOffset) {
                 return null;
             }
-            String text = fileInfo.document.getText(new TextRange(startOffset, endOffset));
+            @NotNull String text = fileInfo.document.getText(new TextRange(startOffset, endOffset));
             return new LineInfo(fileInfo, text, lineNumber, startOffset, endOffset);
         } catch (Exception e) {
             return null;

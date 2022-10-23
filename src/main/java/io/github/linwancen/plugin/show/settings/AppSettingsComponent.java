@@ -7,6 +7,7 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,15 +70,13 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     @NotNull
     protected JPanel lineEndFilterPanel() {
-        JPanel text = JPanelFactory.of(
+        @NotNull JPanel text = JPanelFactory.of(
                 new JBLabel("line count: "), lineEndCount,
                 new JBLabel("text color: "), lineEndColor,
                 new JBLabel("json text color: "), lineEndJsonColor,
                 new JBLabel("prefix: "), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
-                // .addComponent(JPanelFactory.of(findElementRightToLeft))
                 .addSeparator()
-                // .addComponent(JPanelFactory.of(fromCall, fromNew, fromRef, inJson, skipAnnotation, skipAscii, skipBlank), 1)
                 .addComponent(JPanelFactory.of(fromNew, fromParam, getToSet, skipAnnotation, skipAscii, skipBlank), 1)
                 .addSeparator()
                 .addComponent(text)
@@ -89,6 +88,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         return myMainPanel;
     }
 
+    @NotNull
     public JComponent getPreferredFocusedComponent() {
         return showTreeComment;
     }
@@ -248,6 +248,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         skipBlank.setSelected(newStatus);
     }
 
+    @Nullable
     public Color getLineEndColor() {
         return lineEndColor.getSelectedColor();
     }
@@ -256,6 +257,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         lineEndColor.setSelectedColor(color);
     }
 
+    @Nullable
     public Color getLineEndJsonColor() {
         return lineEndJsonColor.getSelectedColor();
     }

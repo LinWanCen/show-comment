@@ -13,7 +13,7 @@ class GetFromDocMap {
 
     @Nullable
     static String get(@NotNull Map<String, Map<String, List<String>>> docMap, @NotNull String... words) {
-        List<String> keywordDoc = list(docMap, words);
+        @NotNull List<String> keywordDoc = list(docMap, words);
         if (keywordDoc.size() >= 2) {
             return keywordDoc.get(1);
         }
@@ -22,7 +22,7 @@ class GetFromDocMap {
 
     @NotNull
     private static List<String> list(@NotNull Map<String, Map<String, List<String>>> docMap, @NotNull String... words) {
-        for (Map.Entry<String, Map<String, List<String>>> entry : docMap.entrySet()) {
+        for (@NotNull Map.Entry<String, Map<String, List<String>>> entry : docMap.entrySet()) {
             Map<String, List<String>> map = entry.getValue();
             for (String word : words) {
                 List<String> wordDoc = map.get(word);

@@ -16,8 +16,8 @@ public class LineExt {
 
     public static @Nullable String doc(@NotNull LineInfo lineInfo) {
         int i = lineInfo.text.indexOf(lineInfo.appSettings.lineEndPrefix);
-        String code = i <= 0 ? lineInfo.text : lineInfo.text.substring(0, i);
-        String extDoc = LineExt.extDoc(lineInfo, code);
+        @NotNull String code = i <= 0 ? lineInfo.text : lineInfo.text.substring(0, i);
+        @Nullable String extDoc = LineExt.extDoc(lineInfo, code);
         if (extDoc == null) {
             return null;
         }
@@ -28,20 +28,21 @@ public class LineExt {
         return extDoc;
     }
 
+    @Nullable
     public static String extDoc(@NotNull LineInfo lineInfo, @NotNull String code) {
-        String path = lineInfo.file.getPath();
-        String name = lineInfo.file.getName();
-        String ext = lineInfo.file.getExtension();
-        Map<String, Map<String, List<String>>> keyMap = ConfCache.keyMap(path, name, ext);
+        @NotNull String path = lineInfo.file.getPath();
+        @NotNull String name = lineInfo.file.getName();
+        @Nullable String ext = lineInfo.file.getExtension();
+        @NotNull Map<String, Map<String, List<String>>> keyMap = ConfCache.keyMap(path, name, ext);
         if (keyMap.isEmpty()) {
             return null;
         }
-        Pattern pattern = ConfCache.pattern(lineInfo.project, keyMap, path);
+        @Nullable Pattern pattern = ConfCache.pattern(lineInfo.project, keyMap, path);
         if (pattern == null || pattern.pattern().length() == 0) {
             return null;
         }
-        Map<String, Map<String, List<String>>> docMap = ConfCache.docMap(path, name, ext);
-        Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path, name, ext);
+        @NotNull Map<String, Map<String, List<String>>> docMap = ConfCache.docMap(path, name, ext);
+        @NotNull Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path, name, ext);
         if (docMap.isEmpty() && treeMap.isEmpty()) {
             return null;
         }
@@ -49,7 +50,7 @@ public class LineExt {
             code = cblNotAndOr(code);
         }
         String[] words = pattern.split(code);
-        Matcher matcher = pattern.matcher(code);
+        @NotNull Matcher matcher = pattern.matcher(code);
         return extDoc(keyMap, matcher, docMap, words, treeMap);
     }
 
@@ -57,12 +58,12 @@ public class LineExt {
     private static final Pattern AND_OR_PATTERN = Pattern.compile("(AND|OR) ?'");
 
     @NotNull
-    private static String cblNotAndOr(String text) {
+    private static String cblNotAndOr(@NotNull String text) {
         // maybe faster than regexp
         if (!text.contains("=")) {
             return text;
         }
-        Matcher matcher = DICT_PATTERN.matcher(text);
+        @NotNull Matcher matcher = DICT_PATTERN.matcher(text);
         if (!matcher.find()) {
             return text;
         }
@@ -81,13 +82,13 @@ public class LineExt {
                                  @NotNull Map<String, Map<String, List<String>>> treeMap) {
         boolean haveDoc = false;
         boolean haveKey = false;
-        StringBuilder sb = new StringBuilder();
-        for (String s : words) {
+        @NotNull StringBuilder sb = new StringBuilder();
+        for (@NotNull String s : words) {
             haveDoc |= appendDoc(sb, s, docMap, treeMap);
             haveKey = appendKeyDoc(sb, matcher, keyMap);
         }
         while (haveKey) {
-            haveKey =  appendKeyDoc(sb, matcher, keyMap);
+            haveKey = appendKeyDoc(sb, matcher, keyMap);
         }
         if (!haveDoc) {
             return null;
@@ -102,12 +103,12 @@ public class LineExt {
         if (word.length() == 0) {
             return false;
         }
-        String wordDoc = GetFromDocMap.get(docMap, word);
+        @Nullable String wordDoc = GetFromDocMap.get(docMap, word);
         if (wordDoc != null) {
             sb.append(wordDoc);
             return true;
         }
-        String treeDoc = GetFromDocMap.get(treeMap, word);
+        @Nullable String treeDoc = GetFromDocMap.get(treeMap, word);
         if (treeDoc != null) {
             sb.append(treeDoc);
             return true;
@@ -118,14 +119,14 @@ public class LineExt {
     }
 
     private static boolean appendKeyDoc(@NotNull StringBuilder sb,
-                                     @NotNull Matcher matcher,
-                                     @NotNull Map<String, Map<String, List<String>>> keyMap) {
+                                        @NotNull Matcher matcher,
+                                        @NotNull Map<String, Map<String, List<String>>> keyMap) {
         if (!matcher.find()) {
             return false;
         }
         String keyword = matcher.group();
         // "" if no doc
-        String keyDoc = GetFromDocMap.get(keyMap, keyword);
+        @Nullable String keyDoc = GetFromDocMap.get(keyMap, keyword);
         if (keyDoc != null) {
             sb.append(" ").append(keyDoc);
         }

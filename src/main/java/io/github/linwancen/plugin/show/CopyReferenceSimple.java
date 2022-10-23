@@ -10,6 +10,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -27,16 +28,17 @@ public class CopyReferenceSimple extends CopyReferenceAction {
 
     private static final Pattern QUALIFIED_PATTERN = Pattern.compile("[\\w.]+\\.");
 
+    @Nullable
     @Override
-    protected String getQualifiedName(Editor editor, List<PsiElement> elements) {
+    protected String getQualifiedName(@NotNull Editor editor, List<PsiElement> elements) {
         String qualifiedName = super.getQualifiedName(editor, elements);
         if (qualifiedName == null) {
-            Document document = editor.getDocument();
-            Project project = editor.getProject();
+            @NotNull Document document = editor.getDocument();
+            @Nullable Project project = editor.getProject();
             if (project == null) {
                 return null;
             }
-            PsiFile file = PsiDocumentManager.getInstance(project).getCachedPsiFile(document);
+            @Nullable PsiFile file = PsiDocumentManager.getInstance(project).getCachedPsiFile(document);
             if (file != null) {
                 // getFileFqn(file) => file.getName()
                 return file.getName() + ":" + (editor.getCaretModel().getLogicalPosition().line + 1);

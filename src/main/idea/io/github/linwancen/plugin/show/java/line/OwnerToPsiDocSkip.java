@@ -6,6 +6,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,12 +20,12 @@ public class OwnerToPsiDocSkip {
         if (docOwner == null) {
             return null;
         }
-        AppSettingsState appSettings = AppSettingsState.getInstance();
-        ProjectSettingsState projectSettings = ProjectSettingsState.getInstance(docOwner.getProject());
+        @NotNull AppSettingsState appSettings = AppSettingsState.getInstance();
+        @NotNull ProjectSettingsState projectSettings = ProjectSettingsState.getInstance(docOwner.getProject());
         if (SkipUtils.skipSign(docOwner, appSettings, projectSettings)) {
             return null;
         }
-        PsiDocComment docComment = docOwner instanceof PsiMethod
+        @Nullable PsiDocComment docComment = docOwner instanceof PsiMethod
                 ? OwnerToPsiDocUtils.methodDoc(((PsiMethod) docOwner))
                 : OwnerToPsiDocUtils.srcOrByteCodeDoc(docOwner);
         return SkipUtils.skipDoc(docComment, appSettings, projectSettings);

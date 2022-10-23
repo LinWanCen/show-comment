@@ -1,9 +1,9 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/18553-show-comment">
-    <id>io.github.linwancen.show-comment</id>
-    <name>Show Comment</name>
-    <vendor email="1498425439@qq.com" url="https://github.com/LinWanCen/show-comment">林万程</vendor>
+  <id>io.github.linwancen.show-comment</id>
+  <name>Show Comment</name>
+  <vendor email="1498425439@qq.com" url="https://github.com/LinWanCen/show-comment">林万程</vendor>
 
-    <description><![CDATA[
+  <description><![CDATA[
 Show doc comment at the Project view Tree, line End, json etc.
 <ul>
 <li>"xx-ClassNameOrSimpleName.json" and jump to field
@@ -53,79 +53,79 @@ Show doc comment at the Project view Tree, line End, json etc.
 主页一个 Start，您的支持是项目前进的动力。
     ]]></description>
 
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
-         on how to target different products -->
-    <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
-    <depends optional="true" config-file="sql.xml">com.intellij.database</depends>
-    <depends optional="true" config-file="js.xml">JavaScript</depends>
-    <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
-    <depends optional="true" config-file="go.xml">org.jetbrains.plugins.go</depends>
-    <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
-    <!--suppress PluginXmlValidity, MybatisMapperXmlInspection -->
-    <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
+  <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+       on how to target different products -->
+  <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
+  <depends optional="true" config-file="sql.xml">com.intellij.database</depends>
+  <depends optional="true" config-file="js.xml">JavaScript</depends>
+  <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
+  <depends optional="true" config-file="go.xml">org.jetbrains.plugins.go</depends>
+  <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
+  <!--suppress PluginXmlValidity, MybatisMapperXmlInspection -->
+  <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
 
-    <applicationListeners>
-        <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileListener"
-                  topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
-        <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileChangeListener"
-                  topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
-    </applicationListeners>
+  <applicationListeners>
+    <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileListener"
+              topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
+    <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileChangeListener"
+              topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+  </applicationListeners>
 
-    <projectListeners>
-        <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileInitListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </projectListeners>
+  <projectListeners>
+    <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileInitListener"
+              topic="com.intellij.openapi.project.ProjectManagerListener"/>
+  </projectListeners>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd"/>
-        <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
-        <defaultLiveTemplates file="/liveTemplates/show-comment-doc.xml"/>
-        <defaultLiveTemplates file="/liveTemplates/show-comment-xml.xml"/>
+  <extensions defaultExtensionNs="com.intellij">
+    <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd"/>
+    <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
+    <defaultLiveTemplates file="/liveTemplates/show-comment-doc.xml"/>
+    <defaultLiveTemplates file="/liveTemplates/show-comment-xml.xml"/>
 
-        <applicationConfigurable parentId="tools"
-                                 instance="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
-                                 id="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
-                                 displayName="// Show Comment Global"/>
-        <applicationService serviceImplementation="io.github.linwancen.plugin.show.settings.AppSettingsState"/>
-        <projectConfigurable parentId="tools"
-                             instance="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
-                             id="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
-                             displayName="// Show Comment Project"/>
-        <projectService serviceImplementation="io.github.linwancen.plugin.show.settings.ProjectSettingsState"/>
-    </extensions>
+    <applicationConfigurable parentId="tools"
+                             instance="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
+                             id="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
+                             displayName="// Show Comment Global"/>
+    <applicationService serviceImplementation="io.github.linwancen.plugin.show.settings.AppSettingsState"/>
+    <projectConfigurable parentId="tools"
+                         instance="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
+                         id="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
+                         displayName="// Show Comment Project"/>
+    <projectService serviceImplementation="io.github.linwancen.plugin.show.settings.ProjectSettingsState"/>
+  </extensions>
 
-    <actions>
-        <action
-            id="io.github.linwancen.plugin.show.ext.conf.ReLoadExtDocAction"
-            class="io.github.linwancen.plugin.show.ext.conf.ReloadExtDocAction"
-            text="🔄 // Reload External Comment">
-            <add-to-group group-id="ToolsMenu"/>
-        </action>
-        <action
-            id="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
-            class="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
-            text="🆑 // Clear External Comment">
-            <add-to-group group-id="ToolsMenu"/>
-        </action>
-        <action
-            id="io.github.linwancen.plugin.show.LineEndCopy"
-            class="io.github.linwancen.plugin.show.LineEndCopy"
-            text="// Copy With Line Comment">
-            <add-to-group group-id="EditorPopupMenu" anchor="after"
-                          relative-to-action="CopyReference"/>
-        </action>
-        <action
-            id="io.github.linwancen.plugin.show.CopyReferenceSimple"
-            class="io.github.linwancen.plugin.show.CopyReferenceSimple"
-            text="Copy Class.Method/File:Line">
-            <add-to-group group-id="EditorPopupMenu" anchor="after"
-                          relative-to-action="CopyReference"/>
-        </action>
-        <action
-            id="io.github.linwancen.plugin.show.LineEndAdd"
-            class="io.github.linwancen.plugin.show.LineEndAdd"
-            text="// Add Line Comment">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-        </action>
-    </actions>
+  <actions>
+    <action
+        id="io.github.linwancen.plugin.show.ext.conf.ReLoadExtDocAction"
+        class="io.github.linwancen.plugin.show.ext.conf.ReloadExtDocAction"
+        text="🔄 // Reload External Comment">
+      <add-to-group group-id="ToolsMenu"/>
+    </action>
+    <action
+        id="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
+        class="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
+        text="🆑 // Clear External Comment">
+      <add-to-group group-id="ToolsMenu"/>
+    </action>
+    <action
+        id="io.github.linwancen.plugin.show.LineEndCopy"
+        class="io.github.linwancen.plugin.show.LineEndCopy"
+        text="// Copy With Line Comment">
+      <add-to-group group-id="EditorPopupMenu" anchor="after"
+                    relative-to-action="CopyReference"/>
+    </action>
+    <action
+        id="io.github.linwancen.plugin.show.CopyReferenceSimple"
+        class="io.github.linwancen.plugin.show.CopyReferenceSimple"
+        text="Copy Class.Method/File:Line">
+      <add-to-group group-id="EditorPopupMenu" anchor="after"
+                    relative-to-action="CopyReference"/>
+    </action>
+    <action
+        id="io.github.linwancen.plugin.show.LineEndAdd"
+        class="io.github.linwancen.plugin.show.LineEndAdd"
+        text="// Add Line Comment">
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+    </action>
+  </actions>
 </idea-plugin>

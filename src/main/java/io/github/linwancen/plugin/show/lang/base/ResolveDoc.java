@@ -19,7 +19,7 @@ public class ResolveDoc {
     public static <T extends SettingsInfo> String fromLineEnd(@SuppressWarnings("unused") @NotNull T lineInfo,
                                                               @NotNull PsiElement resolve,
                                                               @NotNull FileViewProvider resolveViewProvider) {
-        Document document = resolveViewProvider.getDocument();
+        @Nullable Document document = resolveViewProvider.getDocument();
         if (document == null) {
             return null;
         }
@@ -33,11 +33,11 @@ public class ResolveDoc {
             return null;
         }
         // end over will return last
-        PsiElement psiElement = resolveViewProvider.findElementAt(resolveEndOffset);
+        @Nullable PsiElement psiElement = resolveViewProvider.findElementAt(resolveEndOffset);
         if (psiElement == null) {
             return null;
         }
-        PsiElement docElement = PsiTreeUtil.prevVisibleLeaf(psiElement);
+        @Nullable PsiElement docElement = PsiTreeUtil.prevVisibleLeaf(psiElement);
         if (!(docElement instanceof PsiComment)) {
             return null;
         }
@@ -51,14 +51,14 @@ public class ResolveDoc {
 
     @Nullable
     public static <T extends SettingsInfo> String fromLineUp(@NotNull T lineInfo,
-                                                             PsiElement resolve,
+                                                             @NotNull PsiElement resolve,
                                                              @NotNull FileViewProvider resolveViewProvider,
                                                              @NotNull List<String> keywords) {
-        Document document = resolveViewProvider.getDocument();
+        @Nullable Document document = resolveViewProvider.getDocument();
         if (document == null) {
             return null;
         }
-        PsiElement psiElement = Prev.prevCompactElement(lineInfo, resolve, document);
+        @Nullable PsiElement psiElement = Prev.prevCompactElement(lineInfo, resolve, document);
         if (!keywords.isEmpty()) {
             while (psiElement != null) {
                 String text = psiElement.getText();
@@ -69,7 +69,7 @@ public class ResolveDoc {
                 }
             }
         }
-        StringBuilder sb = new StringBuilder();
+        @NotNull StringBuilder sb = new StringBuilder();
         while (psiElement instanceof PsiComment) {
             String text = psiElement.getText();
             if (text != null) {

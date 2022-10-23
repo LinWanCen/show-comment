@@ -9,6 +9,7 @@ import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.DumbAwareAction;
 import io.github.linwancen.plugin.show.bean.FileInfo;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.datatransfer.StringSelection;
 
@@ -23,16 +24,16 @@ public class LineEndCopy extends DumbAwareAction {
     }
 
     private void copyWithDoc(@NotNull AnActionEvent event) {
-        FileInfo fileInfo = FileInfo.of(event);
+        @Nullable FileInfo fileInfo = FileInfo.of(event);
         if (fileInfo == null) {
             return;
         }
         int startLine = 0;
         int endLine = fileInfo.document.getLineCount() - 1;
         // if select
-        Editor editor = event.getData(CommonDataKeys.EDITOR);
+        @Nullable Editor editor = event.getData(CommonDataKeys.EDITOR);
         if (editor != null) {
-            Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
+            @NotNull Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
             int start = primaryCaret.getSelectionStart();
             int end = primaryCaret.getSelectionEnd();
             try {
@@ -42,8 +43,8 @@ public class LineEndCopy extends DumbAwareAction {
                 return;
             }
         }
-        String textWithDoc = LineEnd.textWithDoc(fileInfo, startLine, endLine);
-        StringSelection content = new StringSelection(textWithDoc);
+        @NotNull String textWithDoc = LineEnd.textWithDoc(fileInfo, startLine, endLine);
+        @NotNull StringSelection content = new StringSelection(textWithDoc);
         CopyPasteManager.getInstance().setContents(content);
     }
 }

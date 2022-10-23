@@ -32,6 +32,7 @@ public class ProjectSettingsComponent extends AbstractSettingsComponent {
         return myMainPanel;
     }
 
+    @NotNull
     public JComponent getPreferredFocusedComponent() {
         return projectFilterEffective;
     }

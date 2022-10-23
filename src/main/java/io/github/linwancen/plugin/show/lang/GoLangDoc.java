@@ -31,7 +31,7 @@ public class GoLangDoc extends BaseLangDoc {
 
     @Override
     public @Nullable <T extends SettingsInfo> String resolveDocRaw(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(resolve);
+        @NotNull List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(resolve);
         return GoDocumentationProvider.getCommentText(comments, false);
     }
 }

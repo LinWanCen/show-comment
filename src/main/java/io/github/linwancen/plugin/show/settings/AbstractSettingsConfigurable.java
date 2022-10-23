@@ -1,10 +1,13 @@
 package io.github.linwancen.plugin.show.settings;
 
+import org.jetbrains.annotations.NotNull;
+
 public class AbstractSettingsConfigurable {
 
     private AbstractSettingsConfigurable() {}
 
-    static boolean isModified(AbstractSettingsState settings, AbstractSettingsComponent component, boolean modified) {
+    static boolean isModified(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component,
+                              boolean modified) {
         modified |= !component.getLineInclude().equals(settings.getLineInclude());
         modified |= !component.getLineExclude().equals(settings.getLineExclude());
         modified |= !component.getDocInclude().equals(settings.getDocInclude());
@@ -14,7 +17,7 @@ public class AbstractSettingsConfigurable {
         return modified;
     }
 
-    static void apply(AbstractSettingsState settings, AbstractSettingsComponent component) {
+    static void apply(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component) {
         settings.setLineInclude(component.getLineInclude());
         settings.setLineExclude(component.getLineExclude());
         settings.setDocInclude(component.getDocInclude());
@@ -23,7 +26,7 @@ public class AbstractSettingsConfigurable {
         settings.setDocGet(component.getDocGet());
     }
 
-    static void reset(AbstractSettingsState settings, AbstractSettingsComponent component) {
+    static void reset(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component) {
         component.setLineInclude(settings.getLineInclude());
         component.setLineExclude(settings.getLineExclude());
         component.setDocInclude(settings.getDocInclude());

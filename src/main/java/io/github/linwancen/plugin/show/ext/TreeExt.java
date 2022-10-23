@@ -13,21 +13,23 @@ public class TreeExt {
 
     private TreeExt() {}
 
-    public static @Nullable String doc(ProjectViewNode<?> node) {
-        VirtualFile file = node.getVirtualFile();
+    public static @Nullable String doc(@NotNull ProjectViewNode<?> node) {
+        @Nullable VirtualFile file = node.getVirtualFile();
         if (file == null) {
             return null;
         }
         return TreeExt.extDoc(file);
     }
 
+    @Nullable
     public static String extDoc(@NotNull VirtualFile file) {
-        Map<String, Map<String, List<String>>> docMap = ConfCache.treeMap(file.getPath(), file.getName(), file.getPath());
-        String[] words = {
+        @NotNull Map<String, Map<String, List<String>>> docMap = ConfCache.treeMap(
+                file.getPath(), file.getName(), file.getPath());
+        @NotNull String[] words = {
                 file.getName(),
                 file.getNameWithoutExtension(),
         };
-        String extDoc = GetFromDocMap.get(docMap, words);
+        @Nullable String extDoc = GetFromDocMap.get(docMap, words);
         if (extDoc == null) {
             return null;
         }

@@ -14,11 +14,11 @@ public class NewCallRefToPsiDoc {
     private NewCallRefToPsiDoc() {}
 
     @Nullable
-    public static PsiDocComment javaCodeDoc(PsiJavaCodeReferenceElement ref) {
+    public static PsiDocComment javaCodeDoc(@Nullable PsiJavaCodeReferenceElement ref) {
         if (ref == null) {
             return null;
         }
-        PsiElement resolve = null;
+        @Nullable PsiElement resolve = null;
         try {
             resolve = ref.resolve();
         } catch (Throwable ignore) {

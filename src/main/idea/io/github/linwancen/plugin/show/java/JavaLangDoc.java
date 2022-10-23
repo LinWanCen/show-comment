@@ -34,27 +34,28 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String treeDoc(T settingsInfo, ProjectViewNode<?> node, Project project) {
+    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T settingsInfo, ProjectViewNode<?> node,
+                                                             @NotNull Project project) {
         return JavaTree.treeDoc(settingsInfo, node, project);
     }
 
     @Override
     protected @Nullable <T extends SettingsInfo> String refDoc(@NotNull T lineInfo, @NotNull PsiElement ref) {
         if ("Override".equals(ref.getText())) {
-            PsiMethod psiMethod = PsiTreeUtil.getParentOfType(ref, PsiMethod.class);
+            @Nullable PsiMethod psiMethod = PsiTreeUtil.getParentOfType(ref, PsiMethod.class);
             if (psiMethod == null) {
                 return null;
             }
             // must supper
-            PsiDocComment psiDocComment = OwnerToPsiDocUtils.supperMethodDoc(psiMethod);
+            @Nullable PsiDocComment psiDocComment = OwnerToPsiDocUtils.supperMethodDoc(psiMethod);
             return docElementToStr(lineInfo, psiDocComment);
         }
         if (lineInfo.appSettings.fromNew) {
             PsiElement parent = ref.getParent();
             if (parent instanceof PsiNewExpression) {
-                PsiNewExpression psiNewExpression = (PsiNewExpression) parent;
+                @NotNull PsiNewExpression psiNewExpression = (PsiNewExpression) parent;
                 try {
-                    PsiMethod resolve = psiNewExpression.resolveMethod();
+                    @Nullable PsiMethod resolve = psiNewExpression.resolveMethod();
                     if (resolve != null) {
                         return resolveDocPrint(lineInfo, resolve);
                     }
@@ -68,7 +69,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Override
     public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        String resolveDocPrint = super.resolveDocPrint(lineInfo, resolve);
+        @Nullable String resolveDocPrint = super.resolveDocPrint(lineInfo, resolve);
         if (resolveDocPrint != null) {
             return resolveDocPrint;
         }
@@ -80,20 +81,20 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Nullable
     private String paramDoc(@NotNull PsiParameter psiParameter) {
-        PsiMethod method = PsiTreeUtil.getParentOfType(psiParameter, PsiMethod.class);
+        @Nullable PsiMethod method = PsiTreeUtil.getParentOfType(psiParameter, PsiMethod.class);
         if (method == null) {
             return null;
         }
-        PsiDocComment psiDocComment = OwnerToPsiDocUtils.methodDoc(method);
+        @Nullable PsiDocComment psiDocComment = OwnerToPsiDocUtils.methodDoc(method);
         if (psiDocComment == null) {
             return null;
         }
-        String name = psiParameter.getName();
-        PsiDocTag[] params = psiDocComment.findTagsByName("param");
-        for (PsiDocTag param : params) {
-            PsiDocTagValue value = param.getValueElement();
+        @NotNull String name = psiParameter.getName();
+        @NotNull PsiDocTag[] params = psiDocComment.findTagsByName("param");
+        for (@NotNull PsiDocTag param : params) {
+            @Nullable PsiDocTagValue value = param.getValueElement();
             if (value != null && name.equals(value.getText())) {
-                PsiElement[] dataElements = param.getDataElements();
+                @NotNull PsiElement[] dataElements = param.getDataElements();
                 if (dataElements.length > 1) {
                     return dataElements[1].getText();
                 }
@@ -106,7 +107,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     @Override
     protected PsiDocComment toDocElement(@NotNull PsiElement resolve) {
         if (resolve instanceof PsiDocCommentOwner) {
-            PsiDocCommentOwner psiDocCommentOwner = (PsiDocCommentOwner) resolve;
+            @NotNull PsiDocCommentOwner psiDocCommentOwner = (PsiDocCommentOwner) resolve;
             return OwnerToPsiDocSkip.refDoc(psiDocCommentOwner);
         }
         return null;
@@ -115,9 +116,9 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     @NotNull
     @Override
     protected <T extends SettingsInfo> String descDoc(@NotNull T lineInfo, @NotNull PsiDocComment psiDocComment) {
-        StringBuilder sb = new StringBuilder();
+        @NotNull StringBuilder sb = new StringBuilder();
         int lineCount = 0;
-        PsiElement[] elements = psiDocComment.getDescriptionElements();
+        @NotNull PsiElement[] elements = psiDocComment.getDescriptionElements();
         for (PsiElement element : elements) {
             if (appendElementText(sb, element)) {
                 lineCount++;
@@ -132,14 +133,14 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     /**
      * @return is new line
      */
-    private static boolean appendElementText(StringBuilder sb, PsiElement element) {
+    private static boolean appendElementText(@NotNull StringBuilder sb, PsiElement element) {
         if (element instanceof PsiDocToken) {
-            PsiDocToken psiDocToken = (PsiDocToken) element;
+            @NotNull PsiDocToken psiDocToken = (PsiDocToken) element;
             DocFilter.addHtml(sb, psiDocToken.getText());
         }
         if (element instanceof PsiInlineDocTag) {
-            PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
-            PsiElement[] children = psiInlineDocTag.getChildren();
+            @NotNull PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
+            @NotNull PsiElement[] children = psiInlineDocTag.getChildren();
             if (children.length > 3) {
                 DocFilter.addHtml(sb, children[3].getText());
             }
@@ -150,10 +151,10 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     @Override
     protected <T extends SettingsInfo> void appendTag(@NotNull T lineInfo, @NotNull StringBuilder tagStrBuilder,
                                                       @NotNull PsiDocComment psiDocComment, @NotNull String name) {
-        PsiDocTag[] tags = psiDocComment.findTagsByName(name);
-        for (PsiDocTag tag : tags) {
+        @NotNull PsiDocTag[] tags = psiDocComment.findTagsByName(name);
+        for (@NotNull PsiDocTag tag : tags) {
             // @see @param should use getDataElements()
-            PsiDocTagValue value = tag.getValueElement();
+            @Nullable PsiDocTagValue value = tag.getValueElement();
             if (value != null) {
                 DocFilter.addHtml(tagStrBuilder, value.getText());
             }

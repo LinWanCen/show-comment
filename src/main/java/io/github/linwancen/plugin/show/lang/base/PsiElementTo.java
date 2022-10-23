@@ -13,7 +13,7 @@ public class PsiElementTo {
 
     private PsiElementTo() {}
 
-    public static @Nullable FileViewProvider viewProvider(PsiElement resolve) {
+    public static @Nullable FileViewProvider viewProvider(@NotNull PsiElement resolve) {
         PsiFile psiFile = resolve.getContainingFile();
         if (psiFile == null) {
             return null;
@@ -26,8 +26,8 @@ public class PsiElementTo {
     }
 
     public static @NotNull Language language(@NotNull PsiElement element) {
-        Language lang = element.getLanguage();
-        Language base = lang.getBaseLanguage();
+        @NotNull Language lang = element.getLanguage();
+        @Nullable Language base = lang.getBaseLanguage();
         if (base != null) {
             return base;
         }

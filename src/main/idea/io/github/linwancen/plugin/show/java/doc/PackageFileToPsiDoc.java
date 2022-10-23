@@ -13,7 +13,7 @@ class PackageFileToPsiDoc {
     private PackageFileToPsiDoc() {}
 
     @Nullable
-    static PsiDocComment fromPackageInfoFile(PsiFile packageInfoFile) {
+    static PsiDocComment fromPackageInfoFile(@Nullable PsiFile packageInfoFile) {
         if (packageInfoFile == null) {
             return null;
         }
@@ -21,15 +21,16 @@ class PackageFileToPsiDoc {
         if (astNode == null) {
             return null;
         }
-        ASTNode docCommentNode = findRelevantCommentNode(astNode);
+        @Nullable ASTNode docCommentNode = findRelevantCommentNode(astNode);
         if (docCommentNode == null) {
             return null;
         }
         return (PsiDocComment) docCommentNode;
     }
 
+    @Nullable
     private static ASTNode findRelevantCommentNode(@NotNull ASTNode fileNode) {
-        ASTNode node = fileNode.findChildByType(JavaElementType.PACKAGE_STATEMENT);
+        @Nullable ASTNode node = fileNode.findChildByType(JavaElementType.PACKAGE_STATEMENT);
         if (node == null) node = fileNode.getLastChildNode();
         while (node != null && node.getElementType() != JavaDocElementType.DOC_COMMENT) {
             node = node.getTreePrev();

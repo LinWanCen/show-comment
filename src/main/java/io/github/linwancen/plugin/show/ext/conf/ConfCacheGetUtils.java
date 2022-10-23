@@ -32,13 +32,13 @@ class ConfCacheGetUtils {
     static <T> TreeMap<String, T> filterPathNameExt(@NotNull String confMidExt,
                                                     @NotNull Map<VirtualFile, T> cache,
                                                     @NotNull String path, @NotNull String name, @Nullable String ext) {
-        TreeMap<String, T> map = new TreeMap<>();
+        @NotNull TreeMap<String, T> map = new TreeMap<>();
         int max = path.length();
         int length = String.valueOf(max).length();
-        for (Map.Entry<VirtualFile, T> entry : cache.entrySet()) {
+        for (@NotNull Map.Entry<VirtualFile, T> entry : cache.entrySet()) {
             VirtualFile confFile = entry.getKey();
-            String confName = confFile.getNameWithoutExtension();
-            String confPath = confFile.getPath();
+            @NotNull String confName = confFile.getNameWithoutExtension();
+            @NotNull String confPath = confFile.getPath();
             int level = level(path, confPath);
             if (level == 0) {
                 continue;
@@ -76,12 +76,12 @@ class ConfCacheGetUtils {
     static <T> TreeMap<String, T> filterPath(@SuppressWarnings("SameParameterValue")
                                              @NotNull Map<VirtualFile, T> cache,
                                              @NotNull String path, String name, String ext) {
-        TreeMap<String, T> map = new TreeMap<>();
+        @NotNull TreeMap<String, T> map = new TreeMap<>();
         int max = path.length();
         int length = String.valueOf(max).length();
-        for (Map.Entry<VirtualFile, T> entry : cache.entrySet()) {
+        for (@NotNull Map.Entry<VirtualFile, T> entry : cache.entrySet()) {
             VirtualFile confFile = entry.getKey();
-            String confPath = confFile.getPath();
+            @NotNull String confPath = confFile.getPath();
             int level = level(path, confPath);
             if (level == 0) {
                 continue;
@@ -119,7 +119,7 @@ class ConfCacheGetUtils {
     }
 
     @NotNull
-    private static String srcPath(String path) {
+    private static String srcPath(@NotNull String path) {
         int i = path.indexOf('!');
         if (i != -1) {
             return path.substring(i + 1);
@@ -131,7 +131,7 @@ class ConfCacheGetUtils {
         return path;
     }
 
-    private static boolean match(String path, String confPath) {
+    private static boolean match(@NotNull String path, @NotNull String confPath) {
         if (confPath.equals(path) || SKIP_PATH.equals(confPath)) {
             return true;
         }

@@ -2,19 +2,24 @@ package io.github.linwancen.plugin.show.settings;
 
 import com.google.common.base.Splitter;
 import com.intellij.openapi.options.Configurable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
 public class AppSettingsConfigurable implements Configurable {
 
+    @SuppressWarnings("NotNullFieldNotInitialized")
+    @NotNull
     private AppSettingsComponent mySettingsComponent;
 
+    @NotNull
     @Override
     public String getDisplayName() {
         return "Show Comment Global.";
     }
 
+    @NotNull
     @Override
     public JComponent getPreferredFocusedComponent() {
         return mySettingsComponent.getPreferredFocusedComponent();
@@ -29,7 +34,7 @@ public class AppSettingsConfigurable implements Configurable {
 
     @Override
     public boolean isModified() {
-        AppSettingsState settings = AppSettingsState.getInstance();
+        @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getCompact() != settings.compact;
 
@@ -47,8 +52,8 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= !mySettingsComponent.getLineTags().equals(String.join("|", settings.lineTags));
 
         modified |= !mySettingsComponent.getLineEndCount().equals(String.valueOf(settings.lineEndCount));
-        modified |= !mySettingsComponent.getLineEndColor().equals(settings.lineEndTextAttr.getForegroundColor());
-        modified |= !mySettingsComponent.getLineEndJsonColor().equals(settings.lineEndJsonTextAttr.getForegroundColor());
+        modified |= !settings.lineEndTextAttr.getForegroundColor().equals(mySettingsComponent.getLineEndColor());
+        modified |= !settings.lineEndJsonTextAttr.getForegroundColor().equals(mySettingsComponent.getLineEndJsonColor());
         modified |= !mySettingsComponent.getLineEndPrefix().equals(settings.lineEndPrefix);
 
         modified |= mySettingsComponent.getGetToSet() != settings.getToSet;
@@ -65,7 +70,7 @@ public class AppSettingsConfigurable implements Configurable {
 
     @Override
     public void apply() {
-        AppSettingsState settings = AppSettingsState.getInstance();
+        @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
         settings.compact = mySettingsComponent.getCompact();
 
@@ -103,7 +108,7 @@ public class AppSettingsConfigurable implements Configurable {
 
     @Override
     public void reset() {
-        AppSettingsState settings = AppSettingsState.getInstance();
+        @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setCompact(settings.compact);
 
@@ -137,6 +142,7 @@ public class AppSettingsConfigurable implements Configurable {
 
     @Override
     public void disposeUIResources() {
+        //noinspection ConstantConditions
         mySettingsComponent = null;
     }
 

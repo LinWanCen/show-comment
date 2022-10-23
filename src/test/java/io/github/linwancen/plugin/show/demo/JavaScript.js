@@ -1,4 +1,3 @@
-
 lineBlock(isNotDoc)
 lineBlock(docVal)
 block()
@@ -11,7 +10,7 @@ const docVal = ""
 
 /*** lineBlock ***/
 function lineBlock(t) {
-    return t
+  return t
 }
 
 /*****
@@ -19,5 +18,5 @@ function lineBlock(t) {
  ***** 2
  *****/
 function block(t) {
-    return t
+  return t
 }

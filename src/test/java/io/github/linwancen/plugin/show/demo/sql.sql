@@ -1,1 +1,3 @@
-select * from NewTable where Column1 is not null ;
+select *
+from NewTable
+where Column1 is not null;

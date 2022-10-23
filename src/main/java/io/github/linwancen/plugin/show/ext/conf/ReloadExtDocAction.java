@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * call ConfCache.loadAll
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class ReloadExtDocAction extends AnAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        Project project = e.getProject();
+        @Nullable Project project = e.getProject();
         if (project == null) {
             return;
         }

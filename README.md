@@ -87,7 +87,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>1.5   Add line-end-comment  find next loop when none
 <li>1.4   Add line-end-comment  find element right to left
 <li>1.3   ★   project-view-tree file and member comment
-<li>1.2   Add line-end-comment  settings fro class prefix filter
+<li>1.2   Add line-end-comment  settings for class prefix filter
 <li>1.1   Add line-end-comment  settings for text color
 </ul>
 

@@ -3,7 +3,6 @@ package io.github.linwancen.plugin.show.lang.base;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,10 +32,10 @@ public class DocFilter {
      */
     @NotNull
     public static String cutDoc(String text,
-                                AppSettingsState appSettings, boolean deletePrefix) {
+                                @NotNull AppSettingsState appSettings, boolean deletePrefix) {
         String[] split = LINE_SEPARATOR_PATTERN.split(text);
         int lineCount = 0;
-        StringBuilder sb = new StringBuilder();
+        @NotNull StringBuilder sb = new StringBuilder();
         for (String s : split) {
             if (deletePrefix) {
                 s = DOC_PATTERN.matcher(s).replaceAll("");
@@ -64,8 +63,8 @@ public class DocFilter {
      */
     @NotNull
     public static String filterDoc(@NotNull String text,
-                                   AppSettingsState appSettings,
-                                   ProjectSettingsState projectSettings) {
+                                   @NotNull AppSettingsState appSettings,
+                                   @NotNull ProjectSettingsState projectSettings) {
         // docGetEffect first because default false
         if (projectSettings.docGetEffect && projectSettings.projectFilterEffective) {
             return filterDoc(text, projectSettings.docGet);
@@ -79,7 +78,7 @@ public class DocFilter {
     @NotNull
     public static String filterDoc(@NotNull String text, @NotNull Pattern docGet) {
         // if effect skip check empty
-        Matcher m = docGet.matcher(text);
+        @NotNull Matcher m = docGet.matcher(text);
         if (m.find()) {
             return m.group(m.groupCount());
         }
@@ -93,7 +92,7 @@ public class DocFilter {
      * trim end with space
      */
     public static void addHtml(@NotNull StringBuilder sb, @NotNull String s) {
-        String deleteHtml = HTML_PATTERN.matcher(s).replaceAll("").trim();
+        @NotNull String deleteHtml = HTML_PATTERN.matcher(s).replaceAll("").trim();
         if (deleteHtml.length() > 0) {
             sb.append(deleteHtml).append(" ");
         }
