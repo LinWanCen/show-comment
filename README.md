@@ -7,12 +7,10 @@ Thanks JetBrains Licenses for Open Source.
 
 ## Notes 说明
 
-<h2>English Notes:</h2>
+Show doc comment at the Project view Tree, line End, json etc.
 <ul>
-<li>Show javadoc comments at the Project view Tree structure
-<li>Show javadoc comments at the end-of-line
-<li>Show javadoc comments at "xx-ClassNameOrSimpleName.json" and jump to field
-<li>Show comments from External Conf for folder, resources, COBOL etc.
+<li>"xx-ClassNameOrSimpleName.json" and jump to field
+<li>from External Conf for folder, resources, COBOL etc.
 <li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
 
@@ -41,6 +39,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h3>外部注释：</h3>
 <a href="https://gitee.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">示例(Gitee)</a>
+：比如你要给 .go 的文件配置文件注释可以放在相同目录或父目录的 xxx.go.tree.tsv 中
 <ul>
 <li>重新加载：工具 -> "🔄 // Reload External Comment"
 <li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁
@@ -52,12 +51,17 @@ Thanks JetBrains Licenses for Open Source.
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
 
+如果对你有所帮助，别忘了给本项目
+<a href="https://github.com/LinWanCen/show-comment">GitHub</a>
+主页一个 Start，您的支持是项目前进的动力。
+
 
 
 ## Change Notes 更新说明
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>1.24  Add PopupMenu Copy FileName:LineNumber
 <li>1.23  Add project-view-tree-comment setting for show when compact middle packages
 <li>1.22  Add PopupMenu Copy ClassName.MethodName
 <li>1.21  Add line-end-comment  default skip only English when system lang is not `en`
@@ -85,6 +89,7 @@ Thanks JetBrains Licenses for Open Source.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>1.24  增加 右键菜单 复制 文件名:行号
 <li>1.23  增加 项目导航栏注释 折叠中间包时显示中间包注释设置
 <li>1.22  增加 右键菜单 复制 类名.方法名
 <li>1.21  增加 行末注释 系统语言非英文时 默认 忽略纯英文
@@ -120,3 +125,30 @@ See in IDEA with this plugin | 安装插件后用 IDEA 查看
 - [JSON Doc Comment Demo | JSON 文档注释](src/test/java/io/github/linwancen/plugin/show/demo/json/base-Pojo.json)
 - [External Comment Demo For COBOL | 外部注释 Demo](src/test/java/io/github/linwancen/plugin/show/demo/ext/cobol/demo/BASE.cbl)  
 - [COBOL Highlighting | COBOL 高亮配置](src/test/java/io/github/linwancen/plugin/show/demo/ext/cobol/cobol/COBOL_IDEA.md)
+
+
+#### Maven down source jar 自动下载带注释的源码
+```xml
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <id>down_source_jar</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>sources</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>
+                <!-- 公司统一出入参基类 -->
+                com.company.common.base,
+                <!-- 公司统一错误码 -->
+                com.company.common.errcode
+              </includeArtifactIds>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+```

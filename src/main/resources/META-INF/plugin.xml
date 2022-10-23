@@ -1,15 +1,13 @@
-<idea-plugin>
+<idea-plugin url="https://plugins.jetbrains.com/plugin/18553-show-comment">
     <id>io.github.linwancen.show-comment</id>
     <name>Show Comment</name>
     <vendor email="1498425439@qq.com" url="https://github.com/LinWanCen/show-comment">林万程</vendor>
 
     <description><![CDATA[
-<h2>English Notes:</h2>
+Show doc comment at the Project view Tree, line End, json etc.
 <ul>
-<li>Show javadoc comments at the Project view Tree structure
-<li>Show javadoc comments at the end-of-line
-<li>Show javadoc comments at "xx-ClassNameOrSimpleName.json" and jump to field
-<li>Show comments from External Conf for folder, resources, COBOL etc.
+<li>"xx-ClassNameOrSimpleName.json" and jump to field
+<li>from External Conf for folder, resources, COBOL etc.
 <li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
 
@@ -38,6 +36,7 @@
 
 <h3>外部注释：</h3>
 <a href="https://gitee.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">示例(Gitee)</a>
+：比如你要给 .go 的文件配置文件注释可以放在相同目录或父目录的 xxx.go.tree.tsv 中
 <ul>
 <li>重新加载：工具 -> "🔄 // Reload External Comment"
 <li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁
@@ -48,6 +47,10 @@
 <li>在搜索弹出窗中修改 tsv 文件将不会被重加载
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
+
+如果对你有所帮助，别忘了给本项目
+<a href="https://github.com/LinWanCen/show-comment">GitHub</a>
+主页一个 Start，您的支持是项目前进的动力。
     ]]></description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
@@ -112,7 +115,7 @@
         <action
             id="io.github.linwancen.plugin.show.CopyReferenceSimple"
             class="io.github.linwancen.plugin.show.CopyReferenceSimple"
-            text="Copy ClassName.MethodName">
+            text="Copy Class.Method/File:Line">
             <add-to-group group-id="EditorPopupMenu" anchor="after"
                           relative-to-action="CopyReference"/>
         </action>

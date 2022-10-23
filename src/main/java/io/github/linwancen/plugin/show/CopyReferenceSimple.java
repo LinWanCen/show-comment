@@ -3,8 +3,12 @@ package io.github.linwancen.plugin.show;
 import com.intellij.ide.IdeBundle;
 import com.intellij.ide.actions.CopyReferenceAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,7 +21,7 @@ public class CopyReferenceSimple extends CopyReferenceAction {
         super.update(e);
         String tip = IdeBundle.message("copy.reference");
         if (tip != null && tip.replace("\u001B", "").equals(e.getPresentation().getText())) {
-            e.getPresentation().setText("Copy ClassName.MethodName");
+            e.getPresentation().setText("Copy Class.Method/File:Line");
         }
     }
 
@@ -27,6 +31,16 @@ public class CopyReferenceSimple extends CopyReferenceAction {
     protected String getQualifiedName(Editor editor, List<PsiElement> elements) {
         String qualifiedName = super.getQualifiedName(editor, elements);
         if (qualifiedName == null) {
+            Document document = editor.getDocument();
+            Project project = editor.getProject();
+            if (project == null) {
+                return null;
+            }
+            PsiFile file = PsiDocumentManager.getInstance(project).getCachedPsiFile(document);
+            if (file != null) {
+                // getFileFqn(file) => file.getName()
+                return file.getName() + ":" + (editor.getCaretModel().getLogicalPosition().line + 1);
+            }
             return null;
         }
         int i = qualifiedName.indexOf("(");
