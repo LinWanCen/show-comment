@@ -25,10 +25,12 @@ intellij {
         localPath = "/Applications/IntelliJ IDEA.app"
     } else {
         version = ideaVersion
+        // localPath = "D:/Program Files/JetBrains/IntelliJ IDEA 2021.2.2"
     }
     // see https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html#intellij-extension-plugins
     plugins = [
             'Pythonid:201.6668.121',
+            // 'Pythonid:212.5284.44',
     ]
     if ('IC' == ideTypeStr || 'IU' == ideTypeStr) {
         plugins.add('java')
@@ -38,6 +40,7 @@ intellij {
         plugins.add('JavaScript')
         plugins.add('com.intellij.database')
         plugins.add('org.jetbrains.plugins.go:201.6668.60.126')
+        // plugins.add('org.jetbrains.plugins.go:212.5284.31')
     }
 }
 

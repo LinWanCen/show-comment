@@ -117,7 +117,7 @@ Show doc comment at the Project view Tree, line End, json etc.
     <action
         id="io.github.linwancen.plugin.show.CopyReferenceSimple"
         class="io.github.linwancen.plugin.show.CopyReferenceSimple"
-        text="Copy Class.Method/File:Line">
+        text="Copy Class.Method / File:Line">
       <add-to-group group-id="EditorPopupMenu" anchor="after"
                     relative-to-action="CopyReference"/>
     </action>

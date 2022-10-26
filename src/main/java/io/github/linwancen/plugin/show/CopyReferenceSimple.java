@@ -7,7 +7,6 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,7 @@ public class CopyReferenceSimple extends CopyReferenceAction {
         super.update(e);
         String tip = IdeBundle.message("copy.reference");
         if (tip != null && tip.replace("\u001B", "").equals(e.getPresentation().getText())) {
-            e.getPresentation().setText("Copy Class.Method/File:Line");
+            e.getPresentation().setText("Copy Class.Method / File:Line");
         }
     }
 
@@ -30,7 +29,9 @@ public class CopyReferenceSimple extends CopyReferenceAction {
 
     @Nullable
     @Override
-    protected String getQualifiedName(@NotNull Editor editor, List<PsiElement> elements) {
+    protected String getQualifiedName(@NotNull Editor editor, List elements) {
+        // because 2nd param is List<PsiElement> in 2020.1 and List<? extends PsiElement> in new version
+        //noinspection unchecked
         String qualifiedName = super.getQualifiedName(editor, elements);
         if (qualifiedName == null) {
             @NotNull Document document = editor.getDocument();
