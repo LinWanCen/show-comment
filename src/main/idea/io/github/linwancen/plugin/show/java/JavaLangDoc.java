@@ -40,7 +40,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     @Override
-    protected @Nullable <T extends SettingsInfo> String refDoc(@NotNull T lineInfo, @NotNull PsiElement ref) {
+    protected @Nullable String refDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement ref) {
         if ("Override".equals(ref.getText())) {
             @Nullable PsiMethod psiMethod = PsiTreeUtil.getParentOfType(ref, PsiMethod.class);
             if (psiMethod == null) {

@@ -42,7 +42,7 @@ public class LineExt {
             return null;
         }
         @NotNull Map<String, Map<String, List<String>>> docMap = ConfCache.docMap(path, name, ext);
-        @NotNull Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path, name, ext);
+        @NotNull Map<String, Map<String, List<String>>> treeMap = ConfCache.treeMap(path);
         if (docMap.isEmpty() && treeMap.isEmpty()) {
             return null;
         }

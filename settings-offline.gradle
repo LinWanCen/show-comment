@@ -14,13 +14,19 @@ pluginManagement {
             }
         }
         mavenLocal()
-        maven { name "jetbrains-cache"; url "" }
-        maven { name "maven-cache"; url "" }
+        maven { name "jetbrains-cache"; url ""
+            // allowInsecureProtocol true // 7.0+
+        }
+        maven { name "maven-cache"; url ""
+            // allowInsecureProtocol true // 7.0+
+        }
     }
     buildscript {
         repositories {
             mavenLocal()
-            maven { name "jetbrains-cache"; url "" }
+            maven { name "jetbrains-cache"; url ""
+                // allowInsecureProtocol true // 7.0+
+            }
         }
     }
 }

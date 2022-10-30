@@ -116,8 +116,8 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * Override like SQL
      */
     @Nullable
-    protected <T extends SettingsInfo> String refElementDoc(@NotNull T lineInfo,
-                                                            @NotNull PsiElement refElement) {
+    protected String refElementDoc(@NotNull LineInfo lineInfo,
+                                   @NotNull PsiElement refElement) {
         @Nullable String refDoc = refDoc(lineInfo, refElement);
         if (refDoc != null && !DocSkip.skipDoc(lineInfo.appSettings, lineInfo.projectSettings, refDoc)) {
             return refDoc;
@@ -129,7 +129,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * Override like Java/Json
      */
     @Nullable
-    protected <T extends SettingsInfo> String refDoc(@NotNull T lineInfo, @NotNull PsiElement ref) {
+    protected String refDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement ref) {
         // kotlin ref.getReference() == null but ref.getReferences().length == 2
         @NotNull PsiReference[] references = ref.getReferences();
         if (references.length < 1) {

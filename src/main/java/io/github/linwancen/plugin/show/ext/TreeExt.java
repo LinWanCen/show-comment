@@ -23,8 +23,7 @@ public class TreeExt {
 
     @Nullable
     public static String extDoc(@NotNull VirtualFile file) {
-        @NotNull Map<String, Map<String, List<String>>> docMap = ConfCache.treeMap(
-                file.getPath(), file.getName(), file.getPath());
+        @NotNull Map<String, Map<String, List<String>>> docMap = ConfCache.treeMap(file.getPath());
         @NotNull String[] words = {
                 file.getName(),
                 file.getNameWithoutExtension(),

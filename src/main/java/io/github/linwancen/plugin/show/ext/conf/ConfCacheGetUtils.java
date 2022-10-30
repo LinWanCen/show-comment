@@ -6,9 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
-class ConfCacheGetUtils {
+public class ConfCacheGetUtils {
 
     private static final String SKIP_PATH = "doc";
     private static final String MATCH_STR = "%";
@@ -73,9 +74,7 @@ class ConfCacheGetUtils {
      * @return {@code <sortKey, T>}
      */
     @NotNull
-    static <T> TreeMap<String, T> filterPath(@SuppressWarnings("SameParameterValue")
-                                             @NotNull Map<VirtualFile, T> cache,
-                                             @NotNull String path, String name, String ext) {
+    public static <T> SortedMap<String, T> filterPath(@NotNull Map<VirtualFile, T> cache, @NotNull String path) {
         @NotNull TreeMap<String, T> map = new TreeMap<>();
         int max = path.length();
         int length = String.valueOf(max).length();

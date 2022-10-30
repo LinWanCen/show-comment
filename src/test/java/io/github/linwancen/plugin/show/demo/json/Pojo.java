@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show.demo.json;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class Pojo {
     /** integer */
     private int integer;
@@ -15,7 +16,7 @@ public class Pojo {
     /** nestedClass */
     private NestedClass nestedClass;
     /** nestedClassArr */
-    private NestedClass[] nestedClassArr;
+    private NestedClass[][] nestedClassArr;
     /** nestedClassList */
     private List<NestedClass> nestedClassList;
 

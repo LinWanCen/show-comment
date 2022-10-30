@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.03.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.04.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 repositories {
     mavenCentral()
@@ -87,6 +87,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.04  Add line-end-comment  json dict doc from (key).tsv
 <li>2.03  Add live-templates    input `doc` `docc` -> /** */
 <li>2.02  Add line-end-comment  show before doc for `isA(xxx)` and `a.set(b.get)`
 <li>2.01  Add line-end-comment  support SQL, JavaScript, Python, Golang, Kotlin
@@ -119,7 +120,8 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
-<li>2.03  增加 活动模板   输入 `doc` `docc` 生成 /** */
+<li>2.04  增加 行末注释   从 键名.tsv 中读取 json 的字典注释
+<li>2.03  增加 活动模板   输入 doc / docc 等生成 /** */
 <li>2.02  增加 行末注释   `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释
 <li>2.01  增加 行末注释   支持 SQL, JavaScript, Python, Golang, Kotlin
 <li>2.00  ★★           支持所有 JetBrains 软件

@@ -1,16 +1,13 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
-import com.google.common.base.Splitter;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 import com.twelvemonkeys.util.LinkedSet;
-import groovy.json.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,31 +64,5 @@ class ConfFactory {
                     sb.toString(), NotificationType.ERROR).notify(project);
             return null;
         }
-    }
-
-    public static final Pattern DEL_PATTERN = Pattern.compile("\\(\\?[^)]++\\)");
-
-    @NotNull
-    static Map<String, List<String>> buildMap(@Nullable Project project, @NotNull String path,
-                                              @NotNull String[] lines, boolean isKey) {
-        @NotNull Map<String, List<String>> map = new LinkedHashMap<>();
-        for (@NotNull String line : lines) {
-            @NotNull List<String> words = Splitter.on('\t').splitToList(line);
-            if (!words.isEmpty()) {
-                String key = words.get(0);
-                if (key.length() == 0) {
-                    continue;
-                }
-                if (isKey) {
-                    key = StringEscapeUtils.unescapeJava(key);
-                    String del = DEL_PATTERN.matcher(key).replaceAll("");
-                    if (del.length() != 0) {
-                        key = del;
-                    }
-                }
-                map.put(key, words);
-            }
-        }
-        return map;
     }
 }

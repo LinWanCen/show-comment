@@ -18,7 +18,7 @@ public class ConfFileChangeListener implements FileEditorManagerListener {
             return;
         }
         if (file.exists()) {
-            ConfCache.loadFile(event.getManager().getProject(), file);
+            ConfCache.loadFile(file);
         }
     }
 }

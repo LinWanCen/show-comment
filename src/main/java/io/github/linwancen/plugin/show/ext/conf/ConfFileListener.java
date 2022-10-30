@@ -29,13 +29,13 @@ public class ConfFileListener implements BulkFileListener {
             @NotNull VFilePropertyChangeEvent changeEvent = (VFilePropertyChangeEvent) event;
             if ("name".equals(changeEvent.getPropertyName())) {
                 String oldName = changeEvent.getOldValue().toString();
-                if (oldName.endsWith(ConfCache.EXT)) {
+                if (oldName.endsWith(TsvLoader.EXT)) {
                     // change cache too complicated so remove
                     ConfCache.remove(file, oldName);
                 }
             }
         }
-        if (!ConfCache.EXT.equals(file.getExtension())) {
+        if (!TsvLoader.EXT.equals(file.getExtension())) {
             return;
         }
         if (event instanceof VFileMoveEvent) {
@@ -60,6 +60,6 @@ public class ConfFileListener implements BulkFileListener {
         }
         // VFileCreateEvent
         // VFileContentChangeEvent
-        ConfCache.loadFile(null, file);
+        ConfCache.loadFile(file);
     }
 }

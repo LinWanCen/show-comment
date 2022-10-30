@@ -55,6 +55,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
        on how to target different products -->
+  <depends>com.intellij.modules.platform</depends>
   <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
   <depends optional="true" config-file="sql.xml">com.intellij.database</depends>
   <depends optional="true" config-file="js.xml">JavaScript</depends>

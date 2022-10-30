@@ -5,10 +5,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.sql.psi.SqlLanguage;
 import com.intellij.sql.psi.SqlReferenceExpression;
 import com.intellij.util.containers.JBIterable;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocSkip;
-import io.github.linwancen.plugin.show.bean.LineInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,8 +31,8 @@ public class SqlLangDoc extends BaseLangDoc {
 
 
     @Override
-    protected @Nullable <T extends SettingsInfo> String refElementDoc(@NotNull T lineInfo,
-                                                                      @NotNull PsiElement ref) {
+    protected @Nullable String refElementDoc(@NotNull LineInfo lineInfo,
+                                             @NotNull PsiElement ref) {
         JBIterable<DbElement> relatedDbElements;
         Class<?> clazz;
         try {
@@ -48,7 +47,7 @@ public class SqlLangDoc extends BaseLangDoc {
             }
         }
         try {
-            Method method = clazz.getMethod("findRelatedDbElements", PsiElement.class, boolean.class);
+            @NotNull Method method = clazz.getMethod("findRelatedDbElements", PsiElement.class, boolean.class);
             //noinspection unchecked
             relatedDbElements = (JBIterable<DbElement>) method.invoke(null, ref, false);
         } catch (Throwable e) {

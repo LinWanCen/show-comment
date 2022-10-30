@@ -2,12 +2,14 @@
   "nestedClassList": [
     {
       "nestedClass2": {
-        "a": ""
+        "a": "",
+        "dict": 0
       }
     },
     {
       "nestedClass2": {
-        "a": ""
+        "a": "",
+        "dict": 1
       }
     }
   ]

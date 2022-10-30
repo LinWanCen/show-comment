@@ -4,8 +4,6 @@ import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -23,9 +21,6 @@ import java.util.regex.Pattern;
  */
 public class ConfCache {
 
-    private static final Pattern LINE_PATTERN = Pattern.compile("[\\r\\n]++");
-
-    static final String EXT = "tsv";
     static final String KEY_MID_EXT = ".key";
     static final String DOC_MID_EXT = ".doc";
     static final String TREE_MID_EXT = ".tree";
@@ -63,10 +58,8 @@ public class ConfCache {
     }
 
     @NotNull
-    public static Map<String, Map<String, List<String>>> treeMap(@NotNull String path,
-                                                                 @NotNull String name,
-                                                                 @Nullable String ext) {
-        return ConfCacheGetUtils.filterPath(TREE_CACHE, path, name, ext);
+    public static Map<String, Map<String, List<String>>> treeMap(@NotNull String path) {
+        return ConfCacheGetUtils.filterPath(TREE_CACHE, path);
     }
 
     static void clearAll() {
@@ -117,10 +110,10 @@ public class ConfCache {
     static void loadAll(@NotNull Project project) {
         DumbService.getInstance(project).runReadActionInSmartMode(() ->
                 ApplicationManager.getApplication().runReadAction(() -> {
-                    @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, EXT);
+                    @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, TsvLoader.EXT);
                     @NotNull StringBuilder sb = new StringBuilder();
                     for (@NotNull VirtualFile file : files) {
-                        load(project, file);
+                        load(file);
                         sb.append(file.getName()).append("\n");
                     }
                     if (files.isEmpty()) {
@@ -131,33 +124,26 @@ public class ConfCache {
                 }));
     }
 
-    static void loadFile(@Nullable Project project, @NotNull VirtualFile file) {
-        ApplicationManager.getApplication().runReadAction(() -> ConfCache.load(project, file));
+    static void loadFile(@NotNull VirtualFile file) {
+        ApplicationManager.getApplication().runReadAction(() -> ConfCache.load(file));
     }
 
-    private static void load(@Nullable Project project, @NotNull VirtualFile file) {
-        if (!ConfCache.EXT.equals(file.getExtension())) {
+    private static void load(@NotNull VirtualFile file) {
+        if (!TsvLoader.EXT.equals(file.getExtension())) {
             return;
         }
-        @Nullable Document document = FileDocumentManager.getInstance().getDocument(file);
-        if (document == null) {
-            return;
-        }
-        @NotNull String text = document.getText();
         @NotNull String name = file.getNameWithoutExtension();
-        // this pattern would skip empty line
-        String[] lines = LINE_PATTERN.split(text);
         if (name.endsWith(KEY_MID_EXT)) {
             @NotNull String matchName = name.substring(0, name.length() - KEY_MID_EXT.length());
             int i = matchName.lastIndexOf(".");
             if (i > 0) {
                 EXT_IN_KEY_CACHE.add(matchName.substring(i + 1));
             }
-            KEY_CACHE.put(file, ConfFactory.buildMap(project, file.getPath(), lines, true));
+            KEY_CACHE.put(file, TsvLoader.buildMap(file, true));
         } else if (name.endsWith(DOC_MID_EXT)) {
-            DOC_CACHE.put(file, ConfFactory.buildMap(project, file.getPath(), lines, false));
+            DOC_CACHE.put(file, TsvLoader.buildMap(file, false));
         } else if (name.endsWith(TREE_MID_EXT)) {
-            TREE_CACHE.put(file, ConfFactory.buildMap(project, file.getPath(), lines, false));
+            TREE_CACHE.put(file, TsvLoader.buildMap(file, false));
         }
     }
 }

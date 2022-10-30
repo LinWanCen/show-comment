@@ -1,7 +1,9 @@
 {
   "nestedClass": {
     "nestedClass2": {
-      "a": ""
-    }
+      "a": "",
+      "dict": 0
+    },
+    "dict": 1
   }
 }
