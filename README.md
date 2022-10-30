@@ -1,8 +1,8 @@
 # Show Comment Plugin
 IDEA 智能注释插件
 
-[![Version](https://img.shields.io/jetbrains/plugin/v/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/io.github.linwancen.show-comment)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/io.github.linwancen.show-comment)
+[![Version](https://img.shields.io/jetbrains/plugin/v/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/18553-show-comment/versions)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/18553-show-comment)
 
 Thanks JetBrains Licenses for Open Source.
 
@@ -11,6 +11,9 @@ Thanks JetBrains Licenses for Open Source.
 Show doc comment at the Project view Tree, line End, json etc.
 <ul>
 <li>"xx-ClassNameOrSimpleName.json" and jump to field
+<li>input `doc` `docc` -> /** */
+<li>json doc from xxx.json.tsv
+<li>json dict doc from (key).tsv
 <li>from External Conf for folder, resources, COBOL etc.
 <li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
@@ -33,6 +36,9 @@ Show doc comment at the Project view Tree, line End, json etc.
 <ul>
 <li>在结构树显示 文档注释
 <li>在行末尾显示 文档注释
+<li>输入 doc / docc 等生成 /** */
+<li>json 字段注释从 xxx.json.tsv 读取
+<li>json 字典注释从 键名.tsv 读取
 <li>支持 "xx-类全名或简名.json" 文档注释与跳转到字段
 <li>支持 从配置文件获取外部注释用于文件夹、资源、COBOL 等
 <li>修改配置：设置 -> 工具 -> // Show Comment Global/Project
@@ -96,8 +102,8 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>中文更新说明:</h2>
 <ul>
-<li>2.05  增加 行末注释   从 xxx.json.tsv 中读取注释
-<li>2.04  增加 行末注释   从 键名.tsv 中读取 json 的字典注释
+<li>2.05  增加 行末注释   json 字段注释从 xxx.json.tsv 读取
+<li>2.04  增加 行末注释   json 字典注释从 键名.tsv 读取
 <li>2.03  增加 活动模板   输入 doc / docc 等生成 /** */
 <li>2.02  增加 行末注释   `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释
 <li>2.01  增加 行末注释   支持 SQL, JavaScript, Python, Golang, Kotlin

@@ -1,7 +1,7 @@
 package io.github.linwancen.plugin.show.ext;
 
-import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

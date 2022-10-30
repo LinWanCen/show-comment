@@ -5,9 +5,9 @@ import com.goide.documentation.GoDocumentationProvider;
 import com.goide.psi.GoReferenceExpressionBase;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

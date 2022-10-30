@@ -121,8 +121,8 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
-<li>2.05  增加 行末注释   从 xxx.json.tsv 中读取注释
-<li>2.04  增加 行末注释   从 键名.tsv 中读取 json 的字典注释
+<li>2.05  增加 行末注释   json 字段注释从 xxx.json.tsv 读取
+<li>2.04  增加 行末注释   json 字典注释从 键名.tsv 读取
 <li>2.03  增加 活动模板   输入 doc / docc 等生成 /** */
 <li>2.02  增加 行末注释   `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释
 <li>2.01  增加 行末注释   支持 SQL, JavaScript, Python, Golang, Kotlin
