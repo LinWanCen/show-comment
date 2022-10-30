@@ -24,11 +24,13 @@ public class ConfCache {
     static final String KEY_MID_EXT = ".key";
     static final String DOC_MID_EXT = ".doc";
     static final String TREE_MID_EXT = ".tree";
+    static final String JSON_MID_EXT = ".json";
 
     private static final ConcurrentSkipListSet<String> EXT_IN_KEY_CACHE = new ConcurrentSkipListSet<>();
     private static final Map<VirtualFile, Map<String, List<String>>> KEY_CACHE = new ConcurrentHashMap<>();
     private static final Map<VirtualFile, Map<String, List<String>>> DOC_CACHE = new ConcurrentHashMap<>();
     private static final Map<VirtualFile, Map<String, List<String>>> TREE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<VirtualFile, Map<String, List<String>>> JSON_CACHE = new ConcurrentHashMap<>();
 
     private ConfCache() {}
 
@@ -62,11 +64,17 @@ public class ConfCache {
         return ConfCacheGetUtils.filterPath(TREE_CACHE, path);
     }
 
+    @NotNull
+    public static Map<String, Map<String, List<String>>> jsonMap(@NotNull String path) {
+        return ConfCacheGetUtils.filterPath(JSON_CACHE, path);
+    }
+
     static void clearAll() {
         EXT_IN_KEY_CACHE.clear();
         KEY_CACHE.clear();
         DOC_CACHE.clear();
         TREE_CACHE.clear();
+        JSON_CACHE.clear();
     }
 
     static void remove(@NotNull VirtualFile file, @Nullable String name) {
@@ -82,6 +90,8 @@ public class ConfCache {
             DOC_CACHE.remove(file);
         } else if (name.endsWith(TREE_MID_EXT)) {
             TREE_CACHE.remove(file);
+        } else if (name.endsWith(JSON_MID_EXT)) {
+            JSON_CACHE.remove(file);
         }
     }
 
@@ -93,6 +103,8 @@ public class ConfCache {
             copyCache(file, newFile, DOC_CACHE);
         } else if (name.endsWith(TREE_MID_EXT)) {
             copyCache(file, newFile, TREE_CACHE);
+        } else if (name.endsWith(JSON_MID_EXT)) {
+            copyCache(file, newFile, JSON_CACHE);
         }
     }
 
@@ -144,6 +156,8 @@ public class ConfCache {
             DOC_CACHE.put(file, TsvLoader.buildMap(file, false));
         } else if (name.endsWith(TREE_MID_EXT)) {
             TREE_CACHE.put(file, TsvLoader.buildMap(file, false));
+        } else if (name.endsWith(JSON_MID_EXT)) {
+            JSON_CACHE.put(file, TsvLoader.buildMap(file, false));
         }
     }
 }

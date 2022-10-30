@@ -62,6 +62,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.05  Add line-end-comment  json doc from xxx.json.tsv
 <li>2.04  Add line-end-comment  json dict doc from (key).tsv
 <li>2.03  Add live-templates    input `doc` `docc` -> /** */
 <li>2.02  Add line-end-comment  show before doc for `isA(xxx)` and `a.set(b.get)`
@@ -95,6 +96,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.05  增加 行末注释   从 xxx.json.tsv 中读取注释
 <li>2.04  增加 行末注释   从 键名.tsv 中读取 json 的字典注释
 <li>2.03  增加 活动模板   输入 doc / docc 等生成 /** */
 <li>2.02  增加 行末注释   `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释

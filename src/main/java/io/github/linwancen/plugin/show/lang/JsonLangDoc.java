@@ -10,13 +10,18 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.ext.GetFromDocMap;
+import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import io.github.linwancen.plugin.show.ext.conf.ConfCacheGetUtils;
 import io.github.linwancen.plugin.show.ext.conf.TsvLoader;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class JsonLangDoc extends BaseLangDoc {
@@ -52,9 +57,9 @@ public class JsonLangDoc extends BaseLangDoc {
             return null;
         }
         @NotNull JsonProperty jsonProperty = (JsonProperty) ref;
-        @Nullable String dictDoc = dictDoc(lineInfo, jsonProperty);
-        if (dictDoc != null) {
-            return dictDoc;
+        @Nullable String extDoc = extDoc(lineInfo, jsonProperty);
+        if (extDoc != null) {
+            return extDoc;
         }
         @NotNull PsiReference[] references = jsonProperty.getNameElement().getReferences();
         for (@NotNull PsiReference reference : references) {
@@ -76,21 +81,28 @@ public class JsonLangDoc extends BaseLangDoc {
     }
 
     @Nullable
-    private static String dictDoc(@NotNull LineInfo lineInfo, @NotNull JsonProperty prop) {
+    private static String extDoc(@NotNull LineInfo lineInfo, @NotNull JsonProperty prop) {
         @Nullable JsonValue value = prop.getValue();
         if (value == null || value instanceof JsonArray || value instanceof JsonObject) {
             return null;
         }
         @NotNull GlobalSearchScope scope = GlobalSearchScope.allScope(lineInfo.project);
-        String jsonKey = prop.getName();
+        @NotNull String jsonKey = prop.getName();
         String jsonValue = value.getText();
         // Read the json.path before if needed
-        return jsonDictDoc(lineInfo, scope, jsonKey, jsonValue);
+        @Nullable String dictDoc = jsonDictDoc(lineInfo, scope, jsonKey, jsonValue);
+        if (dictDoc != null) {
+            return dictDoc;
+        }
+        @NotNull Map<String, Map<String, List<String>>> jsonMap = ConfCache.jsonMap(lineInfo.file.getPath());
+        return GetFromDocMap.get(jsonMap, jsonKey);
     }
 
     @Nullable
-    private static String jsonDictDoc(@NotNull LineInfo lineInfo, @NotNull GlobalSearchScope scope, String fileName, String jsonValue) {
-        @NotNull Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(lineInfo.project, fileName + ".tsv", scope);
+    private static String jsonDictDoc(@NotNull LineInfo lineInfo,
+                                      @NotNull GlobalSearchScope scope, String jsonKey, String jsonValue) {
+        @NotNull String name = jsonKey + ".tsv";
+        @NotNull Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(lineInfo.project, name, scope);
         // one file
         if (files.size() < 2) {
             for (@NotNull VirtualFile file : files) {
@@ -109,13 +121,7 @@ public class JsonLangDoc extends BaseLangDoc {
             fileMap.put(file, map);
         }
         @NotNull String path = lineInfo.file.getPath();
-        @NotNull SortedMap<String, Map<String, List<String>>> treeMap = ConfCacheGetUtils.filterPath(fileMap, path);
-        for (@NotNull Map.Entry<String, Map<String, List<String>>> entry : treeMap.entrySet()) {
-            List<String> list = entry.getValue().get(jsonValue);
-            if (list != null && list.size() > 1) {
-                return list.get(1);
-            }
-        }
-        return null;
+        @NotNull SortedMap<String, Map<String, List<String>>> sortedMap = ConfCacheGetUtils.filterPath(fileMap, path);
+        return GetFromDocMap.get(sortedMap, jsonValue);
     }
 }

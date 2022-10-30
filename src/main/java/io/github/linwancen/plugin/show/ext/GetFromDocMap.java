@@ -7,12 +7,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-class GetFromDocMap {
+public class GetFromDocMap {
 
     private GetFromDocMap() {}
 
     @Nullable
-    static String get(@NotNull Map<String, Map<String, List<String>>> docMap, @NotNull String... words) {
+    public static String get(@NotNull Map<String, Map<String, List<String>>> docMap, @NotNull String... words) {
         @NotNull List<String> keywordDoc = list(docMap, words);
         if (keywordDoc.size() >= 2) {
             return keywordDoc.get(1);
