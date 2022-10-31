@@ -12,9 +12,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import io.github.linwancen.plugin.show.bean.FuncEnum;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,17 +36,18 @@ public class Tree implements ProjectViewNodeDecorator {
         if (DumbService.isDumb(project)) {
             return;
         }
-        ApplicationManager.getApplication().runReadAction(() -> {
-            @Nullable String doc = treeDoc(node, project);
-            if (doc == null) {
-                return;
-            }
-            @NotNull List<ColoredFragment> coloredText = data.getColoredText();
-            if (coloredText.isEmpty()) {
-                data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
-            }
-            data.addText(" " + doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
-        });
+        DumbService.getInstance(project).runReadActionInSmartMode(() ->
+                ApplicationManager.getApplication().runReadAction(() -> {
+                    @Nullable String doc = treeDoc(node, project);
+                    if (doc == null) {
+                        return;
+                    }
+                    @NotNull List<ColoredFragment> coloredText = data.getColoredText();
+                    if (coloredText.isEmpty()) {
+                        data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
+                    }
+                    data.addText(" " + doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
+                }));
     }
 
     @Nullable
