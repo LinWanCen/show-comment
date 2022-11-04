@@ -141,8 +141,8 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
         if (element instanceof PsiInlineDocTag) {
             @NotNull PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
             @NotNull PsiElement[] children = psiInlineDocTag.getChildren();
-            if (children.length > 3) {
-                DocFilter.addHtml(sb, children[3].getText());
+            if (children.length >= 3) {
+                DocFilter.addHtml(sb, children[children.length - 2].getText());
             }
         }
         return element instanceof PsiWhiteSpace && sb.length() > 0;
