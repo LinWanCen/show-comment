@@ -27,7 +27,8 @@ class SkipUtils {
     private static <T extends SettingsInfo> String psiName(@NotNull T settingsInfo, @Nullable PsiElement psiElement) {
         if (psiElement instanceof PsiClass) {
             @NotNull PsiClass psiClass = (PsiClass) psiElement;
-            if (settingsInfo.appSettings.skipAnnotation && psiClass.isAnnotationType()) {
+            if (settingsInfo.funcEnum == FuncEnum.LINE
+                    && settingsInfo.appSettings.skipAnnotation && psiClass.isAnnotationType()) {
                 return null;
             }
             return psiClass.getQualifiedName();

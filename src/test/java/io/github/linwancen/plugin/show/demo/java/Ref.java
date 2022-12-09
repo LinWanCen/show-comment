@@ -1,9 +1,11 @@
 package io.github.linwancen.plugin.show.demo.java;
 
+import io.github.linwancen.plugin.show.demo.java.obj.Anno;
 import io.github.linwancen.plugin.show.demo.java.obj.Child;
 import io.github.linwancen.plugin.show.demo.java.obj.Face;
 import io.github.linwancen.plugin.show.demo.java.obj.Parent;
 
+@Anno
 public class Ref implements Face {
     public static void method() {
         Parent noneNewMethod = new Call();
