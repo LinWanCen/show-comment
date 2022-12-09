@@ -8,12 +8,13 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
 
     @Override
-    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        @Nullable DocElement docElement = toDocElement(resolve);
+    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T settingsInfo,
+                                                                     @NotNull PsiElement resolve) {
+        @Nullable DocElement docElement = toDocElement(settingsInfo, resolve);
         if (docElement == null) {
             return null;
         }
-        return docElementToStr(lineInfo, docElement);
+        return docElementToStr(settingsInfo, docElement);
     }
 
     @Nullable
@@ -44,7 +45,8 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
     }
 
     @Nullable
-    protected abstract DocElement toDocElement(@NotNull PsiElement resolve);
+    protected abstract <T extends SettingsInfo> DocElement toDocElement(@NotNull T settingsInfo,
+                                                                        @NotNull PsiElement resolve);
 
     /**
      * cut / * # not filter text

@@ -1,7 +1,6 @@
 package io.github.linwancen.plugin.show.lang.base;
 
-import io.github.linwancen.plugin.show.settings.AppSettingsState;
-import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,38 +10,35 @@ public class DocSkip {
 
     private DocSkip() {}
 
-    public static boolean skipSign(@NotNull AppSettingsState appSettings,
-                                   @NotNull ProjectSettingsState projectSettings, String text) {
-        return skipText(text,
-                projectSettings.globalFilterEffective, appSettings.lineInclude, appSettings.lineExclude,
-                projectSettings.projectFilterEffective, projectSettings.lineInclude, projectSettings.lineExclude);
+    public static <T extends SettingsInfo> boolean skipSign(@NotNull T settingsInfo, String text) {
+        return skipText(settingsInfo, text,
+                settingsInfo.appSettings.lineInclude, settingsInfo.appSettings.lineExclude,
+                settingsInfo.projectSettings.lineInclude, settingsInfo.projectSettings.lineExclude);
     }
 
     private static final Pattern NOT_ASCII_PATTERN = Pattern.compile("[^\u0000-\u007f]");
 
-    public static boolean skipDoc(@NotNull AppSettingsState appSettings,
-                                  @NotNull ProjectSettingsState projectSettings, @NotNull String text) {
-        if (appSettings.skipAscii && !NOT_ASCII_PATTERN.matcher(text).find()) {
+    public static <T extends SettingsInfo> boolean skipDoc(@NotNull T settingsInfo, @NotNull String text) {
+        if (settingsInfo.appSettings.skipAscii && !NOT_ASCII_PATTERN.matcher(text).find()) {
             return true;
         }
-        return skipText(text,
-                projectSettings.globalFilterEffective, appSettings.docInclude, appSettings.docExclude,
-                projectSettings.projectFilterEffective, projectSettings.docInclude, projectSettings.docExclude);
+        return skipText(settingsInfo, text,
+                settingsInfo.appSettings.docInclude, settingsInfo.appSettings.docExclude,
+                settingsInfo.projectSettings.docInclude, settingsInfo.projectSettings.docExclude);
     }
 
-    static boolean skipText(@Nullable String text,
-                            boolean appFilterEffective, @NotNull Pattern appDocInclude, @NotNull Pattern appDocExclude,
-                            boolean projectFilterEffective, @NotNull Pattern projectDocInclude,
-                            @NotNull Pattern projectDocExclude
+    static <T extends SettingsInfo> boolean skipText(@NotNull T settingsInfo, @Nullable String text,
+                            @NotNull Pattern appDocInclude, @NotNull Pattern appDocExclude,
+                            @NotNull Pattern projectDocInclude, @NotNull Pattern projectDocExclude
     ) {
         if (text == null) {
             return true;
         }
-        if (appFilterEffective
+        if (settingsInfo.projectSettings.globalFilterEffective
                 && skipText(text, appDocInclude, appDocExclude)) {
             return true;
         }
-        if (projectFilterEffective) {
+        if (settingsInfo.projectSettings.projectFilterEffective) {
             return skipText(text, projectDocInclude, projectDocExclude);
         }
         return false;

@@ -35,7 +35,7 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
 
     @Override
     @Nullable
-    protected KDocSection toDocElement(@NotNull PsiElement resolve) {
+    protected <T extends SettingsInfo> KDocSection toDocElement(@NotNull T settingsInfo, @NotNull PsiElement resolve) {
         if (resolve instanceof PsiPackageBase) {
             return null;
         }

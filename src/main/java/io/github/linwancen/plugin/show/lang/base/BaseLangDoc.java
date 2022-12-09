@@ -119,7 +119,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     protected String refElementDoc(@NotNull LineInfo lineInfo,
                                    @NotNull PsiElement refElement) {
         @Nullable String refDoc = refDoc(lineInfo, refElement);
-        if (refDoc != null && !DocSkip.skipDoc(lineInfo.appSettings, lineInfo.projectSettings, refDoc)) {
+        if (refDoc != null && !DocSkip.skipDoc(lineInfo, refDoc)) {
             return refDoc;
         }
         return null;

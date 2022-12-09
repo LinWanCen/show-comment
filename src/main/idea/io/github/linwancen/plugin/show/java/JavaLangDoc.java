@@ -68,12 +68,12 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        @Nullable String resolveDocPrint = super.resolveDocPrint(lineInfo, resolve);
+    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T settingsInfo, @NotNull PsiElement resolve) {
+        @Nullable String resolveDocPrint = super.resolveDocPrint(settingsInfo, resolve);
         if (resolveDocPrint != null) {
             return resolveDocPrint;
         }
-        if (lineInfo.appSettings.fromParam && resolve instanceof PsiParameter) {
+        if (settingsInfo.appSettings.fromParam && resolve instanceof PsiParameter) {
             return paramDoc((PsiParameter) resolve);
         }
         return null;
@@ -105,10 +105,11 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Nullable
     @Override
-    protected PsiDocComment toDocElement(@NotNull PsiElement resolve) {
+    protected <T extends SettingsInfo> PsiDocComment toDocElement(@NotNull T settingsInfo,
+                                                                  @NotNull PsiElement resolve) {
         if (resolve instanceof PsiDocCommentOwner) {
             @NotNull PsiDocCommentOwner psiDocCommentOwner = (PsiDocCommentOwner) resolve;
-            return OwnerToPsiDocSkip.refDoc(psiDocCommentOwner);
+            return OwnerToPsiDocSkip.refDoc(settingsInfo, psiDocCommentOwner);
         }
         return null;
     }

@@ -4,9 +4,9 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMember;
 import com.intellij.psi.javadoc.PsiDocComment;
+import io.github.linwancen.plugin.show.bean.FuncEnum;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.DocSkip;
-import io.github.linwancen.plugin.show.settings.AppSettingsState;
-import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,19 +15,19 @@ class SkipUtils {
 
     private SkipUtils() {}
 
-    static boolean skipSign(PsiElement psiElement, @NotNull AppSettingsState appSettings,
-                            @NotNull ProjectSettingsState projectSettings) {
-        @Nullable String text = psiName(psiElement, appSettings);
+    static <T extends SettingsInfo> boolean skipSign(@NotNull T settingsInfo, PsiElement psiElement) {
+        @Nullable String text = psiName(settingsInfo, psiElement);
         if (text == null) {
             return true;
         }
-        return DocSkip.skipSign(appSettings, projectSettings, text);
+        return DocSkip.skipSign(settingsInfo, text);
     }
 
-    private static @Nullable String psiName(@Nullable PsiElement psiElement, @NotNull AppSettingsState appSettings) {
+    @Nullable
+    private static <T extends SettingsInfo> String psiName(@NotNull T settingsInfo, @Nullable PsiElement psiElement) {
         if (psiElement instanceof PsiClass) {
             @NotNull PsiClass psiClass = (PsiClass) psiElement;
-            if (appSettings.skipAnnotation && psiClass.isAnnotationType()) {
+            if (settingsInfo.appSettings.skipAnnotation && psiClass.isAnnotationType()) {
                 return null;
             }
             return psiClass.getQualifiedName();
@@ -51,16 +51,15 @@ class SkipUtils {
         return null;
     }
 
-    static PsiDocComment skipDoc(@Nullable PsiDocComment doc, @NotNull AppSettingsState appSettings,
-                                 @NotNull ProjectSettingsState projectSettings) {
+    static <T extends SettingsInfo> PsiDocComment skipDoc(@NotNull T settingsInfo, @Nullable PsiDocComment doc) {
         if (doc == null) {
             return null;
         }
-        if (appSettings.skipBlank && isBlank(doc)) {
+        if (settingsInfo.appSettings.skipBlank && isBlank(doc)) {
             return null;
         }
         String text = doc.getText();
-        boolean skip = DocSkip.skipDoc(appSettings, projectSettings, text);
+        boolean skip = DocSkip.skipDoc(settingsInfo, text);
         return skip ? null : doc;
     }
 

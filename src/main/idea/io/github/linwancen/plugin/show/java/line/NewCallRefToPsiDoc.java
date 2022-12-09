@@ -4,6 +4,8 @@ import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.javadoc.PsiDocComment;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -14,7 +16,8 @@ public class NewCallRefToPsiDoc {
     private NewCallRefToPsiDoc() {}
 
     @Nullable
-    public static PsiDocComment javaCodeDoc(@Nullable PsiJavaCodeReferenceElement ref) {
+    public static <T extends SettingsInfo> PsiDocComment javaCodeDoc(@NotNull T settingsInfo,
+                                                                     @Nullable PsiJavaCodeReferenceElement ref) {
         if (ref == null) {
             return null;
         }
@@ -25,7 +28,7 @@ public class NewCallRefToPsiDoc {
             // ignore
         }
         if (resolve instanceof PsiDocCommentOwner) {
-            return OwnerToPsiDocSkip.refDoc(((PsiDocCommentOwner) resolve));
+            return OwnerToPsiDocSkip.refDoc(settingsInfo, ((PsiDocCommentOwner) resolve));
         }
         return null;
     }

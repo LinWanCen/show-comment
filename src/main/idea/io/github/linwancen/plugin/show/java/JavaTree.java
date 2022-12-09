@@ -24,7 +24,7 @@ public class JavaTree {
     @Nullable
     public static <T extends SettingsInfo> String treeDoc(@NotNull T settingsInfo, ProjectViewNode<?> node,
                                                           @NotNull Project project) {
-        @Nullable PsiDocComment docComment = nodeDoc(node, project);
+        @Nullable PsiDocComment docComment = nodeDoc(settingsInfo, node, project);
         if (docComment == null) {
             return null;
         }
@@ -32,7 +32,8 @@ public class JavaTree {
     }
 
     @Nullable
-    static PsiDocComment nodeDoc(ProjectViewNode<?> node, @NotNull Project project) {
+    static <T extends SettingsInfo> PsiDocComment nodeDoc(@NotNull T settingsInfo, ProjectViewNode<?> node,
+                                                          @NotNull Project project) {
         if (node instanceof PsiFileNode) {
             PsiFile psiFile = ((PsiFileNode) node).getValue();
             return OwnerToPsiDocUtils.fileDoc(psiFile);
@@ -50,7 +51,7 @@ public class JavaTree {
             if (type instanceof PsiClassReferenceType) {
                 @NotNull PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) type;
                 @NotNull PsiJavaCodeReferenceElement reference = psiClassReferenceType.getReference();
-                return NewCallRefToPsiDoc.javaCodeDoc(reference);
+                return NewCallRefToPsiDoc.javaCodeDoc(settingsInfo, reference);
             }
         }
 
