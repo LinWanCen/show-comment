@@ -69,6 +69,7 @@ class PsiMethodToPsiDoc {
             return null;
         }
         @NotNull char[] chars = name.toCharArray();
+        // Lower Case
         chars[0] += 32;
         name = String.valueOf(chars);
         @Nullable PsiField fieldByName = psiClass.findFieldByName(name, false);

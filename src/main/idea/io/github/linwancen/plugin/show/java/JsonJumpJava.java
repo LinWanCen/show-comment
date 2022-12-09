@@ -47,7 +47,7 @@ public class JsonJumpJava extends PsiReferenceContributor {
                         for (@NotNull PsiField psiField : psiFields) {
                             list.add(new JsonRef<>(element, psiField, tips));
                         }
-                        return list.toArray(new PsiReference[0]);
+                        return list.toArray(PsiReference.EMPTY_ARRAY);
                     }
                 });
     }

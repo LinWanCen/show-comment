@@ -68,6 +68,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.06  Add project-view-tree xx-abc.xxx from Abc.java doc
 <li>2.05  Add line-end-comment  json doc from xxx.json.tsv
 <li>2.04  Add line-end-comment  json dict doc from (key).tsv
 <li>2.03  Add live-templates    input `doc` `docc` -> /** */
@@ -102,6 +103,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.06  增加 文件树注释  xx-abc.xxx 来自 Abc.java 的文档注释
 <li>2.05  增加 行末注释   json 字段注释从 xxx.json.tsv 读取
 <li>2.04  增加 行末注释   json 字典注释从 键名.tsv 读取
 <li>2.03  增加 活动模板   输入 doc / docc 等生成 /** */

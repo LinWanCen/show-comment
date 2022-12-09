@@ -24,16 +24,27 @@ public class PsiClassUtils {
         @NotNull String fileName = virtualFile.getNameWithoutExtension();
         @NotNull Matcher matcher = JSON_PATTERN.matcher(fileName);
         if (!matcher.find()) {
-            return new PsiClass[0];
+            return PsiClass.EMPTY_ARRAY;
         }
         String className = matcher.group();
-        return nameToClass(className, project);
+        @NotNull PsiClass[] psiClasses = nameToClass(className, project);
+        if (psiClasses.length != 0) {
+            return psiClasses;
+        }
+        @NotNull char[] chars = className.toCharArray();
+        if (chars.length < 1 || chars[0] < 97 || 122 < chars[0]) {
+            return PsiClass.EMPTY_ARRAY;
+        }
+        // Upper Case
+        chars[0] -= 32;
+        @NotNull String name = String.valueOf(chars);
+        return nameToClass(name, project);
     }
 
     @NotNull
     public static PsiClass[] nameToClass(@Nullable String className, @NotNull Project project) {
         if (className == null) {
-            return new PsiClass[0];
+            return PsiClass.EMPTY_ARRAY;
         }
         int i = className.indexOf('.');
         return i > 0
