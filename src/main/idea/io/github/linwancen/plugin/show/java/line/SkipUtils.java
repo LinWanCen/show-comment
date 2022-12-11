@@ -52,6 +52,7 @@ class SkipUtils {
         return null;
     }
 
+    @Nullable
     static <T extends SettingsInfo> PsiDocComment skipDoc(@NotNull T settingsInfo, @Nullable PsiDocComment doc) {
         if (doc == null) {
             return null;

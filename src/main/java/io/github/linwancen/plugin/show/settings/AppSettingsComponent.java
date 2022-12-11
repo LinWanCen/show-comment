@@ -15,6 +15,7 @@ import java.awt.*;
 public class AppSettingsComponent extends AbstractSettingsComponent {
 
     private final JPanel myMainPanel;
+    private final JButton resetDefault = new JButton("Reset default ");
     private final JBCheckBox showTreeComment = new JBCheckBox("Show tree comment ");
     private final JBCheckBox compact = new JBCheckBox("compact ");
     private final JBTextField treeTags = new JBTextField();
@@ -41,10 +42,12 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public AppSettingsComponent() {
         myMainPanel = FormBuilder.createFormBuilder()
+                .addComponent(resetDefault, 1)
                 .addComponent(showPanel(), 1)
                 .addComponent(lineEndFilterPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
+        resetDefault.addActionListener(e -> AppSettingsConfigurable.reset(AppSettingsState.DEFAULT_SETTING, this));
     }
 
     @NotNull

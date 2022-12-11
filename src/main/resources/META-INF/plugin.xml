@@ -27,6 +27,11 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
 </ul>
 
+<h2>My Other Project</h2>
+<ul>
+<li>Find author/comment of multiple files or lines and export Find:
+<a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
+</ul>
 
 <h2>中文说明:</h2>
 <ul>
@@ -54,9 +59,17 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
 
+<h2>我的其他项目</h2>
+<ul>
+<li>查找多个文件或行的作者与导出搜索：
+<a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
+</ul>
+
+<hr>
+
 如果对你有所帮助，别忘了给本项目
 <a href="https://github.com/LinWanCen/show-comment">GitHub</a>
-主页一个 Start，您的支持是项目前进的动力。
+主页一个 Star，您的支持是项目前进的动力。
     ]]></description>
 
   <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html

@@ -21,6 +21,8 @@ import java.util.Locale;
 )
 public class AppSettingsState extends AbstractSettingsState implements PersistentStateComponent<AppSettingsState> {
 
+    public static final AppSettingsState DEFAULT_SETTING = new AppSettingsState();
+
     public boolean showTreeComment = true;
     public boolean compact = true;
 

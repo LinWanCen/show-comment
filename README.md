@@ -31,6 +31,11 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
 </ul>
 
+<h2>My Other Project</h2>
+<ul>
+<li>Find author/comment of multiple files or lines and export Find:
+<a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
+</ul>
 
 <h2>中文说明:</h2>
 <ul>
@@ -58,9 +63,17 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
 
+<h2>我的其他项目</h2>
+<ul>
+<li>查找多个文件或行的作者与导出搜索：
+<a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
+</ul>
+
+<hr>
+
 如果对你有所帮助，别忘了给本项目
 <a href="https://github.com/LinWanCen/show-comment">GitHub</a>
-主页一个 Start，您的支持是项目前进的动力。
+主页一个 Star，您的支持是项目前进的动力。
 
 
 
@@ -68,6 +81,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.07  Add global-setting    reset default
 <li>2.06  Add project-view-tree xx-abc.xxx from Abc.java doc
 <li>2.05  Add line-end-comment  json doc from xxx.json.tsv
 <li>2.04  Add line-end-comment  json dict doc from (key).tsv
@@ -103,6 +117,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.07  增加 全局设置   复位默认值
 <li>2.06  增加 文件树注释  xx-abc.xxx 来自 Abc.java 的文档注释
 <li>2.05  增加 行末注释   json 字段注释从 xxx.json.tsv 读取
 <li>2.04  增加 行末注释   json 字典注释从 键名.tsv 读取

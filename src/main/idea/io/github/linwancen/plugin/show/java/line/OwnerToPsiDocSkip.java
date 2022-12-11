@@ -15,6 +15,7 @@ public class OwnerToPsiDocSkip {
 
     private OwnerToPsiDocSkip() {}
 
+    @Nullable
     public static <T extends SettingsInfo> PsiDocComment refDoc(@NotNull T settingsInfo,
                                                                 @Nullable PsiDocCommentOwner docOwner) {
         if (docOwner == null) {

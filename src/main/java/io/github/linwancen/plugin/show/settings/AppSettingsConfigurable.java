@@ -109,6 +109,10 @@ public class AppSettingsConfigurable implements Configurable {
     @Override
     public void reset() {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
+        reset(settings, mySettingsComponent);
+    }
+
+    static void reset(@NotNull AppSettingsState settings, AppSettingsComponent mySettingsComponent) {
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setCompact(settings.compact);
 

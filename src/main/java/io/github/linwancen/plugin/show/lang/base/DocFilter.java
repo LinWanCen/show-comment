@@ -36,7 +36,7 @@ public class DocFilter {
         String[] split = LINE_SEPARATOR_PATTERN.split(text);
         int lineCount = 0;
         @NotNull StringBuilder sb = new StringBuilder();
-        for (String s : split) {
+        for (@NotNull String s : split) {
             if (deletePrefix) {
                 s = DOC_PATTERN.matcher(s).replaceAll("");
             }
