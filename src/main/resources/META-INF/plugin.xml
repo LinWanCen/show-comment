@@ -107,7 +107,7 @@ Show doc comment at the Project view Tree, line End, json etc.
                              id="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
                              displayName="// Show Comment Global"/>
     <applicationService serviceImplementation="io.github.linwancen.plugin.show.settings.AppSettingsState"/>
-    <projectConfigurable parentId="tools"
+    <projectConfigurable parentId="io.github.linwancen.plugin.show.settings.AppSettingsConfigurable"
                          instance="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
                          id="io.github.linwancen.plugin.show.settings.ProjectSettingsConfigurable"
                          displayName="// Show Comment Project"/>
