@@ -97,13 +97,15 @@ public class ConfCacheGetUtils {
         String[] paths = StringUtils.split(path, '/');
         String[] confPaths = StringUtils.split(confPath, '/');
         int length = confPaths.length;
-        String lastFolder = confPaths[length - 2];
-        if (lastFolder.startsWith("-")) {
-            try {
-                int i = Integer.parseInt(lastFolder);
-                length = length + i - 1;
-            } catch (NumberFormatException e) {
-                // ignore
+        if (length > 1) {
+            String lastFolder = confPaths[length - 2];
+            if (lastFolder.startsWith("-")) {
+                try {
+                    int i = Integer.parseInt(lastFolder);
+                    length = length + i - 1;
+                } catch (NumberFormatException e) {
+                    // ignore
+                }
             }
         }
         if (length > paths.length) {

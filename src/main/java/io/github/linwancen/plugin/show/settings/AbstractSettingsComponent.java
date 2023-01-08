@@ -23,18 +23,17 @@ public abstract class AbstractSettingsComponent {
     @NotNull
     protected JPanel commonLineEndFilter(FormBuilder formBuilder) {
         formBuilder = formBuilder
-                .addComponent(new JBLabel("Separated by '|' (Regexp), use '' to include all or exclude none."))
+                .addComponent(new JBLabel(ShowBundle.message("regexp.tip")))
                 .addSeparator()
-                .addLabeledComponent(new JBLabel("className#memberName include Regexp: "), lineInclude, 1, true)
-                .addLabeledComponent(new JBLabel("className#memberName exclude Regexp: "), lineExclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("sign.include.regexp")), lineInclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("sign.exclude.regexp")), lineExclude, 1, true)
                 .addSeparator()
-                .addLabeledComponent(new JBLabel("comment include Regexp: "), docInclude, 1, true)
-                .addLabeledComponent(new JBLabel("comment exclude Regexp: "), docExclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
                 .addSeparator();
-        formBuilder = add(formBuilder, docGetEffect, this.docGet,
-                "get doc Regexp, last () when had, default is first sentence .+?(?:[。\\r\\n]|\\. ) :");
+        formBuilder = add(formBuilder, docGetEffect, this.docGet, ShowBundle.message("get.doc.regexp"));
         JPanel lineEndFilter = formBuilder.getPanel();
-        lineEndFilter.setBorder(IdeBorderFactory.createTitledBorder("Line End Comment"));
+        lineEndFilter.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
         return lineEndFilter;
     }
 

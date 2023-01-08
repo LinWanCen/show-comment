@@ -9,8 +9,8 @@ import javax.swing.*;
 public class ProjectSettingsComponent extends AbstractSettingsComponent {
 
     private final JPanel myMainPanel;
-    private final JBCheckBox globalFilterEffective = new JBCheckBox("Global Include Exclude Effective");
-    private final JBCheckBox projectFilterEffective = new JBCheckBox("Project Include Exclude Effective");
+    private final JBCheckBox globalFilterEffective = new JBCheckBox(ShowBundle.message("global.include.exclude.effective"));
+    private final JBCheckBox projectFilterEffective = new JBCheckBox(ShowBundle.message("project.include.exclude.effective"));
 
     public ProjectSettingsComponent() {
         myMainPanel = FormBuilder.createFormBuilder()

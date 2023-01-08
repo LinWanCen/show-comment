@@ -12,6 +12,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
 import io.github.linwancen.plugin.show.bean.FileInfo;
+import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
  * on ProjectViewPopupMenu
  */
 public class LineEndAdd extends DumbAwareAction {
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        super.update(e);
+        e.getPresentation().setText(ShowBundle.message("line.end.add"));
+    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {

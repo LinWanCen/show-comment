@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,10 +20,7 @@ public class CopyReferenceSimple extends CopyReferenceAction {
     @Override
     public void update(@NotNull AnActionEvent e) {
         super.update(e);
-        String tip = IdeBundle.message("copy.reference");
-        if (tip != null && tip.replace("\u001B", "").equals(e.getPresentation().getText())) {
-            e.getPresentation().setText("Copy Class.Method / File:Line");
-        }
+        e.getPresentation().setText(ShowBundle.message("copy.class.method.or.file.line"));
     }
 
     private static final Pattern QUALIFIED_PATTERN = Pattern.compile("[\\w.]+\\.");

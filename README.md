@@ -8,7 +8,11 @@ Thanks JetBrains Licenses for Open Source.
 
 ## Notes 说明
 
-Show doc comment at the Project view Tree, line End, json etc.
+Show doc comment at the Project view Tree, line End, json, other
+
+在文件树、行末、JSON 等地方显示注释.
+
+<h2>English Note</h2>
 <ul>
 <li>"xx-ClassNameOrSimpleName.json" and jump to field
 <li>input `doc` `docc` -> /** */
@@ -18,7 +22,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>Config: settings -> Tools -> // Show Comment Global/Project
 </ul>
 
-<h3>External Comment:</h3>
+<h3>External Comment</h3>
 <a href="https://github.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">Demo(GitHub)</a>
 <ul>
 <li>Reload: Tools -> 🔄 // Reload External Comment
@@ -31,13 +35,16 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
 </ul>
 
-<h2>My Other Project</h2>
+<h3>My Other Project</h3>
 <ul>
 <li>Find author/comment of multiple files or lines and export Find:
 <a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
+<li>Auto sync coverage and capture coverage during debug:
+<a href="https://plugins.jetbrains.com/plugin/20780-sync-coverage">Sync Coverage</a>
 </ul>
 
-<h2>中文说明:</h2>
+<hr>
+<h2>中文说明</h2>
 <ul>
 <li>在结构树显示 文档注释
 <li>在行末尾显示 文档注释
@@ -49,7 +56,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>修改配置：设置 -> 工具 -> // Show Comment Global/Project
 </ul>
 
-<h3>外部注释：</h3>
+<h3>外部注释</h3>
 <a href="https://gitee.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">示例(Gitee)</a>
 ：比如你要给 .go 的文件配置文件注释可以放在相同目录或父目录的 xxx.go.tree.tsv 中
 <ul>
@@ -63,24 +70,38 @@ Show doc comment at the Project view Tree, line End, json etc.
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
 
-<h2>我的其他项目</h2>
+<h3>我的其他项目</h3>
 <ul>
-<li>查找多个文件或行的作者与导出搜索：
+<li>查找多个文件或行的作者 与 导出搜索：
 <a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
+<li>自动同步覆盖率 和 调试中抓取覆盖率：
+<a href="https://plugins.jetbrains.com/plugin/20780-sync-coverage">Sync Coverage</a>
 </ul>
 
 <hr>
+<h2>找个女朋友</h2>
+<ul>
+<li>我的情况：1993-11-03，软件工程师，广发银行编制，宅，LOLm，NS，看书，写文章，KTV，爬山，逛街
+<li>我的性格：ISFP(探险家 内向 实际 感性 随性)
+<li>希望对方：广东省，与家人关系好，爱笑甜美大眼睛
+<li>有兴趣请联系 1498425439@qq.com
+</ul>
 
-如果对你有所帮助，别忘了给本项目
+<hr>
+<h2>支持</h2>
+<ul>
+<li>如果对你有所帮助，别忘了给本项目
 <a href="https://github.com/LinWanCen/show-comment">GitHub</a>
 主页一个 Star，您的支持是项目前进的动力。
-
+</ul>
+<hr>
 
 
 ## Change Notes 更新说明
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.08  Add                   i18n and chinese
 <li>2.07  Add global-setting    reset default
 <li>2.06  Add project-view-tree xx-abc.xxx from Abc.java doc
 <li>2.05  Add line-end-comment  json doc from xxx.json.tsv
@@ -117,6 +138,7 @@ Show doc comment at the Project view Tree, line End, json etc.
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.08  增加           多语言与中文支持
 <li>2.07  增加 全局设置   复位默认值
 <li>2.06  增加 文件树注释  xx-abc.xxx 来自 Abc.java 的文档注释
 <li>2.05  增加 行末注释   json 字段注释从 xxx.json.tsv 读取

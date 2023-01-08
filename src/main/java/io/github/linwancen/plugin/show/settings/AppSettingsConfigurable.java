@@ -16,7 +16,7 @@ public class AppSettingsConfigurable implements Configurable {
     @NotNull
     @Override
     public String getDisplayName() {
-        return "Show Comment Global.";
+        return "// Show Comment Global";
     }
 
     @NotNull

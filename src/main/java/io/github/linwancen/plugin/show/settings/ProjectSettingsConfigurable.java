@@ -27,7 +27,7 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
     @NotNull
     @Override
     public String getDisplayName() {
-        return "Show Comment Project.";
+        return "// Show Comment Project";
     }
 
     @NotNull

@@ -15,11 +15,10 @@ import java.awt.*;
 public class AppSettingsComponent extends AbstractSettingsComponent {
 
     private final JPanel myMainPanel;
-    private final JButton resetDefault = new JButton("Reset default ");
-    private final JBCheckBox showTreeComment = new JBCheckBox("Show tree comment ");
-    private final JBCheckBox compact = new JBCheckBox("compact ");
+    private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
+    private final JBCheckBox compact = new JBCheckBox(ShowBundle.message("compact"));
     private final JBTextField treeTags = new JBTextField();
-    private final JBCheckBox showLineEndComment = new JBCheckBox("Show line end comment ");
+    private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
     private final JBCheckBox showLineEndCommentJava = new JBCheckBox("Java ");
     private final JBCheckBox showLineEndCommentSql = new JBCheckBox("sql ");
     private final JBCheckBox showLineEndCommentJson = new JBCheckBox("json ");
@@ -29,25 +28,26 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JBCheckBox showLineEndCommentGo = new JBCheckBox("Go ");
     private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("Kotlin ");
     private final JBTextField lineTags = new JBTextField();
-    private final JBCheckBox getToSet = new JBCheckBox("get |> set ");
+    private final JBCheckBox getToSet = new JBCheckBox("get --> set ");
     private final JBCheckBox fromNew = new JBCheckBox("java new ");
-    private final JBCheckBox fromParam = new JBCheckBox("java param ");
-    private final JBCheckBox skipAnnotation = new JBCheckBox("skip @ ");
-    private final JBCheckBox skipAscii = new JBCheckBox("skip English ");
-    private final JBCheckBox skipBlank = new JBCheckBox("skip Blank ");
+    private final JBCheckBox fromParam = new JBCheckBox("java @param ");
+    private final JBCheckBox skipAnnotation = new JBCheckBox(ShowBundle.message("skip.anno"));
+    private final JBCheckBox skipAscii = new JBCheckBox(ShowBundle.message("skip.english"));
+    private final JBCheckBox skipBlank = new JBCheckBox(ShowBundle.message("skip.blank"));
     private final ColorPanel lineEndColor = new ColorPanel();
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBTextField lineEndPrefix = new JBTextField();
     private final JBTextField lineEndCount = new JBTextField();
 
     public AppSettingsComponent() {
+        JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
+        resetDefault.addActionListener(e -> AppSettingsConfigurable.reset(AppSettingsState.DEFAULT_SETTING, this));
         myMainPanel = FormBuilder.createFormBuilder()
                 .addComponent(resetDefault, 1)
                 .addComponent(showPanel(), 1)
                 .addComponent(lineEndFilterPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
-        resetDefault.addActionListener(e -> AppSettingsConfigurable.reset(AppSettingsState.DEFAULT_SETTING, this));
     }
 
     @NotNull
@@ -64,20 +64,20 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
                         showLineEndCommentGo,
                         showLineEndCommentKotlin
                 ), 1)
-                .addLabeledComponent(new JBLabel("tree tags split by |:"), treeTags, 1, true)
-                .addLabeledComponent(new JBLabel("line tags split by |:"), lineTags, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("tree.tags")), treeTags, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("line.tags")), lineTags, 1, true)
                 .getPanel();
-        comment.setBorder(IdeBorderFactory.createTitledBorder("Show"));
+        comment.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("show")));
         return comment;
     }
 
     @NotNull
     protected JPanel lineEndFilterPanel() {
         @NotNull JPanel text = JPanelFactory.of(
-                new JBLabel("line count: "), lineEndCount,
-                new JBLabel("text color: "), lineEndColor,
-                new JBLabel("json text color: "), lineEndJsonColor,
-                new JBLabel("prefix: "), lineEndPrefix);
+                new JBLabel(ShowBundle.message("line.count")), lineEndCount,
+                new JBLabel(ShowBundle.message("text.color")), lineEndColor,
+                new JBLabel(ShowBundle.message("text.color.json")), lineEndJsonColor,
+                new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
                 .addSeparator()
                 .addComponent(JPanelFactory.of(fromNew, fromParam, getToSet, skipAnnotation, skipAscii, skipBlank), 1)

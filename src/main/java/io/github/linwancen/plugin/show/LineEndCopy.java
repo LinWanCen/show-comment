@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.project.DumbAwareAction;
 import io.github.linwancen.plugin.show.bean.FileInfo;
+import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,12 @@ import java.awt.datatransfer.StringSelection;
  * on EditorPopupMenu
  */
 public class LineEndCopy extends DumbAwareAction {
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        super.update(e);
+        e.getPresentation().setText(ShowBundle.message("line.end.copy"));
+    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {

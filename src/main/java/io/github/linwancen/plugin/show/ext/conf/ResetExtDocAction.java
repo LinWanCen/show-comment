@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +14,13 @@ import org.jetbrains.annotations.Nullable;
  * <br>Use Reset only for file sort
  */
 public class ResetExtDocAction extends AnAction {
+
+    @Override
+    public void update(@NotNull AnActionEvent e) {
+        super.update(e);
+        e.getPresentation().setText(ShowBundle.message("reset.ext.doc"));
+    }
+
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         ConfCache.clearAll();
