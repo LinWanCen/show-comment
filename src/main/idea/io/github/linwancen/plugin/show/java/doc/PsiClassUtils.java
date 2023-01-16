@@ -31,7 +31,7 @@ public class PsiClassUtils {
         if (psiClasses.length != 0) {
             return psiClasses;
         }
-        @NotNull char[] chars = className.toCharArray();
+        @NotNull char[] chars = fileName.toCharArray();
         if (chars.length < 1 || chars[0] < 97 || 122 < chars[0]) {
             return PsiClass.EMPTY_ARRAY;
         }
