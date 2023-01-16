@@ -13,6 +13,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
 import io.github.linwancen.plugin.show.java.line.NewCallRefToPsiDoc;
+import io.github.linwancen.plugin.show.lang.base.DocSkip;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,11 @@ public class JavaTree {
         if (docComment == null) {
             return null;
         }
-        return JavaLangDoc.INSTANCE.docElementToStr(settingsInfo, docComment);
+        String s = JavaLangDoc.INSTANCE.docElementToStr(settingsInfo, docComment);
+        if (s != null && !DocSkip.skipDoc(settingsInfo, s)) {
+            return s;
+        }
+        return null;
     }
 
     @Nullable
