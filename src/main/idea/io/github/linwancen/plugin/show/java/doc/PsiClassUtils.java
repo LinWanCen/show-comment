@@ -31,6 +31,10 @@ public class PsiClassUtils {
         if (psiClasses.length != 0) {
             return psiClasses;
         }
+        // issue #23
+        if (virtualFile.getExtension() == null || className.length() != fileName.length()) {
+            return PsiClass.EMPTY_ARRAY;
+        }
         @NotNull char[] chars = fileName.toCharArray();
         if (chars.length < 1 || chars[0] < 97 || 122 < chars[0]) {
             return PsiClass.EMPTY_ARRAY;
