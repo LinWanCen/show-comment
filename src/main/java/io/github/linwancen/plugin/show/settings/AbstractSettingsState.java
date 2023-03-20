@@ -14,7 +14,7 @@ public abstract class AbstractSettingsState {
     public transient Pattern docInclude = Pattern.compile("");
     @NotNull
     public transient Pattern docExclude = Pattern.compile("");
-    public transient boolean docGetEffect = false;
+    public boolean docGetEffect = false;
     @NotNull
     public transient Pattern docGet = Pattern.compile(".+?(?:[。\\r\\n]|\\. )");
 
