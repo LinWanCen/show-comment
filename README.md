@@ -35,8 +35,14 @@ Show doc comment at the Project view Tree, line End, json, other
 <li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
 </ul>
 
-<h3>My Other Project</h3>
+<h3>My Project</h3>
 <ul>
+<li>Show doc comment at the Project view Tree, line End, json etc:
+<a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
+</li>
+<li>Method call usage graph and maven dependency graph:
+<a href="https://plugins.jetbrains.com/plugin/21242-draw-graph">Draw Graph</a>
+</li>
 <li>Find author/comment of multiple files or lines and export Find:
 <a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
 <li>Auto sync coverage and capture coverage during debug:
@@ -70,8 +76,14 @@ Show doc comment at the Project view Tree, line End, json, other
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
 
-<h3>我的其他项目</h3>
+<h3>我的项目</h3>
 <ul>
+<li>在文件树、行末、JSON 显示注释:
+<a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
+</li>
+<li>生成 方法调用图 和 Maven 依赖图:
+<a href="https://plugins.jetbrains.com/plugin/21242-draw-graph">Draw Graph</a>
+</li>
 <li>查找多个文件或行的作者 与 导出搜索：
 <a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
 <li>自动同步覆盖率 和 调试中抓取覆盖率：
