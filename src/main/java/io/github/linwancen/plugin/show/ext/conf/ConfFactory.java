@@ -1,13 +1,12 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationGroup;
-import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
-import com.twelvemonkeys.util.LinkedSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,18 +14,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 class ConfFactory {
+    private static final Logger LOG = LoggerFactory.getLogger(ConfFactory.class);
 
     private static final Pattern EMPTY_PATTERN = Pattern.compile("");
     private static final Map<String, Pattern> PATTERN_CACHE = new ConcurrentHashMap<>();
-    private static final NotificationGroup REGEXP_LOG =
-            new NotificationGroup("Ext Doc Keyword Regexp Compile", NotificationDisplayType.TOOL_WINDOW, true);
-
     private ConfFactory() {}
 
     @Nullable
-    static Pattern buildPattern(@Nullable Project project, @NotNull String path,
+    static Pattern buildPattern(@SuppressWarnings("unused") @Nullable Project project, @NotNull String path,
                                 @NotNull Map<String, Map<String, List<String>>> map) {
-        @NotNull Set<String> exclude = new LinkedSet<>();
+        @NotNull Set<String> exclude = new LinkedHashSet<>();
         @NotNull StringBuilder sb = new StringBuilder();
         for (@NotNull Map<String, List<String>> keyMap : map.values()) {
             // key() is escape
@@ -53,15 +50,13 @@ class ConfFactory {
         try {
             @NotNull Pattern compile = Pattern.compile(regex);
             PATTERN_CACHE.put(regex, compile);
-            REGEXP_LOG.createNotification("Ext doc keyword regexp compile success", regex.length() + " chars",
-                    sb.toString(), NotificationType.INFORMATION).notify(project);
+            LOG.info("Ext doc keyword regexp compile success {} chars\n{}", regex.length(), sb);
             return compile;
         } catch (Exception e) {
             sb.insert(0, "\n");
             sb.insert(0, e.getLocalizedMessage());
             PATTERN_CACHE.put(regex, EMPTY_PATTERN);
-            REGEXP_LOG.createNotification("Ext doc keyword regexp compile fail", regex.length() + " chars",
-                    sb.toString(), NotificationType.ERROR).notify(project);
+            LOG.warn("Ext doc keyword regexp compile fail {} chars\n{}", regex.length(), sb);
             return null;
         }
     }

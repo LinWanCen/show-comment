@@ -1,8 +1,5 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
-import com.intellij.notification.NotificationDisplayType;
-import com.intellij.notification.NotificationGroup;
-import com.intellij.notification.NotificationType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -10,6 +7,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.FilenameIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +19,7 @@ import java.util.regex.Pattern;
  * call ConfFactory, ConfCacheGetUtils
  */
 public class ConfCache {
+    private static final Logger LOG = LoggerFactory.getLogger(ConfCache.class);
 
     static final String KEY_MID_EXT = ".key";
     static final String DOC_MID_EXT = ".doc";
@@ -116,9 +116,6 @@ public class ConfCache {
         }
     }
 
-    private static final NotificationGroup LOAD_ALL_LOG =
-            new NotificationGroup("Ext Doc Conf Load All", NotificationDisplayType.BALLOON, true);
-
     static void loadAll(@NotNull Project project) {
         DumbService.getInstance(project).runReadActionInSmartMode(() ->
                 ApplicationManager.getApplication().runReadAction(() -> {
@@ -131,8 +128,7 @@ public class ConfCache {
                     if (files.isEmpty()) {
                         return;
                     }
-                    LOAD_ALL_LOG.createNotification("Ext doc conf load all complete", files.size() + " files",
-                            sb.toString(), NotificationType.INFORMATION).notify(project);
+                    LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
                 }));
     }
 
