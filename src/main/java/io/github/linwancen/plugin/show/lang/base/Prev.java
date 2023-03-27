@@ -37,7 +37,7 @@ public class Prev {
         return null;
     }
 
-    private static final Pattern SYMBOL_PATTERN = Pattern.compile("[" +
+    private static final Pattern SYMBOL_PATTERN = Pattern.compile("[^" +
             ":-@" +
             "\\[-`" +
             "{-~" +
@@ -47,9 +47,8 @@ public class Prev {
     private static PsiElement refClassParent(@NotNull PsiElement element,
                                              @NotNull Class<? extends PsiElement> refClass) {
         String text = element.getText();
-        if (SYMBOL_PATTERN.matcher(text).find()) {
+        if (!SYMBOL_PATTERN.matcher(text).find()) {
             return null;
-
         }
         PsiElement parent = element.getParent();
         if (parent == null) {
