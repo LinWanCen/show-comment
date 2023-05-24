@@ -19,7 +19,11 @@ public class OwnerToPsiDocUtils {
         if (navElement instanceof PsiDocCommentOwner) {
             psiDocCommentOwner = (PsiDocCommentOwner) navElement;
         }
-        return psiDocCommentOwner.getDocComment();
+        try {
+            return psiDocCommentOwner.getDocComment();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Nullable
