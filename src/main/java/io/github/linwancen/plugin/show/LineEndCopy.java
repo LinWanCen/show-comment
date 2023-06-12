@@ -11,6 +11,8 @@ import io.github.linwancen.plugin.show.bean.FileInfo;
 import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.datatransfer.StringSelection;
 
@@ -18,6 +20,8 @@ import java.awt.datatransfer.StringSelection;
  * on EditorPopupMenu
  */
 public class LineEndCopy extends DumbAwareAction {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LineEndCopy.class);
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -27,7 +31,11 @@ public class LineEndCopy extends DumbAwareAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
-        ApplicationManager.getApplication().runReadAction(() -> copyWithDoc(event));
+        try {
+            ApplicationManager.getApplication().runReadAction(() -> copyWithDoc(event));
+        } catch (Throwable e) {
+            LOG.info("LineEndCopy catch Throwable but log to record.", e);
+        }
     }
 
     private void copyWithDoc(@NotNull AnActionEvent event) {

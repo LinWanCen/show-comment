@@ -15,11 +15,15 @@ import io.github.linwancen.plugin.show.bean.FileInfo;
 import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * on ProjectViewPopupMenu
  */
 public class LineEndAdd extends DumbAwareAction {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LineEndAdd.class);
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -29,6 +33,14 @@ public class LineEndAdd extends DumbAwareAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent event) {
+        try {
+            action(event);
+        } catch (Throwable e) {
+            LOG.info("LineEndAdd catch Throwable but log to record.", e);
+        }
+    }
+
+    private void action(@NotNull AnActionEvent event) {
         @Nullable Project project = event.getProject();
         if (project == null) {
             return;

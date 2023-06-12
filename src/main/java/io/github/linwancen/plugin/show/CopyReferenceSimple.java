@@ -28,6 +28,15 @@ public class CopyReferenceSimple extends CopyReferenceAction {
     @Nullable
     @Override
     protected String getQualifiedName(@NotNull Editor editor, List elements) {
+        try {
+            return simpleName(editor, elements);
+        } catch (Exception e) {
+            return e.toString();
+        }
+    }
+
+    @Nullable
+    private String simpleName(@NotNull Editor editor, List elements) {
         // because 2nd param is List<PsiElement> in 2020.1 and List<? extends PsiElement> in new version
         //noinspection unchecked
         String qualifiedName = super.getQualifiedName(editor, elements);

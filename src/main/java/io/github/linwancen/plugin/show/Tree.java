@@ -18,14 +18,26 @@ import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
 
 public class Tree implements ProjectViewNodeDecorator {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Tree.class);
+
     @Override
     public void decorate(@NotNull ProjectViewNode node, @NotNull PresentationData data) {
+        try {
+            decorateImpl(node, data);
+        } catch (Throwable e) {
+            LOG.info("Tree catch Throwable but log to record.", e);
+        }
+    }
+
+    private void decorateImpl(@NotNull ProjectViewNode node, @NotNull PresentationData data) {
         if (!AppSettingsState.getInstance().showTreeComment) {
             return;
         }

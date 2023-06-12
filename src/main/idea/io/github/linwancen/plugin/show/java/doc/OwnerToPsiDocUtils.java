@@ -15,7 +15,12 @@ public class OwnerToPsiDocUtils {
 
     @Nullable
     public static PsiDocComment srcOrByteCodeDoc(@NotNull PsiDocCommentOwner psiDocCommentOwner) {
-        PsiElement navElement = psiDocCommentOwner.getNavigationElement();
+        PsiElement navElement;
+        try {
+            navElement = psiDocCommentOwner.getNavigationElement();
+        } catch (Exception e) {
+            return null;
+        }
         if (navElement instanceof PsiDocCommentOwner) {
             psiDocCommentOwner = (PsiDocCommentOwner) navElement;
         }

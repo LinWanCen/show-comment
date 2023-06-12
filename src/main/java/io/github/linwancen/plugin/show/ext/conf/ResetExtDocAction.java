@@ -8,12 +8,16 @@ import com.intellij.openapi.project.Project;
 import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * call ConfCache.clearAll
  * <br>Use Reset only for file sort
  */
 public class ResetExtDocAction extends AnAction {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ResetExtDocAction.class);
 
     @Override
     public void update(@NotNull AnActionEvent e) {
@@ -23,12 +27,16 @@ public class ResetExtDocAction extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        ConfCache.clearAll();
-        @Nullable Project project = e.getProject();
-        if (project == null) {
-            return;
+        try {
+            ConfCache.clearAll();
+            @Nullable Project project = e.getProject();
+            if (project == null) {
+                return;
+            }
+            ApplicationManager.getApplication().invokeLater(() ->
+                    ProjectView.getInstance(project).refresh());
+        } catch (Throwable t) {
+            LOG.info("ConfFileChangeListener catch Throwable but log to record.", t);
         }
-        ApplicationManager.getApplication().invokeLater(() ->
-                ProjectView.getInstance(project).refresh());
     }
 }

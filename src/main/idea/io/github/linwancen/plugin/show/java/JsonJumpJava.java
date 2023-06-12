@@ -12,6 +12,8 @@ import io.github.linwancen.plugin.show.java.doc.PsiClassUtils;
 import io.github.linwancen.plugin.show.jump.JsonRef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,8 +21,18 @@ import java.util.List;
 
 public class JsonJumpJava extends PsiReferenceContributor {
 
+    private static final Logger LOG = LoggerFactory.getLogger(JsonJumpJava.class);
+
     @Override
     public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
+        try {
+            register(registrar);
+        } catch (Exception e) {
+            LOG.info("JsonJumpJava catch Throwable but log to record.", e);
+        }
+    }
+
+    private static void register(@NotNull PsiReferenceRegistrar registrar) {
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(JsonStringLiteral.class),
                 new PsiReferenceProvider() {
                     @Override

@@ -5,6 +5,8 @@ import com.intellij.openapi.vfs.newvfs.BulkFileListener;
 import com.intellij.openapi.vfs.newvfs.events.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -13,10 +15,16 @@ import java.util.List;
  */
 public class ConfFileListener implements BulkFileListener {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ConfFileListener.class);
+
     @Override
     public void after(@NotNull List<? extends VFileEvent> events) {
-        for (@NotNull VFileEvent event : events) {
-            forEvent(event);
+        try {
+            for (@NotNull VFileEvent event : events) {
+                forEvent(event);
+            }
+        } catch (Throwable e) {
+            LOG.info("ConfFileListener catch Throwable but log to record.", e);
         }
     }
 

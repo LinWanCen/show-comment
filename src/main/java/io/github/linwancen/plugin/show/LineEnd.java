@@ -15,15 +15,31 @@ import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class LineEnd extends EditorLinePainter {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LineEnd.class);
 
     @Override
     public @Nullable Collection<LineExtensionInfo> getLineExtensions(@NotNull Project project,
                                                                      @NotNull VirtualFile file, int lineNumber) {
+        try {
+            return getLineExtensionInfos(project, file, lineNumber);
+        } catch (Throwable e) {
+            LOG.info("LineEnd catch Throwable but log to record.", e);
+            return null;
+        }
+    }
+
+    @Nullable
+    private static List<LineExtensionInfo> getLineExtensionInfos(@NotNull Project project,
+                                                                 @NotNull VirtualFile file, int lineNumber) {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         if (!settings.showLineEndComment) {
             return null;
