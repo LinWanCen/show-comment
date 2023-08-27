@@ -107,7 +107,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 doc = before + " = " + doc;
             }
         } else {
-            doc = before + "  " + doc;
+            doc = before + " | " + doc;
         }
         return doc;
     }
