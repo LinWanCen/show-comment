@@ -92,9 +92,14 @@ public class DocFilter {
      * trim end with space
      */
     public static void addHtml(@NotNull StringBuilder sb, @NotNull String s) {
-        @NotNull String deleteHtml = HTML_PATTERN.matcher(s).replaceAll("").trim();
+        @NotNull String deleteHtml = html2Text(s);
         if (deleteHtml.length() > 0) {
-            sb.append(deleteHtml).append(" ");
+            sb.append(deleteHtml);
         }
+    }
+
+    @NotNull
+    public static String html2Text(@NotNull String s) {
+        return HTML_PATTERN.matcher(s).replaceAll(" ").trim();
     }
 }

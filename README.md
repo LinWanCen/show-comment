@@ -113,6 +113,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.09  Add line-end-comment  support Python doc strings
 <li>2.08  Add                   i18n and chinese
 <li>2.07  Add global-setting    reset default
 <li>2.06  Add project-view-tree xx-abc.xxx from Abc.java doc
@@ -150,6 +151,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.09  增加 行末注释   支持 Python 文档字符串
 <li>2.08  增加           多语言与中文支持
 <li>2.07  增加 全局设置   复位默认值
 <li>2.06  增加 文件树注释  xx-abc.xxx 来自 Abc.java 的文档注释
