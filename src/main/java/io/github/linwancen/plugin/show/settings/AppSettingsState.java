@@ -28,13 +28,17 @@ public class AppSettingsState extends AbstractSettingsState implements Persisten
 
     public boolean showLineEndComment = true;
     public boolean showLineEndCommentJava = true;
+    public boolean showLineEndCommentJavaBase = false;
+    public boolean showLineEndCommentKotlin = true;
+    public boolean showLineEndCommentKotlinBase = false;
+    public boolean showLineEndCommentJs = true;
+    public boolean showLineEndCommentJsBase = false;
+    public boolean showLineEndCommentPy = true;
+    public boolean showLineEndCommentPyBase = false;
+    public boolean showLineEndCommentGo = true;
+    public boolean showLineEndCommentGoBase = false;
     public boolean showLineEndCommentSql = true;
     public boolean showLineEndCommentJson = true;
-    public boolean showLineEndCommentJs = true;
-    public boolean jsDoc = true;
-    public boolean showLineEndCommentPy = true;
-    public boolean showLineEndCommentGo = true;
-    public boolean showLineEndCommentKotlin = true;
 
     @NotNull
     public String[] treeTags = {"author"};

@@ -58,7 +58,10 @@ public class ResolveDoc {
         if (document == null) {
             return null;
         }
-        @Nullable PsiElement psiElement = Prev.prevCompactElement(lineInfo, resolve, document);
+        @Nullable PsiElement psiElement = PsiTreeUtil.getChildOfType(resolve, PsiComment.class);
+        if (psiElement == null) {
+            psiElement = Prev.prevCompactElement(lineInfo, resolve, document);
+        }
         if (!keywords.isEmpty()) {
             while (psiElement != null) {
                 String text = psiElement.getText();

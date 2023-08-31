@@ -31,6 +31,11 @@ public class PythonLangDoc extends BaseTagLangDoc<StructuredDocString> {
         return lineInfo.appSettings.showLineEndCommentPy;
     }
 
+    @Override
+    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T settingsInfo) {
+        return settingsInfo.appSettings.showLineEndCommentPyBase;
+    }
+
     @Nullable
     @Override
     protected <T extends SettingsInfo> StructuredDocString toDocElement(@NotNull T settingsInfo,

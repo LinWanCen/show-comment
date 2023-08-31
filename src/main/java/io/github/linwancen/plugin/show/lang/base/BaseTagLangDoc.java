@@ -11,8 +11,8 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
     public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T settingsInfo,
                                                                      @NotNull PsiElement resolve) {
         @Nullable DocElement docElement = toDocElement(settingsInfo, resolve);
-        if (docElement == null) {
-            return null;
+        if (docElement == null && parseBaseComment(settingsInfo)) {
+            return super.resolveDocPrint(settingsInfo, resolve);
         }
         return docElementToStr(settingsInfo, docElement);
     }
@@ -43,6 +43,8 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
         }
         return text;
     }
+
+    protected abstract <T extends SettingsInfo> boolean parseBaseComment(T settingsInfo);
 
     @Nullable
     protected abstract <T extends SettingsInfo> DocElement toDocElement(@NotNull T settingsInfo,

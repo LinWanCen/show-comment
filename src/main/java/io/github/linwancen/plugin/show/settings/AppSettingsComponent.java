@@ -20,13 +20,17 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JBTextField treeTags = new JBTextField();
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
     private final JBCheckBox showLineEndCommentJava = new JBCheckBox("Java ");
+    private final JBCheckBox showLineEndCommentJavaBase = new JBCheckBox("// Java ");
+    private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("Kotlin ");
+    private final JBCheckBox showLineEndCommentKotlinBase = new JBCheckBox("// Kotlin ");
+    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("js ");
+    private final JBCheckBox showLineEndCommentJsBase = new JBCheckBox("// js ");
+    private final JBCheckBox showLineEndCommentPy = new JBCheckBox("Python ");
+    private final JBCheckBox showLineEndCommentPyBase = new JBCheckBox("# Python ");
+    private final JBCheckBox showLineEndCommentGo = new JBCheckBox("Go ");
+    private final JBCheckBox showLineEndCommentGoBase = new JBCheckBox("// Go ");
     private final JBCheckBox showLineEndCommentSql = new JBCheckBox("sql ");
     private final JBCheckBox showLineEndCommentJson = new JBCheckBox("json ");
-    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("js ");
-    private final JBCheckBox jsdoc = new JBCheckBox("jsdoc ");
-    private final JBCheckBox showLineEndCommentPy = new JBCheckBox("Python ");
-    private final JBCheckBox showLineEndCommentGo = new JBCheckBox("Go ");
-    private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("Kotlin ");
     private final JBTextField lineTags = new JBTextField();
     private final JBCheckBox getToSet = new JBCheckBox("get --> set ");
     private final JBCheckBox fromNew = new JBCheckBox("java new ");
@@ -40,7 +44,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
     private final JBTextField lineEndCount = new JBTextField();
 
     public AppSettingsComponent() {
-        JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
+        @NotNull JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
         resetDefault.addActionListener(e -> AppSettingsConfigurable.reset(AppSettingsState.DEFAULT_SETTING, this));
         myMainPanel = FormBuilder.createFormBuilder()
                 .addComponent(resetDefault, 1)
@@ -56,13 +60,18 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
                 .addComponent(JPanelFactory.of(showTreeComment, compact), 1)
                 .addComponent(JPanelFactory.of(showLineEndComment,
                         showLineEndCommentJava,
+                        showLineEndCommentKotlin,
+                        showLineEndCommentJs,
+                        showLineEndCommentPy,
+                        showLineEndCommentGo
+                ), 1)
+                .addComponent(JPanelFactory.of(
                         showLineEndCommentSql,
                         showLineEndCommentJson,
-                        showLineEndCommentJs,
-                        jsdoc,
-                        showLineEndCommentPy,
-                        showLineEndCommentGo,
-                        showLineEndCommentKotlin
+                        showLineEndCommentJavaBase,
+                        showLineEndCommentKotlinBase,
+                        showLineEndCommentJsBase,
+                        showLineEndCommentPyBase
                 ), 1)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("tree.tags")), treeTags, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("line.tags")), lineTags, 1, true)
@@ -122,6 +131,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         treeTags.setText(newText);
     }
 
+    // region line end
     public boolean getShowLineEndComment() {
         return showLineEndComment.isSelected();
     }
@@ -138,20 +148,12 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         showLineEndCommentJava.setSelected(newStatus);
     }
 
-    public boolean getShowLineEndCommentSql() {
-        return showLineEndCommentSql.isSelected();
+    public boolean getShowLineEndCommentKotlin() {
+        return showLineEndCommentKotlin.isSelected();
     }
 
-    public void setShowLineEndCommentSql(boolean newStatus) {
-        showLineEndCommentSql.setSelected(newStatus);
-    }
-
-    public boolean getShowLineEndCommentJson() {
-        return showLineEndCommentJson.isSelected();
-    }
-
-    public void setShowLineEndCommentJson(boolean newStatus) {
-        showLineEndCommentJson.setSelected(newStatus);
+    public void setShowLineEndCommentKotlin(boolean newStatus) {
+        showLineEndCommentKotlin.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentJs() {
@@ -160,14 +162,6 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
 
     public void setShowLineEndCommentJs(boolean newStatus) {
         showLineEndCommentJs.setSelected(newStatus);
-    }
-
-    public boolean getJsdoc() {
-        return jsdoc.isSelected();
-    }
-
-    public void setJsdoc(boolean newStatus) {
-        jsdoc.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentPy() {
@@ -186,13 +180,63 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
         showLineEndCommentGo.setSelected(newStatus);
     }
 
-    public boolean getShowLineEndCommentKotlin() {
-        return showLineEndCommentKotlin.isSelected();
+    public boolean getShowLineEndCommentJavaBase() {
+        return showLineEndCommentJavaBase.isSelected();
     }
 
-    public void setShowLineEndCommentKotlin(boolean newStatus) {
-        showLineEndCommentKotlin.setSelected(newStatus);
+    public void setShowLineEndCommentJavaBase(boolean newStatus) {
+        showLineEndCommentJavaBase.setSelected(newStatus);
     }
+
+    public boolean getShowLineEndCommentKotlinBase() {
+        return showLineEndCommentKotlinBase.isSelected();
+    }
+
+    public void setShowLineEndCommentKotlinBase(boolean newStatus) {
+        showLineEndCommentKotlinBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentJsBase() {
+        return showLineEndCommentJsBase.isSelected();
+    }
+
+    public void setShowLineEndCommentJsBase(boolean newStatus) {
+        showLineEndCommentJsBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentPyBase() {
+        return showLineEndCommentPyBase.isSelected();
+    }
+
+    public void setShowLineEndCommentPyBase(boolean newStatus) {
+        showLineEndCommentPyBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentGoBase() {
+        return showLineEndCommentGoBase.isSelected();
+    }
+
+    public void setShowLineEndCommentGoBase(boolean newStatus) {
+        showLineEndCommentGoBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentSql() {
+        return showLineEndCommentSql.isSelected();
+    }
+
+    public void setShowLineEndCommentSql(boolean newStatus) {
+        showLineEndCommentSql.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentJson() {
+        return showLineEndCommentJson.isSelected();
+    }
+
+    public void setShowLineEndCommentJson(boolean newStatus) {
+        showLineEndCommentJson.setSelected(newStatus);
+    }
+
+    // endregion line end
 
     @NotNull
     public String getLineTags() {

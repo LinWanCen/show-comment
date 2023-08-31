@@ -9,6 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
+import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
@@ -73,10 +74,22 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
         if (resolveDocPrint != null) {
             return resolveDocPrint;
         }
+        // no doc comment support get set
+        if (parseBaseComment(settingsInfo) && resolve instanceof PsiMethod) {
+            @Nullable PsiField psiField = PsiMethodToPsiDoc.propMethodField((PsiMethod) resolve);
+            if (psiField != null) {
+                return super.resolveDocPrint(settingsInfo, psiField);
+            }
+        }
         if (settingsInfo.appSettings.fromParam && resolve instanceof PsiParameter) {
             return paramDoc((PsiParameter) resolve);
         }
         return null;
+    }
+
+    @Override
+    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T settingsInfo) {
+        return settingsInfo.appSettings.showLineEndCommentJavaBase;
     }
 
     @Nullable

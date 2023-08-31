@@ -37,7 +37,7 @@ public class JsLangDoc extends BaseLangDoc {
         if (text != null) {
             return text;
         }
-        if (!lineInfo.appSettings.jsDoc) {
+        if (lineInfo.appSettings.showLineEndCommentJsBase) {
             return super.resolveDocRaw(lineInfo, resolve);
         }
         return null;

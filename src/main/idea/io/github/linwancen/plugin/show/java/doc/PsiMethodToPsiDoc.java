@@ -8,7 +8,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class PsiMethodToPsiDoc {
+public class PsiMethodToPsiDoc {
 
     private PsiMethodToPsiDoc() {}
 
@@ -69,7 +69,16 @@ class PsiMethodToPsiDoc {
     }
 
     @Nullable
-    private static PsiDocComment propMethodDoc(@NotNull PsiMethod psiMethod, @NotNull PsiClass psiClass) {
+    public static PsiField propMethodField(@NotNull PsiMethod psiMethod) {
+        @Nullable PsiClass clazz = psiMethod.getContainingClass();
+        if (clazz == null) {
+            return null;
+        }
+        return propMethodClassField(psiMethod, clazz);
+    }
+
+    @Nullable
+    static PsiField propMethodClassField(@NotNull PsiMethod psiMethod, @NotNull PsiClass psiClass) {
         @NotNull String name = psiMethod.getName();
         if (name.length() > 3 && (name.startsWith("get") || name.startsWith("set"))) {
             name = name.substring(3);
@@ -82,7 +91,12 @@ class PsiMethodToPsiDoc {
         // Lower Case
         chars[0] += 32;
         name = String.valueOf(chars);
-        @Nullable PsiField fieldByName = psiClass.findFieldByName(name, false);
+        return psiClass.findFieldByName(name, false);
+    }
+
+    @Nullable
+    private static PsiDocComment propMethodDoc(@NotNull PsiMethod psiMethod, @NotNull PsiClass psiClass) {
+        @Nullable PsiField fieldByName = propMethodClassField(psiMethod, psiClass);
         if (fieldByName == null) {
             return null;
         }

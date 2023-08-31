@@ -69,12 +69,14 @@ public abstract class BaseLangDoc extends EditorLinePainter {
             return null;
         }
         @Nullable String doc = null;
+        @Nullable String text = null;
         @Nullable PsiElement refElement = element;
         while ((refElement = Prev.prevRefChild(lineInfo, refElement, refClass)) != null) {
             PsiElement parent = refElement.getParent();
             @Nullable String filterDoc = refElementDoc(lineInfo, parent);
             if (filterDoc != null) {
                 doc = filterDoc;
+                text = refElement.getText();
                 refElement = parent;
                 break;
             }
@@ -87,24 +89,29 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         if (refElement == null) {
             return doc;
         }
-        String text = refElement.getText();
-        boolean set = text.startsWith("set");
         PsiElement parent = refElement.getParent();
         @Nullable String before = refElementDoc(lineInfo, parent);
         if (before != null) {
-            doc = mergeDoc(set, lineInfo.appSettings.getToSet, before, doc);
+            doc = mergeDoc(refElement.getText(), text, lineInfo.appSettings.getToSet, before, doc);
         }
         return doc;
     }
 
     @NotNull
-    private String mergeDoc(boolean set, boolean getToSet, String before, String doc) {
-        if (set) {
+    private String mergeDoc(@NotNull String beforeText, @NotNull String text, boolean getToSet, String before, String doc) {
+        if (beforeText.startsWith("set")) {
+            beforeText = beforeText.substring(3);
+            if (text.startsWith("get")) {
+                text = text.substring(3);
+            } else if (text.startsWith("is")) {
+                text = text.substring(2);
+            }
+            boolean same = beforeText.equals(text);
             if (getToSet) {
                 // because lambda is -> or =>
-                doc = doc + " --> " + before;
+                doc = doc + (same ? " ==> " : " --> ") + before;
             } else {
-                doc = before + " = " + doc;
+                doc = before + (same ? " <== " : " <-- ") + doc;
             }
         } else {
             doc = before + " | " + doc;

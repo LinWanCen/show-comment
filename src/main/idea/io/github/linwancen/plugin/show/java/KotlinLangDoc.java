@@ -34,6 +34,11 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
     }
 
     @Override
+    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T settingsInfo) {
+        return settingsInfo.appSettings.showLineEndCommentKotlinBase;
+    }
+
+    @Override
     @Nullable
     protected <T extends SettingsInfo> KDocSection toDocElement(@NotNull T settingsInfo, @NotNull PsiElement resolve) {
         if (resolve instanceof PsiPackageBase) {

@@ -40,13 +40,17 @@ public class AppSettingsConfigurable implements Configurable {
 
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
         modified |= mySettingsComponent.getShowLineEndCommentJava() != settings.showLineEndCommentJava;
-        modified |= mySettingsComponent.getShowLineEndCommentSql() != settings.showLineEndCommentSql;
-        modified |= mySettingsComponent.getShowLineEndCommentJson() != settings.showLineEndCommentJson;
+        modified |= mySettingsComponent.getShowLineEndCommentKotlin() != settings.showLineEndCommentKotlin;
         modified |= mySettingsComponent.getShowLineEndCommentJs() != settings.showLineEndCommentJs;
-        modified |= mySettingsComponent.getJsdoc() != settings.jsDoc;
         modified |= mySettingsComponent.getShowLineEndCommentPy() != settings.showLineEndCommentPy;
         modified |= mySettingsComponent.getShowLineEndCommentGo() != settings.showLineEndCommentGo;
-        modified |= mySettingsComponent.getShowLineEndCommentKotlin() != settings.showLineEndCommentKotlin;
+        modified |= mySettingsComponent.getShowLineEndCommentJavaBase() != settings.showLineEndCommentJavaBase;
+        modified |= mySettingsComponent.getShowLineEndCommentKotlinBase() != settings.showLineEndCommentKotlinBase;
+        modified |= mySettingsComponent.getShowLineEndCommentJsBase() != settings.showLineEndCommentJsBase;
+        modified |= mySettingsComponent.getShowLineEndCommentPyBase() != settings.showLineEndCommentPyBase;
+        modified |= mySettingsComponent.getShowLineEndCommentGoBase() != settings.showLineEndCommentGoBase;
+        modified |= mySettingsComponent.getShowLineEndCommentSql() != settings.showLineEndCommentSql;
+        modified |= mySettingsComponent.getShowLineEndCommentJson() != settings.showLineEndCommentJson;
 
         modified |= !mySettingsComponent.getTreeTags().equals(String.join("|", settings.treeTags));
         modified |= !mySettingsComponent.getLineTags().equals(String.join("|", settings.lineTags));
@@ -76,13 +80,17 @@ public class AppSettingsConfigurable implements Configurable {
 
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
         settings.showLineEndCommentJava = mySettingsComponent.getShowLineEndCommentJava();
-        settings.showLineEndCommentSql = mySettingsComponent.getShowLineEndCommentSql();
-        settings.showLineEndCommentJson = mySettingsComponent.getShowLineEndCommentJson();
+        settings.showLineEndCommentKotlin = mySettingsComponent.getShowLineEndCommentKotlin();
         settings.showLineEndCommentJs = mySettingsComponent.getShowLineEndCommentJs();
-        settings.jsDoc = mySettingsComponent.getJsdoc();
         settings.showLineEndCommentPy = mySettingsComponent.getShowLineEndCommentPy();
         settings.showLineEndCommentGo = mySettingsComponent.getShowLineEndCommentGo();
-        settings.showLineEndCommentKotlin = mySettingsComponent.getShowLineEndCommentKotlin();
+        settings.showLineEndCommentJavaBase = mySettingsComponent.getShowLineEndCommentJavaBase();
+        settings.showLineEndCommentKotlinBase = mySettingsComponent.getShowLineEndCommentKotlinBase();
+        settings.showLineEndCommentJsBase = mySettingsComponent.getShowLineEndCommentJsBase();
+        settings.showLineEndCommentPyBase = mySettingsComponent.getShowLineEndCommentPyBase();
+        settings.showLineEndCommentGoBase = mySettingsComponent.getShowLineEndCommentGoBase();
+        settings.showLineEndCommentSql = mySettingsComponent.getShowLineEndCommentSql();
+        settings.showLineEndCommentJson = mySettingsComponent.getShowLineEndCommentJson();
 
         settings.treeTags = Splitter.on('|').splitToList(mySettingsComponent.getTreeTags()).toArray(new String[0]);
         settings.lineTags = Splitter.on('|').splitToList(mySettingsComponent.getLineTags()).toArray(new String[0]);
@@ -112,19 +120,23 @@ public class AppSettingsConfigurable implements Configurable {
         reset(settings, mySettingsComponent);
     }
 
-    static void reset(@NotNull AppSettingsState settings, AppSettingsComponent mySettingsComponent) {
+    static void reset(@NotNull AppSettingsState settings, @NotNull AppSettingsComponent mySettingsComponent) {
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setCompact(settings.compact);
 
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
         mySettingsComponent.setShowLineEndCommentJava(settings.showLineEndCommentJava);
-        mySettingsComponent.setShowLineEndCommentSql(settings.showLineEndCommentSql);
-        mySettingsComponent.setShowLineEndCommentJson(settings.showLineEndCommentJson);
+        mySettingsComponent.setShowLineEndCommentKotlin(settings.showLineEndCommentKotlin);
         mySettingsComponent.setShowLineEndCommentJs(settings.showLineEndCommentJs);
-        mySettingsComponent.setJsdoc(settings.jsDoc);
         mySettingsComponent.setShowLineEndCommentPy(settings.showLineEndCommentPy);
         mySettingsComponent.setShowLineEndCommentGo(settings.showLineEndCommentGo);
-        mySettingsComponent.setShowLineEndCommentKotlin(settings.showLineEndCommentKotlin);
+        mySettingsComponent.setShowLineEndCommentJavaBase(settings.showLineEndCommentJavaBase);
+        mySettingsComponent.setShowLineEndCommentKotlinBase(settings.showLineEndCommentKotlinBase);
+        mySettingsComponent.setShowLineEndCommentJsBase(settings.showLineEndCommentJsBase);
+        mySettingsComponent.setShowLineEndCommentPyBase(settings.showLineEndCommentPyBase);
+        mySettingsComponent.setShowLineEndCommentGoBase(settings.showLineEndCommentGoBase);
+        mySettingsComponent.setShowLineEndCommentSql(settings.showLineEndCommentSql);
+        mySettingsComponent.setShowLineEndCommentJson(settings.showLineEndCommentJson);
 
         mySettingsComponent.setTreeTags(String.join("|", settings.treeTags));
         mySettingsComponent.setLineTags(String.join("|", settings.lineTags));
