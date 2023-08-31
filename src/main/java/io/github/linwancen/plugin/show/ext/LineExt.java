@@ -38,7 +38,7 @@ public class LineExt {
             return null;
         }
         @Nullable Pattern pattern = ConfCache.pattern(lineInfo.project, keyMap, path);
-        if (pattern == null || pattern.pattern().length() == 0) {
+        if (pattern == null || pattern.pattern().isEmpty()) {
             return null;
         }
         @NotNull Map<String, Map<String, List<String>>> docMap = ConfCache.docMap(path, name, ext);
@@ -100,7 +100,7 @@ public class LineExt {
                                      @NotNull Map<String, Map<String, List<String>>> docMap,
                                      @NotNull Map<String, Map<String, List<String>>> treeMap) {
         word = word.trim();
-        if (word.length() == 0) {
+        if (word.isEmpty()) {
             return false;
         }
         @Nullable String wordDoc = GetFromDocMap.get(docMap, word);

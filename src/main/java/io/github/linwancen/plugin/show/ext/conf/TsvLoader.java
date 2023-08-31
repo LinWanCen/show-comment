@@ -36,13 +36,13 @@ public class TsvLoader {
             @NotNull List<String> words = Splitter.on('\t').splitToList(line);
             if (!words.isEmpty()) {
                 String key = words.get(0);
-                if (key.length() == 0) {
+                if (key.isEmpty()) {
                     continue;
                 }
                 if (patternKey) {
                     key = StringEscapeUtils.unescapeJava(key);
                     String del = DEL_PATTERN.matcher(key).replaceAll("");
-                    if (del.length() != 0) {
+                    if (!del.isEmpty()) {
                         key = del;
                     }
                 }

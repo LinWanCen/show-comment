@@ -31,7 +31,7 @@ class ConfFactory {
                 String key = list.get(0);
                 if (key.startsWith("?")) {
                     exclude.add(key.substring(1));
-                } else if (key.length() > 0 && !exclude.contains(key)) {
+                } else if (!key.isEmpty() && !exclude.contains(key)) {
                     sb.append(key).append("|");
                 }
             }

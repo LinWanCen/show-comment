@@ -52,14 +52,14 @@ public class DocSkip {
     }
 
     static boolean include(@NotNull String text, @NotNull Pattern include) {
-        if (include.pattern().length() == 0) {
+        if (include.pattern().isEmpty()) {
             return true;
         }
         return include.matcher(text).find();
     }
 
     static boolean exclude(@NotNull String text, @NotNull Pattern exclude) {
-        if (exclude.pattern().length() == 0) {
+        if (exclude.pattern().isEmpty()) {
             return false;
         }
         return exclude.matcher(text).find();

@@ -27,6 +27,9 @@ public class PsiClassUtils {
             return PsiClass.EMPTY_ARRAY;
         }
         String className = matcher.group();
+        if (className == null) {
+            return PsiClass.EMPTY_ARRAY;
+        }
         @NotNull PsiClass[] psiClasses = nameToClass(className, project);
         if (psiClasses.length != 0) {
             return psiClasses;

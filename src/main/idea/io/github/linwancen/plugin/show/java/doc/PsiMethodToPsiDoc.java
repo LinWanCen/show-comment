@@ -15,7 +15,7 @@ class PsiMethodToPsiDoc {
     @Nullable
     static PsiDocComment methodSupperNewPropDoc(@NotNull PsiMethod psiMethod) {
         // .class
-        PsiElement navElement = null;
+        @Nullable PsiElement navElement;
         try {
             navElement = psiMethod.getNavigationElement();
         } catch (Exception e) {

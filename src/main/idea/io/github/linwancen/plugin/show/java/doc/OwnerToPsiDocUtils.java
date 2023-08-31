@@ -47,7 +47,7 @@ public class OwnerToPsiDocUtils {
             return null;
         }
         @Nullable String name = psiPackage.getName();
-        if (name == null || name.length() == 0) {
+        if (name == null || name.isEmpty()) {
             return null;
         }
         @NotNull PsiDirectory[] psiDirectories = psiPackage.getDirectories();

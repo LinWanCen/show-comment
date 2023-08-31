@@ -42,7 +42,7 @@ public class DocFilter {
             }
             s = s.trim();
             sb.append(s);
-            if (s.length() > 0) {
+            if (!s.isEmpty()) {
                 sb.append(" ");
             }
             lineCount++;
@@ -93,7 +93,7 @@ public class DocFilter {
      */
     public static void addHtml(@NotNull StringBuilder sb, @NotNull String s) {
         @NotNull String deleteHtml = html2Text(s);
-        if (deleteHtml.length() > 0) {
+        if (!deleteHtml.isEmpty()) {
             sb.append(deleteHtml);
         }
     }

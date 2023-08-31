@@ -29,7 +29,7 @@ public class JavaTree {
         if (docComment == null) {
             return null;
         }
-        String s = JavaLangDoc.INSTANCE.docElementToStr(settingsInfo, docComment);
+        @Nullable String s = JavaLangDoc.INSTANCE.docElementToStr(settingsInfo, docComment);
         if (s != null && !DocSkip.skipDoc(settingsInfo, s)) {
             return s;
         }

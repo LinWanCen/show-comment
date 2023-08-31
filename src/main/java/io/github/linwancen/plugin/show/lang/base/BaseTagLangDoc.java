@@ -31,14 +31,14 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
         for (@NotNull String name : names) {
             appendTag(lineInfo, tagStrBuilder, docElement, name);
         }
-        if (desc.length() > 0) {
+        if (!desc.isEmpty()) {
             if (tagStrBuilder.length() > 0) {
                 tagStrBuilder.insert(0, " @ ");
             }
             tagStrBuilder.insert(0, desc);
         }
         @NotNull String text = tagStrBuilder.toString().trim();
-        if (text.length() == 0) {
+        if (text.isEmpty()) {
             return null;
         }
         return text;

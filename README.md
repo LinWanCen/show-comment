@@ -37,7 +37,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h3>My Project</h3>
 <ul>
-<li>Show doc comment at the Project view Tree, line End, json etc:
+<li>Show doc comment at the Project view Tree, line End, json etc.:
 <a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
 </li>
 <li>Method call usage graph and maven dependency graph:
