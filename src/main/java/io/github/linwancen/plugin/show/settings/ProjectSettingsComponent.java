@@ -9,11 +9,14 @@ import javax.swing.*;
 public class ProjectSettingsComponent extends AbstractSettingsComponent {
 
     private final JPanel myMainPanel;
-    private final JBCheckBox globalFilterEffective = new JBCheckBox(ShowBundle.message("global.include.exclude.effective"));
-    private final JBCheckBox projectFilterEffective = new JBCheckBox(ShowBundle.message("project.include.exclude.effective"));
+    private final JBCheckBox globalFilterEffective = new JBCheckBox(ShowBundle.message("global.settings.effective"));
+    private final JBCheckBox projectFilterEffective = new JBCheckBox(ShowBundle.message("project.settings.effective"));
 
     public ProjectSettingsComponent() {
+        @NotNull JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
+        resetDefault.addActionListener(e -> ProjectSettingsConfigurable.reset(ProjectSettingsState.DEFAULT_SETTING, this));
         myMainPanel = FormBuilder.createFormBuilder()
+                .addComponent(JPanelFactory.of(resetDefault, globalFilterEffective, projectFilterEffective), 1)
                 .addComponent(lineEndFilterPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
@@ -22,8 +25,6 @@ public class ProjectSettingsComponent extends AbstractSettingsComponent {
     @NotNull
     protected JPanel lineEndFilterPanel() {
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
-                .addComponent(globalFilterEffective)
-                .addComponent(projectFilterEffective)
                 .addSeparator();
         return commonLineEndFilter(formBuilder);
     }

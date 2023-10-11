@@ -1,6 +1,7 @@
 package io.github.linwancen.plugin.show.lang.base;
 
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,20 +64,20 @@ public class DocFilter {
      */
     @NotNull
     public static String filterDoc(@NotNull String text,
-                                   @NotNull AppSettingsState appSettings,
+                                   @NotNull GlobalSettingsState globalSettingsState,
                                    @NotNull ProjectSettingsState projectSettings) {
         // docGetEffect first because default false
         if (projectSettings.docGetEffect && projectSettings.projectFilterEffective) {
-            return filterDoc(text, projectSettings.docGet);
-        } else if (appSettings.docGetEffect && projectSettings.globalFilterEffective) {
-            return filterDoc(text, appSettings.docGet);
+            return filterPattern(text, projectSettings.docGet);
+        } else if (globalSettingsState.docGetEffect && projectSettings.globalFilterEffective) {
+            return filterPattern(text, globalSettingsState.docGet);
         } else {
             return text;
         }
     }
 
     @NotNull
-    public static String filterDoc(@NotNull String text, @NotNull Pattern docGet) {
+    public static String filterPattern(@NotNull String text, @NotNull Pattern docGet) {
         // if effect skip check empty
         @NotNull Matcher m = docGet.matcher(text);
         if (m.find()) {
@@ -94,7 +95,7 @@ public class DocFilter {
     public static void addHtml(@NotNull StringBuilder sb, @NotNull String s) {
         @NotNull String deleteHtml = html2Text(s);
         if (!deleteHtml.isEmpty()) {
-            sb.append(deleteHtml);
+            sb.append(deleteHtml).append(" ");
         }
     }
 

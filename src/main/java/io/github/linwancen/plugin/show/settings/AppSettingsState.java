@@ -19,7 +19,7 @@ import java.util.Locale;
         name = "io.github.linwancen.plugin.show.settings.AppSettingsState",
         storages = @Storage("ShowCommentGlobal.xml")
 )
-public class AppSettingsState extends AbstractSettingsState implements PersistentStateComponent<AppSettingsState> {
+public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
 
     public static final AppSettingsState DEFAULT_SETTING = new AppSettingsState();
 

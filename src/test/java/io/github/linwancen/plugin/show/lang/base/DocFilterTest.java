@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.lang.base;
 
-import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class DocFilterTest {
     };
 
     /**
-     * @see DocFilter#filterDoc
+     * @see DocFilter#filterPattern
      */
     @Test
     void testGetDoc() {
@@ -40,7 +39,7 @@ class DocFilterTest {
             Pattern p = PATTERNS[pi];
             for (int si = 0; si < STRS.length; si++) {
                 String s = STRS[si];
-                @Nullable String doc = DocFilter.filterDoc(s, p);
+                @Nullable String doc = DocFilter.filterPattern(s, p);
                 String pattern = p.pattern();
                 System.out.println("（" + s + ", " + pattern + "): " + doc);
                 if (pi < 2) {

@@ -5,6 +5,7 @@ plugins {
 
 group 'io.github.linwancen'
 version '2.10.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+description "Show comment at the Project View Tree, line End, JSON, other"
 
 repositories {
     mavenCentral()

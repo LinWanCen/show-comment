@@ -16,7 +16,7 @@ public class AppSettingsConfigurable implements Configurable {
     @NotNull
     @Override
     public String getDisplayName() {
-        return "// Show Comment Global";
+        return "// Show Comment App";
     }
 
     @NotNull
@@ -66,9 +66,6 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
         modified |= mySettingsComponent.getSkipAscii() != settings.skipAscii;
         modified |= mySettingsComponent.getSkipBlank() != settings.skipBlank;
-
-        modified = AbstractSettingsConfigurable.isModified(settings, mySettingsComponent, modified);
-
         return modified;
     }
 
@@ -110,8 +107,6 @@ public class AppSettingsConfigurable implements Configurable {
         settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
         settings.skipAscii = mySettingsComponent.getSkipAscii();
         settings.skipBlank = mySettingsComponent.getSkipBlank();
-
-        AbstractSettingsConfigurable.apply(settings, mySettingsComponent);
     }
 
     @Override
@@ -152,8 +147,6 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
         mySettingsComponent.setSkipAscii(settings.skipAscii);
         mySettingsComponent.setSkipBlank(settings.skipBlank);
-
-        AbstractSettingsConfigurable.reset(settings, mySettingsComponent);
     }
 
     @Override

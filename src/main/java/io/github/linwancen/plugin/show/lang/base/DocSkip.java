@@ -12,7 +12,7 @@ public class DocSkip {
 
     public static <T extends SettingsInfo> boolean skipSign(@NotNull T settingsInfo, String text) {
         return skipText(settingsInfo, text,
-                settingsInfo.appSettings.lineInclude, settingsInfo.appSettings.lineExclude,
+                settingsInfo.globalSettings.lineInclude, settingsInfo.globalSettings.lineExclude,
                 settingsInfo.projectSettings.lineInclude, settingsInfo.projectSettings.lineExclude);
     }
 
@@ -23,7 +23,7 @@ public class DocSkip {
             return true;
         }
         return skipText(settingsInfo, text,
-                settingsInfo.appSettings.docInclude, settingsInfo.appSettings.docExclude,
+                settingsInfo.globalSettings.docInclude, settingsInfo.globalSettings.docExclude,
                 settingsInfo.projectSettings.docInclude, settingsInfo.projectSettings.docExclude);
     }
 

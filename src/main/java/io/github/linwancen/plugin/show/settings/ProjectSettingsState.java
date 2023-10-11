@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 )
 public class ProjectSettingsState extends AbstractSettingsState implements PersistentStateComponent<ProjectSettingsState> {
 
+    public static final ProjectSettingsState DEFAULT_SETTING = new ProjectSettingsState();
+
     public boolean globalFilterEffective = true;
     public boolean projectFilterEffective = false;
 

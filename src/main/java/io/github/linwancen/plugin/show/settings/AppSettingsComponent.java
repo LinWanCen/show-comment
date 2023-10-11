@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
-public class AppSettingsComponent extends AbstractSettingsComponent {
+public class AppSettingsComponent {
 
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
@@ -93,7 +93,7 @@ public class AppSettingsComponent extends AbstractSettingsComponent {
                 .addSeparator()
                 .addComponent(text)
                 .addSeparator();
-        return commonLineEndFilter(formBuilder);
+        return formBuilder.getPanel();
     }
 
     public JPanel getPanel() {

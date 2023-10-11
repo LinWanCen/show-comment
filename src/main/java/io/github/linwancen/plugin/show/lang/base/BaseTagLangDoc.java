@@ -24,7 +24,7 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
         }
         // desc
         @NotNull String descDoc = descDoc(lineInfo, docElement).trim();
-        @NotNull String desc = DocFilter.filterDoc(descDoc, lineInfo.appSettings, lineInfo.projectSettings);
+        @NotNull String desc = DocFilter.filterDoc(descDoc, lineInfo.globalSettings, lineInfo.projectSettings);
         // tag
         @NotNull StringBuilder tagStrBuilder = new StringBuilder();
         @NotNull String[] names = lineInfo.tagNames();

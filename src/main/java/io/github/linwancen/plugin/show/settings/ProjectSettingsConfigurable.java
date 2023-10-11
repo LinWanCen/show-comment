@@ -63,9 +63,13 @@ public class ProjectSettingsConfigurable extends ModuleAwareProjectConfigurable<
     @Override
     public void reset() {
         @NotNull ProjectSettingsState settings = ProjectSettingsState.getInstance(getProject());
-        mySettingsComponent.setGlobalFilterEffective(settings.globalFilterEffective);
-        mySettingsComponent.setProjectFilterEffective(settings.projectFilterEffective);
-        AbstractSettingsConfigurable.reset(settings, mySettingsComponent);
+        reset(settings, mySettingsComponent);
+    }
+
+    static void reset(@NotNull ProjectSettingsState settings, ProjectSettingsComponent mySettingsComponent1) {
+        mySettingsComponent1.setGlobalFilterEffective(settings.globalFilterEffective);
+        mySettingsComponent1.setProjectFilterEffective(settings.projectFilterEffective);
+        AbstractSettingsConfigurable.reset(settings, mySettingsComponent1);
     }
 
     @Override
