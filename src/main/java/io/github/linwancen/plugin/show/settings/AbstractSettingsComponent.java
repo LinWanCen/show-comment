@@ -3,11 +3,13 @@ package io.github.linwancen.plugin.show.settings;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBTextArea;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 public abstract class AbstractSettingsComponent {
 
@@ -19,6 +21,8 @@ public abstract class AbstractSettingsComponent {
 
     private final JBCheckBox docGetEffect = new JBCheckBox("");
     private final JBTextField docGet = new JBTextField();
+    private final JBCheckBox projectDocEffect = new JBCheckBox("");
+    private final JBTextArea projectDoc = new JBTextArea();
 
     @NotNull
     protected JPanel commonLineEndFilter(FormBuilder formBuilder) {
@@ -31,15 +35,16 @@ public abstract class AbstractSettingsComponent {
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
                 .addSeparator();
-        formBuilder = add(formBuilder, docGetEffect, this.docGet, ShowBundle.message("get.doc.regexp"));
+        formBuilder = add(formBuilder, docGetEffect, docGet, ShowBundle.message("get.doc.regexp"));
+        formBuilder = add(formBuilder, projectDocEffect, projectDoc, ShowBundle.message("project.doc.regexp"));
         JPanel lineEndFilter = formBuilder.getPanel();
         lineEndFilter.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
         return lineEndFilter;
     }
 
     protected FormBuilder add(@NotNull FormBuilder formBuilder, JBCheckBox jbCheckBox,
-                              @NotNull JBTextField jbTextField, @NotNull String tip) {
-        return formBuilder.addLabeledComponent(JPanelFactory.of(jbCheckBox, new JBLabel(tip)), jbTextField, 1, true);
+                              @NotNull JTextComponent jTextComponent, @NotNull String tip) {
+        return formBuilder.addLabeledComponent(JPanelFactory.of(jbCheckBox, new JBLabel(tip)), jTextComponent, 1, true);
     }
 
     @NotNull
@@ -95,5 +100,23 @@ public abstract class AbstractSettingsComponent {
 
     public void setDocGet(@NotNull String newText) {
         docGet.setText(newText);
+    }
+
+
+    public boolean getProjectEffect() {
+        return projectDocEffect.isSelected();
+    }
+
+    public void setProjectEffect(boolean newStatus) {
+        projectDocEffect.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getProjectDoc() {
+        return projectDoc.getText();
+    }
+
+    public void setProjectDoc(@NotNull String newText) {
+        projectDoc.setText(newText);
     }
 }

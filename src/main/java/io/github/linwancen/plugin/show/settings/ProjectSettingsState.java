@@ -8,11 +8,19 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.regex.Pattern;
+
 @State(
         name = "io.github.linwancen.plugin.show.settings.ProjectSettingsState",
         storages = @Storage("ShowCommentProject.xml")
 )
 public class ProjectSettingsState extends AbstractSettingsState implements PersistentStateComponent<ProjectSettingsState> {
+
+    public ProjectSettingsState() {
+        this.lineExclude = Pattern.compile("");
+        this.projectDocEffect = false;
+        this.projectDoc = new Pattern[][]{};
+    }
 
     public static final ProjectSettingsState DEFAULT_SETTING = new ProjectSettingsState();
 

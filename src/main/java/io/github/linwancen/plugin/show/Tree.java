@@ -16,6 +16,7 @@ import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.tree.ProjectDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -69,6 +70,10 @@ public class Tree implements ProjectViewNodeDecorator {
             return doc;
         }
         @NotNull SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.TREE);
+        @Nullable String projectDoc = ProjectDoc.projectDoc(node, settingsInfo);
+        if (projectDoc != null) {
+            return projectDoc;
+        }
         Object value = node.getValue();
         if (value instanceof PsiElement) {
             @NotNull PsiElement psiElement = (PsiElement) value;

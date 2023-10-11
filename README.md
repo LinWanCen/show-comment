@@ -1,5 +1,4 @@
-# Show Comment Plugin
-IDEA 智能注释插件
+# 智能注释插件 Show Comment Plugin IDEA
 
 [![Version](https://img.shields.io/jetbrains/plugin/v/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/18553-show-comment/versions)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/18553-show-comment)
@@ -113,6 +112,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.11  Add project-view-tree description from pom.xml and build.gradle
 <li>2.10  Add line-end-comment  not doc comment
 <li>2.09  Add line-end-comment  support Python doc strings
 <li>2.08  Add                   i18n and chinese
@@ -152,6 +152,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.11  增加 文件树注释  模块描述 来自 pom.xml 和 build.gradle
 <li>2.10  增加 行末注释   非文档注释
 <li>2.09  增加 行末注释   支持 Python 文档字符串
 <li>2.08  增加           多语言与中文支持

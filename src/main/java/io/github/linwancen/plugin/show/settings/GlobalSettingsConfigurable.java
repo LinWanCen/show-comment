@@ -49,7 +49,7 @@ public class GlobalSettingsConfigurable implements Configurable {
         reset(settings, mySettingsComponent);
     }
 
-    static void reset(@NotNull GlobalSettingsState settings, GlobalSettingsComponent mySettingsComponent1) {
+    static void reset(@NotNull GlobalSettingsState settings, @NotNull GlobalSettingsComponent mySettingsComponent1) {
         AbstractSettingsConfigurable.reset(settings, mySettingsComponent1);
     }
 

@@ -18,7 +18,7 @@ public class Prev {
     @Nullable
     public static PsiElement prevRefChild(@NotNull LineInfo lineInfo, @NotNull PsiElement element,
                                           @NotNull Class<? extends PsiElement> refClass) {
-        PsiElement prevParent = refClassParent(element, refClass);
+        @Nullable PsiElement prevParent = refClassParent(element, refClass);
         while ((element = PsiTreeUtil.prevVisibleLeaf(element)) != null) {
             if (element.getTextRange().getEndOffset() < lineInfo.startOffset) {
                 return null;
