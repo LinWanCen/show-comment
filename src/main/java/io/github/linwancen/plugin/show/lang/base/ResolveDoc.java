@@ -73,12 +73,24 @@ public class ResolveDoc {
             }
         }
         @NotNull StringBuilder sb = new StringBuilder();
-        while (psiElement instanceof PsiComment) {
+        boolean isComment = psiElement instanceof PsiComment;
+        while (isComment) {
             String text = psiElement.getText();
+            int thisStartOffset = psiElement.getTextRange().getStartOffset();
+            psiElement = Prev.prevCompactElement(lineInfo, psiElement, document);
+            isComment = psiElement instanceof PsiComment;
+            if (!isComment && psiElement != null) {
+                int prevEndOffset = psiElement.getTextRange().getEndOffset();
+                int thisLineNumber = document.getLineNumber(thisStartOffset);
+                int prevLineNumber = document.getLineNumber(prevEndOffset);
+                boolean isNotCommentSameLine = thisLineNumber == prevLineNumber;
+                if (isNotCommentSameLine) {
+                    break;
+                }
+            }
             if (text != null) {
                 sb.insert(0, "\n").insert(0, text);
             }
-            psiElement = Prev.prevCompactElement(lineInfo, psiElement, document);
         }
         if (sb.length() == 0) {
             return null;
