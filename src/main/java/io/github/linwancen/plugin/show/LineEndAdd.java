@@ -27,7 +27,6 @@ public class LineEndAdd extends DumbAwareAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        super.update(e);
         e.getPresentation().setText(ShowBundle.message("line.end.add"));
     }
 

@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 
 public abstract class AbstractSettingsState {
 
+    public int lineEndCount = 2;
+    public int lineEndLen = 0;
     @NotNull
     public transient Pattern lineInclude = Pattern.compile("");
     @NotNull

@@ -9,9 +9,10 @@ import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 
 public abstract class AbstractSettingsComponent {
+
+    protected final JBTextField lineEndCount = new JBTextField();
 
     private final JBTextField lineInclude = new JBTextField();
     private final JBTextField lineExclude = new JBTextField();
@@ -43,19 +44,29 @@ public abstract class AbstractSettingsComponent {
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
                 .addSeparator();
-        JPanel label = JPanelFactory.of(docGetEffect, new JBLabel(ShowBundle.message("get.doc.regexp")));
+        @NotNull JPanel label = JPanelFactory.of(docGetEffect, new JBLabel(ShowBundle.message("get.doc.regexp")));
         JPanel panel = builder
                 .addLabeledComponent(label, docGet, 1, true).getPanel();
         panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
         return panel;
     }
 
+    @NotNull
     private JPanel treePanel() {
-        JPanel label = JPanelFactory.of(projectDocEffect, new JBLabel(ShowBundle.message("project.doc.regexp")));
+        @NotNull JPanel label = JPanelFactory.of(projectDocEffect, new JBLabel(ShowBundle.message("project.doc.regexp")));
         JPanel panel = FormBuilder.createFormBuilder()
                 .addLabeledComponent(label, projectDoc, 1, true).getPanel();
         panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("tree.comment")));
         return panel;
+    }
+
+    @NotNull
+    public String getLineEndCount() {
+        return lineEndCount.getText();
+    }
+
+    public void setLineEndCount(@NotNull String newText) {
+        lineEndCount.setText(newText);
     }
 
     @NotNull

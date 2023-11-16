@@ -1,6 +1,7 @@
 package io.github.linwancen.plugin.show.settings;
 
 import com.intellij.ui.components.JBCheckBox;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,10 @@ public class ProjectSettingsComponent extends AbstractSettingsComponent {
         @NotNull JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
         resetDefault.addActionListener(e -> ProjectSettingsConfigurable.reset(ProjectSettingsState.DEFAULT_SETTING, this));
         myMainPanel = FormBuilder.createFormBuilder()
-                .addComponent(JPanelFactory.of(resetDefault, globalFilterEffective, projectFilterEffective), 1)
+                .addComponent(JPanelFactory.of(resetDefault,
+                        new JBLabel(ShowBundle.message("line.count")), lineEndCount,
+                        globalFilterEffective, projectFilterEffective
+                ), 1)
                 .addComponent(commonPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();

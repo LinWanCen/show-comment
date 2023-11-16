@@ -53,8 +53,6 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     @NotNull
     public String lineEndPrefix = "   // ";
-    public int lineEndCount = 2;
-    public int lineEndLen = 0;
     public boolean getToSet = true;
     public boolean fromNew = true;
     public boolean fromParam = false;

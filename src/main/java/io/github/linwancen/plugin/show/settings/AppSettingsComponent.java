@@ -41,13 +41,12 @@ public class AppSettingsComponent {
     private final ColorPanel lineEndColor = new ColorPanel();
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBTextField lineEndPrefix = new JBTextField();
-    private final JBTextField lineEndCount = new JBTextField();
 
     public AppSettingsComponent() {
         @NotNull JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
         resetDefault.addActionListener(e -> AppSettingsConfigurable.reset(AppSettingsState.DEFAULT_SETTING, this));
         myMainPanel = FormBuilder.createFormBuilder()
-                .addComponent(resetDefault, 1)
+                .addComponent(JPanelFactory.of(resetDefault), 1)
                 .addComponent(showPanel(), 1)
                 .addComponent(lineEndFilterPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
@@ -83,7 +82,6 @@ public class AppSettingsComponent {
     @NotNull
     protected JPanel lineEndFilterPanel() {
         @NotNull JPanel text = JPanelFactory.of(
-                new JBLabel(ShowBundle.message("line.count")), lineEndCount,
                 new JBLabel(ShowBundle.message("text.color")), lineEndColor,
                 new JBLabel(ShowBundle.message("text.color.json")), lineEndJsonColor,
                 new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
@@ -320,14 +318,5 @@ public class AppSettingsComponent {
 
     public void setLineEndPrefix(@NotNull String newText) {
         lineEndPrefix.setText(newText);
-    }
-
-    @NotNull
-    public String getLineEndCount() {
-        return lineEndCount.getText();
-    }
-
-    public void setLineEndCount(@NotNull String newText) {
-        lineEndCount.setText(newText);
     }
 }

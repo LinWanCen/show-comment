@@ -11,7 +11,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,7 +56,7 @@ public class PythonLangDoc extends BaseTagLangDoc<StructuredDocString> {
             return summary;
         }
         @NotNull String description = structuredDocString.getDescription();
-        return DocFilter.cutDoc(DocFilter.html2Text(description), lineInfo.appSettings, false);
+        return DocFilter.cutDoc(DocFilter.html2Text(description), lineInfo, false);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class PythonLangDoc extends BaseTagLangDoc<StructuredDocString> {
         if (structuredDocString instanceof TagBasedDocString) {
             @Nullable Substring tagValue = ((TagBasedDocString) structuredDocString).getTagValue(name);
             if (tagValue != null) {
-                @NotNull String cutDoc = DocFilter.cutDoc(tagValue.getValue(), lineInfo.appSettings, false);
+                @NotNull String cutDoc = DocFilter.cutDoc(tagValue.getValue(), lineInfo, false);
                 tagStrBuilder.append(cutDoc);
             }
         }

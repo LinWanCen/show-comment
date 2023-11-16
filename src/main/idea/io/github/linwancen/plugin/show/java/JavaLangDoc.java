@@ -137,7 +137,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             if (appendElementText(sb, element)) {
                 lineCount++;
             }
-            if (DocFilter.lineCountOrLenOver(lineInfo.appSettings, sb, lineCount)) {
+            if (DocFilter.lineCountOrLenOver(lineInfo, sb, lineCount)) {
                 break;
             }
         }

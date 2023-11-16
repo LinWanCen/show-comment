@@ -1,5 +1,7 @@
 package io.github.linwancen.plugin.show.lang.base;
 
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.settings.AbstractSettingsState;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
@@ -32,8 +34,7 @@ public class DocFilter {
      * end with space
      */
     @NotNull
-    public static String cutDoc(String text,
-                                @NotNull AppSettingsState appSettings, boolean deletePrefix) {
+    public static <T extends SettingsInfo> String cutDoc(String text, @NotNull T info, boolean deletePrefix) {
         String[] split = LINE_SEPARATOR_PATTERN.split(text);
         int lineCount = 0;
         @NotNull StringBuilder sb = new StringBuilder();
@@ -47,13 +48,24 @@ public class DocFilter {
                 sb.append(" ");
             }
             lineCount++;
-            if (lineCountOrLenOver(appSettings, sb, lineCount)) break;
+            if (lineCountOrLenOver(info, sb, lineCount)) break;
         }
         return sb.toString();
     }
 
-    public static boolean lineCountOrLenOver(@NotNull AppSettingsState appSettings,
-                                             @NotNull StringBuilder sb, int lineCount) {
+    public static <T extends SettingsInfo> boolean lineCountOrLenOver(@NotNull T info,
+                                                                      @NotNull StringBuilder sb, int lineCount) {
+        if (info.projectSettings.projectFilterEffective) {
+            return lineCountOrLenOverInfo(info.projectSettings, sb, lineCount);
+        } else if (info.projectSettings.globalFilterEffective) {
+            return lineCountOrLenOverInfo(info.globalSettings, sb, lineCount);
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean lineCountOrLenOverInfo(@NotNull AbstractSettingsState appSettings,
+                                                  @NotNull StringBuilder sb, int lineCount) {
         boolean countOver = appSettings.lineEndCount > 0 && lineCount >= appSettings.lineEndCount;
         boolean lenOver = appSettings.lineEndLen > 0 && sb.length() >= appSettings.lineEndLen;
         return countOver || lenOver;

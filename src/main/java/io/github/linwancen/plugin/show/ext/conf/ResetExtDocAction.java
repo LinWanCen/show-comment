@@ -21,7 +21,6 @@ public class ResetExtDocAction extends AnAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        super.update(e);
         e.getPresentation().setText(ShowBundle.message("reset.ext.doc"));
     }
 

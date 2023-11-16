@@ -55,7 +55,6 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= !mySettingsComponent.getTreeTags().equals(String.join("|", settings.treeTags));
         modified |= !mySettingsComponent.getLineTags().equals(String.join("|", settings.lineTags));
 
-        modified |= !mySettingsComponent.getLineEndCount().equals(String.valueOf(settings.lineEndCount));
         modified |= !settings.lineEndTextAttr.getForegroundColor().equals(mySettingsComponent.getLineEndColor());
         modified |= !settings.lineEndJsonTextAttr.getForegroundColor().equals(mySettingsComponent.getLineEndJsonColor());
         modified |= !mySettingsComponent.getLineEndPrefix().equals(settings.lineEndPrefix);
@@ -92,11 +91,6 @@ public class AppSettingsConfigurable implements Configurable {
         settings.treeTags = Splitter.on('|').splitToList(mySettingsComponent.getTreeTags()).toArray(new String[0]);
         settings.lineTags = Splitter.on('|').splitToList(mySettingsComponent.getLineTags()).toArray(new String[0]);
 
-        try {
-            settings.lineEndCount = Integer.parseInt(mySettingsComponent.getLineEndCount());
-        } catch (NumberFormatException e) {
-            mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
-        }
         settings.lineEndTextAttr.setForegroundColor(mySettingsComponent.getLineEndColor());
         settings.lineEndJsonTextAttr.setForegroundColor(mySettingsComponent.getLineEndJsonColor());
         settings.lineEndPrefix = mySettingsComponent.getLineEndPrefix();
@@ -136,7 +130,6 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setTreeTags(String.join("|", settings.treeTags));
         mySettingsComponent.setLineTags(String.join("|", settings.lineTags));
 
-        mySettingsComponent.setLineEndCount(String.valueOf(settings.lineEndCount));
         mySettingsComponent.setLineEndColor(settings.lineEndTextAttr.getForegroundColor());
         mySettingsComponent.setLineEndJsonColor(settings.lineEndJsonTextAttr.getForegroundColor());
         mySettingsComponent.setLineEndPrefix(settings.lineEndPrefix);

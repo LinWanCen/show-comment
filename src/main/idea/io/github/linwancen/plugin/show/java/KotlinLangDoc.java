@@ -55,7 +55,7 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
     @Override
     protected <T extends SettingsInfo> String descDoc(@NotNull T lineInfo, @NotNull KDocSection kDocSection) {
         @NotNull String content = kDocSection.getContent();
-        return DocFilter.cutDoc(content, lineInfo.appSettings, false);
+        return DocFilter.cutDoc(content, lineInfo, false);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
         @NotNull List<KDocTag> tags = kDocSection.findTagsByName(name);
         for (@NotNull KDocTag tag : tags) {
             @NotNull String content = tag.getContent();
-            @NotNull String cutDoc = DocFilter.cutDoc(content, lineInfo.appSettings, false);
+            @NotNull String cutDoc = DocFilter.cutDoc(content, lineInfo, false);
             tagStrBuilder.append(cutDoc);
         }
     }

@@ -18,7 +18,6 @@ public class CopyReferenceSimple extends CopyReferenceAction {
 
     @Override
     public void update(@NotNull AnActionEvent e) {
-        super.update(e);
         e.getPresentation().setText(ShowBundle.message("copy.class.method.or.file.line"));
     }
 
