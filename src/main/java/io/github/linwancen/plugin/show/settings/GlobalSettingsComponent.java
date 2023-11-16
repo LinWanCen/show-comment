@@ -13,16 +13,9 @@ public class GlobalSettingsComponent extends AbstractSettingsComponent {
         resetDefault.addActionListener(e -> GlobalSettingsConfigurable.reset(GlobalSettingsState.DEFAULT_SETTING, this));
         myMainPanel = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(resetDefault), 1)
-                .addComponent(lineEndFilterPanel(), 1)
+                .addComponent(commonPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
-    }
-
-    @NotNull
-    protected JPanel lineEndFilterPanel() {
-        FormBuilder formBuilder = FormBuilder.createFormBuilder()
-                .addSeparator();
-        return commonLineEndFilter(formBuilder);
     }
 
     public JPanel getPanel() {

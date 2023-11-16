@@ -25,8 +25,16 @@ public abstract class AbstractSettingsComponent {
     private final JBTextArea projectDoc = new JBTextArea();
 
     @NotNull
-    protected JPanel commonLineEndFilter(FormBuilder formBuilder) {
-        formBuilder = formBuilder
+    protected JPanel commonPanel() {
+        return FormBuilder.createFormBuilder()
+                .addComponent(lineEndPanel(), 1)
+                .addComponent(treePanel(), 1)
+                .getPanel();
+    }
+
+    @NotNull
+    protected JPanel lineEndPanel() {
+        FormBuilder builder = FormBuilder.createFormBuilder()
                 .addComponent(new JBLabel(ShowBundle.message("regexp.tip")))
                 .addSeparator()
                 .addLabeledComponent(new JBLabel(ShowBundle.message("sign.include.regexp")), lineInclude, 1, true)
@@ -35,16 +43,19 @@ public abstract class AbstractSettingsComponent {
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
                 .addSeparator();
-        formBuilder = add(formBuilder, docGetEffect, docGet, ShowBundle.message("get.doc.regexp"));
-        formBuilder = add(formBuilder, projectDocEffect, projectDoc, ShowBundle.message("project.doc.regexp"));
-        JPanel lineEndFilter = formBuilder.getPanel();
-        lineEndFilter.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
-        return lineEndFilter;
+        JPanel label = JPanelFactory.of(docGetEffect, new JBLabel(ShowBundle.message("get.doc.regexp")));
+        JPanel panel = builder
+                .addLabeledComponent(label, docGet, 1, true).getPanel();
+        panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
+        return panel;
     }
 
-    protected FormBuilder add(@NotNull FormBuilder formBuilder, JBCheckBox jbCheckBox,
-                              @NotNull JTextComponent jTextComponent, @NotNull String tip) {
-        return formBuilder.addLabeledComponent(JPanelFactory.of(jbCheckBox, new JBLabel(tip)), jTextComponent, 1, true);
+    private JPanel treePanel() {
+        JPanel label = JPanelFactory.of(projectDocEffect, new JBLabel(ShowBundle.message("project.doc.regexp")));
+        JPanel panel = FormBuilder.createFormBuilder()
+                .addLabeledComponent(label, projectDoc, 1, true).getPanel();
+        panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("tree.comment")));
+        return panel;
     }
 
     @NotNull
