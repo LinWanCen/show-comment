@@ -2,9 +2,9 @@ package io.github.linwancen.plugin.show;
 
 import com.intellij.json.JsonFileType;
 import com.intellij.json.json5.Json5FileType;
-import com.intellij.openapi.editor.EditorLinePainter;
-import com.intellij.openapi.editor.LineExtensionInfo;
+import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -13,6 +13,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.ext.LineExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -43,6 +44,24 @@ public class LineEnd extends EditorLinePainter {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         if (!settings.showLineEndComment) {
             return null;
+        }
+        @NotNull GlobalSettingsState globalSettingsState = GlobalSettingsState.getInstance();
+        if (globalSettingsState.onlySelectLine) {
+            Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+            if (editor != null) {
+                SelectionModel select = editor.getSelectionModel();
+                VisualPosition start = select.getSelectionStartPosition();
+                int lineNum = lineNumber + 1;
+                if (start != null) {
+                    if (lineNum < start.getLine()) {
+                        return null;
+                    }
+                }
+                VisualPosition end = select.getSelectionEndPosition();
+                if (end != null && lineNum > end.getLine()) {
+                    return null;
+                }
+            }
         }
         if (DumbService.isDumb(project)) {
             return null;

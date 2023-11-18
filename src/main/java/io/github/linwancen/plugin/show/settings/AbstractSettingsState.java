@@ -11,6 +11,7 @@ public abstract class AbstractSettingsState {
 
     public int lineEndCount = 2;
     public int lineEndLen = 0;
+    public boolean onlySelectLine = false;
     @NotNull
     public transient Pattern lineInclude = Pattern.compile("");
     @NotNull

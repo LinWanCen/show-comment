@@ -9,6 +9,7 @@ public class AbstractSettingsConfigurable {
     static boolean isModified(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component,
                               boolean modified) {
         modified |= !component.getLineEndCount().equals(String.valueOf(settings.lineEndCount));
+        modified |= component.getOnlySelectLine() != settings.onlySelectLine;
         modified |= !component.getLineInclude().equals(settings.getLineInclude());
         modified |= !component.getLineExclude().equals(settings.getLineExclude());
         modified |= !component.getDocInclude().equals(settings.getDocInclude());
@@ -26,6 +27,7 @@ public class AbstractSettingsConfigurable {
         } catch (NumberFormatException e) {
             component.setLineEndCount(String.valueOf(settings.lineEndCount));
         }
+        settings.onlySelectLine = component.getOnlySelectLine();
         settings.setLineInclude(component.getLineInclude());
         settings.setLineExclude(component.getLineExclude());
         settings.setDocInclude(component.getDocInclude());
@@ -38,6 +40,7 @@ public class AbstractSettingsConfigurable {
 
     static void reset(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component) {
         component.setLineEndCount(String.valueOf(settings.lineEndCount));
+        component.setOnlySelectLine(settings.onlySelectLine);
         component.setLineInclude(settings.getLineInclude());
         component.setLineExclude(settings.getLineExclude());
         component.setDocInclude(settings.getDocInclude());

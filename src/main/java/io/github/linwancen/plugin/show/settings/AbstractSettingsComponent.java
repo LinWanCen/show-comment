@@ -14,6 +14,8 @@ public abstract class AbstractSettingsComponent {
 
     protected final JBTextField lineEndCount = new JBTextField();
 
+    private final JBCheckBox onlySelectLine = new JBCheckBox(ShowBundle.message("only.select.line"));
+
     private final JBTextField lineInclude = new JBTextField();
     private final JBTextField lineExclude = new JBTextField();
 
@@ -36,6 +38,8 @@ public abstract class AbstractSettingsComponent {
     @NotNull
     protected JPanel lineEndPanel() {
         FormBuilder builder = FormBuilder.createFormBuilder()
+                // .addComponent(onlySelectLine)
+                // .addSeparator()
                 .addComponent(new JBLabel(ShowBundle.message("regexp.tip")))
                 .addSeparator()
                 .addLabeledComponent(new JBLabel(ShowBundle.message("sign.include.regexp")), lineInclude, 1, true)
@@ -67,6 +71,14 @@ public abstract class AbstractSettingsComponent {
 
     public void setLineEndCount(@NotNull String newText) {
         lineEndCount.setText(newText);
+    }
+
+    public boolean getOnlySelectLine() {
+        return onlySelectLine.isSelected();
+    }
+
+    public void setOnlySelectLine(boolean newStatus) {
+        onlySelectLine.setSelected(newStatus);
     }
 
     @NotNull
