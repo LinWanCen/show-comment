@@ -49,7 +49,7 @@ public class Tree implements ProjectViewNodeDecorator {
         if (DumbService.isDumb(project)) {
             return;
         }
-        DumbService.getInstance(project).runReadActionInSmartMode(() ->
+        DumbService.getInstance(project).smartInvokeLater(() ->
                 ApplicationManager.getApplication().runReadAction(() -> {
                     @Nullable String doc = treeDoc(node, project);
                     if (doc == null) {
@@ -59,7 +59,13 @@ public class Tree implements ProjectViewNodeDecorator {
                     if (coloredText.isEmpty()) {
                         data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
                     }
-                    data.addText(" " + doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
+                    @NotNull String text = " " + doc;
+                    for (@NotNull ColoredFragment fragment : coloredText) {
+                        if (text.equals(fragment.getText())) {
+                            return;
+                        }
+                    }
+                    data.addText(text, SimpleTextAttributes.GRAY_ATTRIBUTES);
                 }));
     }
 

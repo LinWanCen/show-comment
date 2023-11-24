@@ -2,8 +2,9 @@ package io.github.linwancen.plugin.show;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
@@ -17,6 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 /**
  * on ProjectViewPopupMenu
@@ -50,34 +53,52 @@ public class LineEndAdd extends DumbAwareAction {
         }
         @NotNull ListPopup confirmation = JBPopupFactory.getInstance().createConfirmation(
                 "Add Line Comment?", "Add and replace files!", "Don't add.",
-                () -> ApplicationManager.getApplication().runReadAction(() -> addDocAll(project, files)), 2);
+                () -> addDocAll(project, files), 2);
         confirmation.showInFocusCenter();
     }
 
     private void addDocAll(@NotNull Project project, @NotNull VirtualFile[] files) {
+        @NotNull ArrayList<VirtualFile> list = new ArrayList<>();
         for (@NotNull VirtualFile file : files) {
             VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor<Void>() {
                 @Override
                 public boolean visitFile(@NotNull VirtualFile file) {
                     if (!file.isDirectory()) {
-                        ApplicationManager.getApplication().runReadAction(() -> addDoc(project, file));
+                        list.add(file);
                     }
                     return true;
                 }
             });
         }
+        if (list.isEmpty()) {
+            return;
+        }
+        new Task.Backgroundable(project, "Show LineEndAdd " + list.size() + " " + list.get(0)) {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                WriteCommandAction.runWriteCommandAction(project, () -> {
+                    for (int i = 0; i < list.size(); i++) {
+                        VirtualFile file = list.get(i);
+                        if (file.exists()) {
+                            indicator.setText(i + " / " + list.size() + " file");
+                            indicator.setFraction(1.0 * i / list.size());
+                            addDoc(project, file, indicator);
+                        }
+                    }
+                });
+            }
+        }.queue();
     }
 
-    private void addDoc(@NotNull Project project, @NotNull VirtualFile file) {
+    private void addDoc(@NotNull Project project, @NotNull VirtualFile file, @NotNull ProgressIndicator indicator) {
         @Nullable FileInfo fileInfo = FileInfo.of(file, project);
         if (fileInfo == null) {
             return;
         }
         int startLine = 0;
         int endLine = fileInfo.document.getLineCount() - 1;
-        @NotNull String textWithDoc = LineEnd.textWithDoc(fileInfo, startLine, endLine);
-        WriteCommandAction.runWriteCommandAction(project, () ->
-                fileInfo.document.replaceString(0, fileInfo.document.getTextLength() - 1, textWithDoc)
+        LineEnd.textWithDoc(fileInfo, startLine, endLine, indicator, s ->
+                fileInfo.document.replaceString(0, fileInfo.document.getTextLength() - 1, s)
         );
     }
 }

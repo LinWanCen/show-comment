@@ -117,23 +117,22 @@ public class ConfCache {
     }
 
     static void loadAll(@NotNull Project project) {
-        DumbService.getInstance(project).runReadActionInSmartMode(() ->
-                ApplicationManager.getApplication().runReadAction(() -> {
-                    @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, TsvLoader.EXT);
-                    @NotNull StringBuilder sb = new StringBuilder();
-                    for (@NotNull VirtualFile file : files) {
-                        load(file);
-                        sb.append(file.getName()).append("\n");
-                    }
-                    if (files.isEmpty()) {
-                        return;
-                    }
-                    LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
-                }));
+        DumbService.getInstance(project).smartInvokeLater(() -> {
+            @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, TsvLoader.EXT);
+            @NotNull StringBuilder sb = new StringBuilder();
+            for (@NotNull VirtualFile file : files) {
+                load(file);
+                sb.append(file.getName()).append("\n");
+            }
+            if (files.isEmpty()) {
+                return;
+            }
+            LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
+        });
     }
 
     static void loadFile(@NotNull VirtualFile file) {
-        ApplicationManager.getApplication().runReadAction(() -> ConfCache.load(file));
+        ApplicationManager.getApplication().invokeLater(() -> ConfCache.load(file));
     }
 
     private static void load(@NotNull VirtualFile file) {

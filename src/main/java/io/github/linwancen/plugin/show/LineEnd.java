@@ -5,6 +5,7 @@ import com.intellij.json.json5.Json5FileType;
 import com.intellij.openapi.editor.*;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class LineEnd extends EditorLinePainter {
 
@@ -47,17 +49,17 @@ public class LineEnd extends EditorLinePainter {
         }
         @NotNull GlobalSettingsState globalSettingsState = GlobalSettingsState.getInstance();
         if (globalSettingsState.onlySelectLine) {
-            Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+            @Nullable Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
             if (editor != null) {
-                SelectionModel select = editor.getSelectionModel();
-                VisualPosition start = select.getSelectionStartPosition();
+                @NotNull SelectionModel select = editor.getSelectionModel();
+                @Nullable VisualPosition start = select.getSelectionStartPosition();
                 int lineNum = lineNumber + 1;
                 if (start != null) {
                     if (lineNum < start.getLine()) {
                         return null;
                     }
                 }
-                VisualPosition end = select.getSelectionEndPosition();
+                @Nullable VisualPosition end = select.getSelectionEndPosition();
                 if (end != null && lineNum > end.getLine()) {
                     return null;
                 }
@@ -82,8 +84,10 @@ public class LineEnd extends EditorLinePainter {
         return Collections.singletonList(info);
     }
 
-    @NotNull
-    public static String textWithDoc(@NotNull FileInfo fileInfo, int startLine, int endLine) {
+    public static void textWithDoc(@NotNull FileInfo fileInfo, int startLine, int endLine,
+                                   @NotNull ProgressIndicator indicator, @NotNull Consumer<String> func) {
+        boolean needFraction = indicator.getFraction() != 0;
+        int size = endLine - startLine;
         @NotNull StringBuilder sb = new StringBuilder();
         for (int i = startLine; i <= endLine; i++) {
             @Nullable LineInfo lineInfo = LineInfo.of(fileInfo, i);
@@ -97,11 +101,15 @@ public class LineEnd extends EditorLinePainter {
                 sb.append(lineInfo.appSettings.lineEndPrefix).append(doc);
             }
             sb.append("\n");
+            indicator.setText2(i + " / " + size + " line");
+            if (needFraction) {
+                indicator.setFraction(1.0 * i / size);
+            }
         }
         if (sb.length() > 0) {
             sb.delete(sb.length() - 1, sb.length());
         }
-        return sb.toString();
+        func.accept(sb.toString());
     }
 
     private static @Nullable String lineDocSkipHave(@Nullable LineInfo lineInfo) {
