@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
+import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -127,12 +128,18 @@ public class ConfCache {
             if (files.isEmpty()) {
                 return;
             }
+            ProjectView.getInstance(project).refresh();
             LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
         });
     }
 
-    static void loadFile(@NotNull VirtualFile file) {
-        ApplicationManager.getApplication().invokeLater(() -> ConfCache.load(file));
+    static void loadFile(@NotNull VirtualFile file, @Nullable Project project) {
+        ApplicationManager.getApplication().invokeLater(() -> {
+            ConfCache.load(file);
+            if (project != null) {
+                ProjectView.getInstance(project).refresh();
+            }
+        });
     }
 
     private static void load(@NotNull VirtualFile file) {

@@ -23,7 +23,7 @@ public class ConfFileChangeListener implements FileEditorManagerListener {
         }
         if (file.exists()) {
             try {
-                ConfCache.loadFile(file);
+                ConfCache.loadFile(file, event.getManager().getProject());
             } catch (Throwable e) {
                 LOG.info("ConfFileChangeListener catch Throwable but log to record.", e);
             }

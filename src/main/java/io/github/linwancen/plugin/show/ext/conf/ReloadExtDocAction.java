@@ -31,8 +31,6 @@ public class ReloadExtDocAction extends DumbAwareAction {
                 return;
             }
             ConfCache.loadAll(project);
-            ApplicationManager.getApplication().invokeLater(() ->
-                    ProjectView.getInstance(project).refresh());
         } catch (Throwable t) {
             LOG.info("ReloadExtDocAction catch Throwable but log to record.", t);
         }

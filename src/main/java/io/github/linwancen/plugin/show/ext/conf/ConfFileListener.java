@@ -68,6 +68,6 @@ public class ConfFileListener implements BulkFileListener {
         }
         // VFileCreateEvent
         // VFileContentChangeEvent
-        ConfCache.loadFile(file);
+        ConfCache.loadFile(file, null);
     }
 }
