@@ -24,8 +24,10 @@ public abstract class AbstractSettingsComponent {
 
     private final JBCheckBox docGetEffect = new JBCheckBox("");
     private final JBTextField docGet = new JBTextField();
-    private final JBCheckBox projectDocEffect = new JBCheckBox("");
-    private final JBTextArea projectDoc = new JBTextArea();
+    private final JBCheckBox dirDocEffect = new JBCheckBox("");
+    private final JBTextArea dirDoc = new JBTextArea();
+    private final JBCheckBox fileDocEffect = new JBCheckBox("");
+    private final JBTextArea fileDoc = new JBTextArea();
 
     @NotNull
     protected JPanel commonPanel() {
@@ -57,9 +59,12 @@ public abstract class AbstractSettingsComponent {
 
     @NotNull
     private JPanel treePanel() {
-        @NotNull JPanel label = JPanelFactory.of(projectDocEffect, new JBLabel(ShowBundle.message("project.doc.regexp")));
+        @NotNull JPanel dirLabel = JPanelFactory.of(dirDocEffect, new JBLabel(ShowBundle.message("dir.doc.regexp")));
+        @NotNull JPanel fileLabel = JPanelFactory.of(fileDocEffect, new JBLabel(ShowBundle.message("file.doc.regexp")));
         JPanel panel = FormBuilder.createFormBuilder()
-                .addLabeledComponent(label, projectDoc, 1, true).getPanel();
+                .addLabeledComponent(dirLabel, dirDoc, 1, true)
+                .addLabeledComponent(fileLabel, fileDoc, 1, true)
+                .getPanel();
         panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("tree.comment")));
         return panel;
     }
@@ -137,20 +142,38 @@ public abstract class AbstractSettingsComponent {
     }
 
 
-    public boolean getProjectEffect() {
-        return projectDocEffect.isSelected();
+    public boolean getDirEffect() {
+        return dirDocEffect.isSelected();
     }
 
-    public void setProjectEffect(boolean newStatus) {
-        projectDocEffect.setSelected(newStatus);
+    public void setDirEffect(boolean newStatus) {
+        dirDocEffect.setSelected(newStatus);
     }
 
     @NotNull
-    public String getProjectDoc() {
-        return projectDoc.getText();
+    public String getDirDoc() {
+        return dirDoc.getText();
     }
 
-    public void setProjectDoc(@NotNull String newText) {
-        projectDoc.setText(newText);
+    public void setDirDoc(@NotNull String newText) {
+        dirDoc.setText(newText);
+    }
+
+
+    public boolean getFileEffect() {
+        return fileDocEffect.isSelected();
+    }
+
+    public void setFileEffect(boolean newStatus) {
+        fileDocEffect.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getFileDoc() {
+        return fileDoc.getText();
+    }
+
+    public void setFileDoc(@NotNull String newText) {
+        fileDoc.setText(newText);
     }
 }

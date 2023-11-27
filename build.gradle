@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.11.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.12.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 repositories {
     mavenCentral()
@@ -87,6 +87,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.12  Add project-view-tree support Markdown and Asciidoc
 <li>2.11  Add project-view-tree description from pom.xml and build.gradle
 <li>2.10  Add line-end-comment  not doc comment
 <li>2.09  Add line-end-comment  support Python doc strings
@@ -127,6 +128,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.12  增加 文件树注释  支持 Markdown and Asciidoc
 <li>2.11  增加 文件树注释  模块描述 来自 pom.xml 和 build.gradle
 <li>2.10  增加 行末注释   非文档注释
 <li>2.09  增加 行末注释   支持 Python 文档字符串

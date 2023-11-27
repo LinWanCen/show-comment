@@ -16,7 +16,7 @@ import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
-import io.github.linwancen.plugin.show.tree.ProjectDoc;
+import io.github.linwancen.plugin.show.tree.RelFileDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class Tree implements ProjectViewNodeDecorator {
         if (DumbService.isDumb(project)) {
             return;
         }
-        DumbService.getInstance(project).smartInvokeLater(() ->
+        DumbService.getInstance(project).runReadActionInSmartMode(() ->
                 ApplicationManager.getApplication().runReadAction(() -> {
                     @Nullable String doc = treeDoc(node, project);
                     if (doc == null) {
@@ -59,13 +59,7 @@ public class Tree implements ProjectViewNodeDecorator {
                     if (coloredText.isEmpty()) {
                         data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
                     }
-                    @NotNull String text = " " + doc;
-                    for (@NotNull ColoredFragment fragment : coloredText) {
-                        if (text.equals(fragment.getText())) {
-                            return;
-                        }
-                    }
-                    data.addText(text, SimpleTextAttributes.GRAY_ATTRIBUTES);
+                    data.addText(" " + doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
                 }));
     }
 
@@ -76,9 +70,9 @@ public class Tree implements ProjectViewNodeDecorator {
             return doc;
         }
         @NotNull SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.TREE);
-        @Nullable String projectDoc = ProjectDoc.projectDoc(node, settingsInfo);
-        if (projectDoc != null) {
-            return projectDoc;
+        @Nullable String relFileDoc = RelFileDoc.relFileDoc(node, settingsInfo);
+        if (relFileDoc != null) {
+            return relFileDoc;
         }
         Object value = node.getValue();
         if (value instanceof PsiElement) {

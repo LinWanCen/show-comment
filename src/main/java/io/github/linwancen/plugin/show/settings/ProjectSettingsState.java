@@ -8,6 +8,7 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.regex.Pattern;
 
 @State(
@@ -18,8 +19,10 @@ public class ProjectSettingsState extends AbstractSettingsState implements Persi
 
     public ProjectSettingsState() {
         this.lineExclude = Pattern.compile("");
-        this.projectDocEffect = false;
-        this.projectDoc = new Pattern[][]{};
+        this.dirDocEffect = false;
+        this.dirDoc = Collections.emptyMap();
+        this.fileDocEffect = false;
+        this.fileDoc = Collections.emptyMap();
     }
 
     public static final ProjectSettingsState DEFAULT_SETTING = new ProjectSettingsState();

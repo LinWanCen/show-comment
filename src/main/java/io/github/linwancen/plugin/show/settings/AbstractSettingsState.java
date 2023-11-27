@@ -2,16 +2,16 @@ package io.github.linwancen.plugin.show.settings;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Function;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class AbstractSettingsState {
 
     public int lineEndCount = 2;
     public int lineEndLen = 0;
     public boolean onlySelectLine = false;
+
     @NotNull
     public transient Pattern lineInclude = Pattern.compile("");
     @NotNull
@@ -20,21 +20,32 @@ public abstract class AbstractSettingsState {
     public transient Pattern docInclude = Pattern.compile("");
     @NotNull
     public transient Pattern docExclude = Pattern.compile("");
+
     public boolean docGetEffect = false;
     @NotNull
     public transient Pattern docGet = Pattern.compile(".+?(?:[。\\r\\n]|\\. )");
-    public boolean projectDocEffect = true;
+
+    public boolean dirDocEffect = true;
     @NotNull
-    public transient Pattern[][] projectDoc = {
-            {
-                    Pattern.compile("pom.xml"),
-                    Pattern.compile("<description>([^<]++)</description>"),
-                    Pattern.compile("<name>\\$\\{[^}]*+\\}([^<]++)</name>"),
-            },
-            {Pattern.compile("build.gradle"), Pattern.compile("^description[^'\"]*+['\"]([^'\"]++)['\"]")},
-            {Pattern.compile("build.gradle.kts"), Pattern.compile("^description[^'\"]*+['\"]([^'\"]++)['\"]")},
-            {Pattern.compile("README.md"), Pattern.compile("^# (.*)")},
-    };
+    public transient Map<String, Pattern[]> dirDoc = new LinkedHashMap<>() {{
+        put("pom.xml", new Pattern[]{
+                Pattern.compile("<description>([^<]++)</description>"),
+                Pattern.compile("<name>\\$\\{[^}]*+\\}([^<]++)</name>"),
+        });
+        put("build.gradle", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});
+        put("build.gradle.kts", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});
+        put("README.md", new Pattern[]{Pattern.compile("(?m)^#++ (.*)")});
+    }};
+
+    public boolean fileDocEffect = true;
+    @NotNull
+    public transient Map<String, Pattern[]> fileDoc = new LinkedHashMap<>() {{
+        put("md", new Pattern[]{Pattern.compile("(?m)^#++ (.*)")});
+        put("ad", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
+        put("adoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
+        put("asciidoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
+    }};
+
 
     public String getLineInclude() {
         return lineInclude.pattern();
@@ -79,30 +90,21 @@ public abstract class AbstractSettingsState {
     }
 
 
-    public static final Function<Pattern[], String> TO_LINE = patterns -> Stream.of(patterns)
-            .map(Pattern::pattern)
-            .collect(Collectors.joining("||"));
-
-    public String getProjectDoc() {
-        return Stream.of(projectDoc)
-                .map(TO_LINE)
-                .collect(Collectors.joining("\n"));
+    @NotNull
+    public String getDirDoc() {
+        return PatternMapUtils.toString(dirDoc);
     }
 
-    private static final Pattern LINE_PATTERN = Pattern.compile("[\\r\\n]++");
+    public void setDirDoc(@NotNull String dirDoc) {
+        this.dirDoc = PatternMapUtils.toMap(dirDoc);
+    }
 
-    private static final Pattern SPLIT_PATTERN = Pattern.compile("\\|\\|");
+    @NotNull
+    public String getFileDoc() {
+        return PatternMapUtils.toString(fileDoc);
+    }
 
-    public void setProjectDoc(@NotNull String projectDoc) {
-        String[] projectDocLines = LINE_PATTERN.split(projectDoc);
-        @NotNull Pattern[][] patterns = new Pattern[projectDocLines.length][];
-        for (int i = 0; i < projectDocLines.length; i++) {
-            String[] projectDocs = SPLIT_PATTERN.split(projectDocLines[i]);
-            patterns[i] = new Pattern[projectDocs.length];
-            for (int j = 0; j < projectDocs.length; j++) {
-                patterns[i][j] = Pattern.compile(projectDocs[j]);
-            }
-        }
-        this.projectDoc = patterns;
+    public void setFileDoc(@NotNull String fileDoc) {
+        this.fileDoc = PatternMapUtils.toMap(fileDoc);
     }
 }

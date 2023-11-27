@@ -16,8 +16,10 @@ public class AbstractSettingsConfigurable {
         modified |= !component.getDocExclude().equals(settings.getDocExclude());
         modified |= component.getDocGetEffect() != settings.docGetEffect;
         modified |= !component.getDocGet().equals(settings.getDocGet());
-        modified |= component.getProjectEffect() != settings.projectDocEffect;
-        modified |= !component.getProjectDoc().equals(settings.getProjectDoc());
+        modified |= component.getDirEffect() != settings.dirDocEffect;
+        modified |= !component.getDirDoc().equals(settings.getDirDoc());
+        modified |= component.getFileEffect() != settings.fileDocEffect;
+        modified |= !component.getFileDoc().equals(settings.getFileDoc());
         return modified;
     }
 
@@ -34,8 +36,10 @@ public class AbstractSettingsConfigurable {
         settings.setDocExclude(component.getDocExclude());
         settings.docGetEffect = component.getDocGetEffect();
         settings.setDocGet(component.getDocGet());
-        settings.projectDocEffect = component.getProjectEffect();
-        settings.setProjectDoc(component.getProjectDoc());
+        settings.dirDocEffect = component.getDirEffect();
+        settings.setDirDoc(component.getDirDoc());
+        settings.fileDocEffect = component.getFileEffect();
+        settings.setFileDoc(component.getFileDoc());
     }
 
     static void reset(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component) {
@@ -47,7 +51,9 @@ public class AbstractSettingsConfigurable {
         component.setDocExclude(settings.getDocExclude());
         component.setDocGetEffect(settings.docGetEffect);
         component.setDocGet(settings.getDocGet());
-        component.setProjectEffect(settings.projectDocEffect);
-        component.setProjectDoc(settings.getProjectDoc());
+        component.setDirEffect(settings.dirDocEffect);
+        component.setDirDoc(settings.getDirDoc());
+        component.setFileEffect(settings.fileDocEffect);
+        component.setFileDoc(settings.getFileDoc());
     }
 }
