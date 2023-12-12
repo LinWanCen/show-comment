@@ -55,6 +55,7 @@ public class DocFilter {
 
     public static <T extends SettingsInfo> boolean lineCountOrLenOver(@NotNull T info,
                                                                       @NotNull StringBuilder sb, int lineCount) {
+        // can not effective both
         if (info.projectSettings.projectFilterEffective) {
             return lineCountOrLenOverInfo(info.projectSettings, sb, lineCount);
         } else if (info.projectSettings.globalFilterEffective) {
@@ -78,6 +79,7 @@ public class DocFilter {
     public static String filterDoc(@NotNull String text,
                                    @NotNull GlobalSettingsState globalSettingsState,
                                    @NotNull ProjectSettingsState projectSettings) {
+        // not effective both because regexp is slow
         // docGetEffect first because default false
         if (projectSettings.docGetEffect && projectSettings.projectFilterEffective) {
             return filterPattern(text, projectSettings.docGet);

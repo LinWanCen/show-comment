@@ -7,6 +7,7 @@ import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.settings.AbstractSettingsState;
 import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,12 +18,15 @@ public class RelFileDoc {
         @NotNull ProjectSettingsState projectSettings = settingsInfo.projectSettings;
         @NotNull GlobalSettingsState globalSettings = settingsInfo.globalSettings;
         if (projectSettings.projectFilterEffective) {
-            return relDoc(node, projectSettings);
-        } else if (projectSettings.globalFilterEffective) {
-            return relDoc(node, globalSettings);
-        } else {
-            return null;
+            @Nullable String doc = relDoc(node, projectSettings);
+            if (StringUtils.isNotBlank(doc)) {
+                return doc;
+            }
         }
+        if (projectSettings.globalFilterEffective) {
+            return relDoc(node, globalSettings);
+        }
+        return null;
     }
 
     @Nullable
