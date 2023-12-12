@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RelFileDoc {
+    private RelFileDoc() {}
 
     @Nullable
     public static String relFileDoc(ProjectViewNode<?> node, @NotNull SettingsInfo settingsInfo) {

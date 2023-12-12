@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 class DirDoc {
+    private DirDoc() {}
 
     @Nullable
     static String dirDoc(@NotNull PsiDirectoryNode node, @NotNull AbstractSettingsState settings) {

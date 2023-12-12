@@ -27,7 +27,7 @@ public class GlobalSettingsComponent extends AbstractSettingsComponent {
 
     @NotNull
     public JComponent getPreferredFocusedComponent() {
-        return myMainPanel;
+        return lineEndCount;
     }
 
 }

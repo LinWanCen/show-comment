@@ -32,6 +32,8 @@ public class ResetExtDocAction extends AnAction {
             if (project == null) {
                 return;
             }
+            ApplicationManager.getApplication().invokeLater(() ->
+                    ProjectView.getInstance(project).refresh());
         } catch (Throwable t) {
             LOG.info("ConfFileChangeListener catch Throwable but log to record.", t);
         }

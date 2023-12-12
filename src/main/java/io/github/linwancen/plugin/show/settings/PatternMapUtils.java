@@ -1,19 +1,16 @@
 package io.github.linwancen.plugin.show.settings;
 
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PatternMapUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(PatternMapUtils.class);
+    private PatternMapUtils() {}
 
     public static final Pattern LINE_PATTERN = Pattern.compile("[\\r\\n]++");
     public static final Pattern SPLIT_PATTERN = Pattern.compile("\\|\\|");
@@ -29,7 +26,9 @@ public class PatternMapUtils {
                 for (int i = 1; i < split.length; i++) {
                     try {
                         patterns.add(Pattern.compile(split[i]));
-                    } catch (Exception ignore) {}
+                    } catch (Exception ignore) {
+                        // ignroe
+                    }
                 }
                 map.put(split[0], patterns.toArray(new Pattern[0]));
             }

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 class FileDoc {
+    private FileDoc() {}
 
     @Nullable
     static String fileDoc(@NotNull PsiFileNode node, @NotNull AbstractSettingsState settings) {

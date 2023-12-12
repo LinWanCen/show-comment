@@ -2,7 +2,6 @@ package io.github.linwancen.plugin.show.lang.base;
 
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.settings.AbstractSettingsState;
-import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;

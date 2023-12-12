@@ -1,8 +1,6 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
-import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import io.github.linwancen.plugin.show.settings.ShowBundle;

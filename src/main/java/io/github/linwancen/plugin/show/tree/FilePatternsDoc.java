@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class FilePatternsDoc {
+    private FilePatternsDoc() {}
 
     @Nullable
     static String filePatternsDoc(@NotNull PsiFile psiFile, @NotNull Pattern[] patterns) {

@@ -54,10 +54,8 @@ public class LineEnd extends EditorLinePainter {
                 @NotNull SelectionModel select = editor.getSelectionModel();
                 @Nullable VisualPosition start = select.getSelectionStartPosition();
                 int lineNum = lineNumber + 1;
-                if (start != null) {
-                    if (lineNum < start.getLine()) {
-                        return null;
-                    }
+                if (start != null && lineNum < start.getLine()) {
+                    return null;
                 }
                 @Nullable VisualPosition end = select.getSelectionEndPosition();
                 if (end != null && lineNum > end.getLine()) {
