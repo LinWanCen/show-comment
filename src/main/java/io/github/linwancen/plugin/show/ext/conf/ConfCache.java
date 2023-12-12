@@ -128,7 +128,9 @@ public class ConfCache {
             if (files.isEmpty()) {
                 return;
             }
-            ProjectView.getInstance(project).refresh();
+            if (!project.isDisposed()) {
+                ProjectView.getInstance(project).refresh();
+            }
             LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
         });
     }
@@ -136,7 +138,7 @@ public class ConfCache {
     static void loadFile(@NotNull VirtualFile file, @Nullable Project project) {
         ApplicationManager.getApplication().invokeLater(() -> {
             ConfCache.load(file);
-            if (project != null) {
+            if (project != null && !project.isDisposed()) {
                 ProjectView.getInstance(project).refresh();
             }
         });

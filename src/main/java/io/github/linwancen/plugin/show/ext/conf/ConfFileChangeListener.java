@@ -2,6 +2,7 @@ package io.github.linwancen.plugin.show.ext.conf;
 
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,13 +18,17 @@ public class ConfFileChangeListener implements FileEditorManagerListener {
 
     @Override
     public void selectionChanged(@NotNull FileEditorManagerEvent event) {
+        @NotNull Project project = event.getManager().getProject();
+        if (project.isDisposed()) {
+            return;
+        }
         @Nullable VirtualFile file = event.getOldFile();
         if (file == null) {
             return;
         }
         if (file.exists()) {
             try {
-                ConfCache.loadFile(file, event.getManager().getProject());
+                ConfCache.loadFile(file, project);
             } catch (Throwable e) {
                 LOG.info("ConfFileChangeListener catch Throwable but log to record.", e);
             }
