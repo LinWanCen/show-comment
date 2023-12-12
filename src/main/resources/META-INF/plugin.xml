@@ -110,11 +110,11 @@ Show doc comment at the Project view Tree, line End, json, other
        on how to target different products -->
   <depends>com.intellij.modules.platform</depends>
   <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
+  <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
   <depends optional="true" config-file="sql.xml">com.intellij.database</depends>
   <depends optional="true" config-file="js.xml">JavaScript</depends>
   <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
   <depends optional="true" config-file="go.xml">org.jetbrains.plugins.go</depends>
-  <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
   <!--suppress PluginXmlValidity, MybatisMapperXmlInspection -->
   <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
 

@@ -13,13 +13,12 @@ import java.util.regex.Pattern;
 class FileDoc {
 
     @Nullable
-    static String fileDoc(PsiFileNode node, @NotNull AbstractSettingsState settings) {
+    static String fileDoc(@NotNull PsiFileNode node, @NotNull AbstractSettingsState settings) {
         if (!settings.fileDocEffect) {
             return null;
         }
         @NotNull Map<String, Pattern[]> patternMap = settings.fileDoc;
-        @NotNull PsiFileNode psiFileNode = node;
-        @Nullable PsiFile psiFile = psiFileNode.getValue();
+        @Nullable PsiFile psiFile = node.getValue();
         if (psiFile == null) {
             return null;
         }

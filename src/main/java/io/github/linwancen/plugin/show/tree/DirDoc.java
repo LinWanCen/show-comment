@@ -13,13 +13,12 @@ import java.util.regex.Pattern;
 class DirDoc {
 
     @Nullable
-    static String dirDoc(PsiDirectoryNode node, @NotNull AbstractSettingsState settings) {
+    static String dirDoc(@NotNull PsiDirectoryNode node, @NotNull AbstractSettingsState settings) {
         if (!settings.dirDocEffect) {
             return null;
         }
         @NotNull Map<String, Pattern[]> patternMap = settings.dirDoc;
-        @NotNull PsiDirectoryNode psiDirectoryNode = node;
-        @Nullable PsiDirectory psiDirectory = psiDirectoryNode.getValue();
+        @Nullable PsiDirectory psiDirectory = node.getValue();
         if (psiDirectory == null) {
             return null;
         }

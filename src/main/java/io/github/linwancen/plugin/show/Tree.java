@@ -38,7 +38,7 @@ public class Tree implements ProjectViewNodeDecorator {
         }
     }
 
-    private void decorateImpl(@NotNull ProjectViewNode node, @NotNull PresentationData data) {
+    private void decorateImpl(@NotNull ProjectViewNode<?> node, @NotNull PresentationData data) {
         if (!AppSettingsState.getInstance().showTreeComment) {
             return;
         }
@@ -52,15 +52,19 @@ public class Tree implements ProjectViewNodeDecorator {
         DumbService.getInstance(project).runReadActionInSmartMode(() ->
                 ApplicationManager.getApplication().runReadAction(() -> {
                     @Nullable String doc = treeDoc(node, project);
-                    if (doc == null) {
-                        return;
-                    }
-                    @NotNull List<ColoredFragment> coloredText = data.getColoredText();
-                    if (coloredText.isEmpty()) {
-                        data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
-                    }
-                    data.addText(" " + doc, SimpleTextAttributes.GRAY_ATTRIBUTES);
+                    addText(data, doc);
                 }));
+    }
+
+    static void addText(@NotNull PresentationData data, @Nullable String text) {
+        if (text == null) {
+            return;
+        }
+        @NotNull List<ColoredFragment> coloredText = data.getColoredText();
+        if (coloredText.isEmpty()) {
+            data.addText(data.getPresentableText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
+        }
+        data.addText(" " + text, SimpleTextAttributes.GRAY_ATTRIBUTES);
     }
 
     @Nullable
