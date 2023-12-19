@@ -23,7 +23,9 @@ public class DocFilter {
             // **** xx  block body
             "|^ *\\*++ *+" +
             // #### xx  python and shell start
-            "|^ *#++ *+"
+            "|^ *#++ *+" +
+            // -- xx SQL
+            "|^ *--++ *+"
     );
 
     private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("[\r\n]");
@@ -33,7 +35,7 @@ public class DocFilter {
      * end with space
      */
     @NotNull
-    public static <T extends SettingsInfo> String cutDoc(String text, @NotNull T info, boolean deletePrefix) {
+    public static <T extends SettingsInfo> String cutDoc(@NotNull String text, @NotNull T info, boolean deletePrefix) {
         String[] split = LINE_SEPARATOR_PATTERN.split(text);
         int lineCount = 0;
         @NotNull StringBuilder sb = new StringBuilder();

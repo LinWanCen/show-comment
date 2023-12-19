@@ -174,7 +174,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     /**
-     * Override like Java/Kotlin
+     * Override like Java/Kotlin/Python
      */
     @Nullable
     protected <T extends SettingsInfo> String resolveDocPrint(@NotNull T lineInfo, @NotNull PsiElement resolve) {
