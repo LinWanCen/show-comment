@@ -44,6 +44,9 @@ public abstract class AbstractSettingsState {
         put("ad", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
         put("adoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
         put("asciidoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
+        put("bpmn", new Pattern[]{Pattern.compile("(?m)name=\"([^\"]*)")});
+        put("dmn", new Pattern[]{Pattern.compile("(?m)name=\"([^\"]*)")});
+        put("sh", new Pattern[]{Pattern.compile("(?m)^#++ *([^!].*)")});
     }};
 
 
