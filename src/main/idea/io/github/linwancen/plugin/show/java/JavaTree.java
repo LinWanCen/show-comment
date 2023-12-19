@@ -63,7 +63,7 @@ public class JavaTree {
         if (node instanceof PackageElementNode) {
             // On Packages View
             @NotNull PsiPackage psiPackage = ((PackageElementNode) node).getValue().getPackage();
-            return packageDoc(psiPackage);
+            return OwnerToPsiDocUtils.packageDoc(psiPackage);
         }
 
         // On Packages View, Project Files View
@@ -96,22 +96,6 @@ public class JavaTree {
             if (parent.getChildren().length != 1) {
                 return null;
             }
-            child = parent;
-        }
-    }
-
-    @Nullable
-    static PsiDocComment packageDoc(@NotNull PsiPackage child) {
-        while (true) {
-            @Nullable PsiDocComment docComment = OwnerToPsiDocUtils.packageDoc(child);
-            if (docComment != null) {
-                return docComment;
-            }
-            @Nullable PsiPackage parent = child.getParentPackage();
-            if (parent == null) {
-                return null;
-            }
-            // PsiPackage not implemented getChildren()
             child = parent;
         }
     }
