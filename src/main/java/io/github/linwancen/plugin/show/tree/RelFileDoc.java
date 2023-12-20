@@ -15,9 +15,9 @@ public class RelFileDoc {
     private RelFileDoc() {}
 
     @Nullable
-    public static String relFileDoc(ProjectViewNode<?> node, @NotNull SettingsInfo settingsInfo) {
-        @NotNull ProjectSettingsState projectSettings = settingsInfo.projectSettings;
-        @NotNull GlobalSettingsState globalSettings = settingsInfo.globalSettings;
+    public static String relFileDoc(ProjectViewNode<?> node, @NotNull SettingsInfo info) {
+        @NotNull ProjectSettingsState projectSettings = info.projectSettings;
+        @NotNull GlobalSettingsState globalSettings = info.globalSettings;
         if (projectSettings.projectFilterEffective) {
             @Nullable String doc = relDoc(node, projectSettings);
             if (StringUtils.isNotBlank(doc)) {

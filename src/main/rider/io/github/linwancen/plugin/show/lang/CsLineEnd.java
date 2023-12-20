@@ -18,7 +18,7 @@ public class CsLineEnd extends BaseLangDoc {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
+    public boolean show(@NotNull LineInfo info) {
         return true;
     }
 

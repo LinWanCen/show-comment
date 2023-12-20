@@ -8,28 +8,28 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
 
     @Override
-    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T settingsInfo,
+    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T info,
                                                                      @NotNull PsiElement resolve) {
-        @Nullable DocElement docElement = toDocElement(settingsInfo, resolve);
-        if (docElement == null && parseBaseComment(settingsInfo)) {
-            return super.resolveDocPrint(settingsInfo, resolve);
+        @Nullable DocElement docElement = toDocElement(info, resolve);
+        if (docElement == null && parseBaseComment(info)) {
+            return super.resolveDocPrint(info, resolve);
         }
-        return docElementToStr(settingsInfo, docElement);
+        return docElementToStr(info, docElement);
     }
 
     @Nullable
-    public <T extends SettingsInfo> String docElementToStr(@NotNull T lineInfo, @Nullable DocElement docElement) {
+    public <T extends SettingsInfo> String docElementToStr(@NotNull T info, @Nullable DocElement docElement) {
         if (docElement == null) {
             return null;
         }
         // desc
-        @NotNull String descDoc = descDoc(lineInfo, docElement).trim();
-        @NotNull String desc = DocFilter.filterDoc(descDoc, lineInfo.globalSettings, lineInfo.projectSettings);
+        @NotNull String descDoc = descDoc(info, docElement).trim();
+        @NotNull String desc = DocFilter.filterDoc(descDoc, info.globalSettings, info.projectSettings);
         // tag
         @NotNull StringBuilder tagStrBuilder = new StringBuilder();
-        @NotNull String[] names = lineInfo.tagNames();
+        @NotNull String[] names = info.tagNames();
         for (@NotNull String name : names) {
-            appendTag(lineInfo, tagStrBuilder, docElement, name);
+            appendTag(info, tagStrBuilder, docElement, name);
         }
         if (!desc.isEmpty()) {
             if (tagStrBuilder.length() > 0) {
@@ -44,19 +44,19 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
         return text;
     }
 
-    protected abstract <T extends SettingsInfo> boolean parseBaseComment(T settingsInfo);
+    protected abstract <T extends SettingsInfo> boolean parseBaseComment(T info);
 
     @Nullable
-    protected abstract <T extends SettingsInfo> DocElement toDocElement(@NotNull T settingsInfo,
+    protected abstract <T extends SettingsInfo> DocElement toDocElement(@NotNull T info,
                                                                         @NotNull PsiElement resolve);
 
     /**
      * cut / * # not filter text
      */
     @NotNull
-    protected abstract <T extends SettingsInfo> String descDoc(@NotNull T lineInfo, @NotNull DocElement docElement);
+    protected abstract <T extends SettingsInfo> String descDoc(@NotNull T info, @NotNull DocElement docElement);
 
-    protected abstract <T extends SettingsInfo> void appendTag(@NotNull T lineInfo,
+    protected abstract <T extends SettingsInfo> void appendTag(@NotNull T info,
                                                                @NotNull StringBuilder tagStrBuilder,
                                                                @NotNull DocElement docElement, @NotNull String name);
 }

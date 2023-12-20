@@ -16,7 +16,7 @@ public class NewCallRefToPsiDoc {
     private NewCallRefToPsiDoc() {}
 
     @Nullable
-    public static <T extends SettingsInfo> PsiDocComment javaCodeDoc(@NotNull T settingsInfo,
+    public static <T extends SettingsInfo> PsiDocComment javaCodeDoc(@NotNull T info,
                                                                      @Nullable PsiJavaCodeReferenceElement ref) {
         if (ref == null) {
             return null;
@@ -28,7 +28,7 @@ public class NewCallRefToPsiDoc {
             // ignore
         }
         if (resolve instanceof PsiDocCommentOwner) {
-            return OwnerToPsiDocSkip.refDoc(settingsInfo, ((PsiDocCommentOwner) resolve));
+            return OwnerToPsiDocSkip.refDoc(info, ((PsiDocCommentOwner) resolve));
         }
         return null;
     }

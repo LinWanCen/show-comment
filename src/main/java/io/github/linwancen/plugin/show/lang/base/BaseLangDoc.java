@@ -26,10 +26,10 @@ public abstract class BaseLangDoc extends EditorLinePainter {
 
     public abstract @Nullable Class<? extends PsiElement> getRefClass();
 
-    public abstract boolean show(@NotNull LineInfo lineInfo);
+    public abstract boolean show(@NotNull LineInfo info);
 
     @Nullable
-    public <T extends SettingsInfo> String treeDoc(T settingsInfo, ProjectViewNode<?> node, Project project) {
+    public <T extends SettingsInfo> String treeDoc(T info, ProjectViewNode<?> node, Project project) {
         return null;
     }
 
@@ -40,21 +40,21 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         return null;
     }
 
-    public static @Nullable String langDoc(@NotNull LineInfo lineInfo) {
-        @Nullable PsiElement element = lineInfo.viewProvider.findElementAt(lineInfo.endOffset);
+    public static @Nullable String langDoc(@NotNull LineInfo info) {
+        @Nullable PsiElement element = info.viewProvider.findElementAt(info.endOffset);
         if (element == null) {
             // file end
-            element = lineInfo.viewProvider.findElementAt(lineInfo.endOffset - 1);
+            element = info.viewProvider.findElementAt(info.endOffset - 1);
             if (element == null) {
                 return null;
             }
         }
         @NotNull Language language = PsiElementTo.language(element);
         BaseLangDoc lineEnd = LANG_DOC_MAP.get(language.getID());
-        if (lineEnd != null && lineEnd.show(lineInfo)) {
-            return lineEnd.findRefDoc(lineInfo, element);
-        } else if (language == JsonLanguage.INSTANCE && JsonLangDoc.INSTANCE.show(lineInfo)) {
-            return JsonLangDoc.INSTANCE.findRefDoc(lineInfo, element);
+        if (lineEnd != null && lineEnd.show(info)) {
+            return lineEnd.findRefDoc(info, element);
+        } else if (language == JsonLanguage.INSTANCE && JsonLangDoc.INSTANCE.show(info)) {
+            return JsonLangDoc.INSTANCE.findRefDoc(info, element);
         }
         return null;
     }
@@ -63,7 +63,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * Override like JSON
      */
     @Nullable
-    public String findRefDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement element) {
+    public String findRefDoc(@NotNull LineInfo info, @NotNull PsiElement element) {
         @Nullable Class<? extends PsiElement> refClass = getRefClass();
         if (refClass == null) {
             return null;
@@ -71,9 +71,9 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         @Nullable String doc = null;
         @Nullable String text = null;
         @Nullable PsiElement refElement = element;
-        while ((refElement = Prev.prevRefChild(lineInfo, refElement, refClass)) != null) {
+        while ((refElement = Prev.prevRefChild(info, refElement, refClass)) != null) {
             PsiElement parent = refElement.getParent();
-            @Nullable String filterDoc = refElementDoc(lineInfo, parent);
+            @Nullable String filterDoc = refElementDoc(info, parent);
             if (filterDoc != null) {
                 doc = filterDoc;
                 text = refElement.getText();
@@ -85,14 +85,14 @@ public abstract class BaseLangDoc extends EditorLinePainter {
             return null;
         }
         // before doc
-        refElement = Prev.prevRefChild(lineInfo, refElement, refClass);
+        refElement = Prev.prevRefChild(info, refElement, refClass);
         if (refElement == null) {
             return doc;
         }
         PsiElement parent = refElement.getParent();
-        @Nullable String before = refElementDoc(lineInfo, parent);
+        @Nullable String before = refElementDoc(info, parent);
         if (before != null) {
-            doc = mergeDoc(refElement.getText(), text, lineInfo.appSettings.getToSet, before, doc);
+            doc = mergeDoc(refElement.getText(), text, info.appSettings.getToSet, before, doc);
         }
         return doc;
     }
@@ -123,10 +123,10 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * Override like SQL
      */
     @Nullable
-    protected String refElementDoc(@NotNull LineInfo lineInfo,
+    protected String refElementDoc(@NotNull LineInfo info,
                                    @NotNull PsiElement refElement) {
-        @Nullable String refDoc = refDoc(lineInfo, refElement);
-        if (refDoc != null && !DocSkip.skipDoc(lineInfo, refDoc)) {
+        @Nullable String refDoc = refDoc(info, refElement);
+        if (refDoc != null && !DocSkip.skipDoc(info, refDoc)) {
             return refDoc;
         }
         return null;
@@ -136,7 +136,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * Override like Java/Json
      */
     @Nullable
-    protected String refDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement ref) {
+    protected String refDoc(@NotNull LineInfo info, @NotNull PsiElement ref) {
         // kotlin ref.getReference() == null but ref.getReferences().length == 2
         @NotNull PsiReference[] references = ref.getReferences();
         if (references.length < 1) {
@@ -154,7 +154,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
             if (resolve == null) {
                 return null;
             }
-            @Nullable String resolveDoc = resolveDoc(lineInfo, resolve);
+            @Nullable String resolveDoc = resolveDoc(info, resolve);
             if (resolveDoc != null) {
                 return resolveDoc;
             }
@@ -162,7 +162,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         return null;
     }
 
-    public static @Nullable <T extends SettingsInfo> String resolveDoc(@NotNull T settingsInfo,
+    public static @Nullable <T extends SettingsInfo> String resolveDoc(@NotNull T info,
                                                                        @NotNull PsiElement psiElement) {
         // support like java <-> kotlin
         @NotNull Language language = PsiElementTo.language(psiElement);
@@ -170,20 +170,20 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         if (lineEnd == null) {
             return null;
         }
-        return lineEnd.resolveDocPrint(settingsInfo, psiElement);
+        return lineEnd.resolveDocPrint(info, psiElement);
     }
 
     /**
      * Override like Java/Kotlin/Python
      */
     @Nullable
-    protected <T extends SettingsInfo> String resolveDocPrint(@NotNull T lineInfo, @NotNull PsiElement resolve) {
-        @Nullable String s = resolveDocRaw(lineInfo, resolve);
+    protected <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
+        @Nullable String s = resolveDocRaw(info, resolve);
         if (s == null) {
             return null;
         }
-        @NotNull String cutDoc = DocFilter.cutDoc(s, lineInfo, true);
-        @NotNull String filterDoc = DocFilter.filterDoc(cutDoc, lineInfo.globalSettings, lineInfo.projectSettings);
+        @NotNull String cutDoc = DocFilter.cutDoc(s, info, true);
+        @NotNull String filterDoc = DocFilter.filterDoc(cutDoc, info.globalSettings, info.projectSettings);
         if (filterDoc.trim().isEmpty()) {
             return null;
         }
@@ -194,16 +194,16 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * Override like JS/Go
      */
     @Nullable
-    protected <T extends SettingsInfo> String resolveDocRaw(@NotNull T lineInfo, @NotNull PsiElement resolve) {
+    protected <T extends SettingsInfo> String resolveDocRaw(@NotNull T info, @NotNull PsiElement resolve) {
         @Nullable FileViewProvider viewProvider = PsiElementTo.viewProvider(resolve);
         if (viewProvider == null) {
             return null;
         }
-        @Nullable String doc = ResolveDoc.fromLineEnd(lineInfo, resolve, viewProvider);
+        @Nullable String doc = ResolveDoc.fromLineEnd(info, resolve, viewProvider);
         if (doc != null) {
             return doc;
         }
-        return ResolveDoc.fromLineUp(lineInfo, resolve, viewProvider, keywords());
+        return ResolveDoc.fromLineUp(info, resolve, viewProvider, keywords());
     }
 
     @NotNull

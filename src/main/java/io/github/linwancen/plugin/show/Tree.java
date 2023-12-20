@@ -73,22 +73,22 @@ public class Tree implements ProjectViewNodeDecorator {
         if (doc != null) {
             return doc;
         }
-        @NotNull SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.TREE);
-        @Nullable String relFileDoc = RelFileDoc.relFileDoc(node, settingsInfo);
+        @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
+        @Nullable String relFileDoc = RelFileDoc.relFileDoc(node, info);
         if (relFileDoc != null) {
             return relFileDoc;
         }
         Object value = node.getValue();
         if (value instanceof PsiElement) {
             @NotNull PsiElement psiElement = (PsiElement) value;
-            @Nullable String docPrint = BaseLangDoc.resolveDoc(settingsInfo, psiElement);
+            @Nullable String docPrint = BaseLangDoc.resolveDoc(info, psiElement);
             if (docPrint != null) {
                 return docPrint;
             }
         }
         @NotNull Collection<BaseLangDoc> langDocs = BaseLangDoc.LANG_DOC_MAP.values();
         for (@NotNull BaseLangDoc langDoc : langDocs) {
-            @Nullable String s = langDoc.treeDoc(settingsInfo, node, project);
+            @Nullable String s = langDoc.treeDoc(info, node, project);
             if (s != null) {
                 return s;
             }

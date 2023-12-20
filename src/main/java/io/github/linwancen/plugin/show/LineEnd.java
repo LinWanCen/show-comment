@@ -69,8 +69,8 @@ public class LineEnd extends EditorLinePainter {
         if (!file.exists()) {
             return null;
         }
-        @Nullable LineInfo lineInfo = LineInfo.of(file, project, lineNumber);
-        @Nullable String doc = lineDocSkipHave(lineInfo);
+        @Nullable LineInfo info = LineInfo.of(file, project, lineNumber);
+        @Nullable String doc = lineDocSkipHave(info);
         if (doc == null) {
             return null;
         }
@@ -78,8 +78,8 @@ public class LineEnd extends EditorLinePainter {
                 || file.getFileType().equals(Json5FileType.INSTANCE)
                 ? settings.lineEndJsonTextAttr
                 : settings.lineEndTextAttr;
-        @NotNull LineExtensionInfo info = new LineExtensionInfo(settings.lineEndPrefix + doc, textAttr);
-        return Collections.singletonList(info);
+        @NotNull LineExtensionInfo lineExt = new LineExtensionInfo(settings.lineEndPrefix + doc, textAttr);
+        return Collections.singletonList(lineExt);
     }
 
     public static void textWithDoc(@NotNull FileInfo fileInfo, int startLine, int endLine,
@@ -88,15 +88,15 @@ public class LineEnd extends EditorLinePainter {
         int size = endLine - startLine;
         @NotNull StringBuilder sb = new StringBuilder();
         for (int i = startLine; i <= endLine; i++) {
-            @Nullable LineInfo lineInfo = LineInfo.of(fileInfo, i);
-            if (lineInfo == null) {
+            @Nullable LineInfo info = LineInfo.of(fileInfo, i);
+            if (info == null) {
                 sb.append("\n");
                 continue;
             }
-            sb.append(lineInfo.text);
-            @Nullable String doc = lineDocSkipHave(lineInfo);
+            sb.append(info.text);
+            @Nullable String doc = lineDocSkipHave(info);
             if (doc != null) {
-                sb.append(lineInfo.appSettings.lineEndPrefix).append(doc);
+                sb.append(info.appSettings.lineEndPrefix).append(doc);
             }
             sb.append("\n");
             indicator.setText2(i + " / " + size + " line");
@@ -110,27 +110,27 @@ public class LineEnd extends EditorLinePainter {
         func.accept(sb.toString());
     }
 
-    private static @Nullable String lineDocSkipHave(@Nullable LineInfo lineInfo) {
-        @Nullable String doc = lineDoc(lineInfo);
+    private static @Nullable String lineDocSkipHave(@Nullable LineInfo info) {
+        @Nullable String doc = lineDoc(info);
         if (doc == null) {
             return null;
         }
         @NotNull String trimDoc = doc.trim();
-        if (lineInfo.text.trim().endsWith(trimDoc)) {
+        if (info.text.trim().endsWith(trimDoc)) {
             return null;
         }
         return trimDoc;
     }
 
-    private static @Nullable String lineDoc(@Nullable LineInfo lineInfo) {
-        if (lineInfo == null) {
+    private static @Nullable String lineDoc(@Nullable LineInfo info) {
+        if (info == null) {
             return null;
         }
         // override some text
-        @Nullable String doc = LineExt.doc(lineInfo);
+        @Nullable String doc = LineExt.doc(info);
         if (doc != null) {
             return doc;
         }
-        return BaseLangDoc.langDoc(lineInfo);
+        return BaseLangDoc.langDoc(info);
     }
 }

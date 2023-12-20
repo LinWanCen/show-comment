@@ -15,20 +15,20 @@ class SkipUtils {
 
     private SkipUtils() {}
 
-    static <T extends SettingsInfo> boolean skipSign(@NotNull T settingsInfo, PsiElement psiElement) {
-        @Nullable String text = psiName(settingsInfo, psiElement);
+    static <T extends SettingsInfo> boolean skipSign(@NotNull T info, PsiElement psiElement) {
+        @Nullable String text = psiName(info, psiElement);
         if (text == null) {
             return true;
         }
-        return DocSkip.skipSign(settingsInfo, text);
+        return DocSkip.skipSign(info, text);
     }
 
     @Nullable
-    private static <T extends SettingsInfo> String psiName(@NotNull T settingsInfo, @Nullable PsiElement psiElement) {
+    private static <T extends SettingsInfo> String psiName(@NotNull T info, @Nullable PsiElement psiElement) {
         if (psiElement instanceof PsiClass) {
             @NotNull PsiClass psiClass = (PsiClass) psiElement;
-            if (settingsInfo.funcEnum == FuncEnum.LINE
-                    && settingsInfo.appSettings.skipAnnotation && psiClass.isAnnotationType()) {
+            if (info.funcEnum == FuncEnum.LINE
+                    && info.appSettings.skipAnnotation && psiClass.isAnnotationType()) {
                 return null;
             }
             return psiClass.getQualifiedName();
@@ -53,15 +53,15 @@ class SkipUtils {
     }
 
     @Nullable
-    static <T extends SettingsInfo> PsiDocComment skipDoc(@NotNull T settingsInfo, @Nullable PsiDocComment doc) {
+    static <T extends SettingsInfo> PsiDocComment skipDoc(@NotNull T info, @Nullable PsiDocComment doc) {
         if (doc == null) {
             return null;
         }
-        if (settingsInfo.appSettings.skipBlank && isBlank(doc)) {
+        if (info.appSettings.skipBlank && isBlank(doc)) {
             return null;
         }
         String text = doc.getText();
-        boolean skip = DocSkip.skipDoc(settingsInfo, text);
+        boolean skip = DocSkip.skipDoc(info, text);
         return skip ? null : doc;
     }
 

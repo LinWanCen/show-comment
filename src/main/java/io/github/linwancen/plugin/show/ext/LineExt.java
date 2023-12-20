@@ -14,30 +14,30 @@ public class LineExt {
 
     private LineExt() {}
 
-    public static @Nullable String doc(@NotNull LineInfo lineInfo) {
-        int i = lineInfo.text.indexOf(lineInfo.appSettings.lineEndPrefix);
-        @NotNull String code = i <= 0 ? lineInfo.text : lineInfo.text.substring(0, i);
-        @Nullable String extDoc = LineExt.extDoc(lineInfo, code);
+    public static @Nullable String doc(@NotNull LineInfo info) {
+        int i = info.text.indexOf(info.appSettings.lineEndPrefix);
+        @NotNull String code = i <= 0 ? info.text : info.text.substring(0, i);
+        @Nullable String extDoc = LineExt.extDoc(info, code);
         if (extDoc == null) {
             return null;
         }
         extDoc = extDoc.trim();
-        if (lineInfo.text.endsWith(extDoc)) {
+        if (info.text.endsWith(extDoc)) {
             return null;
         }
         return extDoc;
     }
 
     @Nullable
-    public static String extDoc(@NotNull LineInfo lineInfo, @NotNull String code) {
-        @NotNull String path = lineInfo.file.getPath();
-        @NotNull String name = lineInfo.file.getName();
-        @Nullable String ext = lineInfo.file.getExtension();
+    public static String extDoc(@NotNull LineInfo info, @NotNull String code) {
+        @NotNull String path = info.file.getPath();
+        @NotNull String name = info.file.getName();
+        @Nullable String ext = info.file.getExtension();
         @NotNull Map<String, Map<String, List<String>>> keyMap = ConfCache.keyMap(path, name, ext);
         if (keyMap.isEmpty()) {
             return null;
         }
-        @Nullable Pattern pattern = ConfCache.pattern(lineInfo.project, keyMap, path);
+        @Nullable Pattern pattern = ConfCache.pattern(info.project, keyMap, path);
         if (pattern == null || pattern.pattern().isEmpty()) {
             return null;
         }

@@ -27,18 +27,18 @@ public class PythonLangDoc extends BaseTagLangDoc<StructuredDocString> {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
-        return lineInfo.appSettings.showLineEndCommentPy;
+    public boolean show(@NotNull LineInfo info) {
+        return info.appSettings.showLineEndCommentPy;
     }
 
     @Override
-    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T settingsInfo) {
-        return settingsInfo.appSettings.showLineEndCommentPyBase;
+    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T info) {
+        return info.appSettings.showLineEndCommentPyBase;
     }
 
     @Nullable
     @Override
-    protected <T extends SettingsInfo> StructuredDocString toDocElement(@NotNull T settingsInfo,
+    protected <T extends SettingsInfo> StructuredDocString toDocElement(@NotNull T info,
                                                                         @NotNull PsiElement resolve) {
         if (resolve instanceof PyDocStringOwner) {
             @NotNull PyDocStringOwner pyDocStringOwner = (PyDocStringOwner) resolve;
@@ -49,24 +49,24 @@ public class PythonLangDoc extends BaseTagLangDoc<StructuredDocString> {
 
     @NotNull
     @Override
-    protected <T extends SettingsInfo> String descDoc(@NotNull T lineInfo,
+    protected <T extends SettingsInfo> String descDoc(@NotNull T info,
                                                       @NotNull StructuredDocString structuredDocString) {
         String summary = structuredDocString.getSummary();
         if (StringUtils.isNotEmpty(summary)) {
             return summary;
         }
         @NotNull String description = structuredDocString.getDescription();
-        return DocFilter.cutDoc(DocFilter.html2Text(description), lineInfo, false);
+        return DocFilter.cutDoc(DocFilter.html2Text(description), info, false);
     }
 
     @Override
-    protected <T extends SettingsInfo> void appendTag(@NotNull T lineInfo, @NotNull StringBuilder tagStrBuilder,
+    protected <T extends SettingsInfo> void appendTag(@NotNull T info, @NotNull StringBuilder tagStrBuilder,
                                                       @NotNull StructuredDocString structuredDocString,
                                                       @NotNull String name) {
         if (structuredDocString instanceof TagBasedDocString) {
             @Nullable Substring tagValue = ((TagBasedDocString) structuredDocString).getTagValue(name);
             if (tagValue != null) {
-                @NotNull String cutDoc = DocFilter.cutDoc(tagValue.getValue(), lineInfo, false);
+                @NotNull String cutDoc = DocFilter.cutDoc(tagValue.getValue(), info, false);
                 tagStrBuilder.append(cutDoc);
             }
         }

@@ -25,12 +25,12 @@ public class GoLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
-        return lineInfo.appSettings.showLineEndCommentGo;
+    public boolean show(@NotNull LineInfo info) {
+        return info.appSettings.showLineEndCommentGo;
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String resolveDocRaw(@NotNull T lineInfo, @NotNull PsiElement resolve) {
+    public @Nullable <T extends SettingsInfo> String resolveDocRaw(@NotNull T info, @NotNull PsiElement resolve) {
         @NotNull List<PsiComment> comments = GoDocumentationProvider.getCommentsForElement(resolve);
         return GoDocumentationProvider.getCommentText(comments, false);
     }

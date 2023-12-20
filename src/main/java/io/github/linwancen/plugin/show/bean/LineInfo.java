@@ -12,9 +12,9 @@ public class LineInfo extends FileInfo {
     public final int endOffset;
     public final @NotNull String text;
 
-    protected LineInfo(@NotNull FileInfo fileInfo, @NotNull String text,
+    protected LineInfo(@NotNull FileInfo info, @NotNull String text,
                        int lineNumber, int startOffset, int endOffset) {
-        super(fileInfo.file, fileInfo.document, fileInfo.project, fileInfo.viewProvider, FuncEnum.LINE);
+        super(info.file, info.document, info.project, info.viewProvider, FuncEnum.LINE);
         this.lineNumber = lineNumber;
         this.startOffset = startOffset;
         this.endOffset = endOffset;
@@ -22,26 +22,26 @@ public class LineInfo extends FileInfo {
     }
 
     public static @Nullable LineInfo of(@NotNull VirtualFile file, @NotNull Project project, int lineNumber) {
-        @Nullable FileInfo fileInfo = of(file, project);
-        if (fileInfo == null) {
+        @Nullable FileInfo info = of(file, project);
+        if (info == null) {
             return null;
         }
-        return of(fileInfo, lineNumber);
+        return of(info, lineNumber);
     }
 
-    public static @Nullable LineInfo of(@NotNull FileInfo fileInfo, int lineNumber) {
+    public static @Nullable LineInfo of(@NotNull FileInfo info, int lineNumber) {
         // lineNumber start 0, as 1 <= 1 should return
-        if (fileInfo.document.getLineCount() <= lineNumber) {
+        if (info.document.getLineCount() <= lineNumber) {
             return null;
         }
         try {
-            int startOffset = fileInfo.document.getLineStartOffset(lineNumber);
-            int endOffset = fileInfo.document.getLineEndOffset(lineNumber);
+            int startOffset = info.document.getLineStartOffset(lineNumber);
+            int endOffset = info.document.getLineEndOffset(lineNumber);
             if (startOffset == endOffset) {
                 return null;
             }
-            @NotNull String text = fileInfo.document.getText(new TextRange(startOffset, endOffset));
-            return new LineInfo(fileInfo, text, lineNumber, startOffset, endOffset);
+            @NotNull String text = info.document.getText(new TextRange(startOffset, endOffset));
+            return new LineInfo(info, text, lineNumber, startOffset, endOffset);
         } catch (Exception e) {
             return null;
         }

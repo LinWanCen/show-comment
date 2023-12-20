@@ -16,7 +16,7 @@ public class ResolveDoc {
     private ResolveDoc() {}
 
     @Nullable
-    public static <T extends SettingsInfo> String fromLineEnd(@SuppressWarnings("unused") @NotNull T lineInfo,
+    public static <T extends SettingsInfo> String fromLineEnd(@SuppressWarnings("unused") @NotNull T info,
                                                               @NotNull PsiElement resolve,
                                                               @NotNull FileViewProvider resolveViewProvider) {
         @Nullable Document document = resolveViewProvider.getDocument();
@@ -50,7 +50,7 @@ public class ResolveDoc {
     }
 
     @Nullable
-    public static <T extends SettingsInfo> String fromLineUp(@NotNull T lineInfo,
+    public static <T extends SettingsInfo> String fromLineUp(@NotNull T info,
                                                              @NotNull PsiElement resolve,
                                                              @NotNull FileViewProvider resolveViewProvider,
                                                              @NotNull List<String> keywords) {
@@ -60,13 +60,13 @@ public class ResolveDoc {
         }
         @Nullable PsiElement psiElement = PsiTreeUtil.getChildOfType(resolve, PsiComment.class);
         if (psiElement == null) {
-            psiElement = Prev.prevCompactElement(lineInfo, resolve, document);
+            psiElement = Prev.prevCompactElement(info, resolve, document);
         }
         if (!keywords.isEmpty()) {
             while (psiElement != null) {
                 String text = psiElement.getText();
                 if (keywords.contains(text)) {
-                    psiElement = Prev.prevCompactElement(lineInfo, psiElement, document);
+                    psiElement = Prev.prevCompactElement(info, psiElement, document);
                 } else {
                     break;
                 }
@@ -77,7 +77,7 @@ public class ResolveDoc {
         while (isComment) {
             String text = psiElement.getText();
             int thisStartOffset = psiElement.getTextRange().getStartOffset();
-            psiElement = Prev.prevCompactElement(lineInfo, psiElement, document);
+            psiElement = Prev.prevCompactElement(info, psiElement, document);
             isComment = psiElement instanceof PsiComment;
             if (!isComment && psiElement != null) {
                 int prevEndOffset = psiElement.getTextRange().getEndOffset();

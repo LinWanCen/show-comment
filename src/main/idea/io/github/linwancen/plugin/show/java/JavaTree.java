@@ -23,21 +23,21 @@ public class JavaTree {
     private JavaTree() {}
 
     @Nullable
-    public static <T extends SettingsInfo> String treeDoc(@NotNull T settingsInfo, ProjectViewNode<?> node,
+    public static <T extends SettingsInfo> String treeDoc(@NotNull T info, ProjectViewNode<?> node,
                                                           @NotNull Project project) {
-        @Nullable PsiDocComment docComment = nodeDoc(settingsInfo, node, project);
+        @Nullable PsiDocComment docComment = nodeDoc(info, node, project);
         if (docComment == null) {
             return null;
         }
-        @Nullable String s = JavaLangDoc.INSTANCE.docElementToStr(settingsInfo, docComment);
-        if (s != null && !DocSkip.skipDoc(settingsInfo, s)) {
+        @Nullable String s = JavaLangDoc.INSTANCE.docElementToStr(info, docComment);
+        if (s != null && !DocSkip.skipDoc(info, s)) {
             return s;
         }
         return null;
     }
 
     @Nullable
-    static <T extends SettingsInfo> PsiDocComment nodeDoc(@NotNull T settingsInfo, ProjectViewNode<?> node,
+    static <T extends SettingsInfo> PsiDocComment nodeDoc(@NotNull T info, ProjectViewNode<?> node,
                                                           @NotNull Project project) {
         if (node instanceof PsiFileNode) {
             PsiFile psiFile = ((PsiFileNode) node).getValue();
@@ -56,7 +56,7 @@ public class JavaTree {
             if (type instanceof PsiClassReferenceType) {
                 @NotNull PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) type;
                 @NotNull PsiJavaCodeReferenceElement reference = psiClassReferenceType.getReference();
-                return NewCallRefToPsiDoc.javaCodeDoc(settingsInfo, reference);
+                return NewCallRefToPsiDoc.javaCodeDoc(info, reference);
             }
         }
 

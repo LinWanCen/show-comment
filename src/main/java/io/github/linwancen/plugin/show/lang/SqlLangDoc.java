@@ -25,13 +25,13 @@ public class SqlLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
-        return lineInfo.appSettings.showLineEndCommentSql;
+    public boolean show(@NotNull LineInfo info) {
+        return info.appSettings.showLineEndCommentSql;
     }
 
 
     @Override
-    protected @Nullable String refElementDoc(@NotNull LineInfo lineInfo,
+    protected @Nullable String refElementDoc(@NotNull LineInfo info,
                                              @NotNull PsiElement ref) {
         JBIterable<DbElement> relatedDbElements;
         Class<?> clazz;
@@ -55,7 +55,7 @@ public class SqlLangDoc extends BaseLangDoc {
         }
         for (@NotNull DbElement dbElement : relatedDbElements) {
             @Nullable String refDoc = dbElement.getComment();
-            if (refDoc != null && !DocSkip.skipDoc(lineInfo, refDoc)) {
+            if (refDoc != null && !DocSkip.skipDoc(info, refDoc)) {
                 return refDoc;
             }
         }

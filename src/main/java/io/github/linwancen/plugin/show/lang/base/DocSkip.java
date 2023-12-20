@@ -10,35 +10,35 @@ public class DocSkip {
 
     private DocSkip() {}
 
-    public static <T extends SettingsInfo> boolean skipSign(@NotNull T settingsInfo, String text) {
-        return skipText(settingsInfo, text,
-                settingsInfo.globalSettings.lineInclude, settingsInfo.globalSettings.lineExclude,
-                settingsInfo.projectSettings.lineInclude, settingsInfo.projectSettings.lineExclude);
+    public static <T extends SettingsInfo> boolean skipSign(@NotNull T info, String text) {
+        return skipText(info, text,
+                info.globalSettings.lineInclude, info.globalSettings.lineExclude,
+                info.projectSettings.lineInclude, info.projectSettings.lineExclude);
     }
 
     private static final Pattern NOT_ASCII_PATTERN = Pattern.compile("[^\u0000-\u007f]");
 
-    public static <T extends SettingsInfo> boolean skipDoc(@NotNull T settingsInfo, @NotNull String text) {
-        if (settingsInfo.appSettings.skipAscii && !NOT_ASCII_PATTERN.matcher(text).find()) {
+    public static <T extends SettingsInfo> boolean skipDoc(@NotNull T info, @NotNull String text) {
+        if (info.appSettings.skipAscii && !NOT_ASCII_PATTERN.matcher(text).find()) {
             return true;
         }
-        return skipText(settingsInfo, text,
-                settingsInfo.globalSettings.docInclude, settingsInfo.globalSettings.docExclude,
-                settingsInfo.projectSettings.docInclude, settingsInfo.projectSettings.docExclude);
+        return skipText(info, text,
+                info.globalSettings.docInclude, info.globalSettings.docExclude,
+                info.projectSettings.docInclude, info.projectSettings.docExclude);
     }
 
-    static <T extends SettingsInfo> boolean skipText(@NotNull T settingsInfo, @Nullable String text,
+    static <T extends SettingsInfo> boolean skipText(@NotNull T info, @Nullable String text,
                             @NotNull Pattern appDocInclude, @NotNull Pattern appDocExclude,
                             @NotNull Pattern projectDocInclude, @NotNull Pattern projectDocExclude
     ) {
         if (text == null) {
             return true;
         }
-        if (settingsInfo.projectSettings.globalFilterEffective
+        if (info.projectSettings.globalFilterEffective
                 && skipText(text, appDocInclude, appDocExclude)) {
             return true;
         }
-        if (settingsInfo.projectSettings.projectFilterEffective) {
+        if (info.projectSettings.projectFilterEffective) {
             return skipText(text, projectDocInclude, projectDocExclude);
         }
         return false;

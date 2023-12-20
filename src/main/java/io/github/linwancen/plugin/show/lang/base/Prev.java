@@ -16,18 +16,18 @@ public class Prev {
     private Prev() {}
 
     @Nullable
-    public static PsiElement prevRefChild(@NotNull LineInfo lineInfo, @NotNull PsiElement element,
+    public static PsiElement prevRefChild(@NotNull LineInfo info, @NotNull PsiElement element,
                                           @NotNull Class<? extends PsiElement> refClass) {
         @Nullable PsiElement prevParent = refClassParent(element, refClass);
         while ((element = PsiTreeUtil.prevVisibleLeaf(element)) != null) {
-            if (element.getTextRange().getEndOffset() < lineInfo.startOffset) {
+            if (element.getTextRange().getEndOffset() < info.startOffset) {
                 return null;
             }
             @Nullable PsiElement parent = refClassParent(element, refClass);
             if (parent != null) {
                 // skip b in a.b.c
                 if (prevParent != null
-                        && prevParent.getTextRange().getEndOffset() < lineInfo.endOffset
+                        && prevParent.getTextRange().getEndOffset() < info.endOffset
                         && PsiTreeUtil.findChildOfType(prevParent, refClass) == parent) {
                     prevParent = parent;
                 } else {
@@ -68,7 +68,7 @@ public class Prev {
     }
 
     public static @Nullable <T extends SettingsInfo> PsiElement prevCompactElement(
-            @SuppressWarnings("unused") @NotNull T lineInfo, @NotNull PsiElement resolve, @NotNull Document document) {
+            @SuppressWarnings("unused") @NotNull T info, @NotNull PsiElement resolve, @NotNull Document document) {
         @Nullable PsiElement element = PsiTreeUtil.prevVisibleLeaf(resolve);
         if (element == null) {
             return null;

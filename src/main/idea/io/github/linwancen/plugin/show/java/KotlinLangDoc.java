@@ -29,18 +29,18 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
-        return lineInfo.appSettings.showLineEndCommentKotlin;
+    public boolean show(@NotNull LineInfo info) {
+        return info.appSettings.showLineEndCommentKotlin;
     }
 
     @Override
-    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T settingsInfo) {
-        return settingsInfo.appSettings.showLineEndCommentKotlinBase;
+    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T info) {
+        return info.appSettings.showLineEndCommentKotlinBase;
     }
 
     @Override
     @Nullable
-    protected <T extends SettingsInfo> KDocSection toDocElement(@NotNull T settingsInfo, @NotNull PsiElement resolve) {
+    protected <T extends SettingsInfo> KDocSection toDocElement(@NotNull T info, @NotNull PsiElement resolve) {
         if (resolve instanceof PsiPackageBase) {
             return null;
         }
@@ -53,18 +53,18 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
 
     @NotNull
     @Override
-    protected <T extends SettingsInfo> String descDoc(@NotNull T lineInfo, @NotNull KDocSection kDocSection) {
+    protected <T extends SettingsInfo> String descDoc(@NotNull T info, @NotNull KDocSection kDocSection) {
         @NotNull String content = kDocSection.getContent();
-        return DocFilter.cutDoc(content, lineInfo, false);
+        return DocFilter.cutDoc(content, info, false);
     }
 
     @Override
-    protected <T extends SettingsInfo> void appendTag(@NotNull T lineInfo, @NotNull StringBuilder tagStrBuilder,
+    protected <T extends SettingsInfo> void appendTag(@NotNull T info, @NotNull StringBuilder tagStrBuilder,
                                                       @NotNull KDocSection kDocSection, @NotNull String name) {
         @NotNull List<KDocTag> tags = kDocSection.findTagsByName(name);
         for (@NotNull KDocTag tag : tags) {
             @NotNull String content = tag.getContent();
-            @NotNull String cutDoc = DocFilter.cutDoc(content, lineInfo, false);
+            @NotNull String cutDoc = DocFilter.cutDoc(content, info, false);
             tagStrBuilder.append(cutDoc);
         }
     }

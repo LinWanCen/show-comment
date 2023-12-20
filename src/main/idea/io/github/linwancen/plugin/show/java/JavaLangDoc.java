@@ -30,18 +30,18 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
-        return lineInfo.appSettings.showLineEndCommentJava;
+    public boolean show(@NotNull LineInfo info) {
+        return info.appSettings.showLineEndCommentJava;
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T settingsInfo, ProjectViewNode<?> node,
+    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, ProjectViewNode<?> node,
                                                              @NotNull Project project) {
-        return JavaTree.treeDoc(settingsInfo, node, project);
+        return JavaTree.treeDoc(info, node, project);
     }
 
     @Override
-    protected @Nullable String refDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement ref) {
+    protected @Nullable String refDoc(@NotNull LineInfo info, @NotNull PsiElement ref) {
         if ("Override".equals(ref.getText())) {
             @Nullable PsiMethod psiMethod = PsiTreeUtil.getParentOfType(ref, PsiMethod.class);
             if (psiMethod == null) {
@@ -49,47 +49,47 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             }
             // must supper
             @Nullable PsiDocComment psiDocComment = OwnerToPsiDocUtils.supperMethodDoc(psiMethod);
-            return docElementToStr(lineInfo, psiDocComment);
+            return docElementToStr(info, psiDocComment);
         }
-        if (lineInfo.appSettings.fromNew) {
+        if (info.appSettings.fromNew) {
             PsiElement parent = ref.getParent();
             if (parent instanceof PsiNewExpression) {
                 @NotNull PsiNewExpression psiNewExpression = (PsiNewExpression) parent;
                 try {
                     @Nullable PsiMethod resolve = psiNewExpression.resolveMethod();
                     if (resolve != null) {
-                        return resolveDocPrint(lineInfo, resolve);
+                        return resolveDocPrint(info, resolve);
                     }
                 } catch (Throwable ignore) {
                     // ignore
                 }
             }
         }
-        return super.refDoc(lineInfo, ref);
+        return super.refDoc(info, ref);
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T settingsInfo, @NotNull PsiElement resolve) {
-        @Nullable String resolveDocPrint = super.resolveDocPrint(settingsInfo, resolve);
+    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
+        @Nullable String resolveDocPrint = super.resolveDocPrint(info, resolve);
         if (resolveDocPrint != null) {
             return resolveDocPrint;
         }
         // no doc comment support get set
-        if (parseBaseComment(settingsInfo) && resolve instanceof PsiMethod) {
+        if (parseBaseComment(info) && resolve instanceof PsiMethod) {
             @Nullable PsiField psiField = PsiMethodToPsiDoc.propMethodField((PsiMethod) resolve);
             if (psiField != null) {
-                return super.resolveDocPrint(settingsInfo, psiField);
+                return super.resolveDocPrint(info, psiField);
             }
         }
-        if (settingsInfo.appSettings.fromParam && resolve instanceof PsiParameter) {
+        if (info.appSettings.fromParam && resolve instanceof PsiParameter) {
             return paramDoc((PsiParameter) resolve);
         }
         return null;
     }
 
     @Override
-    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T settingsInfo) {
-        return settingsInfo.appSettings.showLineEndCommentJavaBase;
+    protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T info) {
+        return info.appSettings.showLineEndCommentJavaBase;
     }
 
     @Nullable
@@ -118,18 +118,18 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Nullable
     @Override
-    protected <T extends SettingsInfo> PsiDocComment toDocElement(@NotNull T settingsInfo,
+    protected <T extends SettingsInfo> PsiDocComment toDocElement(@NotNull T info,
                                                                   @NotNull PsiElement resolve) {
         if (resolve instanceof PsiDocCommentOwner) {
             @NotNull PsiDocCommentOwner psiDocCommentOwner = (PsiDocCommentOwner) resolve;
-            return OwnerToPsiDocSkip.refDoc(settingsInfo, psiDocCommentOwner);
+            return OwnerToPsiDocSkip.refDoc(info, psiDocCommentOwner);
         }
         return null;
     }
 
     @NotNull
     @Override
-    protected <T extends SettingsInfo> String descDoc(@NotNull T lineInfo, @NotNull PsiDocComment psiDocComment) {
+    protected <T extends SettingsInfo> String descDoc(@NotNull T info, @NotNull PsiDocComment psiDocComment) {
         @NotNull StringBuilder sb = new StringBuilder();
         int lineCount = 0;
         @NotNull PsiElement[] elements = psiDocComment.getDescriptionElements();
@@ -137,7 +137,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             if (appendElementText(sb, element)) {
                 lineCount++;
             }
-            if (DocFilter.lineCountOrLenOver(lineInfo, sb, lineCount)) {
+            if (DocFilter.lineCountOrLenOver(info, sb, lineCount)) {
                 break;
             }
         }
@@ -163,7 +163,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     @Override
-    protected <T extends SettingsInfo> void appendTag(@NotNull T lineInfo, @NotNull StringBuilder tagStrBuilder,
+    protected <T extends SettingsInfo> void appendTag(@NotNull T info, @NotNull StringBuilder tagStrBuilder,
                                                       @NotNull PsiDocComment psiDocComment, @NotNull String name) {
         @NotNull PsiDocTag[] tags = psiDocComment.findTagsByName(name);
         for (@NotNull PsiDocTag tag : tags) {

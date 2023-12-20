@@ -16,17 +16,17 @@ public class OwnerToPsiDocSkip {
     private OwnerToPsiDocSkip() {}
 
     @Nullable
-    public static <T extends SettingsInfo> PsiDocComment refDoc(@NotNull T settingsInfo,
+    public static <T extends SettingsInfo> PsiDocComment refDoc(@NotNull T info,
                                                                 @Nullable PsiDocCommentOwner docOwner) {
         if (docOwner == null) {
             return null;
         }
-        if (SkipUtils.skipSign(settingsInfo, docOwner)) {
+        if (SkipUtils.skipSign(info, docOwner)) {
             return null;
         }
         @Nullable PsiDocComment docComment = docOwner instanceof PsiMethod
                 ? OwnerToPsiDocUtils.methodDoc(((PsiMethod) docOwner))
                 : OwnerToPsiDocUtils.srcOrByteCodeDoc(docOwner);
-        return SkipUtils.skipDoc(settingsInfo, docComment);
+        return SkipUtils.skipDoc(info, docComment);
     }
 }

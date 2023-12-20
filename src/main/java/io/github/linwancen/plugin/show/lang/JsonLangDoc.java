@@ -34,13 +34,13 @@ public class JsonLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
-        return lineInfo.appSettings.showLineEndCommentJson;
+    public boolean show(@NotNull LineInfo info) {
+        return info.appSettings.showLineEndCommentJson;
     }
 
     @Override
-    public @Nullable String findRefDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement element) {
-        @Nullable PsiElement start = lineInfo.viewProvider.findElementAt(lineInfo.startOffset);
+    public @Nullable String findRefDoc(@NotNull LineInfo info, @NotNull PsiElement element) {
+        @Nullable PsiElement start = info.viewProvider.findElementAt(info.startOffset);
         if (start == null) {
             return null;
         }
@@ -48,16 +48,16 @@ public class JsonLangDoc extends BaseLangDoc {
         if (jsonProperty == null) {
             return null;
         }
-        return refElementDoc(lineInfo, jsonProperty);
+        return refElementDoc(info, jsonProperty);
     }
 
     @Override
-    protected @Nullable String refDoc(@NotNull LineInfo lineInfo, @NotNull PsiElement ref) {
+    protected @Nullable String refDoc(@NotNull LineInfo info, @NotNull PsiElement ref) {
         if (!(ref instanceof JsonProperty)) {
             return null;
         }
         @NotNull JsonProperty jsonProperty = (JsonProperty) ref;
-        @Nullable String extDoc = extDoc(lineInfo, jsonProperty);
+        @Nullable String extDoc = extDoc(info, jsonProperty);
         if (extDoc != null) {
             return extDoc;
         }
@@ -72,7 +72,7 @@ public class JsonLangDoc extends BaseLangDoc {
             if (resolve == null) {
                 continue;
             }
-            @Nullable String doc = BaseLangDoc.resolveDoc(lineInfo, resolve);
+            @Nullable String doc = BaseLangDoc.resolveDoc(info, resolve);
             if (doc != null) {
                 return doc;
             }
@@ -81,28 +81,28 @@ public class JsonLangDoc extends BaseLangDoc {
     }
 
     @Nullable
-    private static String extDoc(@NotNull LineInfo lineInfo, @NotNull JsonProperty prop) {
+    private static String extDoc(@NotNull LineInfo info, @NotNull JsonProperty prop) {
         @Nullable JsonValue value = prop.getValue();
         if (value == null || value instanceof JsonArray || value instanceof JsonObject) {
             return null;
         }
-        @NotNull GlobalSearchScope scope = GlobalSearchScope.allScope(lineInfo.project);
+        @NotNull GlobalSearchScope scope = GlobalSearchScope.allScope(info.project);
         @NotNull String jsonKey = prop.getName();
         String jsonValue = value.getText();
         // Read the json.path before if needed
-        @Nullable String dictDoc = jsonDictDoc(lineInfo, scope, jsonKey, jsonValue);
+        @Nullable String dictDoc = jsonDictDoc(info, scope, jsonKey, jsonValue);
         if (dictDoc != null) {
             return dictDoc;
         }
-        @NotNull Map<String, Map<String, List<String>>> jsonMap = ConfCache.jsonMap(lineInfo.file.getPath());
+        @NotNull Map<String, Map<String, List<String>>> jsonMap = ConfCache.jsonMap(info.file.getPath());
         return GetFromDocMap.get(jsonMap, jsonKey);
     }
 
     @Nullable
-    private static String jsonDictDoc(@NotNull LineInfo lineInfo,
+    private static String jsonDictDoc(@NotNull LineInfo info,
                                       @NotNull GlobalSearchScope scope, String jsonKey, String jsonValue) {
         @NotNull String name = jsonKey + ".tsv";
-        @NotNull Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(lineInfo.project, name, scope);
+        @NotNull Collection<VirtualFile> files = FilenameIndex.getVirtualFilesByName(info.project, name, scope);
         // one file
         if (files.size() < 2) {
             for (@NotNull VirtualFile file : files) {
@@ -120,7 +120,7 @@ public class JsonLangDoc extends BaseLangDoc {
             @NotNull Map<String, List<String>> map = TsvLoader.buildMap(file, false);
             fileMap.put(file, map);
         }
-        @NotNull String path = lineInfo.file.getPath();
+        @NotNull String path = info.file.getPath();
         @NotNull SortedMap<String, Map<String, List<String>>> sortedMap = ConfCacheGetUtils.filterPath(fileMap, path);
         return GetFromDocMap.get(sortedMap, jsonValue);
     }

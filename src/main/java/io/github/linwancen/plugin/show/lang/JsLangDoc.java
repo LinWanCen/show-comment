@@ -23,12 +23,12 @@ public class JsLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public boolean show(@NotNull LineInfo lineInfo) {
-        return lineInfo.appSettings.showLineEndCommentJs;
+    public boolean show(@NotNull LineInfo info) {
+        return info.appSettings.showLineEndCommentJs;
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String resolveDocRaw(@NotNull T lineInfo, @NotNull PsiElement resolve) {
+    public @Nullable <T extends SettingsInfo> String resolveDocRaw(@NotNull T info, @NotNull PsiElement resolve) {
         @Nullable PsiComment psiComment = JSDocumentationUtils.findOwnDocCommentForImplicitElement(resolve);
         if (psiComment == null) {
             return null;
@@ -37,8 +37,8 @@ public class JsLangDoc extends BaseLangDoc {
         if (text != null) {
             return text;
         }
-        if (lineInfo.appSettings.showLineEndCommentJsBase) {
-            return super.resolveDocRaw(lineInfo, resolve);
+        if (info.appSettings.showLineEndCommentJsBase) {
+            return super.resolveDocRaw(info, resolve);
         }
         return null;
     }

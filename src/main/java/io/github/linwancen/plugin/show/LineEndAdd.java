@@ -91,14 +91,14 @@ public class LineEndAdd extends DumbAwareAction {
     }
 
     private void addDoc(@NotNull Project project, @NotNull VirtualFile file, @NotNull ProgressIndicator indicator) {
-        @Nullable FileInfo fileInfo = FileInfo.of(file, project);
-        if (fileInfo == null) {
+        @Nullable FileInfo info = FileInfo.of(file, project);
+        if (info == null) {
             return;
         }
         int startLine = 0;
-        int endLine = fileInfo.document.getLineCount() - 1;
-        LineEnd.textWithDoc(fileInfo, startLine, endLine, indicator, s ->
-                fileInfo.document.replaceString(0, fileInfo.document.getTextLength() - 1, s)
+        int endLine = info.document.getLineCount() - 1;
+        LineEnd.textWithDoc(info, startLine, endLine, indicator, s ->
+                info.document.replaceString(0, info.document.getTextLength() - 1, s)
         );
     }
 }

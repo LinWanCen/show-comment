@@ -45,16 +45,16 @@ public class LineEndCopy extends DumbAwareAction {
         if (project == null) {
             return;
         }
-        @Nullable FileInfo fileInfo = FileInfo.of(event);
-        if (fileInfo == null) {
+        @Nullable FileInfo info = FileInfo.of(event);
+        if (info == null) {
             return;
         }
-        new Task.Backgroundable(project, "Show LineEndCopy " + fileInfo.file.getName()) {
+        new Task.Backgroundable(project, "Show LineEndCopy " + info.file.getName()) {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
                 ApplicationManager.getApplication().runReadAction(() -> {
                     int startLine = 0;
-                    int endLine = fileInfo.document.getLineCount() - 1;
+                    int endLine = info.document.getLineCount() - 1;
                     // if select
                     @Nullable Editor editor = event.getData(CommonDataKeys.EDITOR);
                     if (editor != null) {
@@ -62,13 +62,13 @@ public class LineEndCopy extends DumbAwareAction {
                         int start = primaryCaret.getSelectionStart();
                         int end = primaryCaret.getSelectionEnd();
                         try {
-                            startLine = fileInfo.document.getLineNumber(start);
-                            endLine = fileInfo.document.getLineNumber(end);
+                            startLine = info.document.getLineNumber(start);
+                            endLine = info.document.getLineNumber(end);
                         } catch (Exception e) {
                             return;
                         }
                     }
-                    LineEnd.textWithDoc(fileInfo, startLine, endLine, indicator, s -> {
+                    LineEnd.textWithDoc(info, startLine, endLine, indicator, s -> {
                         @NotNull StringSelection content = new StringSelection(s);
                         CopyPasteManager.getInstance().setContents(content);
                     });
