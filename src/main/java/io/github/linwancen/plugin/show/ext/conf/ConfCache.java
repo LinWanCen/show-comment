@@ -38,7 +38,7 @@ public class ConfCache {
     @Nullable
     public static Pattern pattern(@Nullable Project project,
                                   @NotNull Map<String, Map<String, List<String>>> keyMap, @NotNull String path) {
-        return ConfFactory.buildPattern(project, path, keyMap);
+        return SpiltKeyWordPatternFactory.from(project, path, keyMap);
     }
 
     @NotNull
@@ -70,7 +70,7 @@ public class ConfCache {
         return ConfCacheGetUtils.filterPath(JSON_CACHE, path);
     }
 
-    static void clearAll() {
+    public static void clearAll() {
         EXT_IN_KEY_CACHE.clear();
         KEY_CACHE.clear();
         DOC_CACHE.clear();
@@ -78,7 +78,7 @@ public class ConfCache {
         JSON_CACHE.clear();
     }
 
-    static void remove(@NotNull VirtualFile file, @Nullable String name) {
+    public static void remove(@NotNull VirtualFile file, @Nullable String name) {
         if (name != null) {
             int i = name.lastIndexOf('.');
             name = name.substring(0, i);
@@ -96,7 +96,7 @@ public class ConfCache {
         }
     }
 
-    static void copy(@NotNull VirtualFile file, @NotNull VirtualFile newFile) {
+    public static void copy(@NotNull VirtualFile file, @NotNull VirtualFile newFile) {
         @NotNull String name = file.getNameWithoutExtension();
         if (name.endsWith(KEY_MID_EXT)) {
             copyCache(file, newFile, KEY_CACHE);
@@ -117,7 +117,7 @@ public class ConfCache {
         }
     }
 
-    static void loadAll(@NotNull Project project) {
+    public static void loadAll(@NotNull Project project) {
         DumbService.getInstance(project).smartInvokeLater(() -> {
             @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, TsvLoader.EXT);
             @NotNull StringBuilder sb = new StringBuilder();
@@ -135,7 +135,7 @@ public class ConfCache {
         });
     }
 
-    static void loadFile(@NotNull VirtualFile file, @Nullable Project project) {
+    public static void loadFile(@NotNull VirtualFile file, @Nullable Project project) {
         ApplicationManager.getApplication().invokeLater(() -> {
             ConfCache.load(file);
             if (project != null && !project.isDisposed()) {

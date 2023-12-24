@@ -1,7 +1,8 @@
-package io.github.linwancen.plugin.show.ext.conf;
+package io.github.linwancen.plugin.show.ext.conf.listener;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManagerListener;
+import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -13,16 +13,16 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-class ConfFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(ConfFactory.class);
+class SpiltKeyWordPatternFactory {
+    private static final Logger LOG = LoggerFactory.getLogger(SpiltKeyWordPatternFactory.class);
 
     private static final Pattern EMPTY_PATTERN = Pattern.compile("");
     private static final Map<String, Pattern> PATTERN_CACHE = new ConcurrentHashMap<>();
-    private ConfFactory() {}
+    private SpiltKeyWordPatternFactory() {}
 
     @Nullable
-    static Pattern buildPattern(@SuppressWarnings("unused") @Nullable Project project, @NotNull String path,
-                                @NotNull Map<String, Map<String, List<String>>> map) {
+    static Pattern from(@SuppressWarnings("unused") @Nullable Project project, @NotNull String path,
+                        @NotNull Map<String, Map<String, List<String>>> map) {
         @NotNull Set<String> exclude = new LinkedHashSet<>();
         @NotNull StringBuilder sb = new StringBuilder();
         for (@NotNull Map<String, List<String>> keyMap : map.values()) {

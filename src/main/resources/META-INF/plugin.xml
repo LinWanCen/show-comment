@@ -119,14 +119,14 @@ Show doc comment at the Project view Tree, line End, json, other
   <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
 
   <applicationListeners>
-    <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileListener"
+    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileListener"
               topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
-    <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileChangeListener"
+    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileChangeListener"
               topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
   </applicationListeners>
 
   <projectListeners>
-    <listener class="io.github.linwancen.plugin.show.ext.conf.ConfFileInitListener"
+    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileInitListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
   </projectListeners>
 
@@ -156,13 +156,13 @@ Show doc comment at the Project view Tree, line End, json, other
   <actions>
     <action
         id="io.github.linwancen.plugin.show.ext.conf.ReLoadExtDocAction"
-        class="io.github.linwancen.plugin.show.ext.conf.ReloadExtDocAction"
+        class="io.github.linwancen.plugin.show.ext.conf.action.ReloadExtDocAction"
         text="🔄 // Reload External Comment">
       <add-to-group group-id="ToolsMenu"/>
     </action>
     <action
-        id="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
-        class="io.github.linwancen.plugin.show.ext.conf.ResetExtDocAction"
+        id="io.github.linwancen.plugin.show.ext.conf.action.ResetExtDocAction"
+        class="io.github.linwancen.plugin.show.ext.conf.action.ResetExtDocAction"
         text="🆑 // Clear External Comment">
       <add-to-group group-id="ToolsMenu"/>
     </action>
