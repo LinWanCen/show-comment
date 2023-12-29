@@ -5,6 +5,7 @@ import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonValue;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.FilenameIndex;
@@ -39,8 +40,9 @@ public class JsonLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public @Nullable String findRefDoc(@NotNull LineInfo info, @NotNull PsiElement element) {
-        @Nullable PsiElement start = info.viewProvider.findElementAt(info.startOffset);
+    public @Nullable String findRefDoc(@NotNull LineInfo info, @NotNull FileViewProvider viewProvider,
+                                       @NotNull PsiElement element) {
+        @Nullable PsiElement start = viewProvider.findElementAt(info.startOffset);
         if (start == null) {
             return null;
         }

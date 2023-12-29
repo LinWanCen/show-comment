@@ -8,7 +8,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,14 +15,12 @@ public class FileInfo extends SettingsInfo {
     public final @NotNull VirtualFile file;
     public final @NotNull Document document;
     public final @NotNull Project project;
-    public final @NotNull FileViewProvider viewProvider;
 
     protected FileInfo(@NotNull VirtualFile file, @NotNull Document document, @NotNull Project project,
-                       @NotNull FileViewProvider viewProvider, @NotNull FuncEnum funcEnum) {
+                       @NotNull FuncEnum funcEnum) {
         super(project, funcEnum);
         this.project = project;
         this.file = file;
-        this.viewProvider = viewProvider;
         this.document = document;
     }
 
@@ -32,11 +29,7 @@ public class FileInfo extends SettingsInfo {
         if (document == null) {
             return null;
         }
-        @Nullable FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(file);
-        if (viewProvider == null) {
-            return null;
-        }
-        return new FileInfo(file, document, project, viewProvider, FuncEnum.LINE);
+        return new FileInfo(file, document, project, FuncEnum.LINE);
     }
 
     public static @Nullable FileInfo of(@NotNull AnActionEvent event) {
@@ -51,6 +44,6 @@ public class FileInfo extends SettingsInfo {
         }
         @NotNull VirtualFile file = viewProvider.getVirtualFile();
         @NotNull Project project = psiFile.getProject();
-        return new FileInfo(file, document, project, viewProvider, FuncEnum.LINE);
+        return new FileInfo(file, document, project, FuncEnum.LINE);
     }
 }

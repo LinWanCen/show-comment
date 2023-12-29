@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
@@ -16,7 +17,11 @@ import io.github.linwancen.plugin.show.lang.JsonLangDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -41,10 +46,14 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     public static @Nullable String langDoc(@NotNull LineInfo info) {
-        @Nullable PsiElement element = info.viewProvider.findElementAt(info.endOffset);
+        @Nullable FileViewProvider viewProvider = PsiManager.getInstance(info.project).findViewProvider(info.file);
+        if (viewProvider == null) {
+            return null;
+        }
+        @Nullable PsiElement element = viewProvider.findElementAt(info.endOffset);
         if (element == null) {
             // file end
-            element = info.viewProvider.findElementAt(info.endOffset - 1);
+            element = viewProvider.findElementAt(info.endOffset - 1);
             if (element == null) {
                 return null;
             }
@@ -52,9 +61,9 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         @NotNull Language language = PsiElementTo.language(element);
         BaseLangDoc lineEnd = LANG_DOC_MAP.get(language.getID());
         if (lineEnd != null && lineEnd.show(info)) {
-            return lineEnd.findRefDoc(info, element);
+            return lineEnd.findRefDoc(info, viewProvider, element);
         } else if (language == JsonLanguage.INSTANCE && JsonLangDoc.INSTANCE.show(info)) {
-            return JsonLangDoc.INSTANCE.findRefDoc(info, element);
+            return JsonLangDoc.INSTANCE.findRefDoc(info, viewProvider, element);
         }
         return null;
     }
@@ -63,7 +72,8 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * Override like JSON
      */
     @Nullable
-    public String findRefDoc(@NotNull LineInfo info, @NotNull PsiElement element) {
+    public String findRefDoc(@NotNull LineInfo info, @NotNull FileViewProvider viewProvider,
+                             @NotNull PsiElement element) {
         @Nullable Class<? extends PsiElement> refClass = getRefClass();
         if (refClass == null) {
             return null;
@@ -98,7 +108,8 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     @NotNull
-    private String mergeDoc(@NotNull String beforeText, @NotNull String text, boolean getToSet, String before, String doc) {
+    private String mergeDoc(@NotNull String beforeText, @NotNull String text,
+                            boolean getToSet, String before, String doc) {
         if (beforeText.startsWith("set")) {
             beforeText = beforeText.substring(3);
             if (text.startsWith("get")) {
