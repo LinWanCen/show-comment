@@ -76,6 +76,7 @@ public class LineEndAdd extends DumbAwareAction {
         new Task.Backgroundable(project, "Show LineEndAdd " + list.size() + " " + list.get(0)) {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
+                indicator.setIndeterminate(false);
                 WriteCommandAction.runWriteCommandAction(project, () -> {
                     for (int i = 0; i < list.size(); i++) {
                         VirtualFile file = list.get(i);

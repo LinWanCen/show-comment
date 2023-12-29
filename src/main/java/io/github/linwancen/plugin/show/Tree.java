@@ -5,6 +5,7 @@ import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ProjectViewNodeDecorator;
 import com.intellij.ide.util.treeView.PresentableNodeDescriptor.ColoredFragment;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.packageDependencies.ui.PackageDependenciesNode;
@@ -13,6 +14,7 @@ import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.cache.TreeCacheUtils;
 import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
@@ -33,20 +35,30 @@ public class Tree implements ProjectViewNodeDecorator {
     public void decorate(@NotNull ProjectViewNode node, @NotNull PresentationData data) {
         try {
             decorateImpl(node, data);
+        } catch (ProcessCanceledException ignore) {
+            // ignore
         } catch (Throwable e) {
             LOG.info("Tree catch Throwable but log to record.", e);
         }
     }
 
     private void decorateImpl(@NotNull ProjectViewNode<?> node, @NotNull PresentationData data) {
-        if (!AppSettingsState.getInstance().showTreeComment) {
+        @NotNull AppSettingsState state = AppSettingsState.getInstance();
+        if (!state.showTreeComment) {
             return;
         }
         @Nullable Project project = node.getProject();
         if (project == null) {
             return;
         }
-        if (DumbService.isDumb(project)) {
+        @Nullable String extDoc = TreeExt.doc(node);
+        if (extDoc != null) {
+            addText(data, extDoc);
+            return;
+        }
+        if (state.treeCache) {
+            @Nullable String doc = TreeCacheUtils.treeDoc(node, project);
+            addText(data, doc);
             return;
         }
         DumbService.getInstance(project).runReadActionInSmartMode(() ->
@@ -68,11 +80,7 @@ public class Tree implements ProjectViewNodeDecorator {
     }
 
     @Nullable
-    private String treeDoc(@NotNull ProjectViewNode<?> node, @NotNull Project project) {
-        @Nullable String doc = TreeExt.doc(node);
-        if (doc != null) {
-            return doc;
-        }
+    public static String treeDoc(@NotNull ProjectViewNode<?> node, @NotNull Project project) {
         @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
         @Nullable String relFileDoc = RelFileDoc.relFileDoc(node, info);
         if (relFileDoc != null) {

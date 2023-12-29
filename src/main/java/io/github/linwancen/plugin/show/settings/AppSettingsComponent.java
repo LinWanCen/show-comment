@@ -17,20 +17,22 @@ public class AppSettingsComponent {
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
     private final JBCheckBox compact = new JBCheckBox(ShowBundle.message("compact"));
+    private final JBCheckBox treeCache = new JBCheckBox(ShowBundle.message("tree.cache"));
     private final JBTextField treeTags = new JBTextField();
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
-    private final JBCheckBox showLineEndCommentJava = new JBCheckBox("Java ");
+    private final JBCheckBox lineEndCache = new JBCheckBox(ShowBundle.message("line.end.cache"));
+    private final JBCheckBox showLineEndCommentJava = new JBCheckBox("    Java ");
     private final JBCheckBox showLineEndCommentJavaBase = new JBCheckBox("// Java ");
-    private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("Kotlin ");
+    private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("    Kotlin ");
     private final JBCheckBox showLineEndCommentKotlinBase = new JBCheckBox("// Kotlin ");
-    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("js ");
+    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("    js ");
     private final JBCheckBox showLineEndCommentJsBase = new JBCheckBox("// js ");
-    private final JBCheckBox showLineEndCommentPy = new JBCheckBox("Python ");
+    private final JBCheckBox showLineEndCommentPy = new JBCheckBox("   Python ");
     private final JBCheckBox showLineEndCommentPyBase = new JBCheckBox("# Python ");
-    private final JBCheckBox showLineEndCommentGo = new JBCheckBox("Go ");
+    private final JBCheckBox showLineEndCommentGo = new JBCheckBox("    Go ");
     private final JBCheckBox showLineEndCommentGoBase = new JBCheckBox("// Go ");
-    private final JBCheckBox showLineEndCommentSql = new JBCheckBox("sql ");
-    private final JBCheckBox showLineEndCommentJson = new JBCheckBox("json ");
+    private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    sql ");
+    private final JBCheckBox showLineEndCommentJson = new JBCheckBox("    json ");
     private final JBTextField lineTags = new JBTextField();
     private final JBCheckBox getToSet = new JBCheckBox("get --> set ");
     private final JBCheckBox fromNew = new JBCheckBox("java new ");
@@ -56,17 +58,18 @@ public class AppSettingsComponent {
     @NotNull
     private JPanel showPanel() {
         JPanel comment = FormBuilder.createFormBuilder()
-                .addComponent(JPanelFactory.of(showTreeComment, compact), 1)
-                .addComponent(JPanelFactory.of(showLineEndComment,
+                .addComponent(JPanelFactory.of(showTreeComment, treeCache, compact), 1)
+                .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache), 1)
+                .addComponent(JPanelFactory.of(
                         showLineEndCommentJava,
                         showLineEndCommentKotlin,
                         showLineEndCommentJs,
                         showLineEndCommentPy,
-                        showLineEndCommentGo
+                        showLineEndCommentGo,
+                        showLineEndCommentSql,
+                        showLineEndCommentJson
                 ), 1)
                 .addComponent(JPanelFactory.of(
-                        showLineEndCommentSql,
-                        showLineEndCommentJson,
                         showLineEndCommentJavaBase,
                         showLineEndCommentKotlinBase,
                         showLineEndCommentJsBase,
@@ -120,6 +123,14 @@ public class AppSettingsComponent {
         compact.setSelected(newStatus);
     }
 
+    public boolean getTreeCache() {
+        return treeCache.isSelected();
+    }
+
+    public void setTreeCache(boolean newStatus) {
+        treeCache.setSelected(newStatus);
+    }
+
     @NotNull
     public String getTreeTags() {
         return treeTags.getText();
@@ -136,6 +147,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndComment(boolean newStatus) {
         showLineEndComment.setSelected(newStatus);
+    }
+
+    public boolean getLineEndCache() {
+        return lineEndCache.isSelected();
+    }
+
+    public void setLineEndCache(boolean newStatus) {
+        lineEndCache.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentJava() {

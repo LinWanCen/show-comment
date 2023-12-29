@@ -52,6 +52,7 @@ public class LineEndCopy extends DumbAwareAction {
         new Task.Backgroundable(project, "Show LineEndCopy " + info.file.getName()) {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
+                indicator.setIndeterminate(false);
                 ApplicationManager.getApplication().runReadAction(() -> {
                     int startLine = 0;
                     int endLine = info.document.getLineCount() - 1;

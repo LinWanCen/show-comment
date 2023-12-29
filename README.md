@@ -112,6 +112,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.13  ★                     Cache for 2023.3
 <li>2.12  Add project-view-tree support Markdown and Asciidoc
 <li>2.11  Add project-view-tree description from pom.xml and build.gradle
 <li>2.10  Add line-end-comment  not doc comment
@@ -153,6 +154,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.13  ★             缓存用于支持 2023.3
 <li>2.12  增加 文件树注释  支持 Markdown and Asciidoc
 <li>2.11  增加 文件树注释  模块描述 来自 pom.xml 和 build.gradle
 <li>2.10  增加 行末注释   非文档注释

@@ -4,7 +4,6 @@ import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.FilenameIndex;
@@ -13,7 +12,11 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.regex.Pattern;
@@ -123,14 +126,16 @@ public class ConfCache {
         new Task.Backgroundable(project, "Show Load xxx.tree/key/doc/json.tsv") {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
+                indicator.setIndeterminate(false);
                 ApplicationManager.getApplication().runReadAction(() -> {
                     @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project, TsvLoader.EXT);
                     @NotNull StringBuilder sb = new StringBuilder();
-                    int i = 0;
+                    double i = 0;
                     for (@NotNull VirtualFile file : files) {
                         indicator.setText(file.getName());
                         load(file);
-                        indicator.setFraction((double) ++i /files.size());
+                        i++;
+                        indicator.setFraction(i / files.size());
                         sb.append(file.getName()).append("\n");
                     }
                     if (files.isEmpty()) {

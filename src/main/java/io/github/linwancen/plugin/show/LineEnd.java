@@ -2,15 +2,19 @@ package io.github.linwancen.plugin.show;
 
 import com.intellij.json.JsonFileType;
 import com.intellij.json.json5.Json5FileType;
-import com.intellij.openapi.editor.*;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorLinePainter;
+import com.intellij.openapi.editor.LineExtensionInfo;
+import com.intellij.openapi.editor.SelectionModel;
+import com.intellij.openapi.editor.VisualPosition;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import io.github.linwancen.plugin.show.bean.FileInfo;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.cache.LineEndCacheUtils;
 import io.github.linwancen.plugin.show.ext.LineExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
@@ -22,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class LineEnd extends EditorLinePainter {
@@ -41,8 +44,8 @@ public class LineEnd extends EditorLinePainter {
     }
 
     @Nullable
-    private static List<LineExtensionInfo> getLineExtensionInfos(@NotNull Project project,
-                                                                 @NotNull VirtualFile file, int lineNumber) {
+    private static Collection<LineExtensionInfo> getLineExtensionInfos(@NotNull Project project,
+                                                                       @NotNull VirtualFile file, int lineNumber) {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         if (!settings.showLineEndComment) {
             return null;
@@ -63,23 +66,32 @@ public class LineEnd extends EditorLinePainter {
                 }
             }
         }
-        if (DumbService.isDumb(project)) {
-            return null;
-        }
-        if (!file.exists()) {
-            return null;
-        }
         @Nullable LineInfo info = LineInfo.of(file, project, lineNumber);
+        if (info == null) {
+            return null;
+        }
+        if (settings.lineEndCache) {
+            return LineEndCacheUtils.get(info);
+        } else {
+            @Nullable LineExtensionInfo lineExt = lineExt(info);
+            if (lineExt == null) {
+                return null;
+            }
+            return Collections.singleton(lineExt);
+        }
+    }
+
+    @Nullable
+    public static LineExtensionInfo lineExt(@NotNull LineInfo info) {
         @Nullable String doc = lineDocSkipHave(info);
         if (doc == null) {
             return null;
         }
-        @NotNull TextAttributes textAttr = file.getFileType().equals(JsonFileType.INSTANCE)
-                || file.getFileType().equals(Json5FileType.INSTANCE)
-                ? settings.lineEndJsonTextAttr
-                : settings.lineEndTextAttr;
-        @NotNull LineExtensionInfo lineExt = new LineExtensionInfo(settings.lineEndPrefix + doc, textAttr);
-        return Collections.singletonList(lineExt);
+        @NotNull TextAttributes textAttr = info.file.getFileType().equals(JsonFileType.INSTANCE)
+                || info.file.getFileType().equals(Json5FileType.INSTANCE)
+                ? info.appSettings.lineEndJsonTextAttr
+                : info.appSettings.lineEndTextAttr;
+        return new LineExtensionInfo(info.appSettings.lineEndPrefix + doc, textAttr);
     }
 
     public static void textWithDoc(@NotNull FileInfo fileInfo, int startLine, int endLine,
@@ -110,8 +122,11 @@ public class LineEnd extends EditorLinePainter {
         func.accept(sb.toString());
     }
 
-    private static @Nullable String lineDocSkipHave(@Nullable LineInfo info) {
-        @Nullable String doc = lineDoc(info);
+    private static @Nullable String lineDocSkipHave(@NotNull LineInfo info) {
+        @Nullable String doc = LineExt.doc(info);
+        if (doc == null) {
+            doc = BaseLangDoc.langDoc(info);
+        }
         if (doc == null) {
             return null;
         }
@@ -120,17 +135,5 @@ public class LineEnd extends EditorLinePainter {
             return null;
         }
         return trimDoc;
-    }
-
-    private static @Nullable String lineDoc(@Nullable LineInfo info) {
-        if (info == null) {
-            return null;
-        }
-        // override some text
-        @Nullable String doc = LineExt.doc(info);
-        if (doc != null) {
-            return doc;
-        }
-        return BaseLangDoc.langDoc(info);
     }
 }
