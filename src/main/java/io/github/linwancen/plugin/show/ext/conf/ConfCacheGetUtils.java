@@ -82,6 +82,7 @@ public class ConfCacheGetUtils {
             VirtualFile confFile = entry.getKey();
             @NotNull String confPath = confFile.getPath();
             int level = level(path, confPath);
+            // no one match or child
             if (level == 0) {
                 continue;
             }
@@ -108,6 +109,7 @@ public class ConfCacheGetUtils {
                 }
             }
         }
+        // child or other child
         if (length > paths.length) {
             return 0;
         }
@@ -123,11 +125,11 @@ public class ConfCacheGetUtils {
     private static String srcPath(@NotNull String path) {
         int i = path.indexOf('!');
         if (i != -1) {
-            return path.substring(i + 1);
+            return path.substring(i + 1) + "resources";
         }
         i = path.indexOf("/resources");
         if (i != -1) {
-            return path.substring(i + "/resources".length());
+            return path.substring(i);
         }
         return path;
     }
