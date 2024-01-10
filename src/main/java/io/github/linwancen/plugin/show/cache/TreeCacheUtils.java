@@ -1,10 +1,8 @@
 package io.github.linwancen.plugin.show.cache;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.concurrency.AppExecutorUtil;
@@ -32,8 +30,10 @@ public class TreeCacheUtils {
             treeCache.needUpdate = true;
             checkScheduleAndInit();
             return treeCache.doc;
+        } catch (ProcessCanceledException e) {
+            return null;
         } catch (Throwable e) {
-            LOG.info("LineEndCache catch Throwable but log to record.", e);
+            LOG.info("TreeCacheUtils catch Throwable but log to record.", e);
             return null;
         }
     }
@@ -47,7 +47,7 @@ public class TreeCacheUtils {
                     isRun = true;
                     AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(() -> {
                         try {
-                            ApplicationManager.getApplication().runReadAction(TreeCacheUtils::cacheUpdate);
+                            cacheUpdate();
                         } catch (Exception e) {
                             LOG.info("TreeCacheUtils checkScheduleAndInit catch Throwable but log to record.", e);
                         }
@@ -68,13 +68,15 @@ public class TreeCacheUtils {
                     return;
                 }
                 nodeCache.forEach((node, treeCache) -> {
-                    try {
-                        if (treeCache.needUpdate) {
-                            treeCache.needUpdate = false;
-                            treeCache.doc = Tree.treeDoc(node, project);
-                        }
-                    } catch (Exception e) {
-                        LOG.info("TreeCacheUtils nodeCache.forEach catch Throwable but log to record.", e);
+                    if (treeCache.needUpdate) {
+                        treeCache.needUpdate = false;
+                        ApplicationManager.getApplication().runReadAction(() -> {
+                            try {
+                                treeCache.doc = Tree.treeDoc(node, project);
+                            } catch (Exception e) {
+                                LOG.info("TreeCacheUtils nodeCache.forEach catch Throwable but log to record.", e);
+                            }
+                        });
                     }
                 });
             } catch (Exception e) {

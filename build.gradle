@@ -82,6 +82,7 @@ tasks.withType(Javadoc) {
 patchPluginXml {
     // The performance of 2019.3 has been greatly improved.
     // change plugins without restarting the IDE in 2020.1.
+    // 2020.2 JCEF, 2022.3 JDK17, 2023.3 AI
     sinceBuild = '201.1'
     untilBuild = ''
     changeNotes = """

@@ -4,6 +4,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class TreeCache {
     @Nullable
-    public String doc;
+    public volatile String doc;
     public volatile boolean needUpdate = true;
 }

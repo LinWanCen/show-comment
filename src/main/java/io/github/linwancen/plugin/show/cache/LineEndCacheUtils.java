@@ -29,15 +29,17 @@ public class LineEndCacheUtils {
             @NotNull LineEndCache lineCache = cache
                     .computeIfAbsent(info.project, a -> new ConcurrentHashMap<>())
                     .computeIfAbsent(info.file, a -> new ConcurrentHashMap<>())
-                    .computeIfAbsent(info.lineNumber, a -> new LineEndCache(info.text, new ArrayList<>(1), info));
-            if (lineCache.selectChanged || !info.text.equals(lineCache.code)) {
-                lineCache.lineExtList.clear();
+                    .computeIfAbsent(info.lineNumber, a -> new LineEndCache(info.text, info));
+            if (lineCache.selectChanged) {
                 lineCache.info = info;
+            } else if (!info.text.equals(lineCache.code)) {
+                lineCache.info = info;
+                lineCache.lineExtList.clear();
             }
             checkScheduleAndInit();
             return lineCache.lineExtList;
         } catch (Throwable e) {
-            LOG.info("LineEndCache catch Throwable but log to record.", e);
+            LOG.info("LineEndCacheUtils catch Throwable but log to record.", e);
             return null;
         }
     }
@@ -51,9 +53,9 @@ public class LineEndCacheUtils {
                     isRun = true;
                     AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(() -> {
                         try {
-                            ApplicationManager.getApplication().runReadAction(LineEndCacheUtils::cacheUpdate);
+                            cacheUpdate();
                         } catch (Exception e) {
-                            LOG.info("LineEndCache checkScheduleAndInit catch Throwable but log to record.", e);
+                            LOG.info("LineEndCacheUtils checkScheduleAndInit catch Throwable but log to record.", e);
                         }
                     }, 0L, 1L, TimeUnit.SECONDS);
                 }
@@ -71,26 +73,34 @@ public class LineEndCacheUtils {
                 if (DumbService.isDumb(project)) {
                     return;
                 }
-                fileMap.forEach((file, lineMap) ->
-                        lineMap.forEach((lineNumber, lineEndCache) -> {
-                            try {
-                                @Nullable LineInfo info = lineEndCache.info;
-                                if (info == null) {
-                                    return;
-                                }
-                                @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
-                                lineEndCache.updated();
-                                lineEndCache.code = info.text;
-                                if (lineExt == null) {
-                                    return;
-                                }
-                                lineEndCache.lineExtList.add(lineExt);
-                            } catch (Exception e) {
-                                LOG.info("LineEndCache lineMap.forEach catch Throwable but log to record.", e);
+                fileMap.forEach((file, lineMap) -> lineMap.forEach((lineNumber, lineEndCache) -> {
+                    if (lineEndCache.info == null) {
+                        return;
+                    }
+                    ApplicationManager.getApplication().runReadAction(() -> {
+                        try {
+                            @Nullable LineInfo info = lineEndCache.info;
+                            if (info == null) {
+                                return;
                             }
-                        }));
+                            lineEndCache.info = null;
+                            if (lineEndCache.selectChanged) {
+                                lineEndCache.selectChanged = false;
+                                lineEndCache.lineExtList.clear();
+                            }
+                            @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
+                            if (lineExt != null) {
+                                lineEndCache.lineExtList.add(lineExt);
+                            }
+                            // change after ext is updated
+                            lineEndCache.code = info.text;
+                        } catch (Exception e) {
+                            LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
+                        }
+                    });
+                }));
             } catch (Exception e) {
-                LOG.info("LineEndCache cache.forEach catch Throwable but log to record.", e);
+                LOG.info("LineEndCacheUtils cache.forEach catch Throwable but log to record.", e);
             }
         });
     }

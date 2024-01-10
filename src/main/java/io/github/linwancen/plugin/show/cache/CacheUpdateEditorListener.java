@@ -18,8 +18,6 @@ import java.util.Map;
  */
 public class CacheUpdateEditorListener implements FileEditorManagerListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CacheUpdateEditorListener.class);
-
     @Override
     public void selectionChanged(@NotNull FileEditorManagerEvent event) {
         @NotNull Project project = event.getManager().getProject();
@@ -52,8 +50,10 @@ public class CacheUpdateEditorListener implements FileEditorManagerListener {
                 LineEndCacheUtils.cache.remove(project);
                 return;
             }
-            Map<VirtualFile, Map<Integer, LineEndCache>> fileMap = LineEndCacheUtils.cache.get(project);
-            fileMap.remove(file);
+            @Nullable Map<VirtualFile, Map<Integer, LineEndCache>> fileMap = LineEndCacheUtils.cache.get(project);
+            if (fileMap != null) {
+                fileMap.remove(file);
+            }
         });
     }
 }
