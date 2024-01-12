@@ -107,6 +107,10 @@ public class LineEndCacheUtils {
                             if (list != null) {
                                 list.clear();
                             }
+                            // fix delete line get doc from before line because PsiFile be not updated
+                            if ("}".equals(info.text.trim())) {
+                                return;
+                            }
                             if (lineExt != null) {
                                 if (list != null) {
                                     list.add(lineExt);
