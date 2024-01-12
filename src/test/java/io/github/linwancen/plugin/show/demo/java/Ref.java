@@ -4,10 +4,12 @@ import io.github.linwancen.plugin.show.demo.java.obj.Anno;
 import io.github.linwancen.plugin.show.demo.java.obj.Child;
 import io.github.linwancen.plugin.show.demo.java.obj.Face;
 import io.github.linwancen.plugin.show.demo.java.obj.Parent;
+import io.github.linwancen.plugin.show.demo.java.obj.YesOrNoEnum;
 
 @Anno
 public class Ref implements Face {
     public static void method() {
+        YesOrNoEnum enumDoc = YesOrNoEnum.YES;
         Parent noneNewMethod = new Call();
         Face noneNewDoc = new Ref();
         Child child = new Child(true);

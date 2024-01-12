@@ -64,6 +64,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getGetToSet() != settings.getToSet;
         modified |= mySettingsComponent.getFromNew() != settings.fromNew;
         modified |= mySettingsComponent.getFromParam() != settings.fromParam;
+        modified |= mySettingsComponent.getEnumDoc() != settings.enumDoc;
         modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
         modified |= mySettingsComponent.getSkipAscii() != settings.skipAscii;
         modified |= mySettingsComponent.getSkipBlank() != settings.skipBlank;
@@ -102,6 +103,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.getToSet = mySettingsComponent.getGetToSet();
         settings.fromNew = mySettingsComponent.getFromNew();
         settings.fromParam = mySettingsComponent.getFromParam();
+        settings.enumDoc = mySettingsComponent.getEnumDoc();
         settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
         settings.skipAscii = mySettingsComponent.getSkipAscii();
         settings.skipBlank = mySettingsComponent.getSkipBlank();
@@ -143,6 +145,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setGetToSet(settings.getToSet);
         mySettingsComponent.setFromNew(settings.fromNew);
         mySettingsComponent.setFromParam(settings.fromParam);
+        mySettingsComponent.setEnumDoc(settings.enumDoc);
         mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
         mySettingsComponent.setSkipAscii(settings.skipAscii);
         mySettingsComponent.setSkipBlank(settings.skipBlank);
