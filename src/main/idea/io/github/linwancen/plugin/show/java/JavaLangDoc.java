@@ -10,6 +10,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.java.doc.EnumDoc;
 import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
+import io.github.linwancen.plugin.show.java.doc.ParamDoc;
 import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
@@ -83,7 +84,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             }
         }
         if (info.appSettings.fromParam && resolve instanceof PsiParameter) {
-            return paramDoc((PsiParameter) resolve);
+            return ParamDoc.paramDoc((PsiParameter) resolve);
         }
         if (info.appSettings.enumDoc && resolve instanceof PsiEnumConstant) {
             return EnumDoc.enumDoc((PsiEnumConstant) resolve);
@@ -94,30 +95,6 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     @Override
     protected <T extends SettingsInfo> boolean parseBaseComment(@NotNull T info) {
         return info.appSettings.showLineEndCommentJavaBase;
-    }
-
-    @Nullable
-    private String paramDoc(@NotNull PsiParameter psiParameter) {
-        @Nullable PsiMethod method = PsiTreeUtil.getParentOfType(psiParameter, PsiMethod.class);
-        if (method == null) {
-            return null;
-        }
-        @Nullable PsiDocComment psiDocComment = OwnerToPsiDocUtils.methodDoc(method);
-        if (psiDocComment == null) {
-            return null;
-        }
-        @NotNull String name = psiParameter.getName();
-        @NotNull PsiDocTag[] params = psiDocComment.findTagsByName("param");
-        for (@NotNull PsiDocTag param : params) {
-            @Nullable PsiDocTagValue value = param.getValueElement();
-            if (value != null && name.equals(value.getText())) {
-                @NotNull PsiElement[] dataElements = param.getDataElements();
-                if (dataElements.length > 1) {
-                    return dataElements[1].getText();
-                }
-            }
-        }
-        return null;
     }
 
     @Nullable
