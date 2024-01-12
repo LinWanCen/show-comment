@@ -7,14 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LineInfo extends FileInfo {
+    public final int lineCount;
     public final int lineNumber;
     public final int startOffset;
     public final int endOffset;
     public final @NotNull String text;
 
     protected LineInfo(@NotNull FileInfo info, @NotNull String text,
-                       int lineNumber, int startOffset, int endOffset) {
+                       int lineCount, int lineNumber, int startOffset, int endOffset) {
         super(info.file, info.document, info.project, FuncEnum.LINE);
+        this.lineCount = lineCount;
         this.lineNumber = lineNumber;
         this.startOffset = startOffset;
         this.endOffset = endOffset;
@@ -30,8 +32,9 @@ public class LineInfo extends FileInfo {
     }
 
     public static @Nullable LineInfo of(@NotNull FileInfo info, int lineNumber) {
+        int lineCount = info.document.getLineCount();
         // lineNumber start 0, as 1 <= 1 should return
-        if (info.document.getLineCount() <= lineNumber) {
+        if (lineCount <= lineNumber) {
             return null;
         }
         try {
@@ -41,7 +44,7 @@ public class LineInfo extends FileInfo {
                 return null;
             }
             @NotNull String text = info.document.getText(new TextRange(startOffset, endOffset));
-            return new LineInfo(info, text, lineNumber, startOffset, endOffset);
+            return new LineInfo(info, text, lineCount, lineNumber, startOffset, endOffset);
         } catch (Exception e) {
             return null;
         }

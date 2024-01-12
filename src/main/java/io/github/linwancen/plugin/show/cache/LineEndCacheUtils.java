@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -26,18 +27,35 @@ public class LineEndCacheUtils {
 
     public static @Nullable Collection<LineExtensionInfo> get(@NotNull LineInfo info) {
         try {
-            @NotNull LineEndCache lineCache = cache
+            @NotNull Map<Integer, LineEndCache> lineMap = cache
                     .computeIfAbsent(info.project, a -> new ConcurrentHashMap<>())
-                    .computeIfAbsent(info.file, a -> new ConcurrentHashMap<>())
-                    .computeIfAbsent(info.lineNumber, a -> new LineEndCache(info.text, info));
-            if (lineCache.selectChanged) {
-                lineCache.info = info;
-            } else if (!info.text.equals(lineCache.code)) {
-                lineCache.info = info;
-                lineCache.lineExtList.clear();
-            }
+                    .computeIfAbsent(info.file, a -> new ConcurrentHashMap<>());
+            @NotNull LineEndCache lineCache = lineMap
+                    .computeIfAbsent(info.lineNumber, a -> new LineEndCache(info));
+            @NotNull LineInfo oldInfo = lineCache.info;
+            lineCache.info = info;
+            lineCache.show = true;
             checkScheduleAndInit();
-            return lineCache.lineExtList;
+            @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
+            // load from other line
+            if (list == null && info.lineCount != oldInfo.lineCount) {
+                int oldLineNumber = info.lineNumber - info.lineCount + oldInfo.lineCount;
+                @Nullable LineEndCache oldLineCache = lineMap.get(oldLineNumber);
+                if (oldLineCache != null) {
+                    list = oldLineCache.map.get(info.text);
+                    if (list != null) {
+                        lineCache.map.put(info.text, list);
+                    }
+                }
+            }
+            if (oldInfo.lineCount == info.lineCount) {
+                lineCache.map.entrySet().removeIf(it -> !it.getKey().equals(info.text));
+            }
+            if (list == null) {
+                // because may be updated
+                list = lineCache.map.get(info.text);
+            }
+            return list;
         } catch (Throwable e) {
             LOG.info("LineEndCacheUtils catch Throwable but log to record.", e);
             return null;
@@ -73,27 +91,32 @@ public class LineEndCacheUtils {
                 if (DumbService.isDumb(project)) {
                     return;
                 }
-                fileMap.forEach((file, lineMap) -> lineMap.forEach((lineNumber, lineEndCache) -> {
-                    if (lineEndCache.info == null) {
+                fileMap.forEach((file, lineMap) -> lineMap.forEach((lineNumber, lineCache) -> {
+                    @NotNull LineInfo info = lineCache.info;
+                    @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
+                    if (!(lineCache.needUpdate() || list == null)) {
                         return;
                     }
                     ApplicationManager.getApplication().runReadAction(() -> {
                         try {
-                            @Nullable LineInfo info = lineEndCache.info;
-                            if (info == null) {
+                            @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
+                            @Nullable LineInfo info2 = LineInfo.of(info, lineNumber);
+                            if (info2 == null || !info2.text.equals(info.text)) {
                                 return;
                             }
-                            lineEndCache.info = null;
-                            if (lineEndCache.selectChanged) {
-                                lineEndCache.selectChanged = false;
-                                lineEndCache.lineExtList.clear();
+                            if (list != null) {
+                                list.clear();
                             }
-                            @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
                             if (lineExt != null) {
-                                lineEndCache.lineExtList.add(lineExt);
+                                if (list != null) {
+                                    list.add(lineExt);
+                                } else {
+                                    lineCache.map.put(info.text, new ArrayList<>() {{
+                                        add(lineExt);
+                                    }});
+                                }
                             }
-                            // change after ext is updated
-                            lineEndCache.code = info.text;
+                            lineCache.updated();
                         } catch (Exception e) {
                             LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
                         }

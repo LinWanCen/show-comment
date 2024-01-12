@@ -46,6 +46,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     public static @Nullable String langDoc(@NotNull LineInfo info) {
+        // psiFile.getText() may be not equals document.getText()
         @Nullable FileViewProvider viewProvider = PsiManager.getInstance(info.project).findViewProvider(info.file);
         if (viewProvider == null) {
             return null;
