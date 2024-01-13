@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.cache;
 
+import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.LineExtensionInfo;
 import com.intellij.openapi.project.DumbService;
@@ -97,8 +98,15 @@ public class LineEndCacheUtils {
                     if (!(lineCache.needUpdate() || list == null)) {
                         return;
                     }
-                    ApplicationManager.getApplication().runReadAction(() -> {
+                    Application application = ApplicationManager.getApplication();
+                    if (application == null) {
+                        return;
+                    }
+                    application.runReadAction(() -> {
                         try {
+                            if (project.isDisposed()) {
+                                return;
+                            }
                             @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
                             @Nullable LineInfo info2 = LineInfo.of(info, lineNumber);
                             if (info2 == null || !info2.text.equals(info.text)) {
