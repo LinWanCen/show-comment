@@ -164,11 +164,11 @@ public abstract class AbstractSettingsComponent {
     }
 
 
-    public boolean getDirEffect() {
+    public boolean getDirDocEffect() {
         return dirDocEffect.isSelected();
     }
 
-    public void setDirEffect(boolean newStatus) {
+    public void setDirDocEffect(boolean newStatus) {
         dirDocEffect.setSelected(newStatus);
     }
 
@@ -182,11 +182,11 @@ public abstract class AbstractSettingsComponent {
     }
 
 
-    public boolean getFileEffect() {
+    public boolean getFileDocEffect() {
         return fileDocEffect.isSelected();
     }
 
-    public void setFileEffect(boolean newStatus) {
+    public void setFileDocEffect(boolean newStatus) {
         fileDocEffect.setSelected(newStatus);
     }
 
