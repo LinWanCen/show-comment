@@ -51,4 +51,16 @@ public class Child extends Parent implements Face {
     public void setField(Child field) {
         this.field = field;
     }
+
+
+    @Anno("Anno")
+    public Child annoField;
+
+    public Child getAnnoField() {
+        return annoField;
+    }
+
+    public void setAnnoField(Child annoField) {
+        this.annoField = annoField;
+    }
 }

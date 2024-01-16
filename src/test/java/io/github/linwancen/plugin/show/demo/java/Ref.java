@@ -14,6 +14,8 @@ public class Ref implements Face {
         Face noneNewDoc = new Ref();
         Child child = new Child(true);
         Child field = child.field.field;
+        Child af = child.annoField;
+        Child gaf = child.getAnnoField();
         boolean bool = child.field.bool;
         Face fun = Child::setFun;
         child

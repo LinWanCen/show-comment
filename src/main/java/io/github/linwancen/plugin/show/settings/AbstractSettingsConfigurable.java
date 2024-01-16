@@ -16,6 +16,8 @@ public class AbstractSettingsConfigurable {
         modified |= !component.getDocExclude().equals(settings.getDocExclude());
         modified |= component.getDocGetEffect() != settings.docGetEffect;
         modified |= !component.getDocGet().equals(settings.getDocGet());
+        modified |= component.getAnnoDocEffect() != settings.annoDocEffect;
+        modified |= !component.getAnnoDoc().equals(settings.getAnnoDoc());
         modified |= component.getDirEffect() != settings.dirDocEffect;
         modified |= !component.getDirDoc().equals(settings.getDirDoc());
         modified |= component.getFileEffect() != settings.fileDocEffect;
@@ -36,6 +38,8 @@ public class AbstractSettingsConfigurable {
         settings.setDocExclude(component.getDocExclude());
         settings.docGetEffect = component.getDocGetEffect();
         settings.setDocGet(component.getDocGet());
+        settings.annoDocEffect = component.getAnnoDocEffect();
+        settings.setAnnoDoc(component.getAnnoDoc());
         settings.dirDocEffect = component.getDirEffect();
         settings.setDirDoc(component.getDirDoc());
         settings.fileDocEffect = component.getFileEffect();
@@ -51,6 +55,8 @@ public class AbstractSettingsConfigurable {
         component.setDocExclude(settings.getDocExclude());
         component.setDocGetEffect(settings.docGetEffect);
         component.setDocGet(settings.getDocGet());
+        component.setAnnoDocEffect(settings.annoDocEffect);
+        component.setAnnoDoc(settings.getAnnoDoc());
         component.setDirEffect(settings.dirDocEffect);
         component.setDirDoc(settings.getDirDoc());
         component.setFileEffect(settings.fileDocEffect);

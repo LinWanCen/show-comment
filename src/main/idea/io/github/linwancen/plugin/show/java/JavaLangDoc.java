@@ -8,6 +8,7 @@ import com.intellij.psi.javadoc.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.java.doc.AnnoDoc;
 import io.github.linwancen.plugin.show.java.doc.EnumDoc;
 import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
 import io.github.linwancen.plugin.show.java.doc.ParamDoc;
@@ -85,9 +86,11 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
         }
         if (info.appSettings.fromParam && resolve instanceof PsiParameter) {
             return ParamDoc.paramDoc((PsiParameter) resolve);
-        }
-        if (info.appSettings.enumDoc && resolve instanceof PsiEnumConstant) {
+        } else if (info.appSettings.enumDoc && resolve instanceof PsiEnumConstant) {
             return EnumDoc.enumDoc((PsiEnumConstant) resolve);
+        }
+        if (resolve instanceof PsiJvmModifiersOwner) {
+            return AnnoDoc.annoDoc(info, (PsiJvmModifiersOwner) resolve);
         }
         return null;
     }

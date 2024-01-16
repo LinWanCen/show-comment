@@ -24,6 +24,8 @@ public abstract class AbstractSettingsComponent {
 
     private final JBCheckBox docGetEffect = new JBCheckBox("");
     private final JBTextField docGet = new JBTextField();
+    private final JBCheckBox annoDocEffect = new JBCheckBox("");
+    private final JBTextArea annoDoc = new JBTextArea();
     private final JBCheckBox dirDocEffect = new JBCheckBox("");
     private final JBTextArea dirDoc = new JBTextArea();
     private final JBCheckBox fileDocEffect = new JBCheckBox("");
@@ -50,9 +52,11 @@ public abstract class AbstractSettingsComponent {
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
                 .addSeparator();
-        @NotNull JPanel label = JPanelFactory.of(docGetEffect, new JBLabel(ShowBundle.message("get.doc.regexp")));
-        JPanel panel = builder
-                .addLabeledComponent(label, docGet, 1, true).getPanel();
+        @NotNull JPanel getLabel = JPanelFactory.of(docGetEffect, new JBLabel(ShowBundle.message("get.doc.regexp")));
+        builder = builder.addLabeledComponent(getLabel, docGet, 1, true);
+        @NotNull JPanel annoLabel = JPanelFactory.of(annoDocEffect, new JBLabel(ShowBundle.message("anno.doc")));
+        builder = builder.addLabeledComponent(annoLabel, annoDoc, 1, true);
+        JPanel panel = builder.getPanel();
         panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
         return panel;
     }
@@ -139,6 +143,24 @@ public abstract class AbstractSettingsComponent {
 
     public void setDocGet(@NotNull String newText) {
         docGet.setText(newText);
+    }
+
+
+    public boolean getAnnoDocEffect() {
+        return annoDocEffect.isSelected();
+    }
+
+    public void setAnnoDocEffect(boolean newStatus) {
+        annoDocEffect.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getAnnoDoc() {
+        return annoDoc.getText();
+    }
+
+    public void setAnnoDoc(@NotNull String newText) {
+        annoDoc.setText(newText);
     }
 
 

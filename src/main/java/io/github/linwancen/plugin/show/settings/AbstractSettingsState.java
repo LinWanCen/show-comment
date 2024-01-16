@@ -2,9 +2,11 @@ package io.github.linwancen.plugin.show.settings;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public abstract class AbstractSettingsState {
 
@@ -24,6 +26,13 @@ public abstract class AbstractSettingsState {
     public boolean docGetEffect = false;
     @NotNull
     public transient Pattern docGet = Pattern.compile(".+?(?:[。\\r\\n]|\\. )");
+
+    public boolean annoDocEffect = true;
+    @NotNull
+    public transient String[][] annoDoc = {
+            {"field", "io.swagger.annotations.ApiModelProperty", "value"},
+            {"field", "io.swagger.v3.oas.annotations.media.Schema", "title"},
+    };
 
     public boolean dirDocEffect = true;
     @NotNull
@@ -90,6 +99,23 @@ public abstract class AbstractSettingsState {
 
     public void setDocGet(@NotNull String docExclude) {
         this.docGet = Pattern.compile(docExclude);
+    }
+
+
+    public String getAnnoDoc() {
+        return Arrays.stream(annoDoc)
+                .map(a -> String.join("#", a))
+                .collect(Collectors.joining("\n"));
+    }
+
+    public static final Pattern LINE_PATTERN = Pattern.compile("[\\r\\n]++");
+    public static final Pattern METHOD_PATTERN = Pattern.compile("#");
+
+    public void setAnnoDoc(@NotNull String s) {
+        String[] split = LINE_PATTERN.split(s);
+        this.annoDoc = Arrays.stream(split)
+                .map(METHOD_PATTERN::split)
+                .toArray(String[][]::new);
     }
 
 
