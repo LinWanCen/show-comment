@@ -1,6 +1,7 @@
 package io.github.linwancen.plugin.show.lang.base;
 
 import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
@@ -23,7 +24,11 @@ public class ResolveDoc {
         if (document == null) {
             return null;
         }
-        int endOffset = resolve.getTextRange().getEndOffset();
+        @Nullable TextRange resolveRange = resolve.getTextRange();
+        if (resolveRange == null) {
+            return null;
+        }
+        int endOffset = resolveRange.getEndOffset();
         int lineNumber;
         int resolveEndOffset;
         try {
@@ -41,7 +46,11 @@ public class ResolveDoc {
         if (!(docElement instanceof PsiComment)) {
             return null;
         }
-        int docEnd = docElement.getTextRange().getEndOffset();
+        @Nullable TextRange docRange = docElement.getTextRange();
+        if (docRange == null) {
+            return null;
+        }
+        int docEnd = docRange.getEndOffset();
         int docLineNumber = document.getLineNumber(docEnd);
         if (lineNumber != docLineNumber) {
             return null;
