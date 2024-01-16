@@ -39,7 +39,7 @@ public abstract class AbstractSettingsState {
     public transient Map<String, Pattern[]> dirDoc = new LinkedHashMap<>() {{
         put("pom.xml", new Pattern[]{
                 Pattern.compile("<description>([^<]++)</description>"),
-                Pattern.compile("<name>\\$\\{[^}]*+\\}([^<]++)</name>"),
+                Pattern.compile("<name>\\$\\{[^}]*+}([^<]++)</name>"),
         });
         put("build.gradle", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});
         put("build.gradle.kts", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});

@@ -123,9 +123,9 @@ public class LineEndCacheUtils {
                                 if (list != null) {
                                     list.add(lineExt);
                                 } else {
-                                    lineCache.map.put(info.text, new ArrayList<>() {{
-                                        add(lineExt);
-                                    }});
+                                    ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>();
+                                    lineExtList.add(lineExt);
+                                    lineCache.map.put(info.text, lineExtList);
                                 }
                             }
                             lineCache.updated();
