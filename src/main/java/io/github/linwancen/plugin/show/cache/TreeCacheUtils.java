@@ -1,7 +1,6 @@
 package io.github.linwancen.plugin.show.cache;
 
 import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -70,7 +69,7 @@ public class TreeCacheUtils {
                 nodeCache.forEach((node, treeCache) -> {
                     if (treeCache.needUpdate) {
                         treeCache.needUpdate = false;
-                        ApplicationManager.getApplication().runReadAction(() -> {
+                        DumbService.getInstance(project).runReadActionInSmartMode(() -> {
                             try {
                                 treeCache.doc = Tree.treeDoc(node, project);
                             } catch (Exception e) {
