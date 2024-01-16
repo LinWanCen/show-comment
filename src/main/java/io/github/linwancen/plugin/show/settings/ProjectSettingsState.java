@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public class ProjectSettingsState extends AbstractSettingsState implements PersistentStateComponent<ProjectSettingsState> {
 
     public ProjectSettingsState() {
+        this.lineEndCount = 0;
         this.lineExclude = Pattern.compile("");
         this.annoDocEffect = false;
         this.annoDoc = new String[][]{};
@@ -30,7 +31,7 @@ public class ProjectSettingsState extends AbstractSettingsState implements Persi
     public static final ProjectSettingsState DEFAULT_SETTING = new ProjectSettingsState();
 
     public boolean globalFilterEffective = true;
-    public boolean projectFilterEffective = false;
+    public boolean projectFilterEffective = true;
 
     @NotNull
     public static ProjectSettingsState getInstance(@NotNull Project project) {
