@@ -132,6 +132,9 @@ public class LineEndCacheUtils {
                         }
                     }).inSmartMode(project).executeSynchronously();
                 }));
+            } catch (IllegalStateException ignore) {
+                // ignore inSmartMode(project) throw:
+                // @NotNull method com/intellij/openapi/project/impl/ProjectImpl.getEarlyDisposable must not return null
             } catch (Exception e) {
                 LOG.info("LineEndCacheUtils cache.forEach catch Throwable but log to record.", e);
             }

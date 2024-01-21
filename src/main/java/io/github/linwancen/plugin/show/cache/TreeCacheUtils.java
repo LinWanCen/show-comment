@@ -84,6 +84,9 @@ public class TreeCacheUtils {
                         }).inSmartMode(project).executeSynchronously();
                     }
                 });
+            } catch (IllegalStateException ignore) {
+                // ignore inSmartMode(project) throw:
+                // @NotNull method com/intellij/openapi/project/impl/ProjectImpl.getEarlyDisposable must not return null
             } catch (Exception e) {
                 LOG.info("TreeCacheUtils cache.forEach catch Throwable but log to record.", e);
             }
