@@ -9,6 +9,7 @@ import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public abstract class AbstractSettingsComponent {
 
@@ -52,6 +53,10 @@ public abstract class AbstractSettingsComponent {
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
                 .addSeparator();
+        Border border = docGet.getBorder();
+        annoDoc.setBorder(border);
+        dirDoc.setBorder(border);
+        fileDoc.setBorder(border);
         @NotNull JPanel getLabel = JPanelFactory.of(docGetEffect, new JBLabel(ShowBundle.message("get.doc.regexp")));
         builder = builder.addLabeledComponent(getLabel, docGet, 1, true);
         @NotNull JPanel annoLabel = JPanelFactory.of(annoDocEffect, new JBLabel(ShowBundle.message("anno.doc")));
