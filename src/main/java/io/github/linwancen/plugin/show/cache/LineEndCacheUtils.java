@@ -1,8 +1,8 @@
 package io.github.linwancen.plugin.show.cache;
 
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.LineExtensionInfo;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -36,7 +36,7 @@ public class LineEndCacheUtils {
             @NotNull LineInfo oldInfo = lineCache.info;
             lineCache.info = info;
             lineCache.show = true;
-            checkScheduleAndInit();
+            checkScheduleAndInit(info.project);
             @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
             // load from other line
             if (list == null && info.lineCount != oldInfo.lineCount) {
@@ -65,8 +65,11 @@ public class LineEndCacheUtils {
 
     private static volatile boolean isRun = false;
 
-    private static void checkScheduleAndInit() {
+    private static void checkScheduleAndInit(Project project) {
         if (!isRun) {
+            if (DumbService.isDumb(project)) {
+                return;
+            }
             synchronized (LineEndCacheUtils.class) {
                 if (!isRun) {
                     isRun = true;
@@ -89,22 +92,15 @@ public class LineEndCacheUtils {
                     cache.remove(project);
                     return;
                 }
-                if (DumbService.isDumb(project)) {
-                    return;
-                }
                 fileMap.forEach((file, lineMap) -> lineMap.forEach((lineNumber, lineCache) -> {
                     @NotNull LineInfo info = lineCache.info;
                     @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
                     if (!(lineCache.needUpdate() || list == null)) {
                         return;
                     }
-                    Application application = ApplicationManager.getApplication();
-                    if (application == null) {
-                        return;
-                    }
-                    application.runReadAction(() -> {
+                    ReadAction.nonBlocking(() -> {
                         try {
-                            if (project.isDisposed()) {
+                            if (project.isDisposed() || DumbService.isDumb(project)) {
                                 return;
                             }
                             @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
@@ -123,16 +119,18 @@ public class LineEndCacheUtils {
                                 if (list != null) {
                                     list.add(lineExt);
                                 } else {
-                                    ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>();
+                                    ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>(1);
                                     lineExtList.add(lineExt);
                                     lineCache.map.put(info.text, lineExtList);
                                 }
                             }
                             lineCache.updated();
+                        } catch (ProcessCanceledException ignore) {
+                            // ignore
                         } catch (Exception e) {
                             LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
                         }
-                    });
+                    }).inSmartMode(project).executeSynchronously();
                 }));
             } catch (Exception e) {
                 LOG.info("LineEndCacheUtils cache.forEach catch Throwable but log to record.", e);

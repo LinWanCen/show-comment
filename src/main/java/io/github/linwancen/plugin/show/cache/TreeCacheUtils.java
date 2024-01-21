@@ -1,6 +1,7 @@
 package io.github.linwancen.plugin.show.cache;
 
 import com.intellij.ide.projectView.ProjectViewNode;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -27,7 +28,7 @@ public class TreeCacheUtils {
                     .computeIfAbsent(project, a -> new ConcurrentHashMap<>())
                     .computeIfAbsent(node, a -> new TreeCache());
             treeCache.needUpdate = true;
-            checkScheduleAndInit();
+            checkScheduleAndInit(project);
             return treeCache.doc;
         } catch (ProcessCanceledException e) {
             return null;
@@ -39,8 +40,11 @@ public class TreeCacheUtils {
 
     private static volatile boolean isRun = false;
 
-    private static void checkScheduleAndInit() {
+    private static void checkScheduleAndInit(Project project) {
         if (!isRun) {
+            if (DumbService.isDumb(project)) {
+                return;
+            }
             synchronized (TreeCacheUtils.class) {
                 if (!isRun) {
                     isRun = true;
@@ -63,19 +67,21 @@ public class TreeCacheUtils {
                     cache.remove(project);
                     return;
                 }
-                if (DumbService.isDumb(project)) {
-                    return;
-                }
                 nodeCache.forEach((node, treeCache) -> {
                     if (treeCache.needUpdate) {
-                        treeCache.needUpdate = false;
-                        DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+                        ReadAction.nonBlocking(() -> {
                             try {
+                                if (project.isDisposed() || DumbService.isDumb(project)) {
+                                    return;
+                                }
                                 treeCache.doc = Tree.treeDoc(node, project);
+                                treeCache.needUpdate = false;
+                            } catch (ProcessCanceledException ignore) {
+                                // ignore
                             } catch (Exception e) {
                                 LOG.info("TreeCacheUtils nodeCache.forEach catch Throwable but log to record.", e);
                             }
-                        });
+                        }).inSmartMode(project).executeSynchronously();
                     }
                 });
             } catch (Exception e) {

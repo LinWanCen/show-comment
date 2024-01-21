@@ -87,11 +87,16 @@ public class LineEnd extends EditorLinePainter {
         if (doc == null) {
             return null;
         }
+        return lineExtText(info, info.appSettings.lineEndPrefix + doc);
+    }
+
+    @NotNull
+    public static LineExtensionInfo lineExtText(@NotNull LineInfo info, String text) {
         @NotNull TextAttributes textAttr = info.file.getFileType().equals(JsonFileType.INSTANCE)
                 || info.file.getFileType().equals(Json5FileType.INSTANCE)
                 ? info.appSettings.lineEndJsonTextAttr
                 : info.appSettings.lineEndTextAttr;
-        return new LineExtensionInfo(info.appSettings.lineEndPrefix + doc, textAttr);
+        return new LineExtensionInfo(text, textAttr);
     }
 
     public static void textWithDoc(@NotNull FileInfo fileInfo, int startLine, int endLine,

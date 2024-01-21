@@ -9,6 +9,7 @@ import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.DumbAwareAction;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import io.github.linwancen.plugin.show.bean.FileInfo;
 import io.github.linwancen.plugin.show.settings.ShowBundle;
@@ -53,27 +54,28 @@ public class LineEndCopy extends DumbAwareAction {
             @Override
             public void run(@NotNull ProgressIndicator indicator) {
                 indicator.setIndeterminate(false);
-                ApplicationManager.getApplication().runReadAction(() -> {
-                    int startLine = 0;
-                    int endLine = info.document.getLineCount() - 1;
-                    // if select
-                    @Nullable Editor editor = event.getData(CommonDataKeys.EDITOR);
-                    if (editor != null) {
-                        @NotNull Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
-                        int start = primaryCaret.getSelectionStart();
-                        int end = primaryCaret.getSelectionEnd();
-                        try {
-                            startLine = info.document.getLineNumber(start);
-                            endLine = info.document.getLineNumber(end);
-                        } catch (Exception e) {
-                            return;
-                        }
-                    }
-                    LineEnd.textWithDoc(info, startLine, endLine, indicator, s -> {
-                        @NotNull StringSelection content = new StringSelection(s);
-                        CopyPasteManager.getInstance().setContents(content);
-                    });
-                });
+                DumbService.getInstance(project).runReadActionInSmartMode(() ->
+                        ApplicationManager.getApplication().runReadAction(() -> {
+                            int startLine = 0;
+                            int endLine = info.document.getLineCount() - 1;
+                            // if select
+                            @Nullable Editor editor = event.getData(CommonDataKeys.EDITOR);
+                            if (editor != null) {
+                                @NotNull Caret primaryCaret = editor.getCaretModel().getPrimaryCaret();
+                                int start = primaryCaret.getSelectionStart();
+                                int end = primaryCaret.getSelectionEnd();
+                                try {
+                                    startLine = info.document.getLineNumber(start);
+                                    endLine = info.document.getLineNumber(end);
+                                } catch (Exception e) {
+                                    return;
+                                }
+                            }
+                            LineEnd.textWithDoc(info, startLine, endLine, indicator, s -> {
+                                @NotNull StringSelection content = new StringSelection(s);
+                                CopyPasteManager.getInstance().setContents(content);
+                            });
+                        }));
             }
         }.queue();
     }
