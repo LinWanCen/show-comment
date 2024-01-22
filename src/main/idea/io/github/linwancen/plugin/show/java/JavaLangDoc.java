@@ -51,7 +51,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
                 return null;
             }
             // must supper
-            @Nullable PsiDocComment psiDocComment = OwnerToPsiDocUtils.supperMethodDoc(psiMethod);
+            @Nullable PsiDocComment psiDocComment = PsiMethodToPsiDoc.supperMethodDoc(psiMethod);
             return docElementToStr(info, psiDocComment);
         }
         if (info.appSettings.fromNew) {

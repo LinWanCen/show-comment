@@ -81,7 +81,8 @@ public class JavaTree {
     @Nullable
     static PsiDocComment dirDoc(@NotNull PsiDirectory child) {
         while (true) {
-            @Nullable PsiDocComment docComment = OwnerToPsiDocUtils.dirDoc(child);
+            @Nullable PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(child);
+            @Nullable PsiDocComment docComment = OwnerToPsiDocUtils.packageDoc(psiPackage);
             if (docComment != null) {
                 return docComment;
             }

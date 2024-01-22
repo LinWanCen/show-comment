@@ -4,7 +4,7 @@ import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
+import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,8 +25,8 @@ public class OwnerToPsiDocSkip {
             return null;
         }
         @Nullable PsiDocComment docComment = docOwner instanceof PsiMethod
-                ? OwnerToPsiDocUtils.methodDoc(((PsiMethod) docOwner))
-                : OwnerToPsiDocUtils.srcOrByteCodeDoc(docOwner);
+                ? PsiMethodToPsiDoc.methodSupperNewPropDoc(((PsiMethod) docOwner))
+                : docOwner.getDocComment();
         return SkipUtils.skipDoc(info, docComment);
     }
 }

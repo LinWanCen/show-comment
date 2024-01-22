@@ -17,7 +17,7 @@ public class ParamDoc {
         if (method == null) {
             return null;
         }
-        @Nullable PsiDocComment psiDocComment = OwnerToPsiDocUtils.methodDoc(method);
+        @Nullable PsiDocComment psiDocComment = PsiMethodToPsiDoc.methodSupperNewPropDoc(method);
         if (psiDocComment == null) {
             return null;
         }

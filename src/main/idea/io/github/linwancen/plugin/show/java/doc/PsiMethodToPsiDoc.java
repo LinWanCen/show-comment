@@ -13,7 +13,7 @@ public class PsiMethodToPsiDoc {
     private PsiMethodToPsiDoc() {}
 
     @Nullable
-    static PsiDocComment methodSupperNewPropDoc(@NotNull PsiMethod psiMethod) {
+    public static PsiDocComment methodSupperNewPropDoc(@NotNull PsiMethod psiMethod) {
         @Nullable PsiDocComment docComment = psiMethod.getDocComment();
         if (docComment != null) {
             return docComment;
@@ -41,7 +41,7 @@ public class PsiMethodToPsiDoc {
     }
 
     @Nullable
-    static PsiDocComment supperMethodDoc(@NotNull PsiMethod psiMethod) {
+    public static PsiDocComment supperMethodDoc(@NotNull PsiMethod psiMethod) {
         @NotNull PsiMethod[] superMethods;
         try {
             superMethods = psiMethod.findSuperMethods();
@@ -59,7 +59,7 @@ public class PsiMethodToPsiDoc {
             if (navElement instanceof PsiMethod) {
                 superMethod = (PsiMethod) navElement;
             }
-            @Nullable PsiDocComment superDoc = OwnerToPsiDocUtils.methodSupperNewPropDoc(superMethod);
+            @Nullable PsiDocComment superDoc = PsiMethodToPsiDoc.methodSupperNewPropDoc(superMethod);
             if (superDoc != null) {
                 return superDoc;
             }

@@ -14,7 +14,7 @@ public class OwnerToPsiDocUtils {
     private OwnerToPsiDocUtils() {}
 
     @Nullable
-    public static PsiDocComment srcOrByteCodeDoc(@NotNull PsiDocCommentOwner psiDocCommentOwner) {
+    private static PsiDocComment srcOrByteCodeDoc(@NotNull PsiDocCommentOwner psiDocCommentOwner) {
         PsiElement navElement;
         try {
             navElement = psiDocCommentOwner.getNavigationElement();
@@ -29,16 +29,6 @@ public class OwnerToPsiDocUtils {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    @Nullable
-    public static PsiDocComment methodDoc(@NotNull PsiMethod psiMethod) {
-        return PsiMethodToPsiDoc.methodSupperNewPropDoc(psiMethod);
-    }
-
-    @Nullable
-    public static PsiDocComment supperMethodDoc(@NotNull PsiMethod psiMethod) {
-        return PsiMethodToPsiDoc.supperMethodDoc(psiMethod);
     }
 
     @Nullable
@@ -90,11 +80,5 @@ public class OwnerToPsiDocUtils {
         }
         PsiClass psiClass = classes[0];
         return srcOrByteCodeDoc(psiClass);
-    }
-
-    @Nullable
-    public static PsiDocComment dirDoc(@NotNull PsiDirectory psiDirectory) {
-        @Nullable PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage(psiDirectory);
-        return packageDoc(psiPackage);
     }
 }
