@@ -63,6 +63,9 @@ public class Tree implements ProjectViewNodeDecorator {
         }
         DumbService.getInstance(project).runReadActionInSmartMode(() ->
                 ApplicationManager.getApplication().runReadAction(() -> {
+                    if (DumbService.getInstance(project).isDumb()) {
+                        return;
+                    }
                     @Nullable String doc = treeDoc(node, project);
                     addText(data, doc);
                 }));
