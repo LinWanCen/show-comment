@@ -176,6 +176,15 @@ public abstract class BaseLangDoc extends EditorLinePainter {
 
     public static @Nullable <T extends SettingsInfo> String resolveDoc(@NotNull T info,
                                                                        @NotNull PsiElement psiElement) {
+        try {
+            // byte to src
+            PsiElement navElement = psiElement.getNavigationElement();
+            if (navElement != null) {
+                psiElement = navElement;
+            }
+        } catch (Throwable ignore) {
+            // ignore
+        }
         // support like java <-> kotlin
         @NotNull Language language = PsiElementTo.language(psiElement);
         BaseLangDoc lineEnd = LANG_DOC_MAP.get(language.getID());

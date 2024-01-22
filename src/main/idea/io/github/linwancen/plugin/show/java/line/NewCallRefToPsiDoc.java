@@ -28,6 +28,14 @@ public class NewCallRefToPsiDoc {
             // ignore
         }
         if (resolve instanceof PsiDocCommentOwner) {
+            try {
+                PsiElement navElement = resolve.getNavigationElement();
+                if (navElement instanceof PsiDocCommentOwner) {
+                    resolve = navElement;
+                }
+            } catch (Throwable ignore) {
+                // ignore
+            }
             return OwnerToPsiDocSkip.refDoc(info, ((PsiDocCommentOwner) resolve));
         }
         return null;

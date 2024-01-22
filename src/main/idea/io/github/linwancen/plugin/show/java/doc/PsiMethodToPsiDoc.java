@@ -14,23 +14,12 @@ public class PsiMethodToPsiDoc {
 
     @Nullable
     static PsiDocComment methodSupperNewPropDoc(@NotNull PsiMethod psiMethod) {
-        // .class
-        @Nullable PsiElement navElement;
-        try {
-            navElement = psiMethod.getNavigationElement();
-        } catch (Exception e) {
-            return null;
-        }
-        if (navElement instanceof PsiMethod) {
-            psiMethod = (PsiMethod) navElement;
-        }
-
         @Nullable PsiDocComment docComment = psiMethod.getDocComment();
         if (docComment != null) {
             return docComment;
         }
 
-        // supper
+        // supper recursion
         @Nullable PsiDocComment superDoc = supperMethodDoc(psiMethod);
         if (superDoc != null) {
             return superDoc;
@@ -60,7 +49,17 @@ public class PsiMethodToPsiDoc {
             return null;
         }
         for (@NotNull PsiMethod superMethod : superMethods) {
-            @Nullable PsiDocComment superDoc = OwnerToPsiDocUtils.methodDoc(superMethod);
+            // .class
+            @Nullable PsiElement navElement;
+            try {
+                navElement = superMethod.getNavigationElement();
+            } catch (Exception e) {
+                return null;
+            }
+            if (navElement instanceof PsiMethod) {
+                superMethod = (PsiMethod) navElement;
+            }
+            @Nullable PsiDocComment superDoc = OwnerToPsiDocUtils.methodSupperNewPropDoc(superMethod);
             if (superDoc != null) {
                 return superDoc;
             }
