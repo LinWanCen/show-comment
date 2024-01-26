@@ -65,7 +65,10 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
                         if (navElement instanceof PsiMethod) {
                             resolve = (PsiMethod) navElement;
                         }
-                        return resolveDocPrint(info, resolve);
+                        @Nullable String s = resolveDocPrint(info, resolve);
+                        if (s != null) {
+                            return s;
+                        }
                     }
                 } catch (Throwable ignore) {
                     // ignore
