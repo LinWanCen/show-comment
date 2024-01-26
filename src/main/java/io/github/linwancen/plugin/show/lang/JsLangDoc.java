@@ -11,6 +11,8 @@ import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class JsLangDoc extends BaseLangDoc {
 
     static {
@@ -18,8 +20,8 @@ public class JsLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return JSPsiReferenceElement.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(JSPsiReferenceElement.class);
     }
 
     @Override

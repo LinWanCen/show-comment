@@ -15,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class PythonLangDoc extends BaseTagLangDoc<StructuredDocString> {
 
     static {
@@ -22,8 +24,8 @@ public class PythonLangDoc extends BaseTagLangDoc<StructuredDocString> {
     }
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return PyReferenceExpression.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(PyReferenceExpression.class);
     }
 
     @Override

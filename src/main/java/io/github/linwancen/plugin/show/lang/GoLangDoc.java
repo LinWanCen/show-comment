@@ -20,8 +20,8 @@ public class GoLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return GoReferenceExpressionBase.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(GoReferenceExpressionBase.class);
     }
 
     @Override

@@ -19,6 +19,8 @@ import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     public static final JavaLangDoc INSTANCE = new JavaLangDoc();
@@ -28,8 +30,8 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return PsiJavaCodeReferenceElement.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(PsiJavaCodeReferenceElement.class, PsiDocTagValue.class);
     }
 
     @Override

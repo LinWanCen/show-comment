@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class SqlLangDoc extends BaseLangDoc {
 
@@ -20,8 +21,8 @@ public class SqlLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return SqlReferenceExpression.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(SqlReferenceExpression.class);
     }
 
     @Override

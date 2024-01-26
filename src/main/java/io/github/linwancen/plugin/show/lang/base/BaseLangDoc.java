@@ -29,7 +29,7 @@ import java.util.Map;
 public abstract class BaseLangDoc extends EditorLinePainter {
     public static final Map<String, BaseLangDoc> LANG_DOC_MAP = new LinkedHashMap<>();
 
-    public abstract @Nullable Class<? extends PsiElement> getRefClass();
+    public abstract @NotNull List<Class<? extends PsiElement>> getRefClass();
 
     public abstract boolean show(@NotNull LineInfo info);
 
@@ -75,10 +75,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     @Nullable
     public String findRefDoc(@NotNull LineInfo info, @NotNull FileViewProvider viewProvider,
                              @NotNull PsiElement element) {
-        @Nullable Class<? extends PsiElement> refClass = getRefClass();
-        if (refClass == null) {
-            return null;
-        }
+        @NotNull List<Class<? extends PsiElement>> refClass = getRefClass();
         @Nullable String doc = null;
         @Nullable String text = null;
         @Nullable PsiElement refElement = element;

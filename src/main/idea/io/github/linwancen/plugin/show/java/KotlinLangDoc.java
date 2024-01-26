@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.idea.KotlinLanguage;
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc;
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocName;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag;
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression;
@@ -24,8 +25,8 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
     }
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return KtNameReferenceExpression.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(KtNameReferenceExpression.class, KDocName.class);
     }
 
     @Override

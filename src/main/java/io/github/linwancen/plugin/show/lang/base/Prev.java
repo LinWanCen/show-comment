@@ -10,6 +10,7 @@ import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Prev {
@@ -18,7 +19,7 @@ public class Prev {
 
     @Nullable
     public static PsiElement prevRefChild(@NotNull LineInfo info, @NotNull PsiElement element,
-                                          @NotNull Class<? extends PsiElement> refClass) {
+                                          @NotNull List<Class<? extends PsiElement>> refClass) {
         @Nullable PsiElement prevParent = refClassParent(element, refClass);
         while ((element = PsiTreeUtil.prevVisibleLeaf(element)) != null) {
             if (element.getTextRange().getEndOffset() < info.startOffset) {
@@ -29,7 +30,7 @@ public class Prev {
                 // skip b in a.b.c
                 if (prevParent != null
                         && prevParent.getTextRange().getEndOffset() < info.endOffset
-                        && PsiTreeUtil.findChildOfType(prevParent, refClass) == parent) {
+                        && prevParentChildEqParent(prevParent, refClass, parent)) {
                     prevParent = parent;
                 } else {
                     if (!(element instanceof PsiComment)) {
@@ -41,6 +42,17 @@ public class Prev {
         return null;
     }
 
+    private static boolean prevParentChildEqParent(@NotNull PsiElement prevParent,
+                                                   @NotNull List<Class<? extends PsiElement>> refClass,
+                                                   @NotNull PsiElement parent) {
+        for (@NotNull Class<? extends PsiElement> c : refClass) {
+            if (PsiTreeUtil.findChildOfType(prevParent, c) == parent) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static final Pattern SYMBOL_PATTERN = Pattern.compile("[^" +
             ":-@" +
             "\\[-`" +
@@ -49,7 +61,7 @@ public class Prev {
 
     @Nullable
     private static PsiElement refClassParent(@NotNull PsiElement element,
-                                             @NotNull Class<? extends PsiElement> refClass) {
+                                             @NotNull List<Class<? extends PsiElement>> refClass) {
         String text = element.getText();
         if (!SYMBOL_PATTERN.matcher(text).find()) {
             return null;
@@ -58,16 +70,21 @@ public class Prev {
         if (parent == null) {
             return null;
         }
-        if (!refClass.isAssignableFrom(parent.getClass())) {
+        if (notAssignableFrom(refClass, parent)) {
             parent = parent.getParent();
             if (parent == null) {
                 return null;
             }
         }
-        if (!refClass.isAssignableFrom(parent.getClass())) {
+        if (notAssignableFrom(refClass, parent)) {
             return null;
         }
         return parent;
+    }
+
+    private static boolean notAssignableFrom(@NotNull List<Class<? extends PsiElement>> refClass,
+                                             @NotNull PsiElement parent) {
+        return refClass.stream().noneMatch(it -> it.isAssignableFrom(parent.getClass()));
     }
 
     public static @Nullable <T extends SettingsInfo> PsiElement prevCompactElement(

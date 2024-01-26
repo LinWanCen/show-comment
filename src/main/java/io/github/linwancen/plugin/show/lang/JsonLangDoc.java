@@ -30,8 +30,8 @@ public class JsonLangDoc extends BaseLangDoc {
     public static final JsonLangDoc INSTANCE = new JsonLangDoc();
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return JsonProperty.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(JsonProperty.class);
     }
 
     @Override

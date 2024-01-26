@@ -4,6 +4,12 @@ import io.github.linwancen.plugin.show.demo.java.obj.Child
 import io.github.linwancen.plugin.show.demo.java.obj.Parent
 
 /**
+ * Kotlin
+ *
+ * [call]
+ * [InDoc.field]
+ * [InDoc.method1] [InDoc.method2]
+ *
  * @author l
  */
 object Kotlin : Parent() {
