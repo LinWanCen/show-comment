@@ -56,14 +56,11 @@ public class DocFilter {
 
     public static <T extends SettingsInfo> boolean lineCountOrLenOver(@NotNull T info,
                                                                       @NotNull StringBuilder sb, int lineCount) {
-        // can not effective both
-        if (info.projectSettings.projectFilterEffective) {
-            return lineCountOrLenOverInfo(info.projectSettings, sb, lineCount);
-        } else if (info.projectSettings.globalFilterEffective) {
-            return lineCountOrLenOverInfo(info.globalSettings, sb, lineCount);
-        } else {
-            return false;
-        }
+        boolean overProject = info.projectSettings.projectFilterEffective
+                && lineCountOrLenOverInfo(info.projectSettings, sb, lineCount);
+        boolean overGlobal = info.projectSettings.globalFilterEffective
+                && lineCountOrLenOverInfo(info.globalSettings, sb, lineCount);
+        return overGlobal || overProject;
     }
 
     private static boolean lineCountOrLenOverInfo(@NotNull AbstractSettingsState appSettings,
