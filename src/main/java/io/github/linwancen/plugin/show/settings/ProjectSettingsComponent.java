@@ -10,6 +10,7 @@ import javax.swing.*;
 
 public class ProjectSettingsComponent extends AbstractSettingsComponent {
 
+    @NotNull
     private final JBScrollPane myMainPanel;
     private final JBCheckBox globalFilterEffective = new JBCheckBox(ShowBundle.message("global.settings.effective"));
     private final JBCheckBox projectFilterEffective = new JBCheckBox(ShowBundle.message("project.settings.effective"));
@@ -25,11 +26,12 @@ public class ProjectSettingsComponent extends AbstractSettingsComponent {
                 .addComponent(commonPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
-        JBScrollPane scrollPane = new JBScrollPane(panel);
+        @NotNull JBScrollPane scrollPane = new JBScrollPane(panel);
         scrollPane.setBorder(null);
         myMainPanel = scrollPane;
     }
 
+    @NotNull
     public JBScrollPane getPanel() {
         return myMainPanel;
     }

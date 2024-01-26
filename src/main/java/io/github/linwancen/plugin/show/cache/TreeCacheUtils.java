@@ -40,7 +40,7 @@ public class TreeCacheUtils {
 
     private static volatile boolean isRun = false;
 
-    private static void checkScheduleAndInit(Project project) {
+    private static void checkScheduleAndInit(@NotNull Project project) {
         if (!isRun) {
             if (DumbService.isDumb(project)) {
                 return;

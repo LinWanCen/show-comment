@@ -98,7 +98,7 @@ public class AnnoDoc {
     }
 
     @Nullable
-    private static String annoDocValue(PsiAnnotationMemberValue value) {
+    private static String annoDocValue(@Nullable PsiAnnotationMemberValue value) {
         if (value == null) {
             return null;
         }

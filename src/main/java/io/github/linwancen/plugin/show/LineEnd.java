@@ -91,7 +91,7 @@ public class LineEnd extends EditorLinePainter {
     }
 
     @NotNull
-    public static LineExtensionInfo lineExtText(@NotNull LineInfo info, String text) {
+    public static LineExtensionInfo lineExtText(@NotNull LineInfo info, @NotNull String text) {
         @NotNull TextAttributes textAttr = info.file.getFileType().equals(JsonFileType.INSTANCE)
                 || info.file.getFileType().equals(Json5FileType.INSTANCE)
                 ? info.appSettings.lineEndJsonTextAttr

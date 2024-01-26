@@ -65,7 +65,7 @@ public class LineEndCacheUtils {
 
     private static volatile boolean isRun = false;
 
-    private static void checkScheduleAndInit(Project project) {
+    private static void checkScheduleAndInit(@NotNull Project project) {
         if (!isRun) {
             if (DumbService.isDumb(project)) {
                 return;
@@ -119,7 +119,7 @@ public class LineEndCacheUtils {
                                 if (list != null) {
                                     list.add(lineExt);
                                 } else {
-                                    ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>(1);
+                                    @NotNull ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>(1);
                                     lineExtList.add(lineExt);
                                     lineCache.map.put(info.text, lineExtList);
                                 }
