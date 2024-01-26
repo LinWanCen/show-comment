@@ -2,6 +2,7 @@ package io.github.linwancen.plugin.show.lang.base;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
@@ -31,7 +32,9 @@ public class Prev {
                         && PsiTreeUtil.findChildOfType(prevParent, refClass) == parent) {
                     prevParent = parent;
                 } else {
-                    return element;
+                    if (!(element instanceof PsiComment)) {
+                        return element;
+                    }
                 }
             }
         }
