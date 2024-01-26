@@ -11,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ParamDoc {
+
+    private ParamDoc() {}
+
     @Nullable
     public static String paramDoc(@NotNull PsiParameter psiParameter) {
         @Nullable PsiMethod method = PsiTreeUtil.getParentOfType(psiParameter, PsiMethod.class);

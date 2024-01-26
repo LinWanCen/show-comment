@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class NewDoc {
+
+    private NewDoc() {}
+
     @Nullable
     public static PsiMethod newMethod(@NotNull PsiElement ref) {
         PsiElement parent = ref.getParent();

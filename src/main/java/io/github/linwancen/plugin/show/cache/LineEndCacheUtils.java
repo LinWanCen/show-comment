@@ -22,6 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class LineEndCacheUtils {
+
+    private LineEndCacheUtils() {}
+
     private static final Logger LOG = LoggerFactory.getLogger(LineEndCacheUtils.class);
 
     public static final Map<Project, Map<VirtualFile, Map<Integer, LineEndCache>>> cache = new ConcurrentHashMap<>();

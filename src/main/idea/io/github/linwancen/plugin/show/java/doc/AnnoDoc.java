@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class AnnoDoc {
 
+    private AnnoDoc() {}
+
     @Nullable
     public static <T extends SettingsInfo> String annoDoc(@NotNull T info, @NotNull PsiJvmModifiersOwner owner) {
         @NotNull ProjectSettingsState projectSettings = info.projectSettings;

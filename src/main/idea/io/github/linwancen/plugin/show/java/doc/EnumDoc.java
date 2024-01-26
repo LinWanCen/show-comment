@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class EnumDoc {
 
+    private EnumDoc() {}
+
     /**
      * Yes(1, "Yes") show 1-Yes
      */

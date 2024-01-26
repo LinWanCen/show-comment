@@ -17,6 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class TreeCacheUtils {
+
+    private TreeCacheUtils() {}
+
     private static final Logger LOG = LoggerFactory.getLogger(TreeCacheUtils.class);
 
     public static final Map<Project, Map<ProjectViewNode<?>, TreeCache>> cache = new ConcurrentHashMap<>();
