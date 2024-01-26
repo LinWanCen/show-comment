@@ -2,23 +2,20 @@ package io.github.linwancen.plugin.show;
 
 import com.intellij.json.JsonFileType;
 import com.intellij.json.json5.Json5FileType;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.editor.VisualPosition;
 import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import io.github.linwancen.plugin.show.bean.FileInfo;
+import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.cache.LineEndCacheUtils;
 import io.github.linwancen.plugin.show.ext.LineExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
-import io.github.linwancen.plugin.show.settings.AppSettingsState;
-import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
+import io.github.linwancen.plugin.show.line.LineSelect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -46,31 +43,18 @@ public class LineEnd extends EditorLinePainter {
     @Nullable
     private static Collection<LineExtensionInfo> getLineExtensionInfos(@NotNull Project project,
                                                                        @NotNull VirtualFile file, int lineNumber) {
-        @NotNull AppSettingsState settings = AppSettingsState.getInstance();
-        if (!settings.showLineEndComment) {
+        @NotNull SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.LINE);
+        if (!settingsInfo.appSettings.showLineEndComment) {
             return null;
         }
-        @NotNull GlobalSettingsState globalSettingsState = GlobalSettingsState.getInstance();
-        if (globalSettingsState.onlySelectLine) {
-            @Nullable Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-            if (editor != null) {
-                @NotNull SelectionModel select = editor.getSelectionModel();
-                @Nullable VisualPosition start = select.getSelectionStartPosition();
-                int lineNum = lineNumber + 1;
-                if (start != null && lineNum < start.getLine()) {
-                    return null;
-                }
-                @Nullable VisualPosition end = select.getSelectionEndPosition();
-                if (end != null && lineNum > end.getLine()) {
-                    return null;
-                }
-            }
+        if (settingsInfo.globalSettings.onlySelectLine && LineSelect.notSelectLine(project, lineNumber)) {
+            return null;
         }
         @Nullable LineInfo info = LineInfo.of(file, project, lineNumber);
         if (info == null) {
             return null;
         }
-        if (settings.lineEndCache) {
+        if (settingsInfo.appSettings.lineEndCache) {
             return LineEndCacheUtils.get(info);
         } else {
             @Nullable LineExtensionInfo lineExt = lineExt(info);

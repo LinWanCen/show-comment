@@ -10,7 +10,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.java.doc.AnnoDoc;
 import io.github.linwancen.plugin.show.java.doc.EnumDoc;
-import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
+import io.github.linwancen.plugin.show.java.doc.NewDoc;
 import io.github.linwancen.plugin.show.java.doc.ParamDoc;
 import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
@@ -57,23 +57,11 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             return docElementToStr(info, psiDocComment);
         }
         if (info.appSettings.fromNew) {
-            PsiElement parent = ref.getParent();
-            if (parent instanceof PsiNewExpression) {
-                @NotNull PsiNewExpression psiNewExpression = (PsiNewExpression) parent;
-                try {
-                    @Nullable PsiMethod resolve = psiNewExpression.resolveMethod();
-                    if (resolve != null) {
-                        PsiElement navElement = resolve.getNavigationElement();
-                        if (navElement instanceof PsiMethod) {
-                            resolve = (PsiMethod) navElement;
-                        }
-                        @Nullable String s = resolveDocPrint(info, resolve);
-                        if (s != null) {
-                            return s;
-                        }
-                    }
-                } catch (Throwable ignore) {
-                    // ignore
+            @Nullable PsiMethod resolve = NewDoc.newMethod(ref);
+            if (resolve != null) {
+                @Nullable String s = resolveDocPrint(info, resolve);
+                if (s != null) {
+                    return s;
                 }
             }
         }
