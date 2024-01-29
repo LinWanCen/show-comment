@@ -54,7 +54,7 @@ public class TreeCacheUtils {
                     AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(() -> {
                         try {
                             cacheUpdate();
-                        } catch (Exception e) {
+                        } catch (Throwable e) {
                             LOG.info("TreeCacheUtils checkScheduleAndInit catch Throwable but log to record.", e);
                         }
                     }, 0L, 1L, TimeUnit.SECONDS);
@@ -81,7 +81,7 @@ public class TreeCacheUtils {
                                 treeCache.needUpdate = false;
                             } catch (ProcessCanceledException ignore) {
                                 // ignore
-                            } catch (Exception e) {
+                            } catch (Throwable e) {
                                 LOG.info("TreeCacheUtils nodeCache.forEach catch Throwable but log to record.", e);
                             }
                         }).inSmartMode(project).executeSynchronously();
@@ -90,7 +90,7 @@ public class TreeCacheUtils {
             } catch (IllegalStateException ignore) {
                 // ignore inSmartMode(project) throw:
                 // @NotNull method com/intellij/openapi/project/impl/ProjectImpl.getEarlyDisposable must not return null
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 LOG.info("TreeCacheUtils cache.forEach catch Throwable but log to record.", e);
             }
         });

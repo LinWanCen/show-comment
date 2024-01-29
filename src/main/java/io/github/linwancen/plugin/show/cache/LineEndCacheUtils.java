@@ -79,7 +79,7 @@ public class LineEndCacheUtils {
                     AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(() -> {
                         try {
                             cacheUpdate();
-                        } catch (Exception e) {
+                        } catch (Throwable e) {
                             LOG.info("LineEndCacheUtils checkScheduleAndInit catch Throwable but log to record.", e);
                         }
                     }, 0L, 1L, TimeUnit.SECONDS);
@@ -130,15 +130,18 @@ public class LineEndCacheUtils {
                             lineCache.updated();
                         } catch (ProcessCanceledException ignore) {
                             // ignore
-                        } catch (Exception e) {
-                            LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
+                        } catch (Throwable e) {
+                            @Nullable String msg = e.getMessage();
+                            if (msg == null || !msg.contains("File is not valid")) {
+                                LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
+                            }
                         }
                     }).inSmartMode(project).executeSynchronously();
                 }));
             } catch (IllegalStateException ignore) {
                 // ignore inSmartMode(project) throw:
                 // @NotNull method com/intellij/openapi/project/impl/ProjectImpl.getEarlyDisposable must not return null
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 LOG.info("LineEndCacheUtils cache.forEach catch Throwable but log to record.", e);
             }
         });
