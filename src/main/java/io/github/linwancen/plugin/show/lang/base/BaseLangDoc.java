@@ -93,37 +93,14 @@ public abstract class BaseLangDoc extends EditorLinePainter {
             return null;
         }
         // before doc
-        refElement = Prev.prevRefChild(info, refElement, refClass);
-        if (refElement == null) {
+        @Nullable PsiElement beforeRefElement = Prev.prevRefChild(info, refElement, refClass);
+        if (beforeRefElement == null) {
             return doc;
         }
-        PsiElement parent = refElement.getParent();
-        @Nullable String before = refElementDoc(info, parent);
-        if (before != null) {
-            doc = mergeDoc(refElement.getText(), text, info.appSettings.getToSet, before, doc);
-        }
-        return doc;
-    }
-
-    @NotNull
-    private String mergeDoc(@NotNull String beforeText, @NotNull String text,
-                            boolean getToSet, String before, String doc) {
-        if (beforeText.startsWith("set")) {
-            beforeText = beforeText.substring(3);
-            if (text.startsWith("get")) {
-                text = text.substring(3);
-            } else if (text.startsWith("is")) {
-                text = text.substring(2);
-            }
-            boolean same = beforeText.equals(text);
-            if (getToSet) {
-                // because lambda is -> or =>
-                doc = doc + (same ? " ==> " : " --> ") + before;
-            } else {
-                doc = before + (same ? " <== " : " <-- ") + doc;
-            }
-        } else {
-            doc = before + " | " + doc;
+        PsiElement parent = beforeRefElement.getParent();
+        @Nullable String beforeDoc = refElementDoc(info, parent);
+        if (beforeDoc != null) {
+            doc = MergeDoc.mergeDoc(beforeRefElement.getText(), text, beforeDoc, doc, info.appSettings.getToSet);
         }
         return doc;
     }
