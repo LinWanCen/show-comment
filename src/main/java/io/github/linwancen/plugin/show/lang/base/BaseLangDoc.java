@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.LineExtensionInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
@@ -190,6 +191,9 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      */
     @Nullable
     protected <T extends SettingsInfo> String resolveDocRaw(@NotNull T info, @NotNull PsiElement resolve) {
+        if (resolve instanceof PsiCompiledElement) {
+            return null;
+        }
         @Nullable FileViewProvider viewProvider = PsiElementTo.viewProvider(resolve);
         if (viewProvider == null) {
             return null;
