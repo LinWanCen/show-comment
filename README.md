@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/jetbrains/plugin/v/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/18553-show-comment/versions)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/io.github.linwancen.show-comment.svg)](https://plugins.jetbrains.com/plugin/18553-show-comment)
 
-Thanks JetBrains Licenses for Open Source.
+Thanks to JetBrains Licenses for Open Source.
 
 ## Notes 说明
 
@@ -13,12 +13,14 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Note</h2>
 <ul>
-<li>"xx-ClassNameOrSimpleName.json" and jump to field
+<li>support Java Kotlin JS/TS Python Go Rust SQL
+<li>tree doc from lang or README.md pom .gradle etc. by settings 
 <li>input `doc` `docc` -> /** */
 <li>json doc from xxx.json.tsv
 <li>json dict doc from (key).tsv
+<li>"xx-ClassNameOrSimpleName.json" and jump to field
 <li>from External Conf for folder, resources, COBOL etc.
-<li>Config: settings -> Tools -> // Show Comment Global/Project
+<li>Config: settings -> Tools -> // Show Comment App/Global/Project
 </ul>
 
 <h3>External Comment</h3>
@@ -51,14 +53,14 @@ Show doc comment at the Project view Tree, line End, json, other
 <hr>
 <h2>中文说明</h2>
 <ul>
-<li>在结构树显示 文档注释
-<li>在行末尾显示 文档注释
+<li>在行末尾显示 引用对象的文档注释，支持 Java Kotlin JS/TS Python Go Rust SQL
+<li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
 <li>输入 doc / docc 等生成 /** */
 <li>json 字段注释从 xxx.json.tsv 读取
 <li>json 字典注释从 键名.tsv 读取
-<li>支持 "xx-类全名或简名.json" 文档注释与跳转到字段
+<li>支持 "xx-类全名或简名.json" 读取字段注释和跳转
 <li>支持 从配置文件获取外部注释用于文件夹、资源、COBOL 等
-<li>修改配置：设置 -> 工具 -> // Show Comment Global/Project
+<li>修改配置：设置 -> 工具 -> // Show Comment App/Global/Project
 </ul>
 
 <h3>外部注释</h3>
@@ -95,13 +97,13 @@ Show doc comment at the Project view Tree, line End, json, other
 <li>我的情况：1993-11-03，软件工程师，广发银行编制，宅，LOLm，NS，看书，写文章，KTV，爬山，逛街
 <li>我的性格：ISFP(探险家 内向 实际 感性 随性)
 <li>希望对方：广东省，与家人关系好，爱笑甜美大眼睛
-<li>有兴趣请联系 1498425439@qq.com
+<li>有兴趣请联系 1498425439@qq.com，也欢迎反馈问题和需求
 </ul>
 
 <hr>
 <h2>支持</h2>
 <ul>
-<li>如果对你有所帮助，别忘了给本项目
+<li>如果对你有所帮助，可以通过群或文章等形式分享给大家，在插件市场好评，或者给本项目
 <a href="https://github.com/LinWanCen/show-comment">GitHub</a>
 主页一个 Star，您的支持是项目前进的动力。
 </ul>
@@ -112,6 +114,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.16  Add line-end-comment  support Rust
 <li>2.15  Add line-end-comment  java anno doc
 <li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
 <li>2.13  ★                     Cache for 2023.3
@@ -156,6 +159,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.16  增加 行末注释   支持 Rust
 <li>2.15  增加 行末注释   java 注解注释
 <li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")
 <li>2.13  ★             缓存用于支持 2023.3

@@ -51,6 +51,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getShowLineEndCommentJsBase() != settings.showLineEndCommentJsBase;
         modified |= mySettingsComponent.getShowLineEndCommentPyBase() != settings.showLineEndCommentPyBase;
         modified |= mySettingsComponent.getShowLineEndCommentGoBase() != settings.showLineEndCommentGoBase;
+        modified |= mySettingsComponent.getShowLineEndCommentRustBase() != settings.showLineEndCommentRustBase;
         modified |= mySettingsComponent.getShowLineEndCommentSql() != settings.showLineEndCommentSql;
         modified |= mySettingsComponent.getShowLineEndCommentJson() != settings.showLineEndCommentJson;
 
@@ -90,6 +91,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showLineEndCommentJsBase = mySettingsComponent.getShowLineEndCommentJsBase();
         settings.showLineEndCommentPyBase = mySettingsComponent.getShowLineEndCommentPyBase();
         settings.showLineEndCommentGoBase = mySettingsComponent.getShowLineEndCommentGoBase();
+        settings.showLineEndCommentRustBase = mySettingsComponent.getShowLineEndCommentRustBase();
         settings.showLineEndCommentSql = mySettingsComponent.getShowLineEndCommentSql();
         settings.showLineEndCommentJson = mySettingsComponent.getShowLineEndCommentJson();
 
@@ -132,6 +134,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowLineEndCommentJsBase(settings.showLineEndCommentJsBase);
         mySettingsComponent.setShowLineEndCommentPyBase(settings.showLineEndCommentPyBase);
         mySettingsComponent.setShowLineEndCommentGoBase(settings.showLineEndCommentGoBase);
+        mySettingsComponent.setShowLineEndCommentRustBase(settings.showLineEndCommentRustBase);
         mySettingsComponent.setShowLineEndCommentSql(settings.showLineEndCommentSql);
         mySettingsComponent.setShowLineEndCommentJson(settings.showLineEndCommentJson);
 

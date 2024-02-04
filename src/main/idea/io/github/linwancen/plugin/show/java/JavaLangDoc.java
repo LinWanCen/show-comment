@@ -74,7 +74,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
         if (resolveDocPrint != null) {
             return resolveDocPrint;
         }
-        // no doc comment support get set
+        // no doc comment support get/set
         if (parseBaseComment(info) && resolve instanceof PsiMethod) {
             @Nullable PsiField psiField = PsiMethodToPsiDoc.propMethodField((PsiMethod) resolve);
             if (psiField != null) {

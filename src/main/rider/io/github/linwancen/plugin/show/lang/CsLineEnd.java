@@ -7,6 +7,8 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Doesn't work because I don't know how to get Reference for CSharp PsiElement
  * <br>https://intellij-support.jetbrains.com/hc/en-us/requests/4228491
@@ -23,7 +25,7 @@ public class CsLineEnd extends BaseLangDoc {
     }
 
     @Override
-    public @NotNull Class<? extends PsiElement> getRefClass() {
-        return CSharpDummyNode.class;
+    public @NotNull List<Class<? extends PsiElement>> getRefClass() {
+        return List.of(CSharpDummyNode.class);
     }
 }

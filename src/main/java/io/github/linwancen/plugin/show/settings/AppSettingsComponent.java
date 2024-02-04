@@ -21,16 +21,17 @@ public class AppSettingsComponent {
     private final JBTextField treeTags = new JBTextField();
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
     private final JBCheckBox lineEndCache = new JBCheckBox(ShowBundle.message("line.end.cache"));
-    private final JBCheckBox showLineEndCommentJava = new JBCheckBox("    Java ");
+    private final JBCheckBox showLineEndCommentJava = new JBCheckBox("   Java ");
     private final JBCheckBox showLineEndCommentJavaBase = new JBCheckBox("// Java ");
-    private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("    Kotlin ");
+    private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("   Kotlin ");
     private final JBCheckBox showLineEndCommentKotlinBase = new JBCheckBox("// Kotlin ");
-    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("    js ");
+    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("   js ");
     private final JBCheckBox showLineEndCommentJsBase = new JBCheckBox("// js ");
-    private final JBCheckBox showLineEndCommentPy = new JBCheckBox("   Python ");
+    private final JBCheckBox showLineEndCommentPy = new JBCheckBox("  Python ");
     private final JBCheckBox showLineEndCommentPyBase = new JBCheckBox("# Python ");
-    private final JBCheckBox showLineEndCommentGo = new JBCheckBox("    Go ");
+    private final JBCheckBox showLineEndCommentGo = new JBCheckBox("   Go ");
     private final JBCheckBox showLineEndCommentGoBase = new JBCheckBox("// Go ");
+    private final JBCheckBox showLineEndCommentRustBase = new JBCheckBox("// Rust ");
     private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    sql ");
     private final JBCheckBox showLineEndCommentJson = new JBCheckBox("    json ");
     private final JBTextField lineTags = new JBTextField();
@@ -74,7 +75,8 @@ public class AppSettingsComponent {
                         showLineEndCommentJavaBase,
                         showLineEndCommentKotlinBase,
                         showLineEndCommentJsBase,
-                        showLineEndCommentPyBase
+                        showLineEndCommentPyBase,
+                        showLineEndCommentRustBase
                 ), 1)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("tree.tags")), treeTags, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("line.tags")), lineTags, 1, true)
@@ -236,6 +238,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndCommentGoBase(boolean newStatus) {
         showLineEndCommentGoBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentRustBase() {
+        return showLineEndCommentRustBase.isSelected();
+    }
+
+    public void setShowLineEndCommentRustBase(boolean newStatus) {
+        showLineEndCommentRustBase.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentSql() {
