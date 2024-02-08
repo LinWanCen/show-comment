@@ -13,7 +13,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Note</h2>
 <ul>
-<li>support Java Kotlin JS/TS Python Go Rust SQL
+<li>support Java Kotlin JS/TS PHP Python Go Rust SQL
 <li>tree doc from lang or README.md pom .gradle etc. by settings 
 <li>input `doc` `docc` -> /** */
 <li>json doc from xxx.json.tsv
@@ -33,13 +33,16 @@ Show doc comment at the Project view Tree, line End, json, other
 <li>In path, "doc" can replace any, and can use % like in SQL, effect at previous layer when folder named -1
 <li>The lines in key.tsv will be concatenated with `|` to regexp; longer str should in front; startWith `?` to exclude
 <li>Chang tsv file in find pop window would not reload!
-<li>The tsv conf file must could be search in "Go to File"(Ctrl + Shift + N)
+<li>The tsv conf file must could be search in "Go to File" (Ctrl + Shift + N)
 </ul>
 
 <h3>My Project</h3>
 <ul>
 <li>Show doc comment at the Project view Tree, line End, json etc.:
 <a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
+</li>
+<li>show line count for file / method, show children count for dir in project view (tree on the left):
+<a href="https://plugins.jetbrains.com/plugin/23300-line-num">Line Num</a>
 </li>
 <li>Method call usage graph and maven dependency graph:
 <a href="https://plugins.jetbrains.com/plugin/21242-draw-graph">Draw Graph</a>
@@ -53,7 +56,7 @@ Show doc comment at the Project view Tree, line End, json, other
 <hr>
 <h2>中文说明</h2>
 <ul>
-<li>在行末尾显示 引用对象的文档注释，支持 Java Kotlin JS/TS Python Go Rust SQL
+<li>在行末尾显示 引用对象的文档注释，支持 Java Kotlin JS/TS PHP Python Go Rust SQL
 <li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
 <li>输入 doc / docc 等生成 /** */
 <li>json 字段注释从 xxx.json.tsv 读取
@@ -81,6 +84,9 @@ Show doc comment at the Project view Tree, line End, json, other
 <ul>
 <li>在文件树、行末、JSON 显示注释:
 <a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
+</li>
+<li>在文件树显示行数、文件数:
+<a href="https://plugins.jetbrains.com/plugin/23300-line-num">Line Num</a>
 </li>
 <li>生成 方法调用图 和 Maven 依赖图:
 <a href="https://plugins.jetbrains.com/plugin/21242-draw-graph">Draw Graph</a>
@@ -114,7 +120,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
-<li>2.16  Add line-end-comment  support Rust
+<li>2.16  Add line-end-comment  support Rust, PHP
 <li>2.15  Add line-end-comment  java anno doc
 <li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
 <li>2.13  ★                     Cache for 2023.3
@@ -159,7 +165,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
-<li>2.16  增加 行末注释   支持 Rust
+<li>2.16  增加 行末注释   支持 Rust, PHP
 <li>2.15  增加 行末注释   java 注解注释
 <li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")
 <li>2.13  ★             缓存用于支持 2023.3

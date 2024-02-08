@@ -67,7 +67,7 @@ public class ResolveDoc {
         if (document == null) {
             return null;
         }
-        @Nullable PsiElement psiElement = PsiTreeUtil.getChildOfType(resolve, PsiComment.class);
+        @Nullable PsiElement psiElement = PsiTreeUtil.findChildOfType(resolve, PsiComment.class);
         if (psiElement == null) {
             psiElement = Prev.prevCompactElement(info, resolve, document);
         }

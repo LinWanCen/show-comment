@@ -27,6 +27,8 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentKotlinBase = new JBCheckBox("// Kotlin ");
     private final JBCheckBox showLineEndCommentJs = new JBCheckBox("   js ");
     private final JBCheckBox showLineEndCommentJsBase = new JBCheckBox("// js ");
+    private final JBCheckBox showLineEndCommentPhp = new JBCheckBox("   php ");
+    private final JBCheckBox showLineEndCommentPhpBase = new JBCheckBox("// php ");
     private final JBCheckBox showLineEndCommentPy = new JBCheckBox("  Python ");
     private final JBCheckBox showLineEndCommentPyBase = new JBCheckBox("# Python ");
     private final JBCheckBox showLineEndCommentGo = new JBCheckBox("   Go ");
@@ -66,6 +68,7 @@ public class AppSettingsComponent {
                         showLineEndCommentJava,
                         showLineEndCommentKotlin,
                         showLineEndCommentJs,
+                        showLineEndCommentPhp,
                         showLineEndCommentPy,
                         showLineEndCommentGo,
                         showLineEndCommentSql,
@@ -75,6 +78,7 @@ public class AppSettingsComponent {
                         showLineEndCommentJavaBase,
                         showLineEndCommentKotlinBase,
                         showLineEndCommentJsBase,
+                        showLineEndCommentPhpBase,
                         showLineEndCommentPyBase,
                         showLineEndCommentRustBase
                 ), 1)
@@ -184,6 +188,14 @@ public class AppSettingsComponent {
         showLineEndCommentJs.setSelected(newStatus);
     }
 
+    public boolean getShowLineEndCommentPhp() {
+        return showLineEndCommentPhp.isSelected();
+    }
+
+    public void setShowLineEndCommentPhp(boolean newStatus) {
+        showLineEndCommentPhp.setSelected(newStatus);
+    }
+
     public boolean getShowLineEndCommentPy() {
         return showLineEndCommentPy.isSelected();
     }
@@ -222,6 +234,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndCommentJsBase(boolean newStatus) {
         showLineEndCommentJsBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentPhpBase() {
+        return showLineEndCommentPhpBase.isSelected();
+    }
+
+    public void setShowLineEndCommentPhpBase(boolean newStatus) {
+        showLineEndCommentPhpBase.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentPyBase() {

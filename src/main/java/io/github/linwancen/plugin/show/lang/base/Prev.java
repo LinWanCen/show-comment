@@ -90,6 +90,10 @@ public class Prev {
     public static @Nullable <T extends SettingsInfo> PsiElement prevCompactElement(
             @SuppressWarnings("unused") @NotNull T info, @NotNull PsiElement resolve, @NotNull Document document) {
         @Nullable PsiElement element = PsiTreeUtil.prevVisibleLeaf(resolve);
+        @Nullable PsiComment psiComment = PsiTreeUtil.getParentOfType(element, PsiComment.class);
+        if (psiComment != null) {
+            return psiComment;
+        }
         if (element == null) {
             return null;
         }
