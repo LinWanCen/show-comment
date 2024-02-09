@@ -34,6 +34,7 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentGo = new JBCheckBox("   Go ");
     private final JBCheckBox showLineEndCommentGoBase = new JBCheckBox("// Go ");
     private final JBCheckBox showLineEndCommentRustBase = new JBCheckBox("// Rust ");
+    private final JBCheckBox showLineEndCommentCBase = new JBCheckBox("// C ");
     private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    sql ");
     private final JBCheckBox showLineEndCommentJson = new JBCheckBox("    json ");
     private final JBTextField lineTags = new JBTextField();
@@ -80,7 +81,8 @@ public class AppSettingsComponent {
                         showLineEndCommentJsBase,
                         showLineEndCommentPhpBase,
                         showLineEndCommentPyBase,
-                        showLineEndCommentRustBase
+                        showLineEndCommentRustBase,
+                        showLineEndCommentCBase
                 ), 1)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("tree.tags")), treeTags, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("line.tags")), lineTags, 1, true)
@@ -266,6 +268,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndCommentRustBase(boolean newStatus) {
         showLineEndCommentRustBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentCBase() {
+        return showLineEndCommentCBase.isSelected();
+    }
+
+    public void setShowLineEndCommentCBase(boolean newStatus) {
+        showLineEndCommentCBase.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentSql() {

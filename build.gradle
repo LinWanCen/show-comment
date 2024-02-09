@@ -57,9 +57,10 @@ sourceSets {
                 srcDirs = ['src/main/java', 'src/main/rider']
             }
         }
-        test {
+    } else if ('CL' == ideTypeStr) {
+        main {
             java {
-                srcDirs = ['src/test/java', 'src/test/rider']
+                srcDirs = ['src/main/java', 'src/main/clion']
             }
         }
     } else {
@@ -67,10 +68,8 @@ sourceSets {
             java {
                 srcDirs = ['src/main/java', 'src/main/idea']
             }
-        }
-        test {
-            java {
-                srcDirs = ['src/test/java', 'src/test/idea']
+            resources {
+                srcDirs = ['src/main/resources', 'src/main/other_lang_class']
             }
         }
     }
@@ -93,7 +92,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
-<li>2.16  Add line-end-comment  support Rust, PHP
+<li>2.16  Add line-end-comment  support Rust, PHP, C/C++/Object C
 <li>2.15  Add line-end-comment  java anno doc
 <li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
 <li>2.13  ★                     Cache for 2023.3
@@ -138,7 +137,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
-<li>2.16  增加 行末注释   支持 Rust, PHP
+<li>2.16  增加 行末注释   支持 Rust, PHP, C/C++/Object C
 <li>2.15  增加 行末注释   java 注解注释
 <li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")
 <li>2.13  ★             缓存用于支持 2023.3

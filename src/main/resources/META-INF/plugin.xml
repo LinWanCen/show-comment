@@ -11,7 +11,7 @@ Show doc comment at the Project view Tree, line End, json, other
 
 <h2>English Note</h2>
 <ul>
-<li>support Java Kotlin JS/TS PHP Python Go Rust SQL
+<li>support Java Kotlin JS/TS PHP Python Go Rust C SQL
 <li>tree doc from lang or README.md pom .gradle etc. by settings
 <li>input `doc` `docc` -> /** */
 <li>json doc from xxx.json.tsv
@@ -54,8 +54,9 @@ Show doc comment at the Project view Tree, line End, json, other
 <hr>
 <h2>中文说明</h2>
 <ul>
-<li>在行末尾显示 引用对象的文档注释，支持 Java Kotlin JS/TS PHP Python Go Rust SQL
 <li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
+<li>在行末尾显示 引用对象的文档注释，欢迎反馈您想要支持的语言，目前 C# 有技术问题待官方解决
+<li>目前支持 Java Kotlin JS/TS PHP Python Go Rust C SQL
 <li>输入 doc / docc 等生成 /** */
 <li>json 字段注释从 xxx.json.tsv 读取
 <li>json 字典注释从 键名.tsv 读取
@@ -126,6 +127,7 @@ Show doc comment at the Project view Tree, line End, json, other
   <!-- old version -->
   <depends optional="true" config-file="rust_old.xml">org.rust.lang</depends>
   <depends optional="true" config-file="rust.xml">com.jetbrains.rust</depends>
+  <depends optional="true" config-file="c.xml">com.intellij.modules.c-capable</depends>
   <depends optional="true" config-file="php.xml">com.jetbrains.php</depends>
   <!--suppress PluginXmlValidity, MybatisMapperXmlInspection -->
   <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
