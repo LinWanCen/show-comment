@@ -33,9 +33,6 @@ intellij {
             'Pythonid:201.6668.121',
             'org.rust.lang:0.3.131.3366-201',
             'org.toml.lang:0.2.131.3366-201',
-            'com.jetbrains.php:201.6668.153',
-            // 'com.jetbrains.rust:232.9921.46',
-            // 'Pythonid:212.5284.44',
     ]
     if ('IC' == ideTypeStr || 'IU' == ideTypeStr) {
         plugins.add('java')
@@ -47,7 +44,7 @@ intellij {
         plugins.add('JavaScript')
         plugins.add('com.intellij.database')
         plugins.add('org.jetbrains.plugins.go:201.6668.60.126')
-        // plugins.add('org.jetbrains.plugins.go:212.5284.31')
+        plugins.add('com.jetbrains.php:201.6668.153')
     }
 }
 

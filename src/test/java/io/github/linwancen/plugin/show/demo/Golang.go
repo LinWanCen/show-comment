@@ -3,10 +3,12 @@
 // go package
 package main
 
+import "fmt"
+
 // doc
 func main() {
-	line(val)
-	line(val1)
+	log(val)
+	log(val1)
 	line(value)
 
 	t := &Class{}
@@ -24,6 +26,13 @@ func main() {
 	line(multiLine(block(t)))
 }
 
+/**
+ * log
+ */
+func log(s string) {
+	fmt.Print(s)
+}
+
 // const
 const val = ""
 
@@ -35,14 +44,14 @@ const (
 // var
 var value *Class
 
-// First Class
+// Class First
 type Class struct {
 	// a
 	a *Class2
 	b *Class2 // b
 }
 
-// Class2
+// Class2 2
 type Class2 struct{}
 
 // line

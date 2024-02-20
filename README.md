@@ -7,7 +7,7 @@ Thanks to JetBrains Licenses for Open Source.
 
 ## Notes 说明
 
-Show doc comment at the Project view Tree, line End, json, other
+Show doc comment in the Project view Tree, line End, json, other
 
 在文件树、行末、JSON 等地方显示注释.
 
@@ -57,7 +57,7 @@ Show doc comment at the Project view Tree, line End, json, other
 <h2>中文说明</h2>
 <ul>
 <li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
-<li>在行末尾显示 引用对象的文档注释，欢迎反馈您想要支持的语言，目前 C# 有技术问题待官方解决
+<li>在行末尾显示 引用对象的文档注释，欢迎反馈您想要支持的语言，欢迎 C# 大神研究 CsLineEnd.java
 <li>目前支持 Java Kotlin JS/TS PHP Python Go Rust C SQL
 <li>输入 doc / docc 等生成 /** */
 <li>json 字段注释从 xxx.json.tsv 读取
