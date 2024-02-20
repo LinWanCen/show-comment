@@ -1,0 +1,5 @@
+<idea-plugin>
+  <extensions defaultExtensionNs="com.intellij">
+    <editor.linePainter implementation="io.github.linwancen.plugin.show.lang.SwiftLangDoc"/>
+  </extensions>
+</idea-plugin>

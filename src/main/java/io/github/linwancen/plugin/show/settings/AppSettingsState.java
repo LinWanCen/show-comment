@@ -43,6 +43,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showLineEndCommentGoBase = false;
     public boolean showLineEndCommentRustBase = true;
     public boolean showLineEndCommentCBase = true;
+    public boolean showLineEndCommentSwiftBase = true;
     public boolean showLineEndCommentSql = true;
     public boolean showLineEndCommentJson = true;
 

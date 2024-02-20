@@ -122,13 +122,15 @@ Show doc comment at the Project view Tree, line End, json, other
   <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
   <depends optional="true" config-file="sql.xml">com.intellij.database</depends>
   <depends optional="true" config-file="js.xml">JavaScript</depends>
+  <depends optional="true" config-file="php.xml">com.jetbrains.php</depends>
   <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
   <depends optional="true" config-file="go.xml">org.jetbrains.plugins.go</depends>
   <!-- old version -->
   <depends optional="true" config-file="rust_old.xml">org.rust.lang</depends>
+  <!--suppress PluginXmlValidity -->
   <depends optional="true" config-file="rust.xml">com.jetbrains.rust</depends>
   <depends optional="true" config-file="c.xml">com.intellij.modules.c-capable</depends>
-  <depends optional="true" config-file="php.xml">com.jetbrains.php</depends>
+  <depends optional="true" config-file="swift.xml">com.intellij.modules.swift-capable</depends>
   <!--suppress PluginXmlValidity, MybatisMapperXmlInspection -->
   <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
 

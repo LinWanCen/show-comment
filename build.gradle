@@ -40,6 +40,8 @@ intellij {
     if ('IC' == ideTypeStr || 'IU' == ideTypeStr) {
         plugins.add('java')
         plugins.add('org.jetbrains.kotlin')
+    } else if ('CL' == ideTypeStr) {
+        plugins.add('com.intellij.clion-swift:201.6668.126')
     }
     if (!ideTypeStr.endsWith('C')) {
         plugins.add('JavaScript')
