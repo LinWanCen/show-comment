@@ -15,8 +15,6 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.javadoc.PsiDocToken;
-import com.intellij.psi.javadoc.PsiInlineDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
@@ -146,18 +144,18 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
      * @return is a new line
      */
     protected boolean appendElementText(@NotNull StringBuilder sb, PsiElement element) {
-        if (element instanceof PsiDocToken) {
-            @NotNull PsiDocToken psiDocToken = (PsiDocToken) element;
-            DocFilter.addHtml(sb, psiDocToken.getText());
+        if (element instanceof PsiWhiteSpace && sb.length() > 0) {
+            return true;
         }
-        if (element instanceof PsiInlineDocTag) {
-            @NotNull PsiInlineDocTag psiInlineDocTag = (PsiInlineDocTag) element;
-            @NotNull PsiElement[] children = psiInlineDocTag.getChildren();
+        PsiElement[] children = element.getChildren();
+        if (children.length > 0) {
             if (children.length >= 3) {
                 DocFilter.addHtml(sb, children[children.length - 2].getText());
             }
+            return false;
         }
-        return element instanceof PsiWhiteSpace && sb.length() > 0;
+        DocFilter.addHtml(sb, element.getText());
+        return false;
     }
 
     @Override

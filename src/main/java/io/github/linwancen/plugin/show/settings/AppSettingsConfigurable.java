@@ -44,6 +44,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getShowLineEndCommentJava() != settings.showLineEndCommentJava;
         modified |= mySettingsComponent.getShowLineEndCommentKotlin() != settings.showLineEndCommentKotlin;
         modified |= mySettingsComponent.getShowLineEndCommentScala() != settings.showLineEndCommentScala;
+        modified |= mySettingsComponent.getShowLineEndCommentGroovy() != settings.showLineEndCommentGroovy;
         modified |= mySettingsComponent.getShowLineEndCommentJs() != settings.showLineEndCommentJs;
         modified |= mySettingsComponent.getShowLineEndCommentPhp() != settings.showLineEndCommentPhp;
         modified |= mySettingsComponent.getShowLineEndCommentPy() != settings.showLineEndCommentPy;
@@ -51,6 +52,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getShowLineEndCommentJavaBase() != settings.showLineEndCommentJavaBase;
         modified |= mySettingsComponent.getShowLineEndCommentKotlinBase() != settings.showLineEndCommentKotlinBase;
         modified |= mySettingsComponent.getShowLineEndCommentScalaBase() != settings.showLineEndCommentScalaBase;
+        modified |= mySettingsComponent.getShowLineEndCommentGroovyBase() != settings.showLineEndCommentGroovyBase;
         modified |= mySettingsComponent.getShowLineEndCommentJsBase() != settings.showLineEndCommentJsBase;
         modified |= mySettingsComponent.getShowLineEndCommentPhpBase() != settings.showLineEndCommentPhpBase;
         modified |= mySettingsComponent.getShowLineEndCommentPyBase() != settings.showLineEndCommentPyBase;
@@ -90,6 +92,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showLineEndCommentJava = mySettingsComponent.getShowLineEndCommentJava();
         settings.showLineEndCommentKotlin = mySettingsComponent.getShowLineEndCommentKotlin();
         settings.showLineEndCommentScala = mySettingsComponent.getShowLineEndCommentScala();
+        settings.showLineEndCommentGroovy = mySettingsComponent.getShowLineEndCommentGroovy();
         settings.showLineEndCommentJs = mySettingsComponent.getShowLineEndCommentJs();
         settings.showLineEndCommentPhp = mySettingsComponent.getShowLineEndCommentPhp();
         settings.showLineEndCommentPy = mySettingsComponent.getShowLineEndCommentPy();
@@ -97,6 +100,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showLineEndCommentJavaBase = mySettingsComponent.getShowLineEndCommentJavaBase();
         settings.showLineEndCommentKotlinBase = mySettingsComponent.getShowLineEndCommentKotlinBase();
         settings.showLineEndCommentScalaBase = mySettingsComponent.getShowLineEndCommentScalaBase();
+        settings.showLineEndCommentGroovyBase = mySettingsComponent.getShowLineEndCommentGroovyBase();
         settings.showLineEndCommentJsBase = mySettingsComponent.getShowLineEndCommentJsBase();
         settings.showLineEndCommentPhpBase = mySettingsComponent.getShowLineEndCommentPhpBase();
         settings.showLineEndCommentPyBase = mySettingsComponent.getShowLineEndCommentPyBase();
@@ -139,6 +143,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowLineEndCommentJava(settings.showLineEndCommentJava);
         mySettingsComponent.setShowLineEndCommentKotlin(settings.showLineEndCommentKotlin);
         mySettingsComponent.setShowLineEndCommentScala(settings.showLineEndCommentScala);
+        mySettingsComponent.setShowLineEndCommentGroovy(settings.showLineEndCommentGroovy);
         mySettingsComponent.setShowLineEndCommentJs(settings.showLineEndCommentJs);
         mySettingsComponent.setShowLineEndCommentPhp(settings.showLineEndCommentPhp);
         mySettingsComponent.setShowLineEndCommentPy(settings.showLineEndCommentPy);
@@ -146,6 +151,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowLineEndCommentJavaBase(settings.showLineEndCommentJavaBase);
         mySettingsComponent.setShowLineEndCommentKotlinBase(settings.showLineEndCommentKotlinBase);
         mySettingsComponent.setShowLineEndCommentScalaBase(settings.showLineEndCommentScalaBase);
+        mySettingsComponent.setShowLineEndCommentGroovyBase(settings.showLineEndCommentGroovyBase);
         mySettingsComponent.setShowLineEndCommentJsBase(settings.showLineEndCommentJsBase);
         mySettingsComponent.setShowLineEndCommentPhpBase(settings.showLineEndCommentPhpBase);
         mySettingsComponent.setShowLineEndCommentPyBase(settings.showLineEndCommentPyBase);
