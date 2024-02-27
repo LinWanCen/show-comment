@@ -38,6 +38,7 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentGo = new JBCheckBox("   Go ");
     private final JBCheckBox showLineEndCommentGoBase = new JBCheckBox("// Go ");
     private final JBCheckBox showLineEndCommentRustBase = new JBCheckBox("// Rust ");
+    private final JBCheckBox showLineEndCommentRubyBase = new JBCheckBox("// Ruby ");
     private final JBCheckBox showLineEndCommentCBase = new JBCheckBox("// C ");
     private final JBCheckBox showLineEndCommentSwiftBase = new JBCheckBox("// Swift ");
     private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    sql ");
@@ -316,6 +317,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndCommentRustBase(boolean newStatus) {
         showLineEndCommentRustBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentRubyBase() {
+        return showLineEndCommentRubyBase.isSelected();
+    }
+
+    public void setShowLineEndCommentRubyBase(boolean newStatus) {
+        showLineEndCommentRubyBase.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentCBase() {

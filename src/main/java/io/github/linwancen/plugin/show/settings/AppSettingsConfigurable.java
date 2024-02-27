@@ -58,6 +58,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getShowLineEndCommentPyBase() != settings.showLineEndCommentPyBase;
         modified |= mySettingsComponent.getShowLineEndCommentGoBase() != settings.showLineEndCommentGoBase;
         modified |= mySettingsComponent.getShowLineEndCommentRustBase() != settings.showLineEndCommentRustBase;
+        modified |= mySettingsComponent.getShowLineEndCommentRubyBase() != settings.showLineEndCommentRubyBase;
         modified |= mySettingsComponent.getShowLineEndCommentCBase() != settings.showLineEndCommentCBase;
         modified |= mySettingsComponent.getShowLineEndCommentSwiftBase() != settings.showLineEndCommentSwiftBase;
         modified |= mySettingsComponent.getShowLineEndCommentSql() != settings.showLineEndCommentSql;
@@ -106,6 +107,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showLineEndCommentPyBase = mySettingsComponent.getShowLineEndCommentPyBase();
         settings.showLineEndCommentGoBase = mySettingsComponent.getShowLineEndCommentGoBase();
         settings.showLineEndCommentRustBase = mySettingsComponent.getShowLineEndCommentRustBase();
+        settings.showLineEndCommentRubyBase = mySettingsComponent.getShowLineEndCommentRubyBase();
         settings.showLineEndCommentCBase = mySettingsComponent.getShowLineEndCommentCBase();
         settings.showLineEndCommentSwiftBase = mySettingsComponent.getShowLineEndCommentSwiftBase();
         settings.showLineEndCommentSql = mySettingsComponent.getShowLineEndCommentSql();
@@ -157,6 +159,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowLineEndCommentPyBase(settings.showLineEndCommentPyBase);
         mySettingsComponent.setShowLineEndCommentGoBase(settings.showLineEndCommentGoBase);
         mySettingsComponent.setShowLineEndCommentRustBase(settings.showLineEndCommentRustBase);
+        mySettingsComponent.setShowLineEndCommentRubyBase(settings.showLineEndCommentRubyBase);
         mySettingsComponent.setShowLineEndCommentCBase(settings.showLineEndCommentCBase);
         mySettingsComponent.setShowLineEndCommentSwiftBase(settings.showLineEndCommentSwiftBase);
         mySettingsComponent.setShowLineEndCommentSql(settings.showLineEndCommentSql);

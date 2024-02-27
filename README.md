@@ -13,7 +13,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>English Note</h2>
 <ul>
-<li>support Java Kotlin Scala Groovy JS/TS PHP Python Go Rust C SQL
+<li>support Java Kotlin Scala Groovy JS/TS PHP Python Go Rust Ruby C SQL
 <li>tree doc from lang or README.md pom .gradle etc. by settings 
 <li>input `doc` `docc` -> /** */
 <li>json doc from xxx.json.tsv
@@ -58,7 +58,7 @@ Show doc comment in the Project view Tree, line End, json, other
 <ul>
 <li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
 <li>在行末尾显示 引用对象的文档注释，欢迎反馈您想要支持的语言，欢迎 C# 大神研究 CsLineEnd.java
-<li>目前支持 Java Kotlin Scala Groovy JS/TS PHP Python Go Rust C SQL
+<li>目前支持 Java Kotlin Scala Groovy JS/TS PHP Python Go Rust Ruby C SQL
 <li>输入 doc / docc 等生成 /** */
 <li>json 字段注释从 xxx.json.tsv 读取
 <li>json 字典注释从 键名.tsv 读取
@@ -121,7 +121,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
-<li>2.16  Add line-end-comment  support Rust, PHP, C/C++/Object C, Scala, Groovy
+<li>2.16  Add line-end-comment  support Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  Add line-end-comment  java anno doc
 <li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
 <li>2.13  ★                     Cache for 2023.3
@@ -166,7 +166,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
-<li>2.16  增加 行末注释   支持 Rust, PHP, C/C++/Object C, Scala, Groovy
+<li>2.16  增加 行末注释   支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  增加 行末注释   java 注解注释
 <li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")
 <li>2.13  ★             缓存用于支持 2023.3
