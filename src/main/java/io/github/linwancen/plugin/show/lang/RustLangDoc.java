@@ -5,6 +5,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import org.jetbrains.annotations.NotNull;
 import org.rust.lang.RsLanguage;
+import org.rust.lang.core.psi.RsMethodCall;
 import org.rust.lang.core.psi.RsPath;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class RustLangDoc extends BaseLangDoc {
 
     @Override
     public @NotNull List<Class<? extends PsiElement>> getRefClass() {
-        return List.of(RsPath.class);
+        return List.of(RsPath.class, RsMethodCall.class);
     }
 
     @Override
