@@ -24,7 +24,9 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentJava = new JBCheckBox("   Java ");
     private final JBCheckBox showLineEndCommentJavaBase = new JBCheckBox("// Java ");
     private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("   Kotlin ");
+    private final JBCheckBox showLineEndCommentScala = new JBCheckBox("   Scala ");
     private final JBCheckBox showLineEndCommentKotlinBase = new JBCheckBox("// Kotlin ");
+    private final JBCheckBox showLineEndCommentScalaBase = new JBCheckBox("// Scala ");
     private final JBCheckBox showLineEndCommentJs = new JBCheckBox("   js ");
     private final JBCheckBox showLineEndCommentJsBase = new JBCheckBox("// js ");
     private final JBCheckBox showLineEndCommentPhp = new JBCheckBox("   php ");
@@ -69,19 +71,27 @@ public class AppSettingsComponent {
                 .addComponent(JPanelFactory.of(
                         showLineEndCommentJava,
                         showLineEndCommentKotlin,
+                        showLineEndCommentScala
+                ), 1)
+                .addComponent(JPanelFactory.of(
+                        showLineEndCommentJavaBase,
+                        showLineEndCommentKotlinBase,
+                        showLineEndCommentScalaBase
+                ), 1)
+                .addComponent(JPanelFactory.of(
                         showLineEndCommentJs,
                         showLineEndCommentPhp,
                         showLineEndCommentPy,
+
                         showLineEndCommentGo,
                         showLineEndCommentSql,
                         showLineEndCommentJson
                 ), 1)
                 .addComponent(JPanelFactory.of(
-                        showLineEndCommentJavaBase,
-                        showLineEndCommentKotlinBase,
                         showLineEndCommentJsBase,
                         showLineEndCommentPhpBase,
                         showLineEndCommentPyBase,
+
                         showLineEndCommentRustBase,
                         showLineEndCommentCBase,
                         showLineEndCommentSwiftBase
@@ -184,6 +194,14 @@ public class AppSettingsComponent {
         showLineEndCommentKotlin.setSelected(newStatus);
     }
 
+    public boolean getShowLineEndCommentScala() {
+        return showLineEndCommentScala.isSelected();
+    }
+
+    public void setShowLineEndCommentScala(boolean newStatus) {
+        showLineEndCommentScala.setSelected(newStatus);
+    }
+
     public boolean getShowLineEndCommentJs() {
         return showLineEndCommentJs.isSelected();
     }
@@ -230,6 +248,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndCommentKotlinBase(boolean newStatus) {
         showLineEndCommentKotlinBase.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentScalaBase() {
+        return showLineEndCommentScalaBase.isSelected();
+    }
+
+    public void setShowLineEndCommentScalaBase(boolean newStatus) {
+        showLineEndCommentScalaBase.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentJsBase() {

@@ -3,8 +3,20 @@ package io.github.linwancen.plugin.show.java;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.javadoc.*;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiEnumConstant;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiJvmModifiersOwner;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.psi.javadoc.PsiDocTagValue;
+import com.intellij.psi.javadoc.PsiDocToken;
+import com.intellij.psi.javadoc.PsiInlineDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
@@ -111,9 +123,14 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     @NotNull
     @Override
     protected <T extends SettingsInfo> String descDoc(@NotNull T info, @NotNull PsiDocComment psiDocComment) {
+        @NotNull PsiElement[] elements = psiDocComment.getDescriptionElements();
+        return elementsDesc(info, elements);
+    }
+
+    @NotNull
+    protected <T extends SettingsInfo> String elementsDesc(@NotNull T info, @NotNull PsiElement[] elements) {
         @NotNull StringBuilder sb = new StringBuilder();
         int lineCount = 0;
-        @NotNull PsiElement[] elements = psiDocComment.getDescriptionElements();
         for (PsiElement element : elements) {
             if (appendElementText(sb, element)) {
                 lineCount++;
@@ -126,9 +143,9 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     /**
-     * @return is new line
+     * @return is a new line
      */
-    private static boolean appendElementText(@NotNull StringBuilder sb, PsiElement element) {
+    protected boolean appendElementText(@NotNull StringBuilder sb, PsiElement element) {
         if (element instanceof PsiDocToken) {
             @NotNull PsiDocToken psiDocToken = (PsiDocToken) element;
             DocFilter.addHtml(sb, psiDocToken.getText());
@@ -148,10 +165,14 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
                                                       @NotNull PsiDocComment psiDocComment, @NotNull String name) {
         @NotNull PsiDocTag[] tags = psiDocComment.findTagsByName(name);
         for (@NotNull PsiDocTag tag : tags) {
-            // @see @param should use getDataElements()
             @Nullable PsiDocTagValue value = tag.getValueElement();
             if (value != null) {
                 DocFilter.addHtml(tagStrBuilder, value.getText());
+            } else  {
+                PsiElement[] dataElements = tag.getDataElements();
+                if (dataElements.length > 0) {
+                    DocFilter.addHtml(tagStrBuilder, dataElements[0].getText());
+                }
             }
         }
     }

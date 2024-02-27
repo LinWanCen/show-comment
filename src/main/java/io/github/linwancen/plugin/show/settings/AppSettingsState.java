@@ -33,6 +33,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showLineEndCommentJavaBase = false;
     public boolean showLineEndCommentKotlin = true;
     public boolean showLineEndCommentKotlinBase = false;
+    public boolean showLineEndCommentScala = true;
+    public boolean showLineEndCommentScalaBase = false;
     public boolean showLineEndCommentJs = true;
     public boolean showLineEndCommentJsBase = false;
     public boolean showLineEndCommentPhp = true;
