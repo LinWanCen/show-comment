@@ -67,7 +67,8 @@ public class ResolveDoc {
         if (document == null) {
             return null;
         }
-        @Nullable PsiElement psiElement = PsiTreeUtil.findChildOfType(resolve, PsiComment.class);
+        // Do not use findChildOfType() because will find any comment at project view tree
+        @Nullable PsiElement psiElement = PsiTreeUtil.getChildOfType(resolve, PsiComment.class);
         if (psiElement == null) {
             psiElement = Prev.prevCompactElement(info, resolve, document);
         }

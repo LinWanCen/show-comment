@@ -1,5 +1,8 @@
 package io.github.linwancen.plugin.show.lang;
 
+import com.intellij.ide.projectView.ProjectViewNode;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jetbrains.php.lang.PhpLanguage;
@@ -31,6 +34,26 @@ public class PhpLangDoc extends BaseTagLangDoc<PhpDocComment> {
     @Override
     public boolean show(@NotNull LineInfo info) {
         return info.appSettings.showLineEndCommentPhp;
+    }
+
+    @Override
+    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull ProjectViewNode<?> node,
+                                                             @NotNull Project project) {
+        Object value = node.getValue();
+        if (value instanceof PsiElement) {
+            @NotNull PsiElement psiElement = (PsiElement) value;
+            if (psiElement.getLanguage() == PhpLanguage.INSTANCE) {
+                @NotNull PsiElement[] children = psiElement.getChildren();
+                for (PsiElement child : children) {
+                    @Nullable PsiComment comment = PsiTreeUtil.getChildOfType(child, PsiComment.class);
+                    if (comment != null) {
+                        String text = comment.getText();
+                        return DocFilter.cutDoc(text, info, true);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     @Override
