@@ -11,10 +11,15 @@ Show doc comment in the Project view Tree, line End, json, other
 
 在文件树、行末、JSON 等地方显示注释.
 
-<h2>English Note</h2>
 <ul>
-<li>support Java Kotlin Scala Groovy JS/TS PHP Python Go Rust Ruby C SQL
-<li>tree doc from lang or README.md pom .gradle etc. by settings 
+  <li>Java, Kotlin, Groovy, Scala
+  <li>C/C++/OC, Python, Go, Rust, Ruby
+  <li>JS/TS, PHP, SQL
+</ul>
+
+<h4>English Note</h4>
+<ul>
+<li>tree doc from lang or README.md pom .gradle etc. by settings
 <li>input `doc` `docc` -> /** */
 <li>json doc from xxx.json.tsv
 <li>json dict doc from (key).tsv
@@ -23,7 +28,7 @@ Show doc comment in the Project view Tree, line End, json, other
 <li>Config: settings -> Tools -> // Show Comment App/Global/Project
 </ul>
 
-<h3>External Comment</h3>
+<h5>External Comment</h5>
 <a href="https://github.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">Demo(GitHub)</a>
 <ul>
 <li>Reload: Tools -> 🔄 // Reload External Comment
@@ -36,12 +41,12 @@ Show doc comment in the Project view Tree, line End, json, other
 <li>The tsv conf file must could be search in "Go to File" (Ctrl + Shift + N)
 </ul>
 
-<h3>My Project</h3>
+<h5>My Project</h5>
 <ul>
 <li>Show doc comment at the Project view Tree, line End, json etc.:
 <a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
 </li>
-<li>show line count for file / method, show children count for dir in project view (tree on the left):
+<li>show line count for file / method, show children count for dir in project view (tree on left):
 <a href="https://plugins.jetbrains.com/plugin/23300-line-num">Line Num</a>
 </li>
 <li>Method call usage graph and maven dependency graph:
@@ -54,11 +59,10 @@ Show doc comment in the Project view Tree, line End, json, other
 </ul>
 
 <hr>
-<h2>中文说明</h2>
+<h4>中文说明</h4>
 <ul>
 <li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
 <li>在行末尾显示 引用对象的文档注释，欢迎反馈您想要支持的语言，欢迎 C# 大神研究 CsLineEnd.java
-<li>目前支持 Java Kotlin Scala Groovy JS/TS PHP Python Go Rust Ruby C SQL
 <li>输入 doc / docc 等生成 /** */
 <li>json 字段注释从 xxx.json.tsv 读取
 <li>json 字典注释从 键名.tsv 读取
@@ -67,7 +71,7 @@ Show doc comment in the Project view Tree, line End, json, other
 <li>修改配置：设置 -> 工具 -> // Show Comment App/Global/Project
 </ul>
 
-<h3>外部注释</h3>
+<h5>外部注释</h5>
 <a href="https://gitee.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">示例(Gitee)</a>
 ：比如你要给 .go 的文件配置文件注释可以放在相同目录或父目录的 xxx.go.tree.tsv 中
 <ul>
@@ -81,7 +85,7 @@ Show doc comment in the Project view Tree, line End, json, other
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
 
-<h3>我的项目</h3>
+<h5>我的项目</h5>
 <ul>
 <li>在文件树、行末、JSON 显示注释:
 <a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
@@ -99,7 +103,7 @@ Show doc comment in the Project view Tree, line End, json, other
 </ul>
 
 <hr>
-<h2>找个女朋友</h2>
+<h4>找个女朋友</h4>
 <ul>
 <li>我的情况：1993-11-03，软件工程师，广发银行编制，宅，LOLm，NS，看书，写文章，KTV，爬山，逛街
 <li>我的性格：ISFP(探险家 内向 实际 感性 随性)
@@ -108,7 +112,7 @@ Show doc comment in the Project view Tree, line End, json, other
 </ul>
 
 <hr>
-<h2>支持</h2>
+<h4>支持</h4>
 <ul>
 <li>如果对你有所帮助，可以通过群或文章等形式分享给大家，在插件市场好评，或者给本项目
 <a href="https://github.com/LinWanCen/show-comment">GitHub</a>
