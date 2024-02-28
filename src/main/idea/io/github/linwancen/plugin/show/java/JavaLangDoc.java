@@ -24,6 +24,7 @@ import io.github.linwancen.plugin.show.java.doc.NewDoc;
 import io.github.linwancen.plugin.show.java.doc.ParamDoc;
 import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
+import io.github.linwancen.plugin.show.java.line.SkipUtils;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import org.jetbrains.annotations.NotNull;
@@ -80,6 +81,9 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Override
     public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
+        if (SkipUtils.skipSign(info, resolve)) {
+            return null;
+        }
         @Nullable String resolveDocPrint = super.resolveDocPrint(info, resolve);
         if (resolveDocPrint != null) {
             return resolveDocPrint;
@@ -147,7 +151,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
         if (element instanceof PsiWhiteSpace && sb.length() > 0) {
             return true;
         }
-        PsiElement[] children = element.getChildren();
+        @NotNull PsiElement[] children = element.getChildren();
         if (children.length > 0) {
             if (children.length >= 3) {
                 DocFilter.addHtml(sb, children[children.length - 2].getText());
@@ -167,7 +171,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             if (value != null) {
                 DocFilter.addHtml(tagStrBuilder, value.getText());
             } else  {
-                PsiElement[] dataElements = tag.getDataElements();
+                @NotNull PsiElement[] dataElements = tag.getDataElements();
                 if (dataElements.length > 0) {
                     DocFilter.addHtml(tagStrBuilder, dataElements[0].getText());
                 }

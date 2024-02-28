@@ -17,22 +17,14 @@ public class OwnerToPsiDocSkip {
 
     @Nullable
     public static <T extends SettingsInfo> PsiDocComment refDoc(@NotNull T info,
-                                                                @Nullable PsiDocCommentOwner docOwner) {
-        return SkipUtils.skipDoc(info, refDocWithOutSkip(info, docOwner));
+                                                                @NotNull PsiDocCommentOwner docOwner) {
+        return SkipUtils.skipDoc(info, refDocWithOutSkip(docOwner));
     }
 
     @Nullable
-    public static <T extends SettingsInfo> PsiDocComment refDocWithOutSkip(@NotNull T info,
-                                                                            @Nullable PsiDocCommentOwner docOwner) {
-        if (docOwner == null) {
-            return null;
-        }
-        if (SkipUtils.skipSign(info, docOwner)) {
-            return null;
-        }
-        @Nullable PsiDocComment docComment = docOwner instanceof PsiMethod
+    public static <T extends SettingsInfo> PsiDocComment refDocWithOutSkip(@NotNull PsiDocCommentOwner docOwner) {
+        return docOwner instanceof PsiMethod
                 ? PsiMethodToPsiDoc.methodSupperNewPropDoc(((PsiMethod) docOwner))
                 : docOwner.getDocComment();
-        return docComment;
     }
 }

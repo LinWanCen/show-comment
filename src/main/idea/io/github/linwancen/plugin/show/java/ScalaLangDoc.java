@@ -46,7 +46,7 @@ public class ScalaLangDoc extends JavaLangDoc {
                                                                   @NotNull PsiElement resolve) {
         if (resolve instanceof PsiDocCommentOwner) {
             @NotNull PsiDocCommentOwner psiDocCommentOwner = (PsiDocCommentOwner) resolve;
-            return OwnerToPsiDocSkip.refDocWithOutSkip(info, psiDocCommentOwner);
+            return OwnerToPsiDocSkip.refDocWithOutSkip(psiDocCommentOwner);
         }
         return null;
     }
@@ -55,8 +55,8 @@ public class ScalaLangDoc extends JavaLangDoc {
     @Override
     protected <T extends SettingsInfo> String descDoc(@NotNull T info, @NotNull PsiDocComment psiDocComment) {
         @NotNull PsiElement[] elements = psiDocComment.getChildren();
-        StringBuilder sb = new StringBuilder();
-        for (PsiElement element : elements) {
+        @NotNull StringBuilder sb = new StringBuilder();
+        for (@NotNull PsiElement element : elements) {
             if (!(element instanceof PsiDocTag)) {
                 sb.append(element.getText());
             }
@@ -70,7 +70,7 @@ public class ScalaLangDoc extends JavaLangDoc {
         @NotNull PsiDocTag[] tags = psiDocComment.findTagsByName("@" + name);
         for (@NotNull PsiDocTag tag : tags) {
             if (tag instanceof ScDocTag) {
-                ScDocTag scDocTag = (ScDocTag) tag;
+                @NotNull ScDocTag scDocTag = (ScDocTag) tag;
                 String doc = scDocTag.getCommentDataText();
                 DocFilter.addHtml(tagStrBuilder, doc);
             }

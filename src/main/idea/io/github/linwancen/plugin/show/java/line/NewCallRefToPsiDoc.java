@@ -36,7 +36,8 @@ public class NewCallRefToPsiDoc {
             } catch (Throwable ignore) {
                 // ignore
             }
-            return OwnerToPsiDocSkip.refDoc(info, ((PsiDocCommentOwner) resolve));
+            @NotNull PsiDocCommentOwner psiDocCommentOwner = (PsiDocCommentOwner) resolve;
+            return OwnerToPsiDocSkip.refDoc(info, psiDocCommentOwner);
         }
         return null;
     }

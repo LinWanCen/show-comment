@@ -11,14 +11,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-class SkipUtils {
+public class SkipUtils {
 
     private SkipUtils() {}
 
-    static <T extends SettingsInfo> boolean skipSign(@NotNull T info, PsiElement psiElement) {
+    public static <T extends SettingsInfo> boolean skipSign(@NotNull T info, PsiElement psiElement) {
         @Nullable String text = psiName(info, psiElement);
         if (text == null) {
-            return true;
+            return false;
         }
         return DocSkip.skipSign(info, text);
     }
