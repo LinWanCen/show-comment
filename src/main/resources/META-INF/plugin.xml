@@ -135,9 +135,7 @@ Show doc comment in the Project view Tree, line End, json, other
   <depends optional="true" config-file="ruby.xml">com.intellij.modules.ruby</depends>
   <!--suppress PluginXmlValidity -->
   <depends optional="true" config-file="c.xml">com.intellij.modules.clion</depends>
-  <!--suppress PluginXmlValidity -->
-  <depends optional="true" config-file="swift.xml">com.intellij.modules.swift-capable</depends>
-  <!--suppress PluginXmlValidity, MybatisMapperXmlInspection -->
+  <depends optional="true" config-file="swift.xml">com.intellij.modules.swift.lang</depends>
   <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
 
   <applicationListeners>
