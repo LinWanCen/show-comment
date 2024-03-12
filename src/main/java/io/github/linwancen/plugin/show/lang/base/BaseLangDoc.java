@@ -1,8 +1,6 @@
 package io.github.linwancen.plugin.show.lang.base;
 
 import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.json.JsonLanguage;
-import com.intellij.lang.Language;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
 import com.intellij.openapi.project.Project;
@@ -14,7 +12,6 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.lang.JsonLangDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,12 +57,12 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 return null;
             }
         }
-        @NotNull Language language = PsiElementTo.language(element);
-        BaseLangDoc lineEnd = LANG_DOC_MAP.get(language.getID());
-        if (lineEnd != null && lineEnd.show(info)) {
+        @Nullable BaseLangDoc lineEnd = PsiElementTo.lineEnd(element);
+        if (lineEnd == null) {
+            return null;
+        }
+        if (lineEnd.show(info)) {
             return lineEnd.findRefDoc(info, viewProvider, element);
-        } else if (language == JsonLanguage.INSTANCE && JsonLangDoc.INSTANCE.show(info)) {
-            return JsonLangDoc.INSTANCE.findRefDoc(info, viewProvider, element);
         }
         return null;
     }
@@ -161,8 +158,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
             // ignore
         }
         // support like java <-> kotlin
-        @NotNull Language language = PsiElementTo.language(psiElement);
-        BaseLangDoc lineEnd = LANG_DOC_MAP.get(language.getID());
+        @Nullable BaseLangDoc lineEnd = PsiElementTo.lineEnd(psiElement);
         if (lineEnd == null) {
             return null;
         }

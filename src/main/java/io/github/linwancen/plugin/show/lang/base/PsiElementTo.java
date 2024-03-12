@@ -25,12 +25,18 @@ public class PsiElementTo {
         return PsiManager.getInstance(resolve.getProject()).findViewProvider(resolveFile);
     }
 
-    public static @NotNull Language language(@NotNull PsiElement element) {
-        @NotNull Language lang = element.getLanguage();
-        @Nullable Language base = lang.getBaseLanguage();
-        if (base != null) {
-            return base;
+    @Nullable
+    public static BaseLangDoc lineEnd(@NotNull PsiElement element) {
+        @Nullable Language language = element.getLanguage();
+        while (true) {
+            @Nullable BaseLangDoc lineEnd = BaseLangDoc.LANG_DOC_MAP.get(language.getID());
+            if (lineEnd != null) {
+                return lineEnd;
+            }
+            language = language.getBaseLanguage();
+            if (language == null) {
+                return null;
+            }
         }
-        return lang;
     }
 }

@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.lang;
 
+import com.intellij.json.JsonLanguage;
 import com.intellij.json.psi.JsonArray;
 import com.intellij.json.psi.JsonObject;
 import com.intellij.json.psi.JsonProperty;
@@ -11,6 +12,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.ext.GetFromDocMap;
 import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import io.github.linwancen.plugin.show.ext.conf.ConfCacheGetUtils;
@@ -27,7 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class JsonLangDoc extends BaseLangDoc {
 
-    public static final JsonLangDoc INSTANCE = new JsonLangDoc();
+    static {
+        LANG_DOC_MAP.put(JsonLanguage.INSTANCE.getID(), new JsonLangDoc());
+    }
 
     @Override
     public @NotNull List<Class<? extends PsiElement>> getRefClass() {
@@ -125,5 +129,11 @@ public class JsonLangDoc extends BaseLangDoc {
         @NotNull String path = info.file.getPath();
         @NotNull SortedMap<String, Map<String, List<String>>> sortedMap = ConfCacheGetUtils.filterPath(fileMap, path);
         return GetFromDocMap.get(sortedMap, jsonValue);
+    }
+
+    @Nullable
+    @Override
+    protected <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
+        return null;
     }
 }
