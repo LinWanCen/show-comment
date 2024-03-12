@@ -15,6 +15,7 @@ Show doc comment in the Project view Tree, line End, json, other
   <li>Java, Kotlin, Groovy, Scala
   <li>C/C++/OC, Python, Go, Rust, Ruby
   <li>JS/TS, PHP, SQL
+  <li>YAML/yml
 </ul>
 
 <h4>English Note</h4>

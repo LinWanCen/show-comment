@@ -13,6 +13,7 @@ Show doc comment in the Project view Tree, line End, json, other
   <li>Java, Kotlin, Groovy, Scala
   <li>C/C++/OC, Python, Go, Rust, Ruby
   <li>JS/TS, PHP, SQL
+  <li>YAML/yml
 </ul>
 
 <h4>English Note</h4>
@@ -136,6 +137,7 @@ Show doc comment in the Project view Tree, line End, json, other
   <depends optional="true" config-file="ruby.xml">com.intellij.modules.ruby</depends>
   <depends optional="true" config-file="c.xml">com.intellij.modules.clion</depends>
   <depends optional="true" config-file="swift.xml">com.intellij.modules.swift.lang</depends>
+  <depends optional="true" config-file="yaml.xml">org.jetbrains.plugins.yaml</depends>
   <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
 
   <applicationListeners>

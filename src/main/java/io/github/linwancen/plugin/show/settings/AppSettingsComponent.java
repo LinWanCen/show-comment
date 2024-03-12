@@ -29,10 +29,10 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentScalaBase = new JBCheckBox("// Scala ");
     private final JBCheckBox showLineEndCommentGroovy = new JBCheckBox("   Groovy ");
     private final JBCheckBox showLineEndCommentGroovyBase = new JBCheckBox("// Groovy ");
-    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("   js ");
-    private final JBCheckBox showLineEndCommentJsBase = new JBCheckBox("// js ");
-    private final JBCheckBox showLineEndCommentPhp = new JBCheckBox("   php ");
-    private final JBCheckBox showLineEndCommentPhpBase = new JBCheckBox("// php ");
+    private final JBCheckBox showLineEndCommentJs = new JBCheckBox("   JS ");
+    private final JBCheckBox showLineEndCommentJsBase = new JBCheckBox("// JS ");
+    private final JBCheckBox showLineEndCommentPhp = new JBCheckBox("   PHP ");
+    private final JBCheckBox showLineEndCommentPhpBase = new JBCheckBox("// PHP ");
     private final JBCheckBox showLineEndCommentPy = new JBCheckBox("  Python ");
     private final JBCheckBox showLineEndCommentPyBase = new JBCheckBox("# Python ");
     private final JBCheckBox showLineEndCommentGo = new JBCheckBox("   Go ");
@@ -41,8 +41,9 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentRubyBase = new JBCheckBox("// Ruby ");
     private final JBCheckBox showLineEndCommentCBase = new JBCheckBox("// C ");
     private final JBCheckBox showLineEndCommentSwiftBase = new JBCheckBox("// Swift ");
-    private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    sql ");
-    private final JBCheckBox showLineEndCommentJson = new JBCheckBox("    json ");
+    private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    SQL ");
+    private final JBCheckBox showLineEndCommentJson = new JBCheckBox("    JSON ");
+    private final JBCheckBox showLineEndCommentYaml = new JBCheckBox("    YAML ");
     private final JBTextField lineTags = new JBTextField();
     private final JBCheckBox getToSet = new JBCheckBox("get --> set ");
     private final JBCheckBox fromNew = new JBCheckBox("java new ");
@@ -90,7 +91,8 @@ public class AppSettingsComponent {
 
                         showLineEndCommentGo,
                         showLineEndCommentSql,
-                        showLineEndCommentJson
+                        showLineEndCommentJson,
+                        showLineEndCommentYaml
                 ), 1)
                 .addComponent(JPanelFactory.of(
                         showLineEndCommentJsBase,
@@ -357,6 +359,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndCommentJson(boolean newStatus) {
         showLineEndCommentJson.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentYaml() {
+        return showLineEndCommentYaml.isSelected();
+    }
+
+    public void setShowLineEndCommentYaml(boolean newStatus) {
+        showLineEndCommentYaml.setSelected(newStatus);
     }
 
     // endregion line end
