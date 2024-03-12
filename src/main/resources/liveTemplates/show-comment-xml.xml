@@ -10,4 +10,34 @@
       <option name="XSL_TEXT" value="false"/>
     </context>
   </template>
+  <template name="reg" value="    &lt;!-- region $SELECTION$ --&gt;" description="&lt;!--  region --&gt;" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="HTML" value="true"/>
+      <option name="HTML_TEXT" value="false"/>
+      <option name="JSP" value="true"/>
+      <option name="MAVEN" value="true"/>
+      <option name="XML" value="true"/>
+      <option name="XSL_TEXT" value="false"/>
+    </context>
+  </template>
+  <template name="end" value="    &lt;!-- endregion $SELECTION$ --&gt;" description="&lt;!--  endregion --&gt;" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="HTML" value="true"/>
+      <option name="HTML_TEXT" value="false"/>
+      <option name="JSP" value="true"/>
+      <option name="MAVEN" value="true"/>
+      <option name="XML" value="true"/>
+      <option name="XSL_TEXT" value="false"/>
+    </context>
+  </template>
+  <template name="la" value="    &lt;!-- language=&quot;$SELECTION$&quot; --&gt;" description="&lt;!--  language --&gt;" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="HTML" value="true"/>
+      <option name="HTML_TEXT" value="false"/>
+      <option name="JSP" value="true"/>
+      <option name="MAVEN" value="true"/>
+      <option name="XML" value="true"/>
+      <option name="XSL_TEXT" value="false"/>
+    </context>
+  </template>
 </templateSet>

@@ -28,6 +28,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_STATEMENT" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TS_STATEMENT" value="false"/>
@@ -63,6 +73,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_STATEMENT" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TS_STATEMENT" value="false"/>
@@ -98,6 +118,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_STATEMENT" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TS_STATEMENT" value="false"/>
@@ -133,6 +163,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_STATEMENT" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TS_STATEMENT" value="false"/>
@@ -164,6 +204,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_TOPLEVEL" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TypeScript" value="true"/>
@@ -194,6 +244,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_TOPLEVEL" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TypeScript" value="true"/>
@@ -224,6 +284,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_TOPLEVEL" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TypeScript" value="true"/>
@@ -255,6 +325,16 @@
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_TOPLEVEL" value="false"/>
+      <option name="PHP" value="true" />
+      <option name="PHP Comment" value="false" />
+      <option name="PHP Expression" value="false" />
+      <option name="PHP Statement" value="false" />
+      <option name="PHP String Literal" value="false" />
+      <option name="SCALA" value="true" />
+      <option name="SCALA_COMMENT" value="false" />
+      <option name="SCALA_IMPLICIT_VALUE_CLASS" value="false" />
+      <option name="SCALA_STRING" value="false" />
+      <option name="SCALA_XML" value="false" />
       <option name="TS_CLASS" value="false"/>
       <option name="TS_EXPRESSION" value="false"/>
       <option name="TypeScript" value="true"/>

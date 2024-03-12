@@ -1,0 +1,29 @@
+<templateSet group="show-comment-#">
+  <template name="la" value="# language=&quot;$SELECTION$&quot;" description="# language=&quot;&quot;" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="RUBY" value="true" />
+      <option name="RUBY_COMMENTS" value="false" />
+      <option name="RUBY_STRING" value="false" />
+      <option name="SHELL_SCRIPT" value="true" />
+      <option name="SQL" value="true" />
+    </context>
+  </template>
+  <template name="reg" value="# region $SELECTION$" description="# language=&quot;&quot;" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="RUBY" value="true" />
+      <option name="RUBY_COMMENTS" value="false" />
+      <option name="RUBY_STRING" value="false" />
+      <option name="SHELL_SCRIPT" value="true" />
+      <option name="SQL" value="true" />
+    </context>
+  </template>
+  <template name="end" value="# endregion $SELECTION$" description="# language=&quot;&quot;" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="RUBY" value="true" />
+      <option name="RUBY_COMMENTS" value="false" />
+      <option name="RUBY_STRING" value="false" />
+      <option name="SHELL_SCRIPT" value="true" />
+      <option name="SQL" value="true" />
+    </context>
+  </template>
+</templateSet>
