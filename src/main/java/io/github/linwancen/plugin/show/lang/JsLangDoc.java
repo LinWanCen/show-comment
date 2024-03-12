@@ -33,15 +33,11 @@ public class JsLangDoc extends BaseLangDoc {
     public @Nullable <T extends SettingsInfo> String resolveDocRaw(@NotNull T info, @NotNull PsiElement resolve) {
         @Nullable PsiComment psiComment = JSDocumentationUtils.findOwnDocCommentForImplicitElement(resolve);
         if (psiComment == null) {
+            if (info.appSettings.showLineEndCommentJsBase) {
+                return super.resolveDocRaw(info, resolve);
+            }
             return null;
         }
-        String text = psiComment.getText();
-        if (text != null) {
-            return text;
-        }
-        if (info.appSettings.showLineEndCommentJsBase) {
-            return super.resolveDocRaw(info, resolve);
-        }
-        return null;
+        return psiComment.getText();
     }
 }
