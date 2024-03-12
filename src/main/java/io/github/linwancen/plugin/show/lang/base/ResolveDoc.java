@@ -100,6 +100,9 @@ public class ResolveDoc {
             }
             if (text != null) {
                 sb.insert(0, "\n").insert(0, text);
+                if (text.contains("/*")) {
+                    break;
+                }
             }
         }
         if (sb.length() == 0) {
