@@ -1,4 +1,4 @@
-// file tree doc is any where not doc comment
+//! file tree doc is any where not doc comment
 
 fn main() {
     my_fun()
