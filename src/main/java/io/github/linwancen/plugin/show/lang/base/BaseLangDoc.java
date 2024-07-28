@@ -104,6 +104,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     /**
+     * skip english and text
      * Override like SQL
      */
     @Nullable
@@ -146,6 +147,9 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         return null;
     }
 
+    /**
+     * static! byte to src, by language
+     */
     public static @Nullable <T extends SettingsInfo> String resolveDoc(@NotNull T info,
                                                                        @NotNull PsiElement psiElement) {
         try {
@@ -166,6 +170,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     /**
+     * line and delete /*#, filter by pattern
      * Override like Java/Kotlin/Python
      */
     @Nullable
@@ -183,6 +188,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     }
 
     /**
+     * LineEnd and LineUp
      * Override like JS/Go
      */
     @Nullable

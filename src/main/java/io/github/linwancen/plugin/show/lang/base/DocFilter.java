@@ -20,9 +20,9 @@ public class DocFilter {
             "|^ */\\*++ *+" +
             // ****/ xx block end, not only line start and must before ****
             "| *\\*++/.*" +
-            // **** xx  block body
+            // **** xx block body
             "|^ *\\*++ *+" +
-            // #### xx  python and shell start
+            // #### xx python and sh start
             "|^ *#++ *+" +
             // -- xx SQL
             "|^ *--++ *+"
@@ -31,7 +31,7 @@ public class DocFilter {
     private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("[\r\n]");
 
     /**
-     * delete / * # in resolveDocPrint()
+     * line and delete /*# in resolveDocPrint()
      * end with space
      */
     @NotNull

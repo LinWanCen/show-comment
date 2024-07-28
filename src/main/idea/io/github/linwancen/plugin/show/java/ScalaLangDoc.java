@@ -67,7 +67,7 @@ public class ScalaLangDoc extends JavaLangDoc {
     @Override
     protected <T extends SettingsInfo> void appendTag(@NotNull T info, @NotNull StringBuilder tagStrBuilder,
                                                       @NotNull PsiDocComment psiDocComment, @NotNull String name) {
-        String key = "@" + name;
+        @NotNull String key = "@" + name;
         @NotNull PsiDocTag[] tags = psiDocComment.findTagsByName(key);
         for (@NotNull PsiDocTag tag : tags) {
             if (tag instanceof ScDocTag) {
