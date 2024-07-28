@@ -160,6 +160,7 @@ Show doc comment in the Project view Tree, line End, json, other
   <extensions defaultExtensionNs="com.intellij">
     <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd"/>
     <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
+    <defaultLiveTemplates file="/liveTemplates/show-comment-_.xml"/>
     <defaultLiveTemplates file="/liveTemplates/show-comment-doc.xml"/>
     <defaultLiveTemplates file="/liveTemplates/show-comment-xml.xml"/>
 

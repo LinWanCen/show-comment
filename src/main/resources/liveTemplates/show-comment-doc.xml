@@ -24,7 +24,6 @@
       <option name="JS_EXPRESSION" value="false"/>
       <option name="JS_STATEMENT" value="false"/>
       <option name="KOTLIN" value="true"/>
-      <option name="KOTLIN_CLASS" value="false"/>
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_STATEMENT" value="false"/>
@@ -69,7 +68,6 @@
       <option name="JS_EXPRESSION" value="false"/>
       <option name="JS_STATEMENT" value="false"/>
       <option name="KOTLIN" value="true"/>
-      <option name="KOTLIN_CLASS" value="false"/>
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
       <option name="KOTLIN_STATEMENT" value="false"/>
@@ -200,10 +198,7 @@
       <option name="JS_DOT_PROPERTY_ACCESS" value="false"/>
       <option name="JS_EXPRESSION" value="false"/>
       <option name="KOTLIN" value="true"/>
-      <option name="KOTLIN_CLASS" value="false"/>
       <option name="KOTLIN_COMMENT" value="false"/>
-      <option name="KOTLIN_EXPRESSION" value="false"/>
-      <option name="KOTLIN_TOPLEVEL" value="false"/>
       <option name="PHP" value="true" />
       <option name="PHP Comment" value="false" />
       <option name="PHP Expression" value="false" />
@@ -240,10 +235,8 @@
       <option name="JS_DOT_PROPERTY_ACCESS" value="false"/>
       <option name="JS_EXPRESSION" value="false"/>
       <option name="KOTLIN" value="true"/>
-      <option name="KOTLIN_CLASS" value="false"/>
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
-      <option name="KOTLIN_TOPLEVEL" value="false"/>
       <option name="PHP" value="true" />
       <option name="PHP Comment" value="false" />
       <option name="PHP Expression" value="false" />
@@ -280,10 +273,8 @@
       <option name="JS_DOT_PROPERTY_ACCESS" value="false"/>
       <option name="JS_EXPRESSION" value="false"/>
       <option name="KOTLIN" value="true"/>
-      <option name="KOTLIN_CLASS" value="false"/>
       <option name="KOTLIN_COMMENT" value="false"/>
       <option name="KOTLIN_EXPRESSION" value="false"/>
-      <option name="KOTLIN_TOPLEVEL" value="false"/>
       <option name="PHP" value="true" />
       <option name="PHP Comment" value="false" />
       <option name="PHP Expression" value="false" />
