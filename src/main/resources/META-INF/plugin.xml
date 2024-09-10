@@ -205,14 +205,14 @@ Show doc comment in the Project view Tree, line End, json, other
         class="io.github.linwancen.plugin.show.LineEndCopy"
         text="// Copy With Line Comment">
       <add-to-group group-id="EditorPopupMenu" anchor="after"
-                    relative-to-action="CopyReference"/>
+                    relative-to-action="CopyGroup"/>
     </action>
     <action
         id="io.github.linwancen.plugin.show.CopyReferenceSimple"
         class="io.github.linwancen.plugin.show.CopyReferenceSimple"
         text="Copy Class.Method / File:LineNum">
       <add-to-group group-id="EditorPopupMenu" anchor="after"
-                    relative-to-action="CopyReference"/>
+                    relative-to-action="CopyGroup"/>
     </action>
   </actions>
 </idea-plugin>

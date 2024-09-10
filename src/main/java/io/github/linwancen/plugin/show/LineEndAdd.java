@@ -1,11 +1,11 @@
 package io.github.linwancen.plugin.show;
 
+import com.intellij.ide.actions.CopyReferenceAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * on ProjectViewPopupMenu
  */
-public class LineEndAdd extends DumbAwareAction {
+public class LineEndAdd extends CopyReferenceAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(LineEndAdd.class);
 

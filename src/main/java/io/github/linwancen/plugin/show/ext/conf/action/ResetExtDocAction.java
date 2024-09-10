@@ -1,7 +1,7 @@
 package io.github.linwancen.plugin.show.ext.conf.action;
 
+import com.intellij.ide.actions.CopyReferenceAction;
 import com.intellij.ide.projectView.ProjectView;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * call ConfCache.clearAll
  * <br>Use Reset only for file sort
  */
-public class ResetExtDocAction extends AnAction {
+public class ResetExtDocAction extends CopyReferenceAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResetExtDocAction.class);
 

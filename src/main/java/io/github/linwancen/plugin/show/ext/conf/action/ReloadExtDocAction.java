@@ -1,7 +1,7 @@
 package io.github.linwancen.plugin.show.ext.conf.action;
 
+import com.intellij.ide.actions.CopyReferenceAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.Project;
 import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import io.github.linwancen.plugin.show.settings.ShowBundle;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * call ConfCache.loadAll
  */
-public class ReloadExtDocAction extends DumbAwareAction {
+public class ReloadExtDocAction extends CopyReferenceAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReloadExtDocAction.class);
 

@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show;
 
+import com.intellij.ide.actions.CopyReferenceAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
@@ -8,7 +9,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import io.github.linwancen.plugin.show.bean.FileInfo;
@@ -23,7 +23,7 @@ import java.awt.datatransfer.StringSelection;
 /**
  * on EditorPopupMenu
  */
-public class LineEndCopy extends DumbAwareAction {
+public class LineEndCopy extends CopyReferenceAction {
 
     private static final Logger LOG = LoggerFactory.getLogger(LineEndCopy.class);
 
