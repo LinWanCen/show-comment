@@ -153,6 +153,8 @@ Show doc comment in the Project view Tree, line End, json, other
   <projectListeners>
     <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileInitListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
+    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileInitListener"
+              topic="com.intellij.openapi.project.DumbService$DumbModeListener"/>
     <listener class="io.github.linwancen.plugin.show.cache.CacheUpdateProjectListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
   </projectListeners>
