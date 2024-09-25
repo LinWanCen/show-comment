@@ -2,8 +2,6 @@ package io.github.linwancen.plugin.show.ext.conf;
 
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -124,21 +122,14 @@ public class ConfCache {
     }
 
     public static void loadAll(@NotNull Project project) {
-        new Task.Backgroundable(project, "Show Load xxx.tree/key/doc/json.tsv") {
-            @Override
-            public void run(@NotNull ProgressIndicator indicator) {
-                indicator.setIndeterminate(false);
+        ApplicationManager.getApplication().executeOnPooledThread(() ->
                 DumbService.getInstance(project).runReadActionInSmartMode(() ->
                         ApplicationManager.getApplication().runReadAction(() -> {
                             @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project,
                                     TsvLoader.EXT);
                             @NotNull StringBuilder sb = new StringBuilder();
-                            double i = 0;
                             for (@NotNull VirtualFile file : files) {
-                                indicator.setText(file.getName());
                                 load(file);
-                                i++;
-                                indicator.setFraction(i / files.size());
                                 sb.append(file.getName()).append("\n");
                             }
                             if (files.isEmpty()) {
@@ -148,9 +139,7 @@ public class ConfCache {
                                 ProjectView.getInstance(project).refresh();
                             }
                             LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
-                        }));
-            }
-        }.queue();
+                        })));
     }
 
     public static void loadFile(@NotNull VirtualFile file, @Nullable Project project) {
