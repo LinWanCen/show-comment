@@ -66,13 +66,13 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
 
     @NotNull
     public String lineEndPrefix = "   // ";
+    public boolean skipAscii = !"en".equals(Locale.getDefault().getLanguage());
+    public boolean skipBlank = true;
+    public boolean skipAnnotation = true;
     public boolean getToSet = true;
     public boolean fromNew = true;
     public boolean fromParam = false;
     public boolean enumDoc = true;
-    public boolean skipAnnotation = true;
-    public boolean skipAscii = !"en".equals(Locale.getDefault().getLanguage());
-    public boolean skipBlank = true;
 
     @NotNull
     public static AppSettingsState getInstance() {

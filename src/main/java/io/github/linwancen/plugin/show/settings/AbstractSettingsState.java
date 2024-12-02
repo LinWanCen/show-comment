@@ -102,6 +102,7 @@ public abstract class AbstractSettingsState {
     }
 
 
+    @NotNull
     public String getAnnoDoc() {
         return Arrays.stream(annoDoc)
                 .map(a -> String.join("#", a))

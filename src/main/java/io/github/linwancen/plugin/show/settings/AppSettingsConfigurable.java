@@ -72,13 +72,14 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= !settings.lineEndJsonTextAttr.getForegroundColor().equals(mySettingsComponent.getLineEndJsonColor());
         modified |= !mySettingsComponent.getLineEndPrefix().equals(settings.lineEndPrefix);
 
+        modified |= mySettingsComponent.getSkipAscii() != settings.skipAscii;
+        modified |= mySettingsComponent.getSkipBlank() != settings.skipBlank;
+        modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
         modified |= mySettingsComponent.getGetToSet() != settings.getToSet;
+
         modified |= mySettingsComponent.getFromNew() != settings.fromNew;
         modified |= mySettingsComponent.getFromParam() != settings.fromParam;
         modified |= mySettingsComponent.getEnumDoc() != settings.enumDoc;
-        modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
-        modified |= mySettingsComponent.getSkipAscii() != settings.skipAscii;
-        modified |= mySettingsComponent.getSkipBlank() != settings.skipBlank;
         return modified;
     }
 
@@ -122,13 +123,14 @@ public class AppSettingsConfigurable implements Configurable {
         settings.lineEndJsonTextAttr.setForegroundColor(mySettingsComponent.getLineEndJsonColor());
         settings.lineEndPrefix = mySettingsComponent.getLineEndPrefix();
 
+        settings.skipAscii = mySettingsComponent.getSkipAscii();
+        settings.skipBlank = mySettingsComponent.getSkipBlank();
+        settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
         settings.getToSet = mySettingsComponent.getGetToSet();
+
         settings.fromNew = mySettingsComponent.getFromNew();
         settings.fromParam = mySettingsComponent.getFromParam();
         settings.enumDoc = mySettingsComponent.getEnumDoc();
-        settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
-        settings.skipAscii = mySettingsComponent.getSkipAscii();
-        settings.skipBlank = mySettingsComponent.getSkipBlank();
     }
 
     @Override
@@ -175,13 +177,14 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setLineEndJsonColor(settings.lineEndJsonTextAttr.getForegroundColor());
         mySettingsComponent.setLineEndPrefix(settings.lineEndPrefix);
 
+        mySettingsComponent.setSkipAscii(settings.skipAscii);
+        mySettingsComponent.setSkipBlank(settings.skipBlank);
+        mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
         mySettingsComponent.setGetToSet(settings.getToSet);
+
         mySettingsComponent.setFromNew(settings.fromNew);
         mySettingsComponent.setFromParam(settings.fromParam);
         mySettingsComponent.setEnumDoc(settings.enumDoc);
-        mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
-        mySettingsComponent.setSkipAscii(settings.skipAscii);
-        mySettingsComponent.setSkipBlank(settings.skipBlank);
     }
 
     @Override

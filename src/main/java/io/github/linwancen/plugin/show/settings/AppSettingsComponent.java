@@ -18,7 +18,6 @@ public class AppSettingsComponent {
     private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
     private final JBCheckBox compact = new JBCheckBox(ShowBundle.message("compact"));
     private final JBCheckBox treeCache = new JBCheckBox(ShowBundle.message("tree.cache"));
-    private final JBTextField treeTags = new JBTextField();
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
     private final JBCheckBox lineEndCache = new JBCheckBox(ShowBundle.message("line.end.cache"));
     private final JBCheckBox showLineEndCommentJava = new JBCheckBox("   Java ");
@@ -44,14 +43,15 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    SQL ");
     private final JBCheckBox showLineEndCommentJson = new JBCheckBox("    JSON ");
     private final JBCheckBox showLineEndCommentYaml = new JBCheckBox("    YAML ");
+    private final JBTextField treeTags = new JBTextField();
     private final JBTextField lineTags = new JBTextField();
+    private final JBCheckBox skipAscii = new JBCheckBox(ShowBundle.message("skip.english"));
+    private final JBCheckBox skipBlank = new JBCheckBox(ShowBundle.message("skip.blank"));
+    private final JBCheckBox skipAnnotation = new JBCheckBox(ShowBundle.message("skip.anno"));
     private final JBCheckBox getToSet = new JBCheckBox("get --> set ");
     private final JBCheckBox fromNew = new JBCheckBox("java new ");
     private final JBCheckBox fromParam = new JBCheckBox("java @param ");
     private final JBCheckBox enumDoc = new JBCheckBox("java enum ");
-    private final JBCheckBox skipAnnotation = new JBCheckBox(ShowBundle.message("skip.anno"));
-    private final JBCheckBox skipAscii = new JBCheckBox(ShowBundle.message("skip.english"));
-    private final JBCheckBox skipBlank = new JBCheckBox(ShowBundle.message("skip.blank"));
     private final ColorPanel lineEndColor = new ColorPanel();
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBTextField lineEndPrefix = new JBTextField();
@@ -118,7 +118,8 @@ public class AppSettingsComponent {
                 new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
                 .addSeparator()
-                .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc, getToSet, skipAnnotation, skipAscii, skipBlank), 1)
+                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet), 1)
+                .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc), 1)
                 .addSeparator()
                 .addComponent(text)
                 .addSeparator();
@@ -380,6 +381,30 @@ public class AppSettingsComponent {
         lineTags.setText(newText);
     }
 
+    public boolean getSkipAscii() {
+        return skipAscii.isSelected();
+    }
+
+    public void setSkipAscii(boolean newStatus) {
+        skipAscii.setSelected(newStatus);
+    }
+
+    public boolean getSkipBlank() {
+        return skipBlank.isSelected();
+    }
+
+    public void setSkipBlank(boolean newStatus) {
+        skipBlank.setSelected(newStatus);
+    }
+
+    public boolean getSkipAnnotation() {
+        return skipAnnotation.isSelected();
+    }
+
+    public void setSkipAnnotation(boolean newStatus) {
+        skipAnnotation.setSelected(newStatus);
+    }
+
     public boolean getGetToSet() {
         return getToSet.isSelected();
     }
@@ -410,30 +435,6 @@ public class AppSettingsComponent {
 
     public void setEnumDoc(boolean newStatus) {
         enumDoc.setSelected(newStatus);
-    }
-
-    public boolean getSkipAnnotation() {
-        return skipAnnotation.isSelected();
-    }
-
-    public void setSkipAnnotation(boolean newStatus) {
-        skipAnnotation.setSelected(newStatus);
-    }
-
-    public boolean getSkipAscii() {
-        return skipAscii.isSelected();
-    }
-
-    public void setSkipAscii(boolean newStatus) {
-        skipAscii.setSelected(newStatus);
-    }
-
-    public boolean getSkipBlank() {
-        return skipBlank.isSelected();
-    }
-
-    public void setSkipBlank(boolean newStatus) {
-        skipBlank.setSelected(newStatus);
     }
 
     @Nullable
