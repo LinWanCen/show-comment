@@ -24,7 +24,7 @@ public class ConfFileInitListener implements DumbService.DumbModeListener, Proje
     public void exitDumbMode() {
         try {
             @NotNull Project[] projects = ProjectManager.getInstance().getOpenProjects();
-            for (Project project : projects) {
+            for (@NotNull Project project : projects) {
                 PROJECT_LOAD_MAP.computeIfAbsent(project, k -> {
                     ConfCache.loadAll(project);
                     return true;

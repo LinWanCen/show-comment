@@ -181,7 +181,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         }
         @NotNull String cutDoc = DocFilter.cutDoc(s, info, true);
         @NotNull String filterDoc = DocFilter.filterDoc(cutDoc, info.globalSettings, info.projectSettings);
-        String trimDoc = filterDoc.trim();
+        @NotNull String trimDoc = filterDoc.trim();
         if (trimDoc.isEmpty()) {
             return null;
         }

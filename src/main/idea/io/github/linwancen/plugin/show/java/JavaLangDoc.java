@@ -170,7 +170,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             @Nullable PsiDocTagValue value = tag.getValueElement();
             if (value != null) {
                 DocFilter.addHtml(tagStrBuilder, value.getText());
-            } else  {
+            } else {
                 @NotNull PsiElement[] dataElements = tag.getDataElements();
                 if (dataElements.length > 0) {
                     DocFilter.addHtml(tagStrBuilder, dataElements[0].getText());

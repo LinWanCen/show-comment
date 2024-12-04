@@ -31,7 +31,7 @@ public class RustLangDoc extends BaseLangDoc {
     @Nullable
     @Override
     protected <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
-        String s = super.resolveDocPrint(info, resolve);
+        @Nullable String s = super.resolveDocPrint(info, resolve);
         if (s != null && s.startsWith("!")) {
             return s.substring(1);
         }

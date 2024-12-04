@@ -5,7 +5,13 @@ import com.intellij.json.psi.JsonStringLiteral;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiReferenceContributor;
+import com.intellij.psi.PsiReferenceProvider;
+import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import io.github.linwancen.plugin.show.java.doc.PsiClassUtils;
@@ -38,28 +44,33 @@ public class JsonJumpJava extends PsiReferenceContributor {
                     @Override
                     public @NotNull PsiReference[] getReferencesByElement(@NotNull PsiElement element,
                                                                           @NotNull ProcessingContext context) {
-                        @Nullable JsonProperty jsonProp = PsiTreeUtil.getParentOfType(
-                                element, JsonProperty.class, true);
-                        if (jsonProp == null) {
-                            return PsiReference.EMPTY_ARRAY;
-                        }
-                        VirtualFile virtualFile = element.getContainingFile().getVirtualFile();
-                        if (virtualFile == null) {
-                            return PsiReference.EMPTY_ARRAY;
-                        }
+                        try {
+                            @Nullable JsonProperty jsonProp = PsiTreeUtil.getParentOfType(
+                                    element, JsonProperty.class, true);
+                            if (jsonProp == null) {
+                                return PsiReference.EMPTY_ARRAY;
+                            }
+                            VirtualFile virtualFile = element.getContainingFile().getVirtualFile();
+                            if (virtualFile == null) {
+                                return PsiReference.EMPTY_ARRAY;
+                            }
 
-                        @NotNull Project project = element.getProject();
-                        @NotNull List<PsiField> psiFields = new ArrayList<>();
-                        @NotNull List<PsiField> tips = new ArrayList<>();
-                        @NotNull PsiClass[] psiClasses = PsiClassUtils.encClass(virtualFile, project);
-                        @NotNull List<String> jsonPath = jsonPath(jsonProp);
-                        put(project, psiFields, tips, psiClasses, jsonPath, jsonPath.size() - 1);
+                            @NotNull Project project = element.getProject();
+                            @NotNull List<PsiField> psiFields = new ArrayList<>();
+                            @NotNull List<PsiField> tips = new ArrayList<>();
+                            @NotNull PsiClass[] psiClasses = PsiClassUtils.encClass(virtualFile, project);
+                            @NotNull List<String> jsonPath = jsonPath(jsonProp);
+                            put(project, psiFields, tips, psiClasses, jsonPath, jsonPath.size() - 1);
 
-                        @NotNull List<PsiReference> list = new ArrayList<>();
-                        for (@NotNull PsiField psiField : psiFields) {
-                            list.add(new JsonRef<>(element, psiField, tips));
+                            @NotNull List<PsiReference> list = new ArrayList<>();
+                            for (@NotNull PsiField psiField : psiFields) {
+                                list.add(new JsonRef<>(element, psiField, tips));
+                            }
+                            return list.toArray(PsiReference.EMPTY_ARRAY);
+                        } catch (Throwable e) {
+                            LOG.error("JsonJumpJava.register catch Throwable but log to record.", e);
                         }
-                        return list.toArray(PsiReference.EMPTY_ARRAY);
+                        return PsiReference.EMPTY_ARRAY;
                     }
                 });
     }
