@@ -30,58 +30,58 @@ Show doc comment in the Project view Tree, line End, json, other
 <h5>External Comment</h5>
 <a href="https://github.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">Demo(GitHub)</a>
 <ul>
-<li>Reload: Tools -> 🔄 // Reload External Comment
-<li>path/[any][filename.]ext.tree.tsv // file and folder tree comment 📝 📁
-<li>path/[any][filename.]ext.key.tsv  // line keywords to split and comment
-<li>path/[any][filename.]ext.doc.tsv  // line words comment
-<li>In path, "doc" can replace any, and can use % like in SQL, effect at previous layer when folder named -1
-<li>The lines in key.tsv will be concatenated with `|` to regexp; longer str should in front; startWith `?` to exclude
-<li>Chang tsv file in find pop window would not reload!
-<li>The tsv conf file must could be search in "Go to File" (Ctrl + Shift + N)
+  <li>Reload: Tools -> 🔄 // Reload External Comment
+  <li>path/[any][filename.]ext.tree.tsv // file and folder tree comment 📝 📁
+  <li>path/[any][filename.]ext.key.regexp  // line keywords to split and comment
+  <li>path/[any][filename.]ext.doc.tsv  // line words comment
+  <li>In path, "doc" can replace any, and can use % like in SQL, effect at previous layer when folder named -1
+  <li>The lines in key.regexp will be concatenated with `|` to regexp; longer str should in front; startWith `?` to exclude
+  <li>Chang tsv file in find pop window would not reload!
+  <li>The tsv conf file must could be search in "Go to File" (Ctrl + Shift + N)
 </ul>
 
 <h5>My Project</h5>
 <ul>
-<li>Show doc comment at the Project view Tree, line End, json etc.:
-<a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
-</li>
-<li>show line count for file / method, show children count for dir in project view (tree on left):
-<a href="https://plugins.jetbrains.com/plugin/23300-line-num">Line Num</a>
-</li>
-<li>Method call usage graph and maven dependency graph:
-<a href="https://plugins.jetbrains.com/plugin/21242-draw-graph">Draw Graph</a>
-</li>
-<li>Find author/comment of multiple files or lines and export Find:
-<a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
-<li>Auto sync coverage and capture coverage during debug:
-<a href="https://plugins.jetbrains.com/plugin/20780-sync-coverage">Sync Coverage</a>
+  <li>Show doc comment at the Project view Tree, line End, json etc.:
+    <a href="https://plugins.jetbrains.com/plugin/18553-show-comment">Show Comment</a>
+  </li>
+  <li>show line count for file / method, show children count for dir in project view (tree on left):
+    <a href="https://plugins.jetbrains.com/plugin/23300-line-num">Line Num</a>
+  </li>
+  <li>Method call usage graph and maven dependency graph:
+    <a href="https://plugins.jetbrains.com/plugin/21242-draw-graph">Draw Graph</a>
+  </li>
+  <li>Find author/comment of multiple files or lines and export Find:
+    <a href="https://plugins.jetbrains.com/plugin/20557-find-author">Find Author</a>
+  <li>Auto sync coverage and capture coverage during debug:
+    <a href="https://plugins.jetbrains.com/plugin/20780-sync-coverage">Sync Coverage</a>
 </ul>
 
 <hr>
 <h4>中文说明</h4>
 <ul>
-<li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
-<li>在行末尾显示 引用对象的文档注释，欢迎反馈您想要支持的语言，欢迎 C# 大神研究 CsLineEnd.java
-<li>输入 doc / docc 等生成 /** */
-<li>json 字段注释从 xxx.json.tsv 读取
-<li>json 字典注释从 键名.tsv 读取
-<li>支持 "xx-类全名或简名.json" 读取字段注释和跳转
-<li>支持 从配置文件获取外部注释用于文件夹、资源、COBOL 等
-<li>修改配置：设置 -> 工具 -> // Show Comment App/Global/Project
+  <li>在结构树显示 文件注释 或 项目说明 (README.md pom.xml 等，可设置)
+  <li>在行末尾显示 引用对象的文档注释，欢迎反馈您想要支持的语言，欢迎 C# 大神研究 CsLineEnd.java
+  <li>输入 doc / docc 等生成 /** */
+  <li>json 字段注释从 xxx.json.tsv 读取
+  <li>json 字典注释从 键名.tsv 读取
+  <li>支持 "xx-类全名或简名.json" 读取字段注释和跳转
+  <li>支持 从配置文件获取外部注释用于文件夹、资源、COBOL 等
+  <li>修改配置：设置 -> 工具 -> // Show Comment App/Global/Project
 </ul>
 
 <h5>外部注释</h5>
 <a href="https://gitee.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">示例(Gitee)</a>
 ：比如你要给 .go 的文件配置文件注释可以放在相同目录或父目录的 xxx.go.tree.tsv 中
 <ul>
-<li>重新加载：工具 -> "🔄 // Reload External Comment"
-<li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁
-<li>path/[any][filename.]ext.key.tsv  // 切割关键字与注释
-<li>path/[any][filename.]ext.doc.tsv  // 词注释
-<li>key.tsv 的每一行将会用`|`连接起来形成正则表达式，较长的关键字应该放在前面，用 `?` 开头排除
-<li>doc 文件夹可以替换任何一层文件夹，可以像 SQL 那样用 % 模糊匹配，文件夹名为 -1 时在上一层文件夹生效
-<li>在搜索弹出窗中修改 tsv 文件将不会被重加载
-<li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
+  <li>重新加载：工具 -> "🔄 // Reload External Comment"
+  <li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁
+  <li>path/[any][filename.]ext.key.regexp  // 切割关键字与注释
+  <li>path/[any][filename.]ext.doc.tsv  // 词注释
+  <li>key.regexp 的每一行将会用`|`连接起来形成正则表达式，较长的关键字应该放在前面，用 `?` 开头排除
+  <li>doc 文件夹可以替换任何一层文件夹，可以像 SQL 那样用 % 模糊匹配，文件夹名为 -1 时在上一层文件夹生效
+  <li>在搜索弹出窗中修改 tsv 文件将不会被重加载
+  <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
 </ul>
 
 <h5>我的项目</h5>
@@ -102,12 +102,11 @@ Show doc comment in the Project view Tree, line End, json, other
 </ul>
 
 <hr>
-<h4>找个女朋友</h4>
+<h4>反馈问题和需求</h4>
 <ul>
-<li>我的情况：1993-11-03，软件工程师，广发银行编制，宅，LOLm，NS，看书，写文章，KTV，爬山，逛街
-<li>我的性格：ISFP(探险家 内向 实际 感性 随性)
-<li>希望对方：广东省，与家人关系好，爱笑甜美大眼睛
-<li>有兴趣请联系 1498425439@qq.com，也欢迎反馈问题和需求
+  <a href="https://github.com/LinWanCen/show-comment/issues">GitHub issues</a>
+  <li>微信 LinWanCen
+  <li>邮箱 1498425439@qq.com
 </ul>
 
 <hr>
@@ -140,6 +139,10 @@ Show doc comment in the Project view Tree, line End, json, other
   <depends optional="true" config-file="json.xml">com.intellij.modules.json</depends>
   <depends optional="true" config-file="yaml.xml">org.jetbrains.plugins.yaml</depends>
   <!--<depends optional="true" config-file="cs.xml">com.intellij.modules.rider</depends>-->
+
+  <extensions defaultExtensionNs="org.jetbrains.kotlin">
+    <supportsKotlinPluginMode supportsK2="true" />
+  </extensions>
 
   <applicationListeners>
     <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileListener"

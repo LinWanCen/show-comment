@@ -34,10 +34,10 @@ Show doc comment in the Project view Tree, line End, json, other
 <ul>
 <li>Reload: Tools -> 🔄 // Reload External Comment
 <li>path/[any][filename.]ext.tree.tsv // file and folder tree comment 📝 📁
-<li>path/[any][filename.]ext.key.tsv  // line keywords to split and comment
+<li>path/[any][filename.]ext.key.regexp  // line keywords to split and comment
 <li>path/[any][filename.]ext.doc.tsv  // line words comment
 <li>In path, "doc" can replace any, and can use % like in SQL, effect at previous layer when folder named -1
-<li>The lines in key.tsv will be concatenated with `|` to regexp; longer str should in front; startWith `?` to exclude
+<li>The lines in key.regexp will be concatenated with `|` to regexp; longer str should in front; startWith `?` to exclude
 <li>Chang tsv file in find pop window would not reload!
 <li>The tsv conf file must could be search in "Go to File" (Ctrl + Shift + N)
 </ul>
@@ -78,9 +78,9 @@ Show doc comment in the Project view Tree, line End, json, other
 <ul>
 <li>重新加载：工具 -> "🔄 // Reload External Comment"
 <li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁
-<li>path/[any][filename.]ext.key.tsv  // 切割关键字与注释
+<li>path/[any][filename.]ext.key.regexp  // 切割关键字与注释
 <li>path/[any][filename.]ext.doc.tsv  // 词注释
-<li>key.tsv 的每一行将会用`|`连接起来形成正则表达式，较长的关键字应该放在前面，用 `?` 开头排除
+<li>key.regexp 的每一行将会用`|`连接起来形成正则表达式，较长的关键字应该放在前面，用 `?` 开头排除
 <li>doc 文件夹可以替换任何一层文件夹，可以像 SQL 那样用 % 模糊匹配，文件夹名为 -1 时在上一层文件夹生效
 <li>在搜索弹出窗中修改 tsv 文件将不会被重加载
 <li>tsv 配置文件必须能被搜索(Ctrl + Shift + N)
@@ -104,12 +104,11 @@ Show doc comment in the Project view Tree, line End, json, other
 </ul>
 
 <hr>
-<h4>找个女朋友</h4>
+<h4>反馈问题和需求</h4>
 <ul>
-<li>我的情况：1993-11-03，软件工程师，广发银行编制，宅，LOLm，NS，看书，写文章，KTV，爬山，逛街
-<li>我的性格：ISFP(探险家 内向 实际 感性 随性)
-<li>希望对方：广东省，与家人关系好，爱笑甜美大眼睛
-<li>有兴趣请联系 1498425439@qq.com，也欢迎反馈问题和需求
+<a href="https://github.com/LinWanCen/show-comment/issue">GitHub issues</a>
+<li>微信 LinWanCen
+<li>邮箱 1498425439@qq.com
 </ul>
 
 <hr>
@@ -126,6 +125,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.17  Add External Comment  support *.key.regexp and MyBatis xml demo in Git
 <li>2.16  Add line-end-comment  support Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  Add line-end-comment  java anno doc
 <li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
@@ -171,6 +171,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.17  增加 tsv 注释  支持 *.key.regexp 与 Mybatis xml 示例在 Git
 <li>2.16  增加 行末注释   支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  增加 行末注释   java 注解注释
 <li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")

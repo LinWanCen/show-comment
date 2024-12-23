@@ -2,7 +2,11 @@ package io.github.linwancen.plugin.show.ext.conf.listener;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.newvfs.BulkFileListener;
-import com.intellij.openapi.vfs.newvfs.events.*;
+import com.intellij.openapi.vfs.newvfs.events.VFileCopyEvent;
+import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent;
+import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
+import com.intellij.openapi.vfs.newvfs.events.VFileMoveEvent;
+import com.intellij.openapi.vfs.newvfs.events.VFilePropertyChangeEvent;
 import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import io.github.linwancen.plugin.show.ext.conf.TsvLoader;
 import org.jetbrains.annotations.NotNull;
@@ -35,20 +39,20 @@ public class ConfFileListener implements BulkFileListener {
         if (file == null) {
             return;
         }
+        if (event instanceof VFileMoveEvent) {
+            return;
+        }
         if (event instanceof VFilePropertyChangeEvent) {
             @NotNull VFilePropertyChangeEvent changeEvent = (VFilePropertyChangeEvent) event;
             if ("name".equals(changeEvent.getPropertyName())) {
                 String oldName = changeEvent.getOldValue().toString();
-                if (oldName.endsWith(TsvLoader.EXT)) {
+                if (oldName.endsWith(TsvLoader.EXT) || oldName.endsWith(TsvLoader.REGEXP_EXT)) {
                     // change cache too complicated so remove
                     ConfCache.remove(file, oldName);
                 }
             }
         }
-        if (!TsvLoader.EXT.equals(file.getExtension())) {
-            return;
-        }
-        if (event instanceof VFileMoveEvent) {
+        if (!TsvLoader.EXT.equals(file.getExtension()) && !TsvLoader.REGEXP_EXT.equals(file.getExtension())) {
             return;
         }
         if (event instanceof VFileDeleteEvent) {

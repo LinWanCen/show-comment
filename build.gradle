@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.16.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.17.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 repositories {
     mavenCentral()
@@ -95,6 +95,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.17  Add External Comment  support *.key.regexp and MyBatis xml demo in Git
 <li>2.16  Add line-end-comment  support Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  Add line-end-comment  java anno doc
 <li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
@@ -140,6 +141,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.17  增加 tsv 注释  支持 *.key.regexp 与 Mybatis xml 示例在 Git
 <li>2.16  增加 行末注释   支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  增加 行末注释   java 注解注释
 <li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")

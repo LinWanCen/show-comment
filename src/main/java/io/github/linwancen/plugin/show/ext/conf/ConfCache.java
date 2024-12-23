@@ -132,6 +132,12 @@ public class ConfCache {
                                 load(file);
                                 sb.append(file.getName()).append("\n");
                             }
+                            @NotNull Collection<VirtualFile> files2 = FilenameIndex.getAllFilesByExt(project,
+                                    TsvLoader.REGEXP_EXT);
+                            for (@NotNull VirtualFile file : files2) {
+                                load(file);
+                                sb.append(file.getName()).append("\n");
+                            }
                             if (files.isEmpty()) {
                                 return;
                             }
@@ -143,6 +149,9 @@ public class ConfCache {
     }
 
     public static void loadFile(@NotNull VirtualFile file, @Nullable Project project) {
+        if (!TsvLoader.EXT.equals(file.getExtension()) && !TsvLoader.REGEXP_EXT.equals(file.getExtension())) {
+            return;
+        }
         ApplicationManager.getApplication().invokeLater(() -> {
             ConfCache.load(file);
             if (project != null && !project.isDisposed()) {
@@ -152,9 +161,6 @@ public class ConfCache {
     }
 
     private static void load(@NotNull VirtualFile file) {
-        if (!TsvLoader.EXT.equals(file.getExtension())) {
-            return;
-        }
         @NotNull String name = file.getNameWithoutExtension();
         if (name.endsWith(KEY_MID_EXT)) {
             @NotNull String matchName = name.substring(0, name.length() - KEY_MID_EXT.length());
