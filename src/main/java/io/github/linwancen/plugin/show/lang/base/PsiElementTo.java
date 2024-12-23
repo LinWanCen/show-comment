@@ -26,7 +26,7 @@ public class PsiElementTo {
     }
 
     @Nullable
-    public static BaseLangDoc lineEnd(@NotNull PsiElement element) {
+    public static BaseLangDoc findLangDoc(@NotNull PsiElement element) {
         @Nullable Language language = element.getLanguage();
         while (true) {
             @Nullable BaseLangDoc lineEnd = BaseLangDoc.LANG_DOC_MAP.get(language.getID());

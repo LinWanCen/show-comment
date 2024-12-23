@@ -10,6 +10,7 @@ import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
+import io.github.linwancen.plugin.show.bean.FileInfo;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,19 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 return null;
             }
         }
-        @Nullable BaseLangDoc lineEnd = PsiElementTo.lineEnd(element);
+        @Nullable PsiElement injectedElement = info.inject.findInjectedElementAt(element.getContainingFile(), info.endOffset);
+        if (injectedElement != null) {
+            @Nullable FileInfo fileInfo = FileInfo.of(injectedElement.getContainingFile());
+            if (fileInfo != null) {
+                int lineNumber = fileInfo.document.getLineNumber(injectedElement.getTextRange().getStartOffset());
+                @Nullable LineInfo lineInfo = LineInfo.of(fileInfo, lineNumber);
+                if (lineInfo != null) {
+                    element = injectedElement;
+                    info = lineInfo;
+                }
+            }
+        }
+        @Nullable BaseLangDoc lineEnd = PsiElementTo.findLangDoc(element);
         if (lineEnd == null) {
             return null;
         }
@@ -162,11 +175,11 @@ public abstract class BaseLangDoc extends EditorLinePainter {
             // ignore
         }
         // support like java <-> kotlin
-        @Nullable BaseLangDoc lineEnd = PsiElementTo.lineEnd(psiElement);
-        if (lineEnd == null) {
+        @Nullable BaseLangDoc langDoc = PsiElementTo.findLangDoc(psiElement);
+        if (langDoc == null) {
             return null;
         }
-        return lineEnd.resolveDocPrint(info, psiElement);
+        return langDoc.resolveDocPrint(info, psiElement);
     }
 
     /**

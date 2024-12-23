@@ -125,6 +125,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.18  Add line-end-comment  support injected language like SQL
 <li>2.17  Add External Comment  support *.key.regexp and MyBatis xml demo in Git
 <li>2.16  Add line-end-comment  support Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  Add line-end-comment  java anno doc
@@ -171,6 +172,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.18  增加 行末注释   支持注入语言如 SQL
 <li>2.17  增加 tsv 注释  支持 *.key.regexp 与 Mybatis xml 示例在 Git
 <li>2.16  增加 行末注释   支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
 <li>2.15  增加 行末注释   java 注解注释

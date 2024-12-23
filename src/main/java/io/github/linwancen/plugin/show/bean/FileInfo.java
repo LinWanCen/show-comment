@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.bean;
 
+import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Document;
@@ -15,6 +16,7 @@ public class FileInfo extends SettingsInfo {
     public final @NotNull VirtualFile file;
     public final @NotNull Document document;
     public final @NotNull Project project;
+    public final @NotNull InjectedLanguageManager inject;
 
     protected FileInfo(@NotNull VirtualFile file, @NotNull Document document, @NotNull Project project,
                        @NotNull FuncEnum funcEnum) {
@@ -22,6 +24,7 @@ public class FileInfo extends SettingsInfo {
         this.project = project;
         this.file = file;
         this.document = document;
+        this.inject = InjectedLanguageManager.getInstance(project);
     }
 
     public static @Nullable FileInfo of(@NotNull VirtualFile file, @NotNull Project project) {
@@ -37,6 +40,10 @@ public class FileInfo extends SettingsInfo {
         if (psiFile == null) {
             return null;
         }
+        return of(psiFile);
+    }
+
+    public static @Nullable FileInfo of(@NotNull PsiFile psiFile) {
         @NotNull FileViewProvider viewProvider = psiFile.getViewProvider();
         @Nullable Document document = viewProvider.getDocument();
         if (document == null) {
