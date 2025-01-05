@@ -9,7 +9,6 @@ import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.kotlin.idea.KotlinLanguage;
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocName;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection;
@@ -19,10 +18,6 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression;
 import java.util.List;
 
 public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
-
-    static {
-        LANG_DOC_MAP.put(KotlinLanguage.INSTANCE.getID(), new KotlinLangDoc());
-    }
 
     @Override
     public @NotNull List<Class<? extends PsiElement>> getRefClass() {

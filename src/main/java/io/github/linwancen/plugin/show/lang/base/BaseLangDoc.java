@@ -28,6 +28,15 @@ import java.util.Map;
 public abstract class BaseLangDoc extends EditorLinePainter {
     public static final Map<String, BaseLangDoc> LANG_DOC_MAP = new LinkedHashMap<>();
 
+    static {
+        try {
+            // for 2024.2
+            Class<?> clazz = Class.forName("io.github.linwancen.plugin.show.java.KotlinLangDoc");
+            BaseLangDoc lang = (BaseLangDoc) clazz.getConstructor().newInstance();
+            LANG_DOC_MAP.put("kotlin", lang);
+        } catch (Exception ignored) {}
+    }
+
     public abstract @NotNull List<Class<? extends PsiElement>> getRefClass();
 
     public abstract boolean show(@NotNull LineInfo info);
