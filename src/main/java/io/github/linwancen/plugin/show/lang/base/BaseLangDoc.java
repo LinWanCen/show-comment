@@ -58,18 +58,20 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 return null;
             }
         }
-        @Nullable PsiElement injectedElement = info.inject.findInjectedElementAt(element.getContainingFile(), info.endOffset);
-        if (injectedElement != null) {
-            @Nullable FileInfo fileInfo = FileInfo.of(injectedElement.getContainingFile());
-            if (fileInfo != null) {
-                int lineNumber = fileInfo.document.getLineNumber(injectedElement.getTextRange().getStartOffset());
-                @Nullable LineInfo lineInfo = LineInfo.of(fileInfo, lineNumber);
-                if (lineInfo != null) {
-                    element = injectedElement;
-                    info = lineInfo;
+        try {
+            @Nullable PsiElement injectedElement = info.inject.findInjectedElementAt(element.getContainingFile(), info.endOffset);
+            if (injectedElement != null) {
+                @Nullable FileInfo fileInfo = FileInfo.of(injectedElement.getContainingFile());
+                if (fileInfo != null) {
+                    int lineNumber = fileInfo.document.getLineNumber(injectedElement.getTextRange().getStartOffset());
+                    @Nullable LineInfo lineInfo = LineInfo.of(fileInfo, lineNumber);
+                    if (lineInfo != null) {
+                        element = injectedElement;
+                        info = lineInfo;
+                    }
                 }
             }
-        }
+        } catch (Throwable ignored) {}
         @Nullable BaseLangDoc lineEnd = PsiElementTo.findLangDoc(element);
         if (lineEnd == null) {
             return null;
