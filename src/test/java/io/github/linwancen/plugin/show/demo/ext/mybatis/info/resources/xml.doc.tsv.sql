@@ -1,4 +1,4 @@
--- table-show-comment-mybatis.xml.doc.tsv
+-- table.xml.doc.tsv
 SELECT t.TABLE_NAME
      , CONCAT(
         REPLACE(REPLACE(t.TABLE_COMMENT, CHAR(10), ' '), CHAR(13), ' '), ' - ',
@@ -16,7 +16,7 @@ FROM (SELECT c.TABLE_SCHEMA,
          JOIN information_schema.`TABLES` t ON t.TABLE_SCHEMA = c.TABLE_SCHEMA AND t.TABLE_NAME = c.TABLE_NAME
 GROUP BY t.TABLE_SCHEMA, t.TABLE_NAME, t.TABLE_COMMENT, TABLE_ROWS;
 
--- column-show-comment-mybatis.xml.doc.tsv
+-- column.xml.doc.tsv
 SELECT c.COLUMN_NAME,
        CONCAT(REPLACE(REPLACE(c.COLUMN_COMMENT, CHAR(10), ' '), CHAR(13), ' '),
               CASE COUNT(s.INDEX_NAME) WHEN 0 THEN '' ELSE ' √' END) AS INFO,
