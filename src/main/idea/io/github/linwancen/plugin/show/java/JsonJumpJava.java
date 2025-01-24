@@ -2,6 +2,7 @@ package io.github.linwancen.plugin.show.java;
 
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonStringLiteral;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
@@ -67,6 +68,8 @@ public class JsonJumpJava extends PsiReferenceContributor {
                                 list.add(new JsonRef<>(element, psiField, tips));
                             }
                             return list.toArray(PsiReference.EMPTY_ARRAY);
+                        } catch (ProcessCanceledException ignored) {
+                            return PsiReference.EMPTY_ARRAY;
                         } catch (Throwable e) {
                             LOG.error("JsonJumpJava.register catch Throwable but log to record.", e);
                         }
