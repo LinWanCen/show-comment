@@ -64,6 +64,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getShowLineEndCommentSql() != settings.showLineEndCommentSql;
         modified |= mySettingsComponent.getShowLineEndCommentJson() != settings.showLineEndCommentJson;
         modified |= mySettingsComponent.getShowLineEndCommentYaml() != settings.showLineEndCommentYaml;
+        modified |= mySettingsComponent.getShowLineEndCommentHtml() != settings.showLineEndCommentHtml;
 
         modified |= !mySettingsComponent.getTreeTags().equals(String.join("|", settings.treeTags));
         modified |= !mySettingsComponent.getLineTags().equals(String.join("|", settings.lineTags));
@@ -115,6 +116,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showLineEndCommentSql = mySettingsComponent.getShowLineEndCommentSql();
         settings.showLineEndCommentJson = mySettingsComponent.getShowLineEndCommentJson();
         settings.showLineEndCommentYaml = mySettingsComponent.getShowLineEndCommentYaml();
+        settings.showLineEndCommentHtml = mySettingsComponent.getShowLineEndCommentHtml();
 
         settings.treeTags = Splitter.on('|').splitToList(mySettingsComponent.getTreeTags()).toArray(new String[0]);
         settings.lineTags = Splitter.on('|').splitToList(mySettingsComponent.getLineTags()).toArray(new String[0]);
@@ -169,6 +171,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowLineEndCommentSql(settings.showLineEndCommentSql);
         mySettingsComponent.setShowLineEndCommentJson(settings.showLineEndCommentJson);
         mySettingsComponent.setShowLineEndCommentYaml(settings.showLineEndCommentYaml);
+        mySettingsComponent.setShowLineEndCommentHtml(settings.showLineEndCommentHtml);
 
         mySettingsComponent.setTreeTags(String.join("|", settings.treeTags));
         mySettingsComponent.setLineTags(String.join("|", settings.lineTags));

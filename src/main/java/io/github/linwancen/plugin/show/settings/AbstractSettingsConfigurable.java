@@ -14,6 +14,10 @@ public class AbstractSettingsConfigurable {
         modified |= !component.getLineExclude().equals(settings.getLineExclude());
         modified |= !component.getDocInclude().equals(settings.getDocInclude());
         modified |= !component.getDocExclude().equals(settings.getDocExclude());
+        modified |= !component.getTagInclude().equals(settings.getTagInclude());
+        modified |= !component.getTagExclude().equals(settings.getTagExclude());
+        modified |= !component.getAttrInclude().equals(settings.getAttrInclude());
+        modified |= !component.getAttrExclude().equals(settings.getAttrExclude());
         modified |= component.getDocGetEffect() != settings.docGetEffect;
         modified |= !component.getDocGet().equals(settings.getDocGet());
         modified |= component.getAnnoDocEffect() != settings.annoDocEffect;
@@ -36,6 +40,10 @@ public class AbstractSettingsConfigurable {
         settings.setLineExclude(component.getLineExclude());
         settings.setDocInclude(component.getDocInclude());
         settings.setDocExclude(component.getDocExclude());
+        settings.setTagInclude(component.getTagInclude());
+        settings.setTagExclude(component.getTagExclude());
+        settings.setAttrInclude(component.getAttrInclude());
+        settings.setAttrExclude(component.getAttrExclude());
         settings.docGetEffect = component.getDocGetEffect();
         settings.setDocGet(component.getDocGet());
         settings.annoDocEffect = component.getAnnoDocEffect();
@@ -53,6 +61,10 @@ public class AbstractSettingsConfigurable {
         component.setLineExclude(settings.getLineExclude());
         component.setDocInclude(settings.getDocInclude());
         component.setDocExclude(settings.getDocExclude());
+        component.setTagInclude(settings.getTagInclude());
+        component.setTagExclude(settings.getTagExclude());
+        component.setAttrInclude(settings.getAttrInclude());
+        component.setAttrExclude(settings.getAttrExclude());
         component.setDocGetEffect(settings.docGetEffect);
         component.setDocGet(settings.getDocGet());
         component.setAnnoDocEffect(settings.annoDocEffect);

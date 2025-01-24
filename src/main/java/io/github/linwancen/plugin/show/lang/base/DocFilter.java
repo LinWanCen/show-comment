@@ -113,6 +113,9 @@ public class DocFilter {
 
     @NotNull
     public static String html2Text(@NotNull String s) {
-        return HTML_PATTERN.matcher(s).replaceAll(" ").trim();
+        return HTML_PATTERN.matcher(s).replaceAll(" ")
+                .replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .trim();
     }
 }

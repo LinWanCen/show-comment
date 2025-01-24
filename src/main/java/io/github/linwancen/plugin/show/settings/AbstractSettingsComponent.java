@@ -23,6 +23,12 @@ public abstract class AbstractSettingsComponent {
     private final JBTextField docInclude = new JBTextField();
     private final JBTextField docExclude = new JBTextField();
 
+    private final JBTextField tagInclude = new JBTextField();
+    private final JBTextField tagExclude = new JBTextField();
+
+    private final JBTextField attrInclude = new JBTextField();
+    private final JBTextField attrExclude = new JBTextField();
+
     private final JBCheckBox docGetEffect = new JBCheckBox("");
     private final JBTextField docGet = new JBTextField();
     private final JBCheckBox annoDocEffect = new JBCheckBox("");
@@ -52,6 +58,11 @@ public abstract class AbstractSettingsComponent {
                 .addSeparator()
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
+                .addSeparator()
+                .addLabeledComponent(new JBLabel(ShowBundle.message("tag.include.regexp")), tagInclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("tag.exclude.regexp")), tagExclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("attr.include.regexp")), attrInclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("attr.exclude.regexp")), attrExclude, 1, true)
                 .addSeparator();
         Border border = docGet.getBorder();
         annoDoc.setBorder(border);
@@ -130,6 +141,42 @@ public abstract class AbstractSettingsComponent {
 
     public void setDocExclude(@NotNull String newText) {
         docExclude.setText(newText);
+    }
+
+    @NotNull
+    public String getTagInclude() {
+        return tagInclude.getText();
+    }
+
+    public void setTagInclude(@NotNull String newText) {
+        tagInclude.setText(newText);
+    }
+
+    @NotNull
+    public String getTagExclude() {
+        return tagExclude.getText();
+    }
+
+    public void setTagExclude(@NotNull String newText) {
+        tagExclude.setText(newText);
+    }
+
+    @NotNull
+    public String getAttrInclude() {
+        return attrInclude.getText();
+    }
+
+    public void setAttrInclude(@NotNull String newText) {
+        attrInclude.setText(newText);
+    }
+
+    @NotNull
+    public String getAttrExclude() {
+        return attrExclude.getText();
+    }
+
+    public void setAttrExclude(@NotNull String newText) {
+        attrExclude.setText(newText);
     }
 
 

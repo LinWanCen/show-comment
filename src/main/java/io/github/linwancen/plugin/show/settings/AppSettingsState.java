@@ -52,6 +52,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showLineEndCommentSql = true;
     public boolean showLineEndCommentJson = true;
     public boolean showLineEndCommentYaml = true;
+    public boolean showLineEndCommentHtml = true;
 
     @NotNull
     public String[] treeTags = {"author"};

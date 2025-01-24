@@ -79,6 +79,7 @@ public class LineEndCacheUtils {
                     AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(() -> {
                         try {
                             cacheUpdate();
+                        } catch (ProcessCanceledException ignored) {
                         } catch (Throwable e) {
                             LOG.info("LineEndCacheUtils checkScheduleAndInit catch Throwable but log to record.", e);
                         }

@@ -125,6 +125,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.19  ★   line-end-comment  support HTML(Vue) Tag/Attr doc since 2022.3.1
 <li>2.18  Add line-end-comment  support injected language like SQL
 <li>2.17  Add External Comment  support *.key.regexp and MyBatis xml demo in Git
 <li>2.16  Add line-end-comment  support Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
@@ -172,6 +173,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.19  ★   行末注释   支持 HTML(Vue) 标签/属性 注释从 2022.3.1 起
 <li>2.18  增加 行末注释   支持注入语言如 SQL
 <li>2.17  增加 tsv 注释  支持 *.key.regexp 与 Mybatis xml 示例在 Git
 <li>2.16  增加 行末注释   支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy

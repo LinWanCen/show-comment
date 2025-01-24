@@ -43,6 +43,7 @@ public class AppSettingsComponent {
     private final JBCheckBox showLineEndCommentSql = new JBCheckBox("    SQL ");
     private final JBCheckBox showLineEndCommentJson = new JBCheckBox("    JSON ");
     private final JBCheckBox showLineEndCommentYaml = new JBCheckBox("    YAML ");
+    private final JBCheckBox showLineEndCommentHtml = new JBCheckBox("    HTML ");
     private final JBTextField treeTags = new JBTextField();
     private final JBTextField lineTags = new JBTextField();
     private final JBCheckBox skipAscii = new JBCheckBox(ShowBundle.message("skip.english"));
@@ -101,7 +102,8 @@ public class AppSettingsComponent {
 
                         showLineEndCommentRustBase,
                         showLineEndCommentCBase,
-                        showLineEndCommentSwiftBase
+                        showLineEndCommentSwiftBase,
+                        showLineEndCommentHtml
                 ), 1)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("tree.tags")), treeTags, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("line.tags")), lineTags, 1, true)
@@ -368,6 +370,14 @@ public class AppSettingsComponent {
 
     public void setShowLineEndCommentYaml(boolean newStatus) {
         showLineEndCommentYaml.setSelected(newStatus);
+    }
+
+    public boolean getShowLineEndCommentHtml() {
+        return showLineEndCommentHtml.isSelected();
+    }
+
+    public void setShowLineEndCommentHtml(boolean newStatus) {
+        showLineEndCommentHtml.setSelected(newStatus);
     }
 
     // endregion line end

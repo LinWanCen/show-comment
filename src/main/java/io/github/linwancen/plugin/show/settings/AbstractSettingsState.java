@@ -22,6 +22,14 @@ public abstract class AbstractSettingsState {
     public transient Pattern docInclude = Pattern.compile("");
     @NotNull
     public transient Pattern docExclude = Pattern.compile("");
+    @NotNull
+    public transient Pattern tagInclude = Pattern.compile("");
+    @NotNull
+    public transient Pattern tagExclude = Pattern.compile("^(template|script|style)$");
+    @NotNull
+    public transient Pattern attrInclude = Pattern.compile("");
+    @NotNull
+    public transient Pattern attrExclude = Pattern.compile("^(v-[\\w-]*|ref|:?style|:?class|:key|@click|@change|@input)$");
 
     public boolean docGetEffect = false;
     @NotNull
@@ -90,6 +98,38 @@ public abstract class AbstractSettingsState {
 
     public void setDocExclude(@NotNull String docExclude) {
         this.docExclude = Pattern.compile(docExclude);
+    }
+
+    public String getTagInclude() {
+        return tagInclude.pattern();
+    }
+
+    public void setTagInclude(@NotNull String tagInclude) {
+        this.tagInclude = Pattern.compile(tagInclude);
+    }
+
+    public String getTagExclude() {
+        return tagExclude.pattern();
+    }
+
+    public void setTagExclude(@NotNull String tagExclude) {
+        this.tagExclude = Pattern.compile(tagExclude);
+    }
+
+    public String getAttrInclude() {
+        return attrInclude.pattern();
+    }
+
+    public void setAttrInclude(@NotNull String attrInclude) {
+        this.attrInclude = Pattern.compile(attrInclude);
+    }
+
+    public String getAttrExclude() {
+        return attrExclude.pattern();
+    }
+
+    public void setAttrExclude(@NotNull String attrExclude) {
+        this.attrExclude = Pattern.compile(attrExclude);
     }
 
 

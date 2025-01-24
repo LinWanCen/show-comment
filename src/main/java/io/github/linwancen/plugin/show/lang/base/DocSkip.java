@@ -1,5 +1,8 @@
 package io.github.linwancen.plugin.show.lang.base;
 
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.xml.XmlAttribute;
+import com.intellij.psi.xml.XmlTag;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +28,21 @@ public class DocSkip {
         return skipText(info, text,
                 info.globalSettings.docInclude, info.globalSettings.docExclude,
                 info.projectSettings.docInclude, info.projectSettings.docExclude);
+    }
+
+    public static <T extends SettingsInfo> boolean skipTagAttr(@NotNull T info, @NotNull PsiElement ref) {
+        if (ref instanceof XmlTag) {
+            String text = ((XmlTag) ref).getName();
+            return skipText(info, text,
+                    info.globalSettings.tagInclude, info.globalSettings.tagExclude,
+                    info.projectSettings.tagInclude, info.projectSettings.tagExclude);
+        } else if (ref instanceof XmlAttribute) {
+            String text = ((XmlAttribute) ref).getName();
+            return skipText(info, text,
+                    info.globalSettings.attrInclude, info.globalSettings.attrExclude,
+                    info.projectSettings.attrInclude, info.projectSettings.attrExclude);
+        }
+        return false;
     }
 
     static <T extends SettingsInfo> boolean skipText(@NotNull T info, @Nullable String text,

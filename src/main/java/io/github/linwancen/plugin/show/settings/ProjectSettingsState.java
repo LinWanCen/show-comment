@@ -20,6 +20,8 @@ public class ProjectSettingsState extends AbstractSettingsState implements Persi
     public ProjectSettingsState() {
         this.lineEndCount = 0;
         this.lineExclude = Pattern.compile("");
+        this.tagExclude = Pattern.compile("");
+        this.attrExclude = Pattern.compile("");
         this.annoDocEffect = false;
         this.annoDoc = new String[][]{};
         this.dirDocEffect = false;
