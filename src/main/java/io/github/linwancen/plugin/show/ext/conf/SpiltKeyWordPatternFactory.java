@@ -46,7 +46,6 @@ class SpiltKeyWordPatternFactory {
         }
         sb.insert(0, "\n");
         sb.insert(0, path);
-        sb.insert(0, "\n");
         try {
             @NotNull Pattern compile = Pattern.compile(regex);
             PATTERN_CACHE.put(regex, compile);

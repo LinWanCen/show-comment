@@ -12,7 +12,7 @@ Show doc comment in the Project view Tree, line End, json, other
 <ul>
   <li>Java, Kotlin, Groovy, Scala
   <li>C/C++/OC, Python, Go, Rust, Ruby
-  <li>JS/TS, PHP, SQL
+  <li>HTML(Vue), JS/TS, PHP, SQL
   <li>YAML/yml
 </ul>
 
@@ -145,22 +145,29 @@ Show doc comment in the Project view Tree, line End, json, other
   </extensions>
 
   <applicationListeners>
-    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileListener"
+    <listener class="io.github.linwancen.plugin.show.ext.listener.FileOptListener"
               topic="com.intellij.openapi.vfs.newvfs.BulkFileListener"/>
-    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileChangeListener"
+    <listener class="io.github.linwancen.plugin.show.ext.listener.FileSelectChangeListener"
               topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     <listener class="io.github.linwancen.plugin.show.cache.CacheUpdateEditorListener"
               topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
   </applicationListeners>
 
   <projectListeners>
-    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileInitListener"
+    <listener class="io.github.linwancen.plugin.show.ext.listener.FileLoadInitListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    <listener class="io.github.linwancen.plugin.show.ext.conf.listener.ConfFileInitListener"
+    <listener class="io.github.linwancen.plugin.show.ext.listener.FileLoadInitListener"
               topic="com.intellij.openapi.project.DumbService$DumbModeListener"/>
     <listener class="io.github.linwancen.plugin.show.cache.CacheUpdateProjectListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
   </projectListeners>
+
+  <extensionPoints>
+    <extensionPoint name="fileLoader" dynamic="true" interface="io.github.linwancen.plugin.show.ext.listener.FileLoader"/>
+  </extensionPoints>
+  <extensions defaultExtensionNs="io.github.linwancen.show-comment">
+    <fileLoader implementation="io.github.linwancen.plugin.show.ext.conf.ConfCache"/>
+  </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
     <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd"/>
@@ -189,13 +196,13 @@ Show doc comment in the Project view Tree, line End, json, other
   <actions>
     <action
         id="io.github.linwancen.plugin.show.ext.conf.ReLoadExtDocAction"
-        class="io.github.linwancen.plugin.show.ext.conf.action.ReloadExtDocAction"
+        class="io.github.linwancen.plugin.show.ext.action.ReloadExtDocAction"
         text="🔄 // Reload External Comment">
       <add-to-group group-id="ToolsMenu"/>
     </action>
     <action
-        id="io.github.linwancen.plugin.show.ext.conf.action.ResetExtDocAction"
-        class="io.github.linwancen.plugin.show.ext.conf.action.ResetExtDocAction"
+        id="io.github.linwancen.plugin.show.ext.action.ResetExtDocAction"
+        class="io.github.linwancen.plugin.show.ext.action.ResetExtDocAction"
         text="🆑 // Clear External Comment">
       <add-to-group group-id="ToolsMenu"/>
     </action>

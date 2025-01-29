@@ -1,11 +1,11 @@
-package io.github.linwancen.plugin.show.ext.conf.action;
+package io.github.linwancen.plugin.show.ext.action;
 
 import com.intellij.ide.actions.CopyReferenceAction;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import io.github.linwancen.plugin.show.ext.conf.ConfCache;
+import io.github.linwancen.plugin.show.ext.listener.FileLoader;
 import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ public class ResetExtDocAction extends CopyReferenceAction {
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
         try {
-            ConfCache.clearAll();
+            FileLoader.EPN.getExtensionList().forEach(FileLoader::clearAll);
             @Nullable Project project = e.getProject();
             if (project == null) {
                 return;

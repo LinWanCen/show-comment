@@ -32,12 +32,12 @@ public class DocSkip {
 
     public static <T extends SettingsInfo> boolean skipTagAttr(@NotNull T info, @NotNull PsiElement ref) {
         if (ref instanceof XmlTag) {
-            String text = ((XmlTag) ref).getName();
+            @NotNull String text = ((XmlTag) ref).getName();
             return skipText(info, text,
                     info.globalSettings.tagInclude, info.globalSettings.tagExclude,
                     info.projectSettings.tagInclude, info.projectSettings.tagExclude);
         } else if (ref instanceof XmlAttribute) {
-            String text = ((XmlAttribute) ref).getName();
+            @NotNull String text = ((XmlAttribute) ref).getName();
             return skipText(info, text,
                     info.globalSettings.attrInclude, info.globalSettings.attrExclude,
                     info.projectSettings.attrInclude, info.projectSettings.attrExclude);

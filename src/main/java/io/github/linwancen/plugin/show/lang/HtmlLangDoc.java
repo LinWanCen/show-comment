@@ -1,21 +1,27 @@
 package io.github.linwancen.plugin.show.lang;
 
+import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.lang.javascript.psi.JSPsiReferenceElement;
 import com.intellij.model.psi.PsiSymbolReference;
 import com.intellij.model.psi.PsiSymbolReferenceService;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import io.github.linwancen.plugin.show.lang.base.DocSkip;
+import io.github.linwancen.plugin.show.lang.vue.VueRouterCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +29,17 @@ import java.util.List;
 public class HtmlLangDoc extends JsLangDoc {
     private static final Logger LOG = LoggerFactory.getLogger(HtmlLangDoc.class);
 
+    @Nullable
     public static final Method WEB_DOC_METHOD;
+    @Nullable
     public static final Method REF_METHOD;
 
     static {
         LANG_DOC_MAP.put(HTMLLanguage.INSTANCE.getID(), new HtmlLangDoc());
-        Method method = null;
-        Method refMethod = null;
+        @Nullable Method method = null;
+        @Nullable Method refMethod = null;
         try {
-            Class<?> clazz = Class.forName("com.intellij.webSymbols.WebSymbol");
+            @NotNull Class<?> clazz = Class.forName("com.intellij.webSymbols.WebSymbol");
             method = clazz.getMethod("getDescription");
             // noinspection UnstableApiUsage
             refMethod = PsiSymbolReferenceService.class.getMethod("getReferences", PsiElement.class);
@@ -52,6 +60,13 @@ public class HtmlLangDoc extends JsLangDoc {
         return info.appSettings.showLineEndCommentJs || info.appSettings.showLineEndCommentHtml;
     }
 
+    @Override
+    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull ProjectViewNode<?> node,
+                                                             @NotNull Project project) {
+        @Nullable VirtualFile virtualFile = node.getVirtualFile();
+        return VueRouterCache.fileDoc(virtualFile);
+    }
+
     /**
      * Override like Java/Json/Html
      */
@@ -64,19 +79,19 @@ public class HtmlLangDoc extends JsLangDoc {
         if (WEB_DOC_METHOD == null || !info.appSettings.showLineEndCommentHtml) {
             return super.refDoc(info, ref);
         }
-        PsiSymbolReferenceService service = PsiSymbolReferenceService.getService();
-        ArrayList<PsiSymbolReference> references = new ArrayList<>();
+        @NotNull PsiSymbolReferenceService service = PsiSymbolReferenceService.getService();
+        @NotNull ArrayList<PsiSymbolReference> references = new ArrayList<>();
         try {
             Object object = REF_METHOD.invoke(service, ref);
             if (object instanceof Iterable) {
-                Iterable<?> objects = (Iterable<?>) object;
+                @NotNull Iterable<?> objects = (Iterable<?>) object;
                 for (Object o : objects) {
                     if (o instanceof PsiSymbolReference) {
                         references.add(((PsiSymbolReference) o));
                     }
                 }
             }
-        } catch (ProcessCanceledException ignored) {
+        } catch (ProcessCanceledException | InvocationTargetException ignored) {
             return super.refDoc(info, ref);
         } catch (Exception e) {
             LOG.warn("Web Tag Attr getReferences fail: ", e);

@@ -3,4 +3,8 @@
     <editor.linePainter implementation="io.github.linwancen.plugin.show.lang.JsLangDoc"/>
     <editor.linePainter implementation="io.github.linwancen.plugin.show.lang.HtmlLangDoc"/>
   </extensions>
+
+  <extensions defaultExtensionNs="io.github.linwancen.show-comment">
+    <fileLoader implementation="io.github.linwancen.plugin.show.lang.vue.VueRouterCache"/>
+  </extensions>
 </idea-plugin>

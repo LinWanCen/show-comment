@@ -1,21 +1,20 @@
-package io.github.linwancen.plugin.show.ext.conf.listener;
+package io.github.linwancen.plugin.show.ext.listener;
 
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * call ConfCache.loadFile
+ * call FileLoader.loadFile
  */
-public class ConfFileChangeListener implements FileEditorManagerListener {
+public class FileSelectChangeListener implements FileEditorManagerListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConfFileChangeListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FileSelectChangeListener.class);
 
     @Override
     public void selectionChanged(@NotNull FileEditorManagerEvent event) {
@@ -29,7 +28,7 @@ public class ConfFileChangeListener implements FileEditorManagerListener {
         }
         if (file.exists()) {
             try {
-                ConfCache.loadFile(file, project);
+                FileLoader.EPN.getExtensionList().forEach(fileLoader -> fileLoader.loadFile(file, project));
             } catch (Throwable e) {
                 LOG.info("ConfFileChangeListener catch Throwable but log to record.", e);
             }

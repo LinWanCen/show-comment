@@ -31,8 +31,8 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     static {
         try {
             // for 2024.2
-            Class<?> clazz = Class.forName("io.github.linwancen.plugin.show.java.KotlinLangDoc");
-            BaseLangDoc lang = (BaseLangDoc) clazz.getConstructor().newInstance();
+            @NotNull Class<?> clazz = Class.forName("io.github.linwancen.plugin.show.java.KotlinLangDoc");
+            @NotNull BaseLangDoc lang = (BaseLangDoc) clazz.getConstructor().newInstance();
             LANG_DOC_MAP.put("kotlin", lang);
         } catch (Exception ignored) {}
     }

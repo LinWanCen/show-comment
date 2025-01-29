@@ -1,9 +1,9 @@
-package io.github.linwancen.plugin.show.ext.conf.action;
+package io.github.linwancen.plugin.show.ext.action;
 
 import com.intellij.ide.actions.CopyReferenceAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import io.github.linwancen.plugin.show.ext.conf.ConfCache;
+import io.github.linwancen.plugin.show.ext.listener.FileLoader;
 import io.github.linwancen.plugin.show.settings.ShowBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public class ReloadExtDocAction extends CopyReferenceAction {
             if (project == null) {
                 return;
             }
-            ConfCache.loadAll(project);
+            FileLoader.EPN.getExtensionList().forEach(fileLoader -> fileLoader.loadAll(project));
         } catch (Throwable t) {
             LOG.info("ReloadExtDocAction catch Throwable but log to record.", t);
         }

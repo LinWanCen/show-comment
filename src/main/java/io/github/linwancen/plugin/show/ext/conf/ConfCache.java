@@ -1,11 +1,10 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
 import com.intellij.ide.projectView.ProjectView;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.FilenameIndex;
+import io.github.linwancen.plugin.show.ext.listener.FileLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ import java.util.regex.Pattern;
 /**
  * call ConfFactory, ConfCacheGetUtils
  */
-public class ConfCache {
+public class ConfCache extends FileLoader {
     private static final Logger LOG = LoggerFactory.getLogger(ConfCache.class);
 
     static final String KEY_MID_EXT = ".key";
@@ -74,7 +73,13 @@ public class ConfCache {
         return ConfCacheGetUtils.filterPath(JSON_CACHE, path);
     }
 
-    public static void clearAll() {
+    @Override
+    public boolean skipExt(@Nullable String extension) {
+        return !TsvLoader.EXT.equals(extension) && !TsvLoader.REGEXP_EXT.equals(extension);
+    }
+
+    @Override
+    public void clearAll() {
         EXT_IN_KEY_CACHE.clear();
         KEY_CACHE.clear();
         DOC_CACHE.clear();
@@ -82,11 +87,15 @@ public class ConfCache {
         JSON_CACHE.clear();
     }
 
-    public static void remove(@NotNull VirtualFile file, @Nullable String name) {
+    @Override
+    public void remove(@NotNull VirtualFile file, @Nullable String name) {
         if (name != null) {
             int i = name.lastIndexOf('.');
+            @NotNull String ext = name.substring(i + 1);
+            if (skipExt(ext)) return;
             name = name.substring(0, i);
         } else {
+            if (skipExt(file.getExtension())) return;
             name = file.getNameWithoutExtension();
         }
         if (name.endsWith(KEY_MID_EXT)) {
@@ -100,8 +109,9 @@ public class ConfCache {
         }
     }
 
-    public static void copy(@NotNull VirtualFile file, @NotNull VirtualFile newFile) {
-        @NotNull String name = file.getNameWithoutExtension();
+    @Override
+    public void copyImpl(@NotNull VirtualFile file, @NotNull VirtualFile newFile) {
+        @NotNull String name = newFile.getNameWithoutExtension();
         if (name.endsWith(KEY_MID_EXT)) {
             copyCache(file, newFile, KEY_CACHE);
         } else if (name.endsWith(DOC_MID_EXT)) {
@@ -121,46 +131,32 @@ public class ConfCache {
         }
     }
 
-    public static void loadAll(@NotNull Project project) {
-        ApplicationManager.getApplication().executeOnPooledThread(() ->
-                DumbService.getInstance(project).runReadActionInSmartMode(() ->
-                        ApplicationManager.getApplication().runReadAction(() -> {
-                            @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project,
-                                    TsvLoader.EXT);
-                            @NotNull StringBuilder sb = new StringBuilder();
-                            for (@NotNull VirtualFile file : files) {
-                                load(file);
-                                sb.append(file.getName()).append("\n");
-                            }
-                            @NotNull Collection<VirtualFile> files2 = FilenameIndex.getAllFilesByExt(project,
-                                    TsvLoader.REGEXP_EXT);
-                            for (@NotNull VirtualFile file : files2) {
-                                load(file);
-                                sb.append(file.getName()).append("\n");
-                            }
-                            if (files.isEmpty()) {
-                                return;
-                            }
-                            if (!project.isDisposed()) {
-                                ProjectView.getInstance(project).refresh();
-                            }
-                            LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
-                        })));
-    }
-
-    public static void loadFile(@NotNull VirtualFile file, @Nullable Project project) {
-        if (!TsvLoader.EXT.equals(file.getExtension()) && !TsvLoader.REGEXP_EXT.equals(file.getExtension())) {
+    @Override
+    public void loadAllImpl(@NotNull Project project) {
+        @NotNull Collection<VirtualFile> files = FilenameIndex.getAllFilesByExt(project,
+                TsvLoader.EXT);
+        @NotNull StringBuilder sb = new StringBuilder();
+        for (@NotNull VirtualFile file : files) {
+            loadFileImpl(file, project);
+            sb.append(file.getName()).append("\n");
+        }
+        @NotNull Collection<VirtualFile> files2 = FilenameIndex.getAllFilesByExt(project,
+                TsvLoader.REGEXP_EXT);
+        for (@NotNull VirtualFile file : files2) {
+            loadFileImpl(file, project);
+            sb.append(file.getPath()).append("\n");
+        }
+        if (files.isEmpty()) {
             return;
         }
-        ApplicationManager.getApplication().invokeLater(() -> {
-            ConfCache.load(file);
-            if (project != null && !project.isDisposed()) {
-                ProjectView.getInstance(project).refresh();
-            }
-        });
+        if (!project.isDisposed()) {
+            ProjectView.getInstance(project).refresh();
+        }
+        LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
     }
 
-    private static void load(@NotNull VirtualFile file) {
+    @Override
+    public void loadFileImpl(@NotNull VirtualFile file, @Nullable Project project) {
         @NotNull String name = file.getNameWithoutExtension();
         if (name.endsWith(KEY_MID_EXT)) {
             @NotNull String matchName = name.substring(0, name.length() - KEY_MID_EXT.length());
