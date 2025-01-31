@@ -20,8 +20,12 @@ public class PsiClassUtils {
     private static final Pattern JSON_PATTERN = Pattern.compile("[\\w.]*+$");
 
     @NotNull
-    public static PsiClass[] encClass(@NotNull VirtualFile virtualFile, @NotNull Project project) {
+    public static PsiClass[] fileToClasses(@NotNull VirtualFile virtualFile, @NotNull Project project) {
         @NotNull String fileName = virtualFile.getNameWithoutExtension();
+        @Nullable String ext = virtualFile.getExtension();
+        if (ext == null || (!ext.startsWith("json") && !ext.equals("xml"))) {
+            return PsiClass.EMPTY_ARRAY;
+        }
         @NotNull Matcher matcher = JSON_PATTERN.matcher(fileName);
         if (!matcher.find()) {
             return PsiClass.EMPTY_ARRAY;
@@ -35,7 +39,7 @@ public class PsiClassUtils {
             return psiClasses;
         }
         // issue #23
-        if (virtualFile.getExtension() == null || className.length() != fileName.length()) {
+        if (className.length() != fileName.length()) {
             return PsiClass.EMPTY_ARRAY;
         }
         @NotNull char[] chars = fileName.toCharArray();

@@ -1,7 +1,13 @@
 package io.github.linwancen.plugin.show.java.doc;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiClassOwner;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiPackage;
 import com.intellij.psi.javadoc.PsiDocComment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +65,7 @@ public class OwnerToPsiDocUtils {
             // for "xxx ClassName.xxx"
             if (psiClasses.length == 0) {
                 VirtualFile virtualFile = psiFile.getVirtualFile();
-                psiClasses = PsiClassUtils.encClass(virtualFile, psiFile.getProject());
+                psiClasses = PsiClassUtils.fileToClasses(virtualFile, psiFile.getProject());
             }
             for (@NotNull PsiClass psiClass : psiClasses) {
                 @Nullable PsiDocComment docComment = srcOrByteCodeDoc(psiClass);
