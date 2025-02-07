@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.20.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.21.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 repositories {
     mavenCentral()
@@ -95,6 +95,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.21  Add project-view-tree use JS/TS/Vue "export default" doc for tree doc
 <li>2.20  Add External Comment  support Vue src/router tree doc
 <li>2.19  ★   line-end-comment  support HTML(Vue) Tag/Attr doc since 2022.3.1
 <li>2.18  Add line-end-comment  support injected language like SQL
@@ -144,6 +145,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.21  增加 文件树注释  用 JS/TS/Vue "export default" 注释当文件注释
 <li>2.20  增加 外部注释   支持 Vue 路由标题文件树注释
 <li>2.19  ★   行末注释   支持 HTML(Vue) 标签/属性 注释从 2022.3.1 起
 <li>2.18  增加 行末注释   支持注入语言如 SQL

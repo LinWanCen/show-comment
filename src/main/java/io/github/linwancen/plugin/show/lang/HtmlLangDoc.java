@@ -64,7 +64,11 @@ public class HtmlLangDoc extends JsLangDoc {
     public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull ProjectViewNode<?> node,
                                                              @NotNull Project project) {
         @Nullable VirtualFile virtualFile = node.getVirtualFile();
-        return VueRouterCache.fileDoc(virtualFile);
+        @Nullable String doc = VueRouterCache.fileDoc(virtualFile);
+        if (doc != null) {
+            return doc;
+        }
+        return super.treeDoc(info, node, project);
     }
 
     /**

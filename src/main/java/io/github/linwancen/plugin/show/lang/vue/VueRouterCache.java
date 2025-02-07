@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,7 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class VueRouterCache extends FileLoader {
     private static final Logger LOG = LoggerFactory.getLogger(VueRouterCache.class);
 
-    private static final Map<VirtualFile, String> DOC_CACHE = new ConcurrentHashMap<>();
+    public static final Map<VirtualFile, String> DOC_CACHE = new ConcurrentHashMap<>();
 
     @Nullable
     public static String fileDoc(@Nullable VirtualFile virtualFile) {
@@ -157,7 +158,7 @@ public class VueRouterCache extends FileLoader {
                 }
             }
             if (title != null) {
-                VirtualFile file = parseComponent(obj);
+                @Nullable VirtualFile file = parseComponent(obj);
                 if (file != null) {
                     virtualFile = file;
                     DOC_CACHE.put(virtualFile, title);
@@ -186,6 +187,16 @@ public class VueRouterCache extends FileLoader {
             return null;
         }
         @Nullable JSExpression value = titleProp.getValue();
+        if (value instanceof JSObjectLiteralExpression) {
+            @NotNull JSObjectLiteralExpression i18n = (JSObjectLiteralExpression) value;
+            // zh_CN
+            @NotNull String lang = Locale.getDefault().toString();
+            @Nullable JSProperty langProp = i18n.findProperty(lang);
+            if (langProp == null) {
+                return null;
+            }
+            value = langProp.getValue();
+        }
         if (value instanceof JSLiteralExpression) {
             return ((JSLiteralExpression) value).getStringValue();
         }
@@ -227,7 +238,7 @@ public class VueRouterCache extends FileLoader {
         }
         @NotNull Collection<PsiElement> elements = importCall.resolveReferencedElements();
         for (PsiElement element : elements) {
-            PsiFile psiFile = PsiTreeUtil.getParentOfType(element, PsiFile.class);
+            @Nullable PsiFile psiFile = PsiTreeUtil.getParentOfType(element, PsiFile.class);
             if (psiFile != null) {
                 return psiFile.getVirtualFile();
             }
