@@ -46,9 +46,8 @@ public abstract class FileLoader {
 
     public void loadAll(@NotNull Project project) {
         ApplicationManager.getApplication().executeOnPooledThread(() ->
-                DumbService.getInstance(project).runReadActionInSmartMode(() ->
-                        ApplicationManager.getApplication().runReadAction(() ->
-                                loadAllImpl(project))));
+                DumbService.getInstance(project).runReadActionInSmartMode(()
+                        -> loadAllImpl(project)));
     }
 
     void loadFile(@NotNull VirtualFile file, @Nullable Project project) {

@@ -91,18 +91,18 @@ public class LineEndCacheUtils {
 
     private static void cacheUpdate() {
         cache.forEach((project, fileMap) -> {
-            try {
-                if (project.isDisposed()) {
-                    cache.remove(project);
-                    return;
-                }
-                fileMap.forEach((file, lineMap) -> lineMap.forEach((lineNumber, lineCache) -> {
-                    @NotNull LineInfo info = lineCache.info;
-                    @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
-                    if (!(lineCache.needUpdate() || list == null)) {
+            ReadAction.nonBlocking(() -> {
+                try {
+                    if (project.isDisposed()) {
+                        cache.remove(project);
                         return;
                     }
-                    ReadAction.nonBlocking(() -> {
+                    fileMap.forEach((file, lineMap) -> lineMap.forEach((lineNumber, lineCache) -> {
+                        @NotNull LineInfo info = lineCache.info;
+                        @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
+                        if (!(lineCache.needUpdate() || list == null)) {
+                            return;
+                        }
                         try {
                             if (project.isDisposed() || DumbService.isDumb(project)) {
                                 return;
@@ -137,15 +137,16 @@ public class LineEndCacheUtils {
                                 LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
                             }
                         }
-                    }).inSmartMode(project).executeSynchronously();
-                }));
-            } catch (ProcessCanceledException ignored) {
-            } catch (IllegalStateException ignore) {
-                // ignore inSmartMode(project) throw:
-                // @NotNull method com/intellij/openapi/project/impl/ProjectImpl.getEarlyDisposable must not return null
-            } catch (Throwable e) {
-                LOG.info("LineEndCacheUtils cache.forEach catch Throwable but log to record.", e);
-            }
+                    }));
+                } catch (ProcessCanceledException ignored) {
+                } catch (IllegalStateException ignore) {
+                    // ignore inSmartMode(project) throw:
+                    // @NotNull method com/intellij/openapi/project/impl/ProjectImpl.getEarlyDisposable must not
+                    // return null
+                } catch (Throwable e) {
+                    LOG.info("LineEndCacheUtils cache.forEach catch Throwable but log to record.", e);
+                }
+            }).inSmartMode(project).submit(AppExecutorUtil.getAppExecutorService());
         });
     }
 }
