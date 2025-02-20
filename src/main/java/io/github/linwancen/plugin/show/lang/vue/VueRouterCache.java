@@ -11,9 +11,7 @@ import com.intellij.lang.javascript.psi.JSObjectLiteralExpression;
 import com.intellij.lang.javascript.psi.JSProperty;
 import com.intellij.lang.javascript.psi.JSReferenceExpression;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
@@ -29,49 +27,17 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * call ConfFactory, ConfCacheGetUtils
+ * Usage HtmlLangDoc, JSLangDoc
  */
 public class VueRouterCache extends FileLoader {
     private static final Logger LOG = LoggerFactory.getLogger(VueRouterCache.class);
-
-    public static final Map<VirtualFile, String> DOC_CACHE = new ConcurrentHashMap<>();
-
-    @Nullable
-    public static String fileDoc(@Nullable VirtualFile virtualFile) {
-        if (virtualFile == null) {
-            return null;
-        }
-        return DOC_CACHE.get(virtualFile);
-    }
-
-    @Override
-    public void clearAll() {
-        DOC_CACHE.clear();
-    }
-
-    @Override
-    public void remove(@NotNull VirtualFile file, @Nullable String oldName) {
-        if (oldName == null) {
-            DOC_CACHE.remove(file);
-        }
-    }
 
     @Override
     public boolean skipFile(@NotNull VirtualFile file) {
         @Nullable String ext = file.getExtension();
         return !file.getPath().contains("src/router") && !"js".equals(ext) && !"ts".equals(ext);
-    }
-
-    @Override
-    public void copyImpl(@NotNull VirtualFile file, @NotNull VirtualFile newFile) {
-        String s = DOC_CACHE.get(file);
-        if (s != null) {
-            DOC_CACHE.put(newFile, s);
-        }
     }
 
     @Override
@@ -92,17 +58,7 @@ public class VueRouterCache extends FileLoader {
             if (router == null) {
                 continue;
             }
-            VfsUtil.visitChildrenRecursively(router, new VirtualFileVisitor<Void>() {
-                @Override
-                public boolean visitFile(@NotNull VirtualFile file) {
-                    if (file.isDirectory()) {
-                        return super.visitFile(file);
-                    }
-                    loadFileImpl(file, project);
-                    sb.append(file.getPath()).append("\n");
-                    return super.visitFile(file);
-                }
-            });
+            visitChildrenRecursively(project, router, sb);
         }
         if (files.isEmpty()) {
             return;
@@ -135,7 +91,7 @@ public class VueRouterCache extends FileLoader {
     }
 
     @Nullable
-    private static VirtualFile parseArr(JSArrayLiteralExpression arr) {
+    private VirtualFile parseArr(JSArrayLiteralExpression arr) {
         @Nullable VirtualFile virtualFile = null;
         @NotNull List<JSObjectLiteralExpression> list = PsiTreeUtil.getChildrenOfTypeAsList(arr,
                 JSObjectLiteralExpression.class);
@@ -152,7 +108,7 @@ public class VueRouterCache extends FileLoader {
                         VirtualFile file = subFile.getParent();
                         if (file != null && title != null) {
                             virtualFile = file;
-                            DOC_CACHE.put(virtualFile, title);
+                            fileDoc.put(virtualFile, title);
                         }
                     }
                 }
@@ -161,10 +117,10 @@ public class VueRouterCache extends FileLoader {
                 @Nullable VirtualFile file = parseComponent(obj);
                 if (file != null) {
                     virtualFile = file;
-                    DOC_CACHE.put(virtualFile, title);
+                    fileDoc.put(virtualFile, title);
                     if ("index.vue".equals(virtualFile.getName())) {
                         virtualFile = virtualFile.getParent();
-                        DOC_CACHE.put(virtualFile, title);
+                        fileDoc.put(virtualFile, title);
                     }
                 }
             }

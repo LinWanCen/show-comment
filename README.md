@@ -125,6 +125,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.22  Add project-view-tree ollama models blobs comment from manifests
 <li>2.21  Add project-view-tree use JS/TS/Vue "export default" doc for tree doc
 <li>2.20  Add External Comment  support Vue src/router tree doc
 <li>2.19  ★   line-end-comment  support HTML(Vue) Tag/Attr doc since 2022.3.1
@@ -175,6 +176,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.22  增加 文件树注释  ollama models 文件夹从 manifests 获取 blobs 文件注释
 <li>2.21  增加 文件树注释  用 JS/TS/Vue "export default" 注释当文件注释
 <li>2.20  增加 外部注释   支持 Vue 路由标题文件树注释
 <li>2.19  ★   行末注释   支持 HTML(Vue) 标签/属性 注释从 2022.3.1 起

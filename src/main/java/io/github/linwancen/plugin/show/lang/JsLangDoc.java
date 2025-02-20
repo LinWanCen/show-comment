@@ -14,6 +14,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.ext.listener.FileLoader;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.lang.vue.VueRouterCache;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,10 @@ public class JsLangDoc extends BaseLangDoc {
         if (doc != null && "index".equals(virtualFile.getNameWithoutExtension())) {
             VirtualFile parent = virtualFile.getParent();
             if (parent != null) {
-                VueRouterCache.DOC_CACHE.put(parent, doc);
+                @Nullable VueRouterCache extension = FileLoader.EPN.findExtension(VueRouterCache.class);
+                if (extension != null) {
+                    extension.fileDoc.put(parent, doc);
+                }
             }
         }
         return doc;

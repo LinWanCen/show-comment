@@ -1,21 +1,16 @@
 package io.github.linwancen.plugin.show.lang;
 
-import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.lang.javascript.psi.JSPsiReferenceElement;
 import com.intellij.model.psi.PsiSymbolReference;
 import com.intellij.model.psi.PsiSymbolReferenceService;
 import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import io.github.linwancen.plugin.show.bean.LineInfo;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import io.github.linwancen.plugin.show.lang.base.DocSkip;
-import io.github.linwancen.plugin.show.lang.vue.VueRouterCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -60,17 +55,6 @@ public class HtmlLangDoc extends JsLangDoc {
         return info.appSettings.showLineEndCommentJs || info.appSettings.showLineEndCommentHtml;
     }
 
-    @Override
-    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull ProjectViewNode<?> node,
-                                                             @NotNull Project project) {
-        @Nullable VirtualFile virtualFile = node.getVirtualFile();
-        @Nullable String doc = VueRouterCache.fileDoc(virtualFile);
-        if (doc != null) {
-            return doc;
-        }
-        return super.treeDoc(info, node, project);
-    }
-
     /**
      * Override like Java/Json/Html
      */
@@ -80,7 +64,7 @@ public class HtmlLangDoc extends JsLangDoc {
         if (DocSkip.skipTagAttr(info, ref)) {
             return null;
         }
-        if (WEB_DOC_METHOD == null || !info.appSettings.showLineEndCommentHtml) {
+        if (WEB_DOC_METHOD == null || REF_METHOD == null || !info.appSettings.showLineEndCommentHtml) {
             return super.refDoc(info, ref);
         }
         @NotNull PsiSymbolReferenceService service = PsiSymbolReferenceService.getService();
