@@ -53,7 +53,9 @@ public class TreeCacheUtils {
                     isRun = true;
                     AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(() -> {
                         try {
-                            cacheUpdate();
+                            ReadAction.nonBlocking(TreeCacheUtils::cacheUpdate)
+                                    .inSmartMode(project)
+                                    .submit(AppExecutorUtil.getAppExecutorService());
                         } catch (Throwable e) {
                             LOG.info("TreeCacheUtils checkScheduleAndInit catch Throwable but log to record.", e);
                         }
@@ -72,21 +74,20 @@ public class TreeCacheUtils {
                 }
                 nodeCache.forEach((node, treeCache) -> {
                     if (treeCache.needUpdate) {
-                        ReadAction.nonBlocking(() -> {
-                            try {
-                                if (project.isDisposed() || DumbService.isDumb(project)) {
-                                    return;
-                                }
-                                treeCache.doc = Tree.treeDoc(node, project);
-                                treeCache.needUpdate = false;
-                            } catch (ProcessCanceledException ignore) {
-                                // ignore
-                            } catch (Throwable e) {
-                                LOG.info("TreeCacheUtils nodeCache.forEach catch Throwable but log to record.", e);
+                        try {
+                            if (project.isDisposed() || DumbService.isDumb(project)) {
+                                return;
                             }
-                        }).inSmartMode(project).executeSynchronously();
+                            treeCache.doc = Tree.treeDoc(node, project);
+                            treeCache.needUpdate = false;
+                        } catch (ProcessCanceledException ignore) {
+                            // ignore
+                        } catch (Throwable e) {
+                            LOG.info("TreeCacheUtils nodeCache.forEach catch Throwable but log to record.", e);
+                        }
                     }
                 });
+            } catch (ProcessCanceledException ignored) {
             } catch (IllegalStateException ignore) {
                 // ignore inSmartMode(project) throw:
                 // @NotNull method com/intellij/openapi/project/impl/ProjectImpl.getEarlyDisposable must not return null
