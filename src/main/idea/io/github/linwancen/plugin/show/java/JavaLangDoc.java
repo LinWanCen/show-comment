@@ -18,7 +18,7 @@ import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.java.doc.AnnoDoc;
+import io.github.linwancen.plugin.show.java.doc.AnnoDocJava;
 import io.github.linwancen.plugin.show.java.doc.EnumDoc;
 import io.github.linwancen.plugin.show.java.doc.NewDoc;
 import io.github.linwancen.plugin.show.java.doc.ParamDoc;
@@ -101,7 +101,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             return EnumDoc.enumDoc((PsiEnumConstant) resolve);
         }
         if (resolve instanceof PsiJvmModifiersOwner) {
-            return AnnoDoc.annoDoc(info, (PsiJvmModifiersOwner) resolve);
+            return AnnoDocJava.INSTANCE.annoDoc(info, (PsiJvmModifiersOwner) resolve);
         }
         return null;
     }

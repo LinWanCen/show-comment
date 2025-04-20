@@ -4,7 +4,120 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.22.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.23.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+
+patchPluginXml {
+    // The performance of 2019.3 has been greatly improved.
+    // change plugins without restarting the IDE in 2020.1.
+    // 2020.2 JCEF, 2022.2 JDK17 java2d perf improved, 2023.3 AI
+    sinceBuild = '201.1'
+    untilBuild = ''
+    changeNotes = """
+<h2>English Change Notes:</h2>
+<ul>
+<li>2.23  Add line-end-comment  kotlin anno doc
+<li>2.22  Add project-view-tree ollama models blobs comment from manifests
+<li>2.21  Add project-view-tree use JS/TS/Vue "export default" doc for tree doc
+<li>2.20  Add External Comment  support Vue src/router tree doc
+<li>2.19  ★   line-end-comment  support HTML(Vue) Tag/Attr doc since 2022.3.1
+<li>2.18  Add line-end-comment  support injected language like SQL
+<li>2.17  Add External Comment  support *.key.regexp and MyBatis xml demo in Git
+<li>2.16  Add line-end-comment  support Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
+<li>2.15  Add line-end-comment  java anno doc
+<li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
+<li>2.13  ★                     Cache for 2023.3
+<li>2.12  Add project-view-tree support Markdown and Asciidoc
+<li>2.11  Add project-view-tree description from pom.xml and build.gradle
+<li>2.10  Add line-end-comment  not doc comment
+<li>2.09  Add line-end-comment  support Python doc strings
+<li>2.08  Add                   i18n and chinese
+<li>2.07  Add global-setting    reset default
+<li>2.06  Add project-view-tree xx-abc.xxx from Abc.java doc
+<li>2.05  Add line-end-comment  json doc from xxx.json.tsv
+<li>2.04  Add line-end-comment  json dict doc from (key).tsv
+<li>2.03  Add live-templates    input `doc` `docc` -> /** */
+<li>2.02  Add line-end-comment  show before doc for `isA(xxx)` and `a.set(b.get)`
+<li>2.01  Add line-end-comment  support SQL, JavaScript, Python, Golang, Kotlin
+<li>2.00  ★★                   support all JetBrains IDE
+<li>1.24  Add PopupMenu         Copy FileName:LineNumber
+<li>1.23  Add project-view-tree setting for show when compact middle packages
+<li>1.22  Add PopupMenu         Copy ClassName.MethodName
+<li>1.21  Add line-end-comment  default skip only English when system lang is not `en`
+<li>1.20  Add line-end-comment  get doc first sentence checkbox
+<li>1.19  Add line-end-comment  supper doc at @Override, support doc tag like @author
+<li>1.18  Add External Comment  effect at previous layer when folder named -1
+<li>1.17  Add line-end-comment  skip doc text or class/member name by regexp
+<li>1.16  Add line-end-comment  skip when comments have been added
+<li>1.15  Add line-end-comment  support COBOL ext '', 'cbl', 'cob', 'cobol'
+<li>1.14  Add line-end-comment  skip Annotation, skip only English (ASCII)
+<li>1.13  Add line-end-comment  Copy With Line Comment & Add Line Comment
+<li>1.12  ★   External Comment  for COBOL etc
+<li>1.11  Add                   json key jump to field
+<li>1.10  Add project-view-tree for package from parent or other project
+<li>1.9   Add project-view-tree for "xx-ClassNameOrSimpleName.json" and SPI file
+<li>1.8   ★   line-end-comment  for "xx-ClassNameOrSimpleName.json"
+<li>1.7   Add line-end-comment  setting for prefix and count
+<li>1.6   Add line-end-comment  independent switch for call, new, ref
+<li>1.5   Add line-end-comment  find next loop when none
+<li>1.4   Add line-end-comment  find element right to left
+<li>1.3   ★   project-view-tree file and member comment
+<li>1.2   Add line-end-comment  settings for class prefix filter
+<li>1.1   Add line-end-comment  settings for text color
+</ul>
+
+<h2>中文更新说明:</h2>
+<ul>
+<li>2.23  增加 行末注释   kotlin 注解注释
+<li>2.22  增加 文件树注释  ollama models 文件夹从 manifests 获取 blobs 文件注释
+<li>2.21  增加 文件树注释  用 JS/TS/Vue "export default" 注释当文件注释
+<li>2.20  增加 外部注释   支持 Vue 路由标题文件树注释
+<li>2.19  ★   行末注释   支持 HTML(Vue) 标签/属性 注释从 2022.3.1 起
+<li>2.18  增加 行末注释   支持注入语言如 SQL
+<li>2.17  增加 tsv 注释  支持 *.key.regexp 与 Mybatis xml 示例在 Git
+<li>2.16  增加 行末注释   支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
+<li>2.15  增加 行末注释   java 注解注释
+<li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")
+<li>2.13  ★             缓存用于支持 2023.3
+<li>2.12  增加 文件树注释  支持 Markdown and Asciidoc
+<li>2.11  增加 文件树注释  模块描述 来自 pom.xml 和 build.gradle
+<li>2.10  增加 行末注释   非文档注释
+<li>2.09  增加 行末注释   支持 Python 文档字符串
+<li>2.08  增加           多语言与中文支持
+<li>2.07  增加 全局设置   复位默认值
+<li>2.06  增加 文件树注释  xx-abc.xxx 来自 Abc.java 的文档注释
+<li>2.05  增加 行末注释   json 字段注释从 xxx.json.tsv 读取
+<li>2.04  增加 行末注释   json 字典注释从 键名.tsv 读取
+<li>2.03  增加 活动模板   输入 doc / docc 等生成 /** */
+<li>2.02  增加 行末注释   `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释
+<li>2.01  增加 行末注释   支持 SQL, JavaScript, Python, Golang, Kotlin
+<li>2.00  ★★           支持所有 JetBrains 软件
+<li>1.24  增加 右键菜单   复制 文件名:行号
+<li>1.23  增加 文件树注释 折叠中间包时显示中间包注释设置
+<li>1.22  增加 右键菜单   复制 类名.方法名
+<li>1.21  增加 行末注释   系统语言非英文时 默认 忽略纯英文
+<li>1.20  增加 行末注释   获取第一句注释选项
+<li>1.19  增加 行末注释   @Override 显示父方法注释，支持 @author 等注释标签
+<li>1.18  增加 tsv 注释  文件夹名为 -1 时配置在上一层文件夹生效
+<li>1.17  增加 行末注释   根据正则表达式跳过指定注释文本或类成员名字的注释
+<li>1.16  增加 行末注释   已经添加行末注释时跳过
+<li>1.15  增加 行末注释   COBOL 拓展名支持 无拓展名、cbl、cob、cobol
+<li>1.14  增加 行末注释   忽略注解 与 忽略纯英文
+<li>1.13  增加 行末注释   带注释复制 和 添加注释
+<li>1.12  ★   tsv 注释  用于 COBOL 等
+<li>1.11  增加           json 跳转到字段
+<li>1.10  增加 文件树注释 在父包和其他项目的包中获取
+<li>1.9   增加 文件树注释 "xx-类全名或简名.json" 和 SPI
+<li>1.8   ★   行末注释   "xx-类全名或简名.json"
+<li>1.7   增加 行末注释   前缀和对象数设置
+<li>1.6   增加 行末调用   new，引用注释独立开关
+<li>1.5   增加 行末注释   没有注释时循环查找下一个对象
+<li>1.4   增加 行末注释   从右往左查找行末注释对象
+<li>1.3   ★   文件树注释 (左侧项目导航文件树)
+<li>1.2   增加 行末注释   类前缀配置
+<li>1.1   增加 行末注释   颜色配置
+</ul>
+      """
+}
 
 repositories {
     mavenCentral()
@@ -84,117 +197,6 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Javadoc) {
     options.encoding = 'UTF-8'
-}
-
-patchPluginXml {
-    // The performance of 2019.3 has been greatly improved.
-    // change plugins without restarting the IDE in 2020.1.
-    // 2020.2 JCEF, 2022.2 JDK17 java2d perf improved, 2023.3 AI
-    sinceBuild = '201.1'
-    untilBuild = ''
-    changeNotes = """
-<h2>English Change Notes:</h2>
-<ul>
-<li>2.22  Add project-view-tree ollama models blobs comment from manifests
-<li>2.21  Add project-view-tree use JS/TS/Vue "export default" doc for tree doc
-<li>2.20  Add External Comment  support Vue src/router tree doc
-<li>2.19  ★   line-end-comment  support HTML(Vue) Tag/Attr doc since 2022.3.1
-<li>2.18  Add line-end-comment  support injected language like SQL
-<li>2.17  Add External Comment  support *.key.regexp and MyBatis xml demo in Git
-<li>2.16  Add line-end-comment  support Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
-<li>2.15  Add line-end-comment  java anno doc
-<li>2.14  Add line-end-comment  java enum doc for Yes(1, "Yes")
-<li>2.13  ★                     Cache for 2023.3
-<li>2.12  Add project-view-tree support Markdown and Asciidoc
-<li>2.11  Add project-view-tree description from pom.xml and build.gradle
-<li>2.10  Add line-end-comment  not doc comment
-<li>2.09  Add line-end-comment  support Python doc strings
-<li>2.08  Add                   i18n and chinese
-<li>2.07  Add global-setting    reset default
-<li>2.06  Add project-view-tree xx-abc.xxx from Abc.java doc
-<li>2.05  Add line-end-comment  json doc from xxx.json.tsv
-<li>2.04  Add line-end-comment  json dict doc from (key).tsv
-<li>2.03  Add live-templates    input `doc` `docc` -> /** */
-<li>2.02  Add line-end-comment  show before doc for `isA(xxx)` and `a.set(b.get)`
-<li>2.01  Add line-end-comment  support SQL, JavaScript, Python, Golang, Kotlin
-<li>2.00  ★★                   support all JetBrains IDE
-<li>1.24  Add PopupMenu         Copy FileName:LineNumber
-<li>1.23  Add project-view-tree setting for show when compact middle packages
-<li>1.22  Add PopupMenu         Copy ClassName.MethodName
-<li>1.21  Add line-end-comment  default skip only English when system lang is not `en`
-<li>1.20  Add line-end-comment  get doc first sentence checkbox
-<li>1.19  Add line-end-comment  supper doc at @Override, support doc tag like @author
-<li>1.18  Add External Comment  effect at previous layer when folder named -1
-<li>1.17  Add line-end-comment  skip doc text or class/member name by regexp
-<li>1.16  Add line-end-comment  skip when comments have been added
-<li>1.15  Add line-end-comment  support COBOL ext '', 'cbl', 'cob', 'cobol'
-<li>1.14  Add line-end-comment  skip Annotation, skip only English (ASCII)
-<li>1.13  Add line-end-comment  Copy With Line Comment & Add Line Comment
-<li>1.12  ★   External Comment  for COBOL etc
-<li>1.11  Add                   json key jump to field
-<li>1.10  Add project-view-tree for package from parent or other project
-<li>1.9   Add project-view-tree for "xx-ClassNameOrSimpleName.json" and SPI file
-<li>1.8   ★   line-end-comment  for "xx-ClassNameOrSimpleName.json"
-<li>1.7   Add line-end-comment  setting for prefix and count
-<li>1.6   Add line-end-comment  independent switch for call, new, ref
-<li>1.5   Add line-end-comment  find next loop when none
-<li>1.4   Add line-end-comment  find element right to left
-<li>1.3   ★   project-view-tree file and member comment
-<li>1.2   Add line-end-comment  settings for class prefix filter
-<li>1.1   Add line-end-comment  settings for text color
-</ul>
-
-<h2>中文更新说明:</h2>
-<ul>
-<li>2.22  增加 文件树注释  ollama models 文件夹从 manifests 获取 blobs 文件注释
-<li>2.21  增加 文件树注释  用 JS/TS/Vue "export default" 注释当文件注释
-<li>2.20  增加 外部注释   支持 Vue 路由标题文件树注释
-<li>2.19  ★   行末注释   支持 HTML(Vue) 标签/属性 注释从 2022.3.1 起
-<li>2.18  增加 行末注释   支持注入语言如 SQL
-<li>2.17  增加 tsv 注释  支持 *.key.regexp 与 Mybatis xml 示例在 Git
-<li>2.16  增加 行末注释   支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
-<li>2.15  增加 行末注释   java 注解注释
-<li>2.14  增加 行末注释   java 枚举注释用于 Yes(1, "是")
-<li>2.13  ★             缓存用于支持 2023.3
-<li>2.12  增加 文件树注释  支持 Markdown and Asciidoc
-<li>2.11  增加 文件树注释  模块描述 来自 pom.xml 和 build.gradle
-<li>2.10  增加 行末注释   非文档注释
-<li>2.09  增加 行末注释   支持 Python 文档字符串
-<li>2.08  增加           多语言与中文支持
-<li>2.07  增加 全局设置   复位默认值
-<li>2.06  增加 文件树注释  xx-abc.xxx 来自 Abc.java 的文档注释
-<li>2.05  增加 行末注释   json 字段注释从 xxx.json.tsv 读取
-<li>2.04  增加 行末注释   json 字典注释从 键名.tsv 读取
-<li>2.03  增加 活动模板   输入 doc / docc 等生成 /** */
-<li>2.02  增加 行末注释   `isA(xxx)` 和 `a.set(b.get)` 显示前一个注释
-<li>2.01  增加 行末注释   支持 SQL, JavaScript, Python, Golang, Kotlin
-<li>2.00  ★★           支持所有 JetBrains 软件
-<li>1.24  增加 右键菜单   复制 文件名:行号
-<li>1.23  增加 文件树注释 折叠中间包时显示中间包注释设置
-<li>1.22  增加 右键菜单   复制 类名.方法名
-<li>1.21  增加 行末注释   系统语言非英文时 默认 忽略纯英文
-<li>1.20  增加 行末注释   获取第一句注释选项
-<li>1.19  增加 行末注释   @Override 显示父方法注释，支持 @author 等注释标签
-<li>1.18  增加 tsv 注释  文件夹名为 -1 时配置在上一层文件夹生效
-<li>1.17  增加 行末注释   根据正则表达式跳过指定注释文本或类成员名字的注释
-<li>1.16  增加 行末注释   已经添加行末注释时跳过
-<li>1.15  增加 行末注释   COBOL 拓展名支持 无拓展名、cbl、cob、cobol
-<li>1.14  增加 行末注释   忽略注解 与 忽略纯英文
-<li>1.13  增加 行末注释   带注释复制 和 添加注释
-<li>1.12  ★   tsv 注释  用于 COBOL 等
-<li>1.11  增加           json 跳转到字段
-<li>1.10  增加 文件树注释 在父包和其他项目的包中获取
-<li>1.9   增加 文件树注释 "xx-类全名或简名.json" 和 SPI
-<li>1.8   ★   行末注释   "xx-类全名或简名.json"
-<li>1.7   增加 行末注释   前缀和对象数设置
-<li>1.6   增加 行末调用   new，引用注释独立开关
-<li>1.5   增加 行末注释   没有注释时循环查找下一个对象
-<li>1.4   增加 行末注释   从右往左查找行末注释对象
-<li>1.3   ★   文件树注释 (左侧项目导航文件树)
-<li>1.2   增加 行末注释   类前缀配置
-<li>1.1   增加 行末注释   颜色配置
-</ul>
-      """
 }
 
 test {

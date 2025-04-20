@@ -10,50 +10,18 @@ import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiJvmModifiersOwner;
 import com.intellij.psi.PsiMethod;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
-import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
-import org.apache.commons.lang3.StringUtils;
+import io.github.linwancen.plugin.show.lang.base.BaseAnnoDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class AnnoDoc {
+public class AnnoDocJava extends BaseAnnoDoc<PsiJvmModifiersOwner> {
 
-    private AnnoDoc() {}
+    public static AnnoDocJava INSTANCE = new AnnoDocJava();
 
-    @Nullable
-    public static <T extends SettingsInfo> String annoDoc(@NotNull T info, @NotNull PsiJvmModifiersOwner owner) {
-        @NotNull ProjectSettingsState projectSettings = info.projectSettings;
-        @NotNull GlobalSettingsState globalSettings = info.globalSettings;
-        // annoDocEffect first because default false
-        if (projectSettings.annoDocEffect && projectSettings.projectFilterEffective) {
-            @Nullable String doc = annoDocArr(owner, projectSettings.annoDoc);
-            if (StringUtils.isNotBlank(doc)) {
-                return doc;
-            }
-        }
-        if (globalSettings.annoDocEffect && projectSettings.globalFilterEffective) {
-            return annoDocArr(owner, globalSettings.annoDoc);
-        }
-        return null;
-    }
+    private AnnoDocJava() {}
 
     @Nullable
-    private static String annoDocArr(@NotNull PsiJvmModifiersOwner owner, @NotNull String[][] lines) {
-        for (@NotNull String[] arr : lines) {
-            if (arr.length < 3) {
-                continue;
-            }
-            @Nullable String s = annoDocMatch(owner, arr);
-            if (s != null) {
-                return s;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    private static String annoDocMatch(@NotNull PsiJvmModifiersOwner owner, @NotNull String[] arr) {
+    protected String annoDocMatch(@NotNull PsiJvmModifiersOwner owner, @NotNull String[] arr) {
         if (typeMatch(owner, arr[0])) {
             return annoDocName(owner, arr);
         }

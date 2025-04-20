@@ -161,7 +161,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 return null;
             }
             if (resolve == null) {
-                return null;
+                continue;
             }
             @Nullable String resolveDoc = resolveDoc(info, resolve);
             if (resolveDoc != null) {

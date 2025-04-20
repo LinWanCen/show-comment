@@ -5,6 +5,7 @@ import com.intellij.psi.impl.file.PsiPackageBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.java.kt.AnnoDocKt;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.kdoc.psi.api.KDoc;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocName;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag;
+import org.jetbrains.kotlin.psi.KtAnnotated;
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression;
 
 import java.util.List;
@@ -27,6 +29,18 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
     @Override
     public boolean show(@NotNull LineInfo info) {
         return info.appSettings.showLineEndCommentKotlin;
+    }
+
+    @Override
+    public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
+        @Nullable String resolveDocPrint = super.resolveDocPrint(info, resolve);
+        if (resolveDocPrint != null) {
+            return resolveDocPrint;
+        }
+        if (resolve instanceof KtAnnotated) {
+            return AnnoDocKt.INSTANCE.annoDoc(info, (KtAnnotated) resolve);
+        }
+        return null;
     }
 
     @Override
