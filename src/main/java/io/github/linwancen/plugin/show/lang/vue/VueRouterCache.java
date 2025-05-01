@@ -1,7 +1,6 @@
 package io.github.linwancen.plugin.show.lang.vue;
 
 import com.intellij.ide.projectView.ProjectView;
-import com.intellij.lang.ecmascript6.psi.ES6ExportDefaultAssignment;
 import com.intellij.lang.ecmascript6.psi.ES6ImportCall;
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding;
 import com.intellij.lang.javascript.psi.JSArrayLiteralExpression;
@@ -78,16 +77,11 @@ public class VueRouterCache extends FileLoader {
         if (psiFile == null) {
             return;
         }
-        @Nullable ES6ExportDefaultAssignment export = PsiTreeUtil.findChildOfType(psiFile,
-                ES6ExportDefaultAssignment.class);
-        if (export == null) {
-            return;
+        Collection<JSArrayLiteralExpression> arrays =
+                PsiTreeUtil.findChildrenOfType(psiFile, JSArrayLiteralExpression.class);
+        for (JSArrayLiteralExpression arr : arrays) {
+            parseArr(arr);
         }
-        @Nullable JSArrayLiteralExpression arr = PsiTreeUtil.findChildOfAnyType(export, JSArrayLiteralExpression.class);
-        if (arr == null) {
-            return;
-        }
-        parseArr(arr);
     }
 
     @Nullable
@@ -192,7 +186,12 @@ public class VueRouterCache extends FileLoader {
         if (importCall == null) {
             return null;
         }
-        @NotNull Collection<PsiElement> elements = importCall.resolveReferencedElements();
+        @NotNull Collection<PsiElement> elements;
+        try {
+            elements = importCall.resolveReferencedElements();
+        } catch (Exception ignored) {
+            return null;
+        }
         for (PsiElement element : elements) {
             @Nullable PsiFile psiFile = PsiTreeUtil.getParentOfType(element, PsiFile.class);
             if (psiFile != null) {
