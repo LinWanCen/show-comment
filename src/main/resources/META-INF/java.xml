@@ -1,6 +1,7 @@
 <idea-plugin>
   <extensions defaultExtensionNs="com.intellij">
-    <psi.referenceContributor implementation="io.github.linwancen.plugin.show.java.JsonJumpJava"/>
+    <psi.referenceContributor implementation="io.github.linwancen.plugin.show.java.JsonJumpJava" language="JSON"/>
+    <psi.referenceContributor implementation="io.github.linwancen.plugin.show.java.JsonJumpJava" language="JSON5"/>
     <editor.linePainter implementation="io.github.linwancen.plugin.show.java.JavaLangDoc"/>
   </extensions>
 </idea-plugin>

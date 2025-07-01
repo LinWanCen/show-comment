@@ -123,6 +123,7 @@ Show doc comment in the Project view Tree, line End, json, other
        on how to target different products -->
   <depends>com.intellij.modules.platform</depends>
   <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
+  <depends optional="true" config-file="maven.xml">org.jetbrains.idea.maven</depends>
   <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
   <depends optional="true" config-file="groovy.xml">org.intellij.groovy</depends>
   <depends optional="true" config-file="scala.xml">org.intellij.scala</depends>
@@ -163,6 +164,7 @@ Show doc comment in the Project view Tree, line End, json, other
   </projectListeners>
 
   <extensionPoints>
+    <extensionPoint name="xmlLangDoc" dynamic="true" interface="io.github.linwancen.plugin.show.lang.XmlLangDoc"/>
     <extensionPoint name="fileLoader" dynamic="true" interface="io.github.linwancen.plugin.show.ext.listener.FileLoader"/>
   </extensionPoints>
   <extensions defaultExtensionNs="io.github.linwancen.show-comment">
@@ -172,6 +174,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
   <extensions defaultExtensionNs="com.intellij">
     <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd"/>
+    <editor.linePainter implementation="io.github.linwancen.plugin.show.lang.XmlLangDoc"/>
     <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
     <defaultLiveTemplates file="/liveTemplates/show-comment-_.xml"/>
     <defaultLiveTemplates file="/liveTemplates/show-comment-doc.xml"/>

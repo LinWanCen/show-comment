@@ -42,6 +42,7 @@ public abstract class AbstractSettingsComponent {
     protected JPanel commonPanel() {
         return FormBuilder.createFormBuilder()
                 .addComponent(lineEndPanel(), 1)
+                .addComponent(webPanel(), 1)
                 .addComponent(treePanel(), 1)
                 .getPanel();
     }
@@ -58,11 +59,6 @@ public abstract class AbstractSettingsComponent {
                 .addSeparator()
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.include.regexp")), docInclude, 1, true)
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
-                .addSeparator()
-                .addLabeledComponent(new JBLabel(ShowBundle.message("tag.include.regexp")), tagInclude, 1, true)
-                .addLabeledComponent(new JBLabel(ShowBundle.message("tag.exclude.regexp")), tagExclude, 1, true)
-                .addLabeledComponent(new JBLabel(ShowBundle.message("attr.include.regexp")), attrInclude, 1, true)
-                .addLabeledComponent(new JBLabel(ShowBundle.message("attr.exclude.regexp")), attrExclude, 1, true)
                 .addSeparator();
         Border border = docGet.getBorder();
         annoDoc.setBorder(border);
@@ -74,6 +70,18 @@ public abstract class AbstractSettingsComponent {
         builder = builder.addLabeledComponent(annoLabel, annoDoc, 1, true);
         JPanel panel = builder.getPanel();
         panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
+        return panel;
+    }
+
+    @NotNull
+    private JPanel webPanel() {
+        JPanel panel = FormBuilder.createFormBuilder()
+                .addLabeledComponent(new JBLabel(ShowBundle.message("tag.include.regexp")), tagInclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("tag.exclude.regexp")), tagExclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("attr.include.regexp")), attrInclude, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("attr.exclude.regexp")), attrExclude, 1, true)
+                .getPanel();
+        panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("web.comment")));
         return panel;
     }
 

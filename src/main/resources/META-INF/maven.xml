@@ -1,0 +1,5 @@
+<idea-plugin>
+  <extensions defaultExtensionNs="io.github.linwancen.show-comment">
+    <xmlLangDoc implementation="io.github.linwancen.plugin.show.java.MavenLangDoc"/>
+  </extensions>
+</idea-plugin>

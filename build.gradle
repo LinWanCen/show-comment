@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.23.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.24.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 patchPluginXml {
     // The performance of 2019.3 has been greatly improved.
@@ -15,6 +15,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.24  Add line-end-comment  Maven pom.xml \${} doc
 <li>2.23  Add line-end-comment  kotlin anno doc
 <li>2.22  Add project-view-tree ollama models blobs comment from manifests
 <li>2.21  Add project-view-tree use JS/TS/Vue "export default" doc for tree doc
@@ -67,6 +68,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.24  增加 行末注释   Maven pom.xml \${} 注释
 <li>2.23  增加 行末注释   kotlin 注解注释
 <li>2.22  增加 文件树注释  ollama models 文件夹从 manifests 获取 blobs 文件注释
 <li>2.21  增加 文件树注释  用 JS/TS/Vue "export default" 注释当文件注释
@@ -151,6 +153,7 @@ intellij {
     ]
     if ('IC' == ideTypeStr || 'IU' == ideTypeStr) {
         plugins.add('java')
+        plugins.add('org.jetbrains.idea.maven')
         plugins.add('org.jetbrains.kotlin')
         plugins.add('org.intellij.groovy')
         plugins.add('org.intellij.scala:2020.1.43')
