@@ -169,6 +169,7 @@ Show doc comment in the Project view Tree, line End, json, other
   </extensionPoints>
   <extensions defaultExtensionNs="io.github.linwancen.show-comment">
     <fileLoader implementation="io.github.linwancen.plugin.show.ext.conf.ConfCache"/>
+    <fileLoader implementation="io.github.linwancen.plugin.show.lang.XmlCache"/>
     <fileLoader implementation="io.github.linwancen.plugin.show.ext.ollama.OllamaModelsCache"/>
   </extensions>
 
