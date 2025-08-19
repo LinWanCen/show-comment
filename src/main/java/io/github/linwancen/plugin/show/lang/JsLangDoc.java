@@ -16,6 +16,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.ext.listener.FileLoader;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import io.github.linwancen.plugin.show.lang.vue.VueRouterCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,6 +77,6 @@ public class JsLangDoc extends BaseLangDoc {
             }
             return null;
         }
-        return psiComment.getText();
+        return PsiUnSaveUtils.getText(psiComment);
     }
 }

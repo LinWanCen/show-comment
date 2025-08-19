@@ -94,7 +94,7 @@ public class JsonLangDoc extends BaseLangDoc {
         }
         @NotNull GlobalSearchScope scope = GlobalSearchScope.allScope(info.project);
         @NotNull String jsonKey = prop.getName();
-        String jsonValue = value.getText();
+        String jsonValue = info.getText(value);
         // Read the json.path before if needed
         @Nullable String dictDoc = jsonDictDoc(info, scope, jsonKey, jsonValue);
         if (dictDoc != null) {

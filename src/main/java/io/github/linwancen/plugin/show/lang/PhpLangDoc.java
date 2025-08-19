@@ -15,6 +15,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +48,7 @@ public class PhpLangDoc extends BaseTagLangDoc<PhpDocComment> {
                 for (PsiElement child : children) {
                     @Nullable PsiComment comment = PsiTreeUtil.getChildOfType(child, PsiComment.class);
                     if (comment != null) {
-                        String text = comment.getText();
+                        String text = PsiUnSaveUtils.getText(comment);
                         return DocFilter.cutDoc(text, info, true);
                     }
                 }
@@ -74,7 +75,7 @@ public class PhpLangDoc extends BaseTagLangDoc<PhpDocComment> {
     @NotNull
     @Override
     protected <T extends SettingsInfo> String descDoc(@NotNull T info, @NotNull PhpDocComment phpDocComment) {
-        String text = phpDocComment.getText();
+        String text = PsiUnSaveUtils.getText(phpDocComment);
         return DocFilter.cutDoc(text, info, true);
     }
 

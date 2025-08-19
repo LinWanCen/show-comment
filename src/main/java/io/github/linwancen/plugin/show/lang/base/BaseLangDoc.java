@@ -106,7 +106,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
             @Nullable String filterDoc = refElementDoc(info, parent);
             if (filterDoc != null) {
                 doc = filterDoc;
-                text = refElement.getText();
+                text = info.getText(refElement);
                 refElement = parent;
                 break;
             }
@@ -122,7 +122,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         PsiElement parent = beforeRefElement.getParent();
         @Nullable String beforeDoc = refElementDoc(info, parent);
         if (beforeDoc != null) {
-            doc = MergeDoc.mergeDoc(beforeRefElement.getText(), text, beforeDoc, doc, info.appSettings.getToSet);
+            doc = MergeDoc.mergeDoc(info.getText(beforeRefElement), text, beforeDoc, doc, info.appSettings.getToSet);
         }
         return doc;
     }

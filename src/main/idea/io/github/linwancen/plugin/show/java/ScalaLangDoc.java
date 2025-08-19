@@ -8,6 +8,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.plugins.scala.ScalaLanguage;
@@ -58,7 +59,7 @@ public class ScalaLangDoc extends JavaLangDoc {
         @NotNull StringBuilder sb = new StringBuilder();
         for (@NotNull PsiElement element : elements) {
             if (!(element instanceof PsiDocTag)) {
-                sb.append(element.getText());
+                sb.append(PsiUnSaveUtils.getText(element));
             }
         }
         return DocFilter.cutDoc(sb.toString(), info, true);
@@ -72,7 +73,7 @@ public class ScalaLangDoc extends JavaLangDoc {
         for (@NotNull PsiDocTag tag : tags) {
             if (tag instanceof ScDocTag) {
                 @NotNull ScDocTag scDocTag = (ScDocTag) tag;
-                String doc = scDocTag.getText();
+                String doc = PsiUnSaveUtils.getText(scDocTag);
                 doc = doc.replace(key, "");
                 DocFilter.addHtml(tagStrBuilder, doc);
             }

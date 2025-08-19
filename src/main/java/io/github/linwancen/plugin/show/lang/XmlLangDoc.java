@@ -15,6 +15,7 @@ import com.intellij.psi.xml.XmlTag;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +49,7 @@ public class XmlLangDoc extends BaseLangDoc {
             return null;
         }
         PsiElement psiElement = viewProvider.findElementAt(0);
-        if (psiElement == null || !"<!--".equals(psiElement.getText())) {
+        if (psiElement == null || !"<!--".equals(PsiUnSaveUtils.getText(psiElement))) {
             Document document = viewProvider.getDocument();
             if (document == null) {
                 return null;
@@ -62,7 +63,7 @@ public class XmlLangDoc extends BaseLangDoc {
             int i = document.getLineStartOffset(1);
             psiElement = viewProvider.findElementAt(i);
         }
-        if (psiElement == null || !"<!--".equals(psiElement.getText())) {
+        if (psiElement == null || !"<!--".equals(PsiUnSaveUtils.getText(psiElement))) {
             return null;
         }
         PsiElement parent = psiElement.getParent();
@@ -73,7 +74,7 @@ public class XmlLangDoc extends BaseLangDoc {
         if (children.length < 2) {
             return null;
         }
-        String doc = children[1].getText();
+        String doc = PsiUnSaveUtils.getText(children[1]);
         // Copyright or copyright
         //noinspection SpellCheckingInspection
         if (doc == null || doc.contains("opyright")) {

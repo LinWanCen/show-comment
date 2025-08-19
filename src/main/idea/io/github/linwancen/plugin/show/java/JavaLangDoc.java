@@ -27,6 +27,7 @@ import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
 import io.github.linwancen.plugin.show.java.line.SkipUtils;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +59,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Override
     protected @Nullable String refDoc(@NotNull LineInfo info, @NotNull PsiElement ref) {
-        if ("Override".equals(ref.getText())) {
+        if ("Override".equals(info.getText(ref))) {
             @Nullable PsiMethod psiMethod = PsiTreeUtil.getParentOfType(ref, PsiMethod.class);
             if (psiMethod == null) {
                 return null;
@@ -154,11 +155,11 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
         @NotNull PsiElement[] children = element.getChildren();
         if (children.length > 0) {
             if (children.length >= 3) {
-                DocFilter.addHtml(sb, children[children.length - 2].getText());
+                DocFilter.addHtml(sb, PsiUnSaveUtils.getText(children[children.length - 2]));
             }
             return false;
         }
-        DocFilter.addHtml(sb, element.getText());
+        DocFilter.addHtml(sb, PsiUnSaveUtils.getText(element));
         return false;
     }
 
@@ -169,11 +170,11 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
         for (@NotNull PsiDocTag tag : tags) {
             @Nullable PsiDocTagValue value = tag.getValueElement();
             if (value != null) {
-                DocFilter.addHtml(tagStrBuilder, value.getText());
+                DocFilter.addHtml(tagStrBuilder, PsiUnSaveUtils.getText(value));
             } else {
                 @NotNull PsiElement[] dataElements = tag.getDataElements();
                 if (dataElements.length > 0) {
-                    DocFilter.addHtml(tagStrBuilder, dataElements[0].getText());
+                    DocFilter.addHtml(tagStrBuilder, PsiUnSaveUtils.getText(dataElements[0]));
                 }
             }
         }

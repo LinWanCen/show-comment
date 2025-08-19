@@ -1,6 +1,7 @@
 package io.github.linwancen.plugin.show.java.kt;
 
 import io.github.linwancen.plugin.show.lang.base.BaseAnnoDoc;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.name.Name;
@@ -70,7 +71,7 @@ public class AnnoDocKt extends BaseAnnoDoc<KtAnnotated> {
             if (arr[2].equals(method)) {
                 KtExpression expression = argument.getArgumentExpression();
                 if (expression instanceof KtStringTemplateExpression) {
-                    String text = expression.getText();
+                    String text = PsiUnSaveUtils.getText(expression);
                     if (text.length() >= 2) {
                         String s = text.substring(1, text.length() - 1);
                         if (!s.isEmpty()) {

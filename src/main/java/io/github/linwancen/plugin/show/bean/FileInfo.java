@@ -6,8 +6,10 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,5 +54,16 @@ public class FileInfo extends SettingsInfo {
         @NotNull VirtualFile file = viewProvider.getVirtualFile();
         @NotNull Project project = psiFile.getProject();
         return new FileInfo(file, document, project, FuncEnum.LINE);
+    }
+
+    public String getText(PsiElement element) {
+        try {
+            TextRange range = element.getTextRange();
+            int startOffset = range.getStartOffset();
+            int endOffset = range.getEndOffset();
+            return document.getText().substring(startOffset, endOffset);
+        } catch (Exception ignored) {
+            return element.getText();
+        }
     }
 }

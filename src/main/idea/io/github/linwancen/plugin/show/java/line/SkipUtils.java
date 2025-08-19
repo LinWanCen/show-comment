@@ -7,6 +7,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.DocSkip;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +61,7 @@ public class SkipUtils {
         if (info.appSettings.skipBlank && isBlank(doc)) {
             return null;
         }
-        String text = doc.getText();
+        String text = PsiUnSaveUtils.getText(doc);
         boolean skip = DocSkip.skipDoc(info, text);
         return skip ? null : doc;
     }
@@ -68,7 +69,7 @@ public class SkipUtils {
     private static boolean isBlank(@NotNull PsiDocComment doc) {
         @NotNull PsiElement[] elements = doc.getDescriptionElements();
         for (@NotNull PsiElement element : elements) {
-            String text = element.getText();
+            String text = PsiUnSaveUtils.getText(element);
             if (StringUtils.isNotBlank(text)) {
                 return false;
             }

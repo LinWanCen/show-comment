@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show.java.doc;
 import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionList;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +28,7 @@ public class EnumDoc {
             return null;
         }
         return Arrays.stream(exps)
-                .map(exp -> exp.getText().replace("\"", ""))
+                .map(exp -> PsiUnSaveUtils.getText(exp).replace("\"", ""))
                 .collect(Collectors.joining("-"));
     }
 }
