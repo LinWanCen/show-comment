@@ -41,7 +41,7 @@ public class XmlLangDoc extends BaseLangDoc {
     public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull ProjectViewNode<?> node,
                                                              @NotNull Project project) {
         @Nullable VirtualFile virtualFile = node.getVirtualFile();
-        if (virtualFile == null) {
+        if (virtualFile == null || virtualFile.isDirectory()) {
             return null;
         }
         @Nullable FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(virtualFile);

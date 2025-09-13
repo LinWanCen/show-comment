@@ -59,7 +59,13 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         if (viewProvider == null) {
             return null;
         }
-        @Nullable PsiElement element = viewProvider.findElementAt(info.endOffset);
+        @Nullable PsiElement element;
+        try {
+            element = viewProvider.findElementAt(info.endOffset);
+        } catch (Throwable ignored) {
+            // InvalidVirtualFileAccessException
+            return null;
+        }
         if (element == null) {
             // file end
             element = viewProvider.findElementAt(info.endOffset - 1);
@@ -177,6 +183,9 @@ public abstract class BaseLangDoc extends EditorLinePainter {
     public static @Nullable <T extends SettingsInfo> String resolveDoc(@NotNull T info,
                                                                        @NotNull PsiElement psiElement) {
         try {
+            if (!psiElement.isValid()) {
+                return null;
+            }
             // byte to src
             PsiElement navElement = psiElement.getNavigationElement();
             if (navElement != null) {

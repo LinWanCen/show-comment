@@ -67,46 +67,51 @@ public class LineEndCacheUtils {
 
     private static void cacheUpdate(Project project, Map<VirtualFile, Map<Integer, LineEndCache>> fileMap) {
         try {
-            fileMap.forEach((file, lineMap) -> lineMap.forEach((lineNumber, lineCache) -> {
-                @NotNull LineInfo info = lineCache.info;
-                @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
-                if (!(lineCache.needUpdate() || list == null)) {
+            if (project.isDisposed() || DumbService.isDumb(project)) {
+                return;
+            }
+            fileMap.forEach((file, lineMap) -> {
+                if (!file.isValid()) {
                     return;
                 }
-                try {
-                    if (project.isDisposed() || DumbService.isDumb(project) || !file.isValid()) {
+                lineMap.forEach((lineNumber, lineCache) -> {
+                    @NotNull LineInfo info = lineCache.info;
+                    @Nullable List<LineExtensionInfo> list = lineCache.map.get(info.text);
+                    if (!(lineCache.needUpdate() || list == null)) {
                         return;
                     }
-                    @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
-                    @Nullable LineInfo info2 = LineInfo.of(info, lineNumber);
-                    if (info2 == null || !info2.text.equals(info.text)) {
-                        return;
-                    }
-                    if (list != null) {
-                        list.clear();
-                    }
-                    // fix delete line get doc from before line because PsiFile be not updated
-                    if ("}".equals(info.text.trim())) {
-                        return;
-                    }
-                    if (lineExt != null) {
+                    try {
+                        @Nullable LineExtensionInfo lineExt = LineEnd.lineExt(info);
+                        @Nullable LineInfo info2 = LineInfo.of(info, lineNumber);
+                        if (info2 == null || !info2.text.equals(info.text)) {
+                            return;
+                        }
                         if (list != null) {
-                            list.add(lineExt);
-                        } else {
-                            @NotNull ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>(1);
-                            lineExtList.add(lineExt);
-                            lineCache.map.put(info.text, lineExtList);
+                            list.clear();
+                        }
+                        // fix delete line get doc from before line because PsiFile be not updated
+                        if ("}".equals(info.text.trim())) {
+                            return;
+                        }
+                        if (lineExt != null) {
+                            if (list != null) {
+                                list.add(lineExt);
+                            } else {
+                                @NotNull ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>(1);
+                                lineExtList.add(lineExt);
+                                lineCache.map.put(info.text, lineExtList);
+                            }
+                        }
+                        lineCache.updated();
+                    } catch (ProcessCanceledException ignored) {
+                    } catch (Throwable e) {
+                        @Nullable String msg = e.getMessage();
+                        if (msg == null || !msg.contains("File is not valid")) {
+                            LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
                         }
                     }
-                    lineCache.updated();
-                } catch (ProcessCanceledException ignored) {
-                } catch (Throwable e) {
-                    @Nullable String msg = e.getMessage();
-                    if (msg == null || !msg.contains("File is not valid")) {
-                        LOG.info("LineEndCacheUtils lineMap.forEach catch Throwable but log to record.", e);
-                    }
-                }
-            }));
+                });
+            });
         } catch (ProcessCanceledException ignored) {
         } catch (IllegalStateException ignore) {
             // ignore inSmartMode(project) throw:
