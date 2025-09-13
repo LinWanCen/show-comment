@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
+import com.intellij.psi.PsiArrayInitializerMemberValue;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiConstantEvaluationHelper;
 import com.intellij.psi.PsiDocCommentOwner;
@@ -74,6 +75,16 @@ public class AnnoDocJava extends BaseAnnoDoc<PsiJvmModifiersOwner> {
         }
         @NotNull Project project = value.getProject();
         @NotNull PsiConstantEvaluationHelper helper = JavaPsiFacade.getInstance(project).getConstantEvaluationHelper();
+        if (value instanceof PsiArrayInitializerMemberValue) {
+            PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
+            StringBuilder sb = new StringBuilder();
+            for (PsiAnnotationMemberValue initializer : initializers) {
+                try {
+                    sb.append(helper.computeConstantExpression(initializer)).append("  ");
+                } catch (Throwable ignored) {}
+            }
+            return sb.toString();
+        }
         @Nullable Object o = helper.computeConstantExpression(value);
         if (o == null) {
             return null;

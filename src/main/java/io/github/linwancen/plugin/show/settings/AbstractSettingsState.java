@@ -41,7 +41,7 @@ public abstract class AbstractSettingsState {
             {"field", "io.swagger.annotations.ApiModelProperty", "value"},
             {"field", "io.swagger.v3.oas.annotations.media.Schema", "title"},
             {"field", "com.alibaba.excel.annotation.ExcelProperty", "value"},
-            {"field", "com.idev.excel.annotation.ExcelProperty", "value"},
+            {"field", "cn.idev.excel.annotation.ExcelProperty", "value"},
     };
 
     public boolean dirDocEffect = true;
