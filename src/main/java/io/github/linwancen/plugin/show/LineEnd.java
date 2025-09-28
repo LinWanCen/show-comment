@@ -14,6 +14,7 @@ import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.cache.LineEndCacheUtils;
 import io.github.linwancen.plugin.show.ext.LineExt;
+import io.github.linwancen.plugin.show.ext.sql.SqlDoc;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.line.LineSelect;
 import org.jetbrains.annotations.NotNull;
@@ -112,9 +113,16 @@ public class LineEnd extends EditorLinePainter {
     }
 
     private static @Nullable String lineDocSkipHave(@NotNull LineInfo info) {
-        @Nullable String doc = LineExt.doc(info);
+        int i = info.text.indexOf(info.appSettings.lineEndPrefix);
+        @NotNull String code = i <= 0 ? info.text : info.text.substring(0, i);
+        @Nullable String doc = LineExt.extDoc(info, code);
         if (doc == null) {
+            // include table and column doc from db
             doc = BaseLangDoc.langDoc(info);
+        }
+        if (doc == null) {
+            // table and column doc from *.sql ddl
+            doc = SqlDoc.sqlDoc(info, code);
         }
         if (doc == null) {
             return null;

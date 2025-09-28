@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 来自*.sql的注释示例 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.linwancen.plugin.show.mapper.FromSqlMapper">
+  <select id="select1">
+    select id,
+      name,
+      from_mysql_column,
+      from_mysql_add_column,
+      from_mysql_mod_column
+    from from_mysql_table
+  </select>
+  <select id="select1">
+    select
+      id,
+      name,
+      from_oracle_column
+    from from_oracle_table
+  </select>
+</mapper>

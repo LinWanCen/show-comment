@@ -33,10 +33,24 @@ public abstract class AbstractSettingsComponent {
     private final JBTextField docGet = new JBTextField();
     private final JBCheckBox annoDocEffect = new JBCheckBox("");
     private final JBTextArea annoDoc = new JBTextArea();
+
+    // region PatternMap: dirDoc fileDoc sqlSplit tableDoc columnDoc indexDoc
+
     private final JBCheckBox dirDocEffect = new JBCheckBox("");
     private final JBTextArea dirDoc = new JBTextArea();
     private final JBCheckBox fileDocEffect = new JBCheckBox("");
     private final JBTextArea fileDoc = new JBTextArea();
+
+    protected final JBCheckBox sqlSplitEffect = new JBCheckBox("");
+    private final JBTextArea sqlSplit = new JBTextArea();
+    private final JBCheckBox tableDocEffect = new JBCheckBox("");
+    private final JBTextArea tableDoc = new JBTextArea();
+    private final JBCheckBox columnDocEffect = new JBCheckBox("");
+    private final JBTextArea columnDoc = new JBTextArea();
+    private final JBCheckBox indexDocEffect = new JBCheckBox("");
+    private final JBTextArea indexDoc = new JBTextArea();
+
+    // endregion
 
     @NotNull
     protected JPanel commonPanel() {
@@ -94,6 +108,24 @@ public abstract class AbstractSettingsComponent {
                 .addLabeledComponent(fileLabel, fileDoc, 1, true)
                 .getPanel();
         panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("tree.comment")));
+        return panel;
+    }
+
+    @SuppressWarnings("unused")
+    @NotNull
+    private JPanel sqlPanel() {
+        // sqlSplit tableDoc columnDoc indexDoc
+        @NotNull JPanel sqlLabel = JPanelFactory.of(sqlSplitEffect, new JBLabel(ShowBundle.message("sql.split.regexp")));
+        @NotNull JPanel tableLabel = JPanelFactory.of(tableDocEffect, new JBLabel(ShowBundle.message("table.doc.regexp")));
+        @NotNull JPanel columnLabel = JPanelFactory.of(columnDocEffect, new JBLabel(ShowBundle.message("column.doc.regexp")));
+        @NotNull JPanel indexLabel = JPanelFactory.of(indexDocEffect, new JBLabel(ShowBundle.message("index.doc.regexp")));
+        JPanel panel = FormBuilder.createFormBuilder()
+                .addLabeledComponent(sqlLabel, sqlSplit, 1, true)
+                .addLabeledComponent(tableLabel, tableDoc, 1, true)
+                .addLabeledComponent(columnLabel, columnDoc, 1, true)
+                .addLabeledComponent(indexLabel, indexDoc, 1, true)
+                .getPanel();
+        panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("sql.comment")));
         return panel;
     }
 
@@ -223,6 +255,7 @@ public abstract class AbstractSettingsComponent {
         annoDoc.setText(newText);
     }
 
+    // region PatternMap
 
     public boolean getDirDocEffect() {
         return dirDocEffect.isSelected();
@@ -258,4 +291,74 @@ public abstract class AbstractSettingsComponent {
     public void setFileDoc(@NotNull String newText) {
         fileDoc.setText(newText);
     }
+
+    public boolean getSqlSplitEffect() {
+        return sqlSplitEffect.isSelected();
+    }
+
+    public void setSqlSplitEffect(boolean newStatus) {
+        sqlSplitEffect.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getSqlSplit() {
+        return sqlSplit.getText();
+    }
+
+    public void setSqlSplit(@NotNull String newText) {
+        sqlSplit.setText(newText);
+    }
+
+    public boolean getTableDocEffect() {
+        return tableDocEffect.isSelected();
+    }
+
+    public void setTableDocEffect(boolean newStatus) {
+        tableDocEffect.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getTableDoc() {
+        return tableDoc.getText();
+    }
+
+    public void setTableDoc(@NotNull String newText) {
+        tableDoc.setText(newText);
+    }
+
+    public boolean getColumnDocEffect() {
+        return columnDocEffect.isSelected();
+    }
+
+    public void setColumnDocEffect(boolean newStatus) {
+        columnDocEffect.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getColumnDoc() {
+        return columnDoc.getText();
+    }
+
+    public void setColumnDoc(@NotNull String newText) {
+        columnDoc.setText(newText);
+    }
+
+    public boolean getIndexDocEffect() {
+        return indexDocEffect.isSelected();
+    }
+
+    public void setIndexDocEffect(boolean newStatus) {
+        indexDocEffect.setSelected(newStatus);
+    }
+
+    @NotNull
+    public String getIndexDoc() {
+        return indexDoc.getText();
+    }
+
+    public void setIndexDoc(@NotNull String newText) {
+        indexDoc.setText(newText);
+    }
+
+    // endregion PatternMap for AI: dirDoc fileDoc sqlSplit tableDoc columnDoc indexDoc
 }

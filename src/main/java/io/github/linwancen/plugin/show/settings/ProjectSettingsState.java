@@ -28,6 +28,12 @@ public class ProjectSettingsState extends AbstractSettingsState implements Persi
         this.dirDoc = Collections.emptyMap();
         this.fileDocEffect = false;
         this.fileDoc = Collections.emptyMap();
+        this.sqlSplitEffect = false;
+        this.sqlSplit = Collections.emptyMap();
+        this.tableDocEffect = false;
+        this.tableDoc = Collections.emptyMap();
+        this.columnDocEffect = false;
+        this.columnDoc = Collections.emptyMap();
     }
 
     public static final ProjectSettingsState DEFAULT_SETTING = new ProjectSettingsState();

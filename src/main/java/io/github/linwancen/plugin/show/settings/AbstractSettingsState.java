@@ -44,6 +44,8 @@ public abstract class AbstractSettingsState {
             {"field", "cn.idev.excel.annotation.ExcelProperty", "value"},
     };
 
+    // region PatternMap: dirDoc fileDoc sqlSplit tableDoc columnDoc indexDoc
+
     public boolean dirDocEffect = true;
     @NotNull
     public transient Map<String, Pattern[]> dirDoc = new LinkedHashMap<>() {{
@@ -68,6 +70,57 @@ public abstract class AbstractSettingsState {
         put("sh", new Pattern[]{Pattern.compile("(?m)^#++ *([^!].*)")});
     }};
 
+    public boolean sqlSplitEffect = true;
+    @NotNull
+    public transient Map<String, Pattern[]> sqlSplit = new LinkedHashMap<>() {{
+        put("sql", new Pattern[]{Pattern.compile("\\W")});
+        put("xml", new Pattern[]{Pattern.compile(",|" +
+                "<.+=|" +
+                " ?[!=].*>|" +
+                "[<=>/\"\\s()]|" +
+                "#\\{[^}]++}|" +
+                "\\w++\\.|" +
+                "&gt;|&lt;|&amp;|&quot;|&apos;")});
+    }};
+
+    public boolean tableDocEffect = true;
+    @NotNull
+    public transient Map<String, Pattern[]> tableDoc = new LinkedHashMap<>() {{
+        put("Oracle", new Pattern[]{Pattern.compile("(?i)comment\\s++on\\s++table\\s++" +
+                "(?:['\"]?\\w++['\"]?\\s*+\\.\\s*+)?" +
+                "['\"]?(\\w++)['\"]?\\s++" +
+                "is\\s++['\"]([^'\"]++)")});
+        put("MySQL", new Pattern[]{Pattern.compile("(?i)table(?:\\s++if\\s++not\\s++exists)?\\s++" +
+                "(?:`?\\w++`?\\.)?" +
+                "`?(\\w++)[^;]+?" +
+                "comment\\s*+=\\s*+['\"]([^'\"]++)")});
+    }};
+
+    public boolean columnDocEffect = true;
+    @NotNull
+    public transient Map<String, Pattern[]> columnDoc = new LinkedHashMap<>() {{
+        put("Oracle", new Pattern[]{Pattern.compile("(?i)comment\\s++on\\s++column\\s++" +
+                "(?:['\"]?\\w++['\"]?\\s*+\\.\\s*+)?" +
+                "['\"]?\\w++['\"]?\\s*+\\.\\s*+" +
+                "['\"]?(\\w++)['\"]?" +
+                "\\s++is\\s++['\"]([^'\"]++)")});
+        put("MySQL", new Pattern[]{Pattern.compile("(?i)\\W(\\w++)`?\\s++" +
+                "(?:varchar|int|tinyint|char|text|decimal|datetime|timestamp|time|date|float|double|bigint|mediumtext" +
+                "|longtext|tinytext|enum|set|json|boolean|bit|binary|varbinary|blob|mediumblob|longblob|tinyblob).+?" +
+                "comment\\s++['\"]([^'\"]++)")});
+    }};
+
+    public boolean indexDocEffect = true;
+    @NotNull
+    public transient Map<String, Pattern[]> indexDoc = new LinkedHashMap<>() {{
+        put("add", new Pattern[]{Pattern.compile("(?i)(?:index|primary).+?\\(`?([^)]+?)`?(\\))")});
+        put("create", new Pattern[]{Pattern.compile("(?i)\\W(\\w++)`?\\s++" +
+                "(?:varchar|int|tinyint|char|text|decimal|datetime|timestamp|time|date|float|double|bigint|mediumtext" +
+                "|longtext|tinytext|enum|set|json|boolean|bit|binary|varbinary|blob|mediumblob|longblob|tinyblob).+?" +
+                "(primary|unique)")});
+    }};
+
+    // endregion
 
     public String getLineInclude() {
         return lineInclude.pattern();
@@ -178,5 +231,41 @@ public abstract class AbstractSettingsState {
 
     public void setFileDoc(@NotNull String fileDoc) {
         this.fileDoc = PatternMapUtils.toMap(fileDoc);
+    }
+
+    @NotNull
+    public String getSqlSplit() {
+        return PatternMapUtils.toString(sqlSplit);
+    }
+
+    public void setSqlSplit(@NotNull String sqlSplit) {
+        this.sqlSplit = PatternMapUtils.toMap(sqlSplit);
+    }
+
+    @NotNull
+    public String getTableDoc() {
+        return PatternMapUtils.toString(tableDoc);
+    }
+
+    public void setTableDoc(@NotNull String tableDoc) {
+        this.tableDoc = PatternMapUtils.toMap(tableDoc);
+    }
+
+    @NotNull
+    public String getColumnDoc() {
+        return PatternMapUtils.toString(columnDoc);
+    }
+
+    public void setColumnDoc(@NotNull String columnDoc) {
+        this.columnDoc = PatternMapUtils.toMap(columnDoc);
+    }
+
+    @NotNull
+    public String getIndexDoc() {
+        return PatternMapUtils.toString(indexDoc);
+    }
+
+    public void setIndexDoc(@NotNull String indexDoc) {
+        this.indexDoc = PatternMapUtils.toMap(indexDoc);
     }
 }

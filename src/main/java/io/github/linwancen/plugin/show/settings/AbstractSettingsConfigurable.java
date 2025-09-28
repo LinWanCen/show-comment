@@ -26,6 +26,14 @@ public class AbstractSettingsConfigurable {
         modified |= !component.getDirDoc().equals(settings.getDirDoc());
         modified |= component.getFileDocEffect() != settings.fileDocEffect;
         modified |= !component.getFileDoc().equals(settings.getFileDoc());
+        modified |= component.getSqlSplitEffect() != settings.sqlSplitEffect;
+        modified |= !component.getSqlSplit().equals(settings.getSqlSplit());
+        modified |= component.getTableDocEffect() != settings.tableDocEffect;
+        modified |= !component.getTableDoc().equals(settings.getTableDoc());
+        modified |= component.getColumnDocEffect() != settings.columnDocEffect;
+        modified |= !component.getColumnDoc().equals(settings.getColumnDoc());
+        modified |= component.getIndexDocEffect() != settings.indexDocEffect;
+        modified |= !component.getIndexDoc().equals(settings.getIndexDoc());
         return modified;
     }
 
@@ -52,6 +60,14 @@ public class AbstractSettingsConfigurable {
         settings.setDirDoc(component.getDirDoc());
         settings.fileDocEffect = component.getFileDocEffect();
         settings.setFileDoc(component.getFileDoc());
+        settings.sqlSplitEffect = component.getSqlSplitEffect();
+        settings.setSqlSplit(component.getSqlSplit());
+        settings.tableDocEffect = component.getTableDocEffect();
+        settings.setTableDoc(component.getTableDoc());
+        settings.columnDocEffect = component.getColumnDocEffect();
+        settings.setColumnDoc(component.getColumnDoc());
+        settings.indexDocEffect = component.getIndexDocEffect();
+        settings.setIndexDoc(component.getIndexDoc());
     }
 
     static void reset(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component) {
@@ -73,5 +89,13 @@ public class AbstractSettingsConfigurable {
         component.setDirDoc(settings.getDirDoc());
         component.setFileDocEffect(settings.fileDocEffect);
         component.setFileDoc(settings.getFileDoc());
+        component.setSqlSplitEffect(settings.sqlSplitEffect);
+        component.setSqlSplit(settings.getSqlSplit());
+        component.setTableDocEffect(settings.tableDocEffect);
+        component.setTableDoc(settings.getTableDoc());
+        component.setColumnDocEffect(settings.columnDocEffect);
+        component.setColumnDoc(settings.getColumnDoc());
+        component.setIndexDocEffect(settings.indexDocEffect);
+        component.setIndexDoc(settings.getIndexDoc());
     }
 }

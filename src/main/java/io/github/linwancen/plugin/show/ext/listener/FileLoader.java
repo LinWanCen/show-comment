@@ -25,10 +25,7 @@ public abstract class FileLoader {
     public final Map<VirtualFile, String> fileDoc = new ConcurrentHashMap<>();
 
     @Nullable
-    public String treeDoc(@Nullable VirtualFile virtualFile) {
-        if (virtualFile == null) {
-            return null;
-        }
+    public String treeDoc(@NotNull VirtualFile virtualFile) {
         return fileDoc.get(virtualFile);
     }
 

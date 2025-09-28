@@ -14,7 +14,8 @@ public class GlobalSettingsComponent extends AbstractSettingsComponent {
         resetDefault.addActionListener(e -> GlobalSettingsConfigurable.reset(GlobalSettingsState.DEFAULT_SETTING, this));
         myMainPanel = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(resetDefault,
-                        new JBLabel(ShowBundle.message("line.count")), lineEndCount
+                        new JBLabel(ShowBundle.message("line.count")), lineEndCount,
+                        JPanelFactory.of(sqlSplitEffect, new JBLabel(ShowBundle.message("sql.comment")))
                 ), 1)
                 .addComponent(commonPanel(), 1)
                 .addComponentFillVertically(new JPanel(), 0)

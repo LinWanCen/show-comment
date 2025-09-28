@@ -14,20 +14,6 @@ public class LineExt {
 
     private LineExt() {}
 
-    public static @Nullable String doc(@NotNull LineInfo info) {
-        int i = info.text.indexOf(info.appSettings.lineEndPrefix);
-        @NotNull String code = i <= 0 ? info.text : info.text.substring(0, i);
-        @Nullable String extDoc = LineExt.extDoc(info, code);
-        if (extDoc == null) {
-            return null;
-        }
-        extDoc = extDoc.trim();
-        if (info.text.endsWith(extDoc)) {
-            return null;
-        }
-        return extDoc;
-    }
-
     @Nullable
     public static String extDoc(@NotNull LineInfo info, @NotNull String code) {
         @NotNull String path = info.file.getPath();

@@ -28,4 +28,5 @@ FROM information_schema.`COLUMNS` c
                    ON s.TABLE_SCHEMA = c.TABLE_SCHEMA AND s.TABLE_NAME = c.TABLE_NAME AND s.COLUMN_NAME = c.COLUMN_NAME
 WHERE c.COLUMN_COMMENT != ''
   AND c.TABLE_SCHEMA NOT IN ('mysql', 'information_schema', 'performance_schema', 'sys')
+  AND c.COLUMN_NAME NOT IN ('id', 'name')
 GROUP BY c.COLUMN_NAME, c.COLUMN_COMMENT, c.TABLE_NAME, c.TABLE_SCHEMA;

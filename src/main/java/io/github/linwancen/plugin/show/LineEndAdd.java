@@ -99,7 +99,7 @@ public class LineEndAdd extends CopyReferenceAction {
         int startLine = 0;
         int endLine = info.document.getLineCount() - 1;
         LineEnd.textWithDoc(info, startLine, endLine, indicator, s ->
-                info.document.replaceString(0, info.document.getTextLength() - 1, s)
+                info.document.replaceString(0, info.document.getTextLength(), s)
         );
     }
 }
