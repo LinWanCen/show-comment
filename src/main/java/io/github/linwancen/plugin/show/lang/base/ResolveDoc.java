@@ -74,7 +74,7 @@ public class ResolveDoc {
         }
         if (!keywords.isEmpty()) {
             while (psiElement != null) {
-                String text = PsiUnSaveUtils.getText(psiElement);
+                @NotNull String text = PsiUnSaveUtils.getText(psiElement);
                 if (keywords.contains(text)) {
                     psiElement = Prev.prevCompactElement(info, psiElement, document);
                 } else {
@@ -85,7 +85,7 @@ public class ResolveDoc {
         @NotNull StringBuilder sb = new StringBuilder();
         boolean isComment = psiElement instanceof PsiComment;
         while (isComment) {
-            String text = PsiUnSaveUtils.getText(psiElement);
+            @NotNull String text = PsiUnSaveUtils.getText(psiElement);
             int thisStartOffset = psiElement.getTextRange().getStartOffset();
             psiElement = Prev.prevCompactElement(info, psiElement, document);
             isComment = psiElement instanceof PsiComment;

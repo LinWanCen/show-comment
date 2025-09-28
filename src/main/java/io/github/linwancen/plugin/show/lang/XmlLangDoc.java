@@ -48,9 +48,9 @@ public class XmlLangDoc extends BaseLangDoc {
         if (viewProvider == null) {
             return null;
         }
-        PsiElement psiElement = viewProvider.findElementAt(0);
+        @Nullable PsiElement psiElement = viewProvider.findElementAt(0);
         if (psiElement == null || !"<!--".equals(PsiUnSaveUtils.getText(psiElement))) {
-            Document document = viewProvider.getDocument();
+            @Nullable Document document = viewProvider.getDocument();
             if (document == null) {
                 return null;
             }
@@ -70,11 +70,11 @@ public class XmlLangDoc extends BaseLangDoc {
         if (!(parent instanceof PsiComment)) {
             return null;
         }
-        PsiElement[] children = parent.getChildren();
+        @NotNull PsiElement[] children = parent.getChildren();
         if (children.length < 2) {
             return null;
         }
-        String doc = PsiUnSaveUtils.getText(children[1]);
+        @Nullable String doc = PsiUnSaveUtils.getText(children[1]);
         // Copyright or copyright
         //noinspection SpellCheckingInspection
         if (doc == null || doc.contains("opyright")) {
@@ -87,10 +87,10 @@ public class XmlLangDoc extends BaseLangDoc {
     @Nullable
     @Override
     public String findRefDoc(@NotNull LineInfo info, @NotNull FileViewProvider viewProvider, @NotNull PsiElement element) {
-        ExtensionPointName<XmlLangDoc> epn = ExtensionPointName.create("io.github.linwancen.show-comment.xmlLangDoc");
-        List<XmlLangDoc> extensionList = epn.getExtensionList();
-        for (XmlLangDoc xmlLangDoc : extensionList) {
-            String doc = xmlLangDoc.findRefDoc(info, viewProvider, element);
+        @NotNull ExtensionPointName<XmlLangDoc> epn = ExtensionPointName.create("io.github.linwancen.show-comment.xmlLangDoc");
+        @NotNull List<XmlLangDoc> extensionList = epn.getExtensionList();
+        for (@NotNull XmlLangDoc xmlLangDoc : extensionList) {
+            @Nullable String doc = xmlLangDoc.findRefDoc(info, viewProvider, element);
             if (doc != null && !doc.trim().isEmpty()) {
                 return doc;
             }

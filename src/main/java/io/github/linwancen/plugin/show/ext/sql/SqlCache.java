@@ -34,7 +34,7 @@ public class SqlCache extends FileLoader {
     @Nullable
     @Override
     public String treeDoc(@NotNull VirtualFile virtualFile) {
-        String name = virtualFile.getNameWithoutExtension();
+        @NotNull String name = virtualFile.getNameWithoutExtension();
         return TABLE_DOC_CACHE.get(name);
     }
 
@@ -52,8 +52,8 @@ public class SqlCache extends FileLoader {
 
     @Override
     public void loadAllImpl(@NotNull Project project) {
-        GlobalSettingsState g = GlobalSettingsState.getInstance();
-        ProjectSettingsState p = ProjectSettingsState.getInstance(project);
+        @NotNull GlobalSettingsState g = GlobalSettingsState.getInstance();
+        @NotNull ProjectSettingsState p = ProjectSettingsState.getInstance(project);
         if (!g.sqlSplitEffect && !p.sqlSplitEffect) {
             return;
         }
@@ -74,18 +74,18 @@ public class SqlCache extends FileLoader {
 
     @Override
     public void loadFileImpl(@NotNull VirtualFile file, @Nullable Project project) {
-        String code = PsiUnSaveUtils.fileText(project, file);
+        @Nullable String code = PsiUnSaveUtils.fileText(project, file);
         if (code == null) {
             return;
         }
-        GlobalSettingsState g = GlobalSettingsState.getInstance();
+        @NotNull GlobalSettingsState g = GlobalSettingsState.getInstance();
         loadSqlDoc(code, TABLE_DOC_CACHE, g.tableDocEffect, g.tableDoc);
         loadSqlDoc(code, COLUMN_DOC_CACHE, g.columnDocEffect, g.columnDoc);
         loadSqlDoc(code, INDEX_DOC_CACHE, g.indexDocEffect, g.indexDoc);
         if (project == null) {
             return;
         }
-        ProjectSettingsState p = ProjectSettingsState.getInstance(project);
+        @NotNull ProjectSettingsState p = ProjectSettingsState.getInstance(project);
         loadSqlDoc(code, TABLE_DOC_CACHE, p.tableDocEffect, p.tableDoc);
         loadSqlDoc(code, COLUMN_DOC_CACHE, p.columnDocEffect, p.columnDoc);
         loadSqlDoc(code, INDEX_DOC_CACHE, p.indexDocEffect, p.indexDoc);
@@ -94,13 +94,13 @@ public class SqlCache extends FileLoader {
     public static final Pattern KEY_PATTERN = Pattern.compile("`?, *`?");
 
     private static void loadSqlDoc(@NotNull String code, @NotNull Map<String, String> map,
-                                   boolean effect, Map<String, Pattern[]> patternMap) {
+                                   boolean effect, @NotNull Map<String, Pattern[]> patternMap) {
         if (!effect) {
             return;
         }
-        for (Pattern[] patterns : patternMap.values()) {
-            for (Pattern pattern : patterns) {
-                Matcher m = pattern.matcher(code);
+        for (@NotNull Pattern[] patterns : patternMap.values()) {
+            for (@NotNull Pattern pattern : patterns) {
+                @NotNull Matcher m = pattern.matcher(code);
                 while (m.find()) {
                     String key = m.group(1);
                     String comment = m.group(2);
@@ -121,7 +121,7 @@ public class SqlCache extends FileLoader {
 
     private static final Pattern IGNORE_KEY_PATTERN = Pattern.compile("(?i)^(id|name)$");
 
-    private static void putComment(@NotNull Map<String, String> map, @NotNull String k, String comment) {
+    private static void putComment(@NotNull Map<String, String> map, @NotNull String k, @NotNull String comment) {
         if (IGNORE_KEY_PATTERN.matcher(k).find()) {
             return;
         }

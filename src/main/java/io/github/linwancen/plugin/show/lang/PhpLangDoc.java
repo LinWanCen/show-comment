@@ -48,7 +48,7 @@ public class PhpLangDoc extends BaseTagLangDoc<PhpDocComment> {
                 for (PsiElement child : children) {
                     @Nullable PsiComment comment = PsiTreeUtil.getChildOfType(child, PsiComment.class);
                     if (comment != null) {
-                        String text = PsiUnSaveUtils.getText(comment);
+                        @NotNull String text = PsiUnSaveUtils.getText(comment);
                         return DocFilter.cutDoc(text, info, true);
                     }
                 }
@@ -75,7 +75,7 @@ public class PhpLangDoc extends BaseTagLangDoc<PhpDocComment> {
     @NotNull
     @Override
     protected <T extends SettingsInfo> String descDoc(@NotNull T info, @NotNull PhpDocComment phpDocComment) {
-        String text = PsiUnSaveUtils.getText(phpDocComment);
+        @NotNull String text = PsiUnSaveUtils.getText(phpDocComment);
         return DocFilter.cutDoc(text, info, true);
     }
 

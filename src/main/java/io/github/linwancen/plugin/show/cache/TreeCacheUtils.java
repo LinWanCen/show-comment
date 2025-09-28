@@ -40,7 +40,7 @@ public class TreeCacheUtils {
         }
     }
 
-    private static void cacheUpdate(Project project, Map<ProjectViewNode<?>, TreeCache> nodeCache) {
+    private static void cacheUpdate(@NotNull Project project, @NotNull Map<ProjectViewNode<?>, TreeCache> nodeCache) {
         try {
             nodeCache.forEach((node, treeCache) -> {
                 if (treeCache.needUpdate) {

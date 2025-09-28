@@ -56,7 +56,7 @@ public class FileInfo extends SettingsInfo {
         return new FileInfo(file, document, project, FuncEnum.LINE);
     }
 
-    public String getText(PsiElement element) {
+    public String getText(@NotNull PsiElement element) {
         try {
             TextRange range = element.getTextRange();
             int startOffset = range.getStartOffset();

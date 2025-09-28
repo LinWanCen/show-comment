@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.ValueArgumentName;
 
 public class AnnoDocKt extends BaseAnnoDoc<KtAnnotated> {
 
+    @NotNull
     public static AnnoDocKt INSTANCE = new AnnoDocKt();
 
     private AnnoDocKt() {}
@@ -24,8 +25,8 @@ public class AnnoDocKt extends BaseAnnoDoc<KtAnnotated> {
     @Nullable
     protected String annoDocMatch(@NotNull KtAnnotated owner, @NotNull String[] arr) {
         if (typeMatch(owner, arr[0])) {
-            for (KtAnnotationEntry entry : owner.getAnnotationEntries()) {
-                String s = annoDocName(entry, arr);
+            for (@NotNull KtAnnotationEntry entry : owner.getAnnotationEntries()) {
+                @Nullable String s = annoDocName(entry, arr);
                 if (s != null) {
                     return s;
                 }
@@ -52,11 +53,11 @@ public class AnnoDocKt extends BaseAnnoDoc<KtAnnotated> {
 
     @Nullable
     private static String annoDocName(@NotNull KtAnnotationEntry entry, @NotNull String[] arr) {
-        Name shortName = entry.getShortName();
+        @Nullable Name shortName = entry.getShortName();
         if (shortName == null) {
             return null;
         }
-        String name = shortName.asString();
+        @NotNull String name = shortName.asString();
         String annoName = arr[1];
         int i = annoName.lastIndexOf('.');
         if (i > 0) {
@@ -65,15 +66,15 @@ public class AnnoDocKt extends BaseAnnoDoc<KtAnnotated> {
         if (!annoName.equals(name)) {
             return null;
         }
-        for (ValueArgument argument : entry.getValueArguments()) {
-            ValueArgumentName argumentName = argument.getArgumentName();
-            String method = argumentName == null ? "value" : argumentName.getAsName().asString();
+        for (@NotNull ValueArgument argument : entry.getValueArguments()) {
+            @Nullable ValueArgumentName argumentName = argument.getArgumentName();
+            @NotNull String method = argumentName == null ? "value" : argumentName.getAsName().asString();
             if (arr[2].equals(method)) {
-                KtExpression expression = argument.getArgumentExpression();
+                @Nullable KtExpression expression = argument.getArgumentExpression();
                 if (expression instanceof KtStringTemplateExpression) {
-                    String text = PsiUnSaveUtils.getText(expression);
+                    @NotNull String text = PsiUnSaveUtils.getText(expression);
                     if (text.length() >= 2) {
-                        String s = text.substring(1, text.length() - 1);
+                        @NotNull String s = text.substring(1, text.length() - 1);
                         if (!s.isEmpty()) {
                             return s;
                         }

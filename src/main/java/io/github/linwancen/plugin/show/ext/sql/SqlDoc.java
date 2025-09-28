@@ -12,17 +12,18 @@ public class SqlDoc {
 
     @Nullable
     public static String sqlDoc(@NotNull LineInfo info, @NotNull String code) {
-        String extension = info.file.getExtension();
+        @Nullable String extension = info.file.getExtension();
         if (extension == null) {
             return null;
         }
-        String s = sqlDocState(extension, info.projectSettings, code);
+        @Nullable String s = sqlDocState(extension, info.projectSettings, code);
         if (s != null) {
             return s;
         }
         return sqlDocState(extension, info.globalSettings, code);
     }
 
+    @Nullable
     private static String sqlDocState(@NotNull String extension, @NotNull AbstractSettingsState state,
                                       @NotNull String code) {
         if (!state.sqlSplitEffect) {
@@ -32,7 +33,7 @@ public class SqlDoc {
         if (patterns == null) {
             return null;
         }
-        for (Pattern pattern : patterns) {
+        for (@NotNull Pattern pattern : patterns) {
             return sqlDocPattern(pattern, code);
         }
         return null;
@@ -83,7 +84,8 @@ public class SqlDoc {
         return false;
     }
 
-    private static String indexSymbol(String indexDoc) {
+    @NotNull
+    private static String indexSymbol(@NotNull String indexDoc) {
         switch (indexDoc) {
             case "primary":
             case "PRIMARY":
@@ -110,7 +112,7 @@ public class SqlDoc {
     }
 
     @NotNull
-    private static String unescape(String keyword) {
+    private static String unescape(@NotNull String keyword) {
         // &gt;|&lt;|&amp;|&quot;|&apos;
         switch (keyword) {
             case "&gt;":

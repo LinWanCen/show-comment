@@ -62,7 +62,7 @@ public class Prev {
     @Nullable
     private static PsiElement refClassParent(@NotNull PsiElement element,
                                              @NotNull List<Class<? extends PsiElement>> refClass) {
-        String text = PsiUnSaveUtils.getText(element);
+        @NotNull String text = PsiUnSaveUtils.getText(element);
         if (!SYMBOL_PATTERN.matcher(text).find()) {
             return null;
         }

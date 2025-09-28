@@ -73,7 +73,7 @@ public class ScalaLangDoc extends JavaLangDoc {
         for (@NotNull PsiDocTag tag : tags) {
             if (tag instanceof ScDocTag) {
                 @NotNull ScDocTag scDocTag = (ScDocTag) tag;
-                String doc = PsiUnSaveUtils.getText(scDocTag);
+                @NotNull String doc = PsiUnSaveUtils.getText(scDocTag);
                 doc = doc.replace(key, "");
                 DocFilter.addHtml(tagStrBuilder, doc);
             }

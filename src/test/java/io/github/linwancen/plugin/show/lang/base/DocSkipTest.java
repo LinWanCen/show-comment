@@ -2,6 +2,7 @@ package io.github.linwancen.plugin.show.lang.base;
 
 
 import groovy.json.JsonOutput;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class DocSkipTest {
     @Test
     void skipName() {
         // o include, x skip
-        boolean[][][] results = {{
+        @NotNull boolean[][][] results = {{
                 // "java" -- name
                 // {}, {"java"}, {"io.b"}, {"java", "io.b"} -- exclude
                 {o, x, o, x}, // {},
@@ -56,18 +57,18 @@ class DocSkipTest {
                 {o, o, x, x}, // {"java", "io"},
         }};
         for (int i = 0, namesLength = names.length; i < namesLength; i++) {
-            String name = names[i];
+            @NotNull String name = names[i];
             loopTest(name, results[i]);
         }
     }
 
-    private void loopTest(String name, boolean[][] results) {
+    private void loopTest(@NotNull String name, boolean[][] results) {
         for (int includeIndex = 0, includesLength = includes.length; includeIndex < includesLength; includeIndex++) {
-            Pattern include = includes[includeIndex];
+            @NotNull Pattern include = includes[includeIndex];
             for (int excludeIndex = 0, excludesLength = excludes.length; excludeIndex < excludesLength; excludeIndex++) {
-                Pattern exclude = excludes[excludeIndex];
+                @NotNull Pattern exclude = excludes[excludeIndex];
                 boolean isSkip = DocSkip.skipText(name, include, exclude);
-                String tip =
+                @NotNull String tip =
                         name + "==" + JsonOutput.toJson(include) + "!=" + JsonOutput.toJson(exclude) + "=>" + isSkip;
                 System.out.println(tip);
                 // o true include, x false skip, so use '!'
@@ -79,7 +80,7 @@ class DocSkipTest {
 
     @Test
     void include() {
-        boolean[][] results = {
+        @NotNull boolean[][] results = {
                 // {"java", "io.a", "io.b"} -- name
                 {o, o, o}, // {},
                 {o, x, x}, // {"java"},
@@ -91,7 +92,7 @@ class DocSkipTest {
 
     @Test
     void exclude() {
-        boolean[][] results = {
+        @NotNull boolean[][] results = {
                 // {"java", "io.a", "io.b"} ... names
                 {x, x, x}, // {},
                 {o, x, x}, // {"java"},
@@ -101,13 +102,13 @@ class DocSkipTest {
         loopTest(DocSkip::exclude, results);
     }
 
-    private void loopTest(BiPredicate<String, Pattern> biPredicate, boolean[][] results) {
+    private void loopTest(@NotNull BiPredicate<String, Pattern> biPredicate, boolean[][] results) {
         for (int includeIndex = 0, includesLength = includes.length; includeIndex < includesLength; includeIndex++) {
-            Pattern include = includes[includeIndex];
+            @NotNull Pattern include = includes[includeIndex];
             for (int nameIndex = 0, namesLength = names.length; nameIndex < namesLength; nameIndex++) {
-                String name = names[nameIndex];
+                @NotNull String name = names[nameIndex];
                 boolean result = biPredicate.test(name, include);
-                String tip = name + "==" + JsonOutput.toJson(include) + "=>" + result;
+                @NotNull String tip = name + "==" + JsonOutput.toJson(include) + "=>" + result;
                 System.out.println(tip);
                 Assertions.assertEquals(results[includeIndex][nameIndex], result, tip);
             }

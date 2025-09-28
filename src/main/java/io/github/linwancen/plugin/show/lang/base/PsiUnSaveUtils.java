@@ -8,12 +8,15 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PsiUnSaveUtils {
 
-    public static String getText(PsiElement element) {
+    @Contract("!null -> !null")
+    @Nullable
+    public static String getText(@Nullable PsiElement element) {
         try {
             if (element == null) {
                 return null;
@@ -23,7 +26,7 @@ public class PsiUnSaveUtils {
                 return element.getText();
             }
             if (element instanceof PsiFile) {
-                Document document = documentManager.getDocument(((PsiFile) element));
+                @Nullable Document document = documentManager.getDocument(((PsiFile) element));
                 if (document == null) {
                     return element.getText();
                 }
@@ -33,7 +36,7 @@ public class PsiUnSaveUtils {
             if (containingFile == null) {
                 return element.getText();
             }
-            Document document = documentManager.getDocument(containingFile);
+            @Nullable Document document = documentManager.getDocument(containingFile);
             if (document == null) {
                 return element.getText();
             }
@@ -45,14 +48,14 @@ public class PsiUnSaveUtils {
 
     @Nullable
     public static String fileText(@Nullable Project project, @NotNull VirtualFile file) {
-        Document document = FileDocumentManager.getInstance().getDocument(file);
+        @Nullable Document document = FileDocumentManager.getInstance().getDocument(file);
         if (document != null) {
             return document.getText();
         }
         if (project == null) {
             return null;
         }
-        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        @Nullable PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
         if (psiFile != null) {
             return psiFile.getText();
         }

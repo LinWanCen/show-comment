@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AnnoDocJava extends BaseAnnoDoc<PsiJvmModifiersOwner> {
 
+    @NotNull
     public static AnnoDocJava INSTANCE = new AnnoDocJava();
 
     private AnnoDocJava() {}
@@ -76,8 +77,8 @@ public class AnnoDocJava extends BaseAnnoDoc<PsiJvmModifiersOwner> {
         @NotNull Project project = value.getProject();
         @NotNull PsiConstantEvaluationHelper helper = JavaPsiFacade.getInstance(project).getConstantEvaluationHelper();
         if (value instanceof PsiArrayInitializerMemberValue) {
-            PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
-            StringBuilder sb = new StringBuilder();
+            @NotNull PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue) value).getInitializers();
+            @NotNull StringBuilder sb = new StringBuilder();
             for (PsiAnnotationMemberValue initializer : initializers) {
                 try {
                     sb.append(helper.computeConstantExpression(initializer)).append("  ");

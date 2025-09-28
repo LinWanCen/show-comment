@@ -65,7 +65,7 @@ public class LineEndCacheUtils {
         }
     }
 
-    private static void cacheUpdate(Project project, Map<VirtualFile, Map<Integer, LineEndCache>> fileMap) {
+    private static void cacheUpdate(@NotNull Project project, @NotNull Map<VirtualFile, Map<Integer, LineEndCache>> fileMap) {
         try {
             if (project.isDisposed() || DumbService.isDumb(project)) {
                 return;

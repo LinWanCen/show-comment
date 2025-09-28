@@ -77,7 +77,7 @@ public class VueRouterCache extends FileLoader {
         if (psiFile == null) {
             return;
         }
-        Collection<JSArrayLiteralExpression> arrays =
+        @NotNull Collection<JSArrayLiteralExpression> arrays =
                 PsiTreeUtil.findChildrenOfType(psiFile, JSArrayLiteralExpression.class);
         for (JSArrayLiteralExpression arr : arrays) {
             parseArr(arr);
