@@ -25,7 +25,10 @@ public class DocFilter {
             // #### xx python and sh start
             "|^ *#++ *+" +
             // -- xx SQL
-            "|^ *--++ *+"
+            "|^ *--++ *+" +
+            // <!-- xml -->
+            "|.*<!--\\s*" +
+            "|\\s*-->.*"
     );
 
     private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("[\r\n]");

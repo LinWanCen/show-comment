@@ -18,6 +18,7 @@ public class AppSettingsComponent {
     private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
     private final JBCheckBox compact = new JBCheckBox(ShowBundle.message("compact"));
     private final JBCheckBox treeCache = new JBCheckBox(ShowBundle.message("tree.cache"));
+    private final JBCheckBox treeFirst = new JBCheckBox(ShowBundle.message("tree.first"));
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
     private final JBCheckBox lineEndCache = new JBCheckBox(ShowBundle.message("line.end.cache"));
     private final JBCheckBox showLineEndCommentJava = new JBCheckBox("   Java ");
@@ -57,86 +58,7 @@ public class AppSettingsComponent {
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBTextField lineEndPrefix = new JBTextField();
 
-    public AppSettingsComponent() {
-        @NotNull JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
-        resetDefault.addActionListener(e -> AppSettingsConfigurable.reset(AppSettingsState.DEFAULT_SETTING, this));
-        myMainPanel = FormBuilder.createFormBuilder()
-                .addComponent(JPanelFactory.of(resetDefault), 1)
-                .addComponent(showPanel(), 1)
-                .addComponent(lineEndFilterPanel(), 1)
-                .addComponentFillVertically(new JPanel(), 0)
-                .getPanel();
-    }
-
-    @NotNull
-    private JPanel showPanel() {
-        JPanel comment = FormBuilder.createFormBuilder()
-                .addComponent(JPanelFactory.of(showTreeComment, treeCache, compact), 1)
-                .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache), 1)
-                .addComponent(JPanelFactory.of(
-                        showLineEndCommentJava,
-                        showLineEndCommentKotlin,
-                        showLineEndCommentScala,
-                        showLineEndCommentGroovy
-                ), 1)
-                .addComponent(JPanelFactory.of(
-                        showLineEndCommentJavaBase,
-                        showLineEndCommentKotlinBase,
-                        showLineEndCommentScalaBase,
-                        showLineEndCommentGroovyBase
-                ), 1)
-                .addComponent(JPanelFactory.of(
-                        showLineEndCommentJs,
-                        showLineEndCommentPhp,
-                        showLineEndCommentPy,
-
-                        showLineEndCommentGo,
-                        showLineEndCommentSql,
-                        showLineEndCommentJson,
-                        showLineEndCommentYaml
-                ), 1)
-                .addComponent(JPanelFactory.of(
-                        showLineEndCommentJsBase,
-                        showLineEndCommentPhpBase,
-                        showLineEndCommentPyBase,
-
-                        showLineEndCommentRustBase,
-                        showLineEndCommentCBase,
-                        showLineEndCommentSwiftBase,
-                        showLineEndCommentHtml
-                ), 1)
-                .addLabeledComponent(new JBLabel(ShowBundle.message("tree.tags")), treeTags, 1, true)
-                .addLabeledComponent(new JBLabel(ShowBundle.message("line.tags")), lineTags, 1, true)
-                .getPanel();
-        comment.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("show")));
-        return comment;
-    }
-
-    @NotNull
-    protected JPanel lineEndFilterPanel() {
-        @NotNull JPanel text = JPanelFactory.of(
-                new JBLabel(ShowBundle.message("text.color")), lineEndColor,
-                new JBLabel(ShowBundle.message("text.color.json")), lineEndJsonColor,
-                new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
-        FormBuilder formBuilder = FormBuilder.createFormBuilder()
-                .addSeparator()
-                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet), 1)
-                .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc), 1)
-                .addSeparator()
-                .addComponent(text)
-                .addSeparator();
-        return formBuilder.getPanel();
-    }
-
-    public JPanel getPanel() {
-        return myMainPanel;
-    }
-
-    @NotNull
-    public JComponent getPreferredFocusedComponent() {
-        return showTreeComment;
-    }
-
+    // move get set near field for AI
 
     public boolean getShowTreeComment() {
         return showTreeComment.isSelected();
@@ -160,6 +82,14 @@ public class AppSettingsComponent {
 
     public void setTreeCache(boolean newStatus) {
         treeCache.setSelected(newStatus);
+    }
+
+    public boolean getTreeFirst() {
+        return treeFirst.isSelected();
+    }
+
+    public void setTreeFirst(boolean newStatus) {
+        treeFirst.setSelected(newStatus);
     }
 
     @NotNull
@@ -472,5 +402,86 @@ public class AppSettingsComponent {
 
     public void setLineEndPrefix(@NotNull String newText) {
         lineEndPrefix.setText(newText);
+    }
+
+
+    public AppSettingsComponent() {
+        @NotNull JButton resetDefault = new JButton(ShowBundle.message("reset.default"));
+        resetDefault.addActionListener(e -> AppSettingsConfigurable.reset(AppSettingsState.DEFAULT_SETTING, this));
+        myMainPanel = FormBuilder.createFormBuilder()
+                .addComponent(JPanelFactory.of(resetDefault), 1)
+                .addComponent(showPanel(), 1)
+                .addComponent(lineEndFilterPanel(), 1)
+                .addComponentFillVertically(new JPanel(), 0)
+                .getPanel();
+    }
+
+    @NotNull
+    private JPanel showPanel() {
+        JPanel comment = FormBuilder.createFormBuilder()
+                .addComponent(JPanelFactory.of(showTreeComment, treeCache, compact, treeFirst), 1)
+                .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache), 1)
+                .addComponent(JPanelFactory.of(
+                        showLineEndCommentJava,
+                        showLineEndCommentKotlin,
+                        showLineEndCommentScala,
+                        showLineEndCommentGroovy
+                ), 1)
+                .addComponent(JPanelFactory.of(
+                        showLineEndCommentJavaBase,
+                        showLineEndCommentKotlinBase,
+                        showLineEndCommentScalaBase,
+                        showLineEndCommentGroovyBase
+                ), 1)
+                .addComponent(JPanelFactory.of(
+                        showLineEndCommentJs,
+                        showLineEndCommentPhp,
+                        showLineEndCommentPy,
+
+                        showLineEndCommentGo,
+                        showLineEndCommentSql,
+                        showLineEndCommentJson,
+                        showLineEndCommentYaml
+                ), 1)
+                .addComponent(JPanelFactory.of(
+                        showLineEndCommentJsBase,
+                        showLineEndCommentPhpBase,
+                        showLineEndCommentPyBase,
+
+                        showLineEndCommentRustBase,
+                        showLineEndCommentCBase,
+                        showLineEndCommentSwiftBase,
+                        showLineEndCommentHtml
+                ), 1)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("tree.tags")), treeTags, 1, true)
+                .addLabeledComponent(new JBLabel(ShowBundle.message("line.tags")), lineTags, 1, true)
+                .getPanel();
+        comment.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("show")));
+        return comment;
+    }
+
+    @NotNull
+    protected JPanel lineEndFilterPanel() {
+        @NotNull JPanel text = JPanelFactory.of(
+                new JBLabel(ShowBundle.message("text.color")), lineEndColor,
+                new JBLabel(ShowBundle.message("text.color.json")), lineEndJsonColor,
+                new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
+        FormBuilder formBuilder = FormBuilder.createFormBuilder()
+                .addSeparator()
+                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet), 1)
+                .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc), 1)
+                .addSeparator()
+                .addComponent(text)
+                .addSeparator();
+        return formBuilder.getPanel();
+    }
+
+    public JPanel getPanel() {
+        return myMainPanel;
+    }
+
+    @NotNull
+    public JComponent getPreferredFocusedComponent() {
+        return showTreeComment;
     }
 }

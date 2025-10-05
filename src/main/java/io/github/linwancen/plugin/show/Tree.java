@@ -19,6 +19,7 @@ import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.tree.RelFileDoc;
+import io.github.linwancen.plugin.show.tree.first.FirstDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -104,7 +105,7 @@ public class Tree implements ProjectViewNodeDecorator {
                 return s;
             }
         }
-        return null;
+        return FirstDoc.firstDoc(node, info);
     }
 
     @Override

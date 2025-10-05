@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.lang;
+package io.github.linwancen.plugin.show.tree.first;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * for html, in here because {@code <!--} is based XML
+ * index.html index.vue index.js
  */
-public class XmlCache extends FileLoader {
+public class FirstDocToDirCache extends FileLoader {
 
     public static void indexDocToDirDoc(@NotNull VirtualFile virtualFile, @Nullable String doc) {
         if (doc != null && "index".equals(virtualFile.getNameWithoutExtension())) {
             VirtualFile parent = virtualFile.getParent();
             if (parent != null) {
-                @Nullable XmlCache extension = FileLoader.EPN.findExtension(XmlCache.class);
+                @Nullable FirstDocToDirCache extension = FileLoader.EPN.findExtension(FirstDocToDirCache.class);
                 if (extension != null) {
                     extension.fileDoc.put(parent, doc);
                 }

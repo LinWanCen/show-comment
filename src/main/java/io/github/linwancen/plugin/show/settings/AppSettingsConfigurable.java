@@ -38,6 +38,7 @@ public class AppSettingsConfigurable implements Configurable {
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getCompact() != settings.compact;
         modified |= mySettingsComponent.getTreeCache() != settings.treeCache;
+        modified |= mySettingsComponent.getTreeFirst() != settings.treeFirst;
 
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
         modified |= mySettingsComponent.getLineEndCache() != settings.lineEndCache;
@@ -90,6 +91,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
         settings.compact = mySettingsComponent.getCompact();
         settings.treeCache = mySettingsComponent.getTreeCache();
+        settings.treeFirst = mySettingsComponent.getTreeFirst();
 
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
         settings.lineEndCache = mySettingsComponent.getLineEndCache();
@@ -145,6 +147,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setCompact(settings.compact);
         mySettingsComponent.setTreeCache(settings.treeCache);
+        mySettingsComponent.setTreeFirst(settings.treeFirst);
 
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
         mySettingsComponent.setLineEndCache(settings.lineEndCache);
