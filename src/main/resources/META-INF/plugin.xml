@@ -202,35 +202,35 @@ Show doc comment in the Project view Tree, line End, json, other
   <actions>
     <action
         id="io.github.linwancen.plugin.show.ext.conf.ReLoadExtDocAction"
-        class="io.github.linwancen.plugin.show.ext.action.ReloadExtDocAction"
-        text="🔄 // Reload External Comment">
+        class="io.github.linwancen.plugin.show.ext.action.ReloadExtDocAction">
       <add-to-group group-id="ToolsMenu"/>
     </action>
     <action
         id="io.github.linwancen.plugin.show.ext.action.ResetExtDocAction"
-        class="io.github.linwancen.plugin.show.ext.action.ResetExtDocAction"
-        text="🆑 // Clear External Comment">
+        class="io.github.linwancen.plugin.show.ext.action.ResetExtDocAction">
       <add-to-group group-id="ToolsMenu"/>
     </action>
     <action
         id="io.github.linwancen.plugin.show.LineEndAdd"
-        class="io.github.linwancen.plugin.show.LineEndAdd"
-        text="// Add Line Comment">
+        class="io.github.linwancen.plugin.show.LineEndAdd">
       <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
     </action>
     <action
         id="io.github.linwancen.plugin.show.LineEndCopy"
-        class="io.github.linwancen.plugin.show.LineEndCopy"
-        text="// Copy With Line Comment">
+        class="io.github.linwancen.plugin.show.LineEndCopy">
       <add-to-group group-id="EditorPopupMenu" anchor="after"
                     relative-to-action="CopyGroup"/>
     </action>
     <action
         id="io.github.linwancen.plugin.show.CopyReferenceSimple"
-        class="io.github.linwancen.plugin.show.CopyReferenceSimple"
-        text="Copy Class.Method / File:LineNum">
+        class="io.github.linwancen.plugin.show.CopyReferenceSimple">
       <add-to-group group-id="EditorPopupMenu" anchor="after"
                     relative-to-action="CopyGroup"/>
+    </action>
+    <action
+        id="io.github.linwancen.plugin.show.settings.action.LineEndSwitchAction"
+        class="io.github.linwancen.plugin.show.settings.action.LineEndSwitchAction">
+      <keyboard-shortcut first-keystroke="alt x" keymap="$default"/>
     </action>
   </actions>
 </idea-plugin>

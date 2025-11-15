@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.27.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.28.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 patchPluginXml {
     // The performance of 2019.3 has been greatly improved.
@@ -15,6 +15,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.28  Add app-setting       Alt X switch line end comment
 <li>2.27  Add project-view-tree use 1st or 2nd line to file comment
 <li>2.26  Add External Comment  load *.sql ddl comment
 <li>2.25  Add project-view-tree use xml/html/vue 1st or 2nd line comment
@@ -71,6 +72,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.28  增加 全局设置   Alt + X 行末注释开关
 <li>2.27  增加 文件树注释  用第 1 或第 2 行注释当文件注释
 <li>2.26  增加 外部注释   读取 *.sql ddl 注释
 <li>2.25  增加 文件树注释  用 xml/html/vue 第 1 或第 2 行注释当文件注释
