@@ -29,7 +29,7 @@ public class ReloadExtDocAction extends CopyReferenceAction {
             if (project == null) {
                 return;
             }
-            FileLoader.EPN.getExtensionList().forEach(fileLoader -> fileLoader.loadAll(project));
+            FileLoader.loadAll(project);
         } catch (Throwable t) {
             LOG.info("ReloadExtDocAction catch Throwable but log to record.", t);
         }

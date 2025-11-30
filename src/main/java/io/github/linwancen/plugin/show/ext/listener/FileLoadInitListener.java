@@ -25,7 +25,7 @@ public class FileLoadInitListener implements DumbService.DumbModeListener, Proje
             @NotNull Project[] projects = ProjectManager.getInstance().getOpenProjects();
             for (@NotNull Project project : projects) {
                 PROJECT_LOAD_MAP.computeIfAbsent(project, k -> {
-                    FileLoader.EPN.getExtensionList().forEach(fileLoader -> fileLoader.loadAll(project));
+                    FileLoader.loadAll(project);
                     return true;
                 });
             }

@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.lang.vue;
 
-import com.intellij.ide.projectView.ProjectView;
 import com.intellij.lang.ecmascript6.psi.ES6ImportCall;
 import com.intellij.lang.ecmascript6.psi.ES6ImportedBinding;
 import com.intellij.lang.javascript.psi.JSArrayLiteralExpression;
@@ -61,9 +60,6 @@ public class VueRouterCache extends FileLoader {
         }
         if (files.isEmpty()) {
             return;
-        }
-        if (!project.isDisposed()) {
-            ProjectView.getInstance(project).refresh();
         }
         LOG.info("Vue Router load all complete {} files\n{}", files.size(), sb);
     }

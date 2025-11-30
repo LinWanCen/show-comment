@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
-import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.FilenameIndex;
@@ -148,9 +147,6 @@ public class ConfCache extends FileLoader {
         }
         if (files.isEmpty()) {
             return;
-        }
-        if (!project.isDisposed()) {
-            ProjectView.getInstance(project).refresh();
         }
         LOG.info("Ext doc conf load all complete {} files\n{}", files.size(), sb);
     }

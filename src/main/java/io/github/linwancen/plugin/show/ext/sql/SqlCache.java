@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.ext.sql;
 
-import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.FilenameIndex;
@@ -65,9 +64,6 @@ public class SqlCache extends FileLoader {
         }
         if (files.isEmpty()) {
             return;
-        }
-        if (!project.isDisposed()) {
-            ProjectView.getInstance(project).refresh();
         }
         LOG.info("SQL doc load all complete {} files\n{}", files.size(), sb);
     }

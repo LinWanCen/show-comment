@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -36,9 +35,6 @@ public class OllamaModelsCache extends FileLoader {
         }
         @NotNull StringBuilder sb = new StringBuilder();
         visitChildrenRecursively(project, dir, sb);
-        if (!project.isDisposed()) {
-            ProjectView.getInstance(project).refresh();
-        }
         LOG.info("ollama manifests load all complete files\n{}", sb);
     }
 
