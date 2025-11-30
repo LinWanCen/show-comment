@@ -2,7 +2,9 @@ package io.github.linwancen.plugin.show.java;
 
 import com.intellij.json.psi.JsonProperty;
 import com.intellij.json.psi.JsonStringLiteral;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PlatformPatterns;
@@ -59,15 +61,17 @@ public class JsonJumpJava extends PsiReferenceContributor {
                             @NotNull Project project = element.getProject();
                             @NotNull List<PsiField> psiFields = new ArrayList<>();
                             @NotNull List<PsiField> tips = new ArrayList<>();
-                            @NotNull PsiClass[] psiClasses = PsiClassUtils.fileToClasses(virtualFile, project);
-                            @NotNull List<String> jsonPath = jsonPath(jsonProp);
-                            put(project, psiFields, tips, psiClasses, jsonPath, jsonPath.size() - 1);
+                            return DumbService.getInstance(project).runReadActionInSmartMode(() -> ReadAction.compute(() -> {
+                                @NotNull PsiClass[] psiClasses = PsiClassUtils.fileToClasses(virtualFile, project);
+                                @NotNull List<String> jsonPath = jsonPath(jsonProp);
+                                put(project, psiFields, tips, psiClasses, jsonPath, jsonPath.size() - 1);
 
-                            @NotNull List<PsiReference> list = new ArrayList<>();
-                            for (@NotNull PsiField psiField : psiFields) {
-                                list.add(new JsonRef<>(element, psiField, tips));
-                            }
-                            return list.toArray(PsiReference.EMPTY_ARRAY);
+                                @NotNull List<PsiReference> list = new ArrayList<>();
+                                for (@NotNull PsiField psiField : psiFields) {
+                                    list.add(new JsonRef<>(element, psiField, tips));
+                                }
+                                return list;
+                            })).toArray(PsiReference.EMPTY_ARRAY);
                         } catch (ProcessCanceledException ignored) {
                             return PsiReference.EMPTY_ARRAY;
                         } catch (Throwable e) {
