@@ -25,6 +25,10 @@ public class TaskUtils {
         taskMap.computeIfAbsent(project,
                 project1 -> AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(() -> {
                     try {
+                        T t = cache.get(project);
+                        if (t == null) {
+                            return;
+                        }
                         ReadAction.nonBlocking(() -> {
                                     if (project.isDisposed()) {
                                         cache.remove(project);
@@ -34,13 +38,10 @@ public class TaskUtils {
                                         }
                                         return;
                                     }
-                                    T t = cache.get(project);
-                                    if (t == null) {
-                                        return;
-                                    }
                                     func.accept(t);
                                 })
                                 .inSmartMode(project)
+                                .coalesceBy(t)
                                 .submit(AppExecutorUtil.getAppExecutorService());
                     } catch (ProcessCanceledException ignored) {
                     } catch (Throwable e) {
