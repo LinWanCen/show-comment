@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show.bean;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
@@ -30,7 +31,7 @@ public class FileInfo extends SettingsInfo {
     }
 
     public static @Nullable FileInfo of(@NotNull VirtualFile file, @NotNull Project project) {
-        @Nullable Document document = FileDocumentManager.getInstance().getDocument(file);
+        @Nullable Document document = ReadAction.compute(() -> FileDocumentManager.getInstance().getDocument(file));
         if (document == null) {
             return null;
         }
