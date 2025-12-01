@@ -22,7 +22,7 @@ public class FirstDoc {
     private FirstDoc() {}
 
     @Nullable
-    public static String firstDoc(ProjectViewNode<?> node, @NotNull SettingsInfo info) {
+    public static String firstDoc(@NotNull ProjectViewNode<?> node, @NotNull SettingsInfo info) {
         if (!info.appSettings.treeFirst) {
             return null;
         }
@@ -30,7 +30,7 @@ public class FirstDoc {
         if (virtualFile == null || !virtualFile.isValid() || virtualFile.isDirectory()) {
             return null;
         }
-        Project project = node.getProject();
+        @Nullable Project project = node.getProject();
         if (project == null) {
             return null;
         }
@@ -68,15 +68,15 @@ public class FirstDoc {
         if (doc.contains("opyright")) {
             return null;
         }
-        String cutDoc = DocFilter.cutDoc(doc, info, true);
+        @NotNull String cutDoc = DocFilter.cutDoc(doc, info, true);
         FirstDocToDirCache.indexDocToDirDoc(virtualFile, cutDoc);
         return cutDoc;
     }
 
     private static final Pattern COMMENT_PATTERN = Pattern.compile("<!--|/\\*|//|#(?!!)");
     private static boolean notDoc(@NotNull PsiElement psiElement) {
-        String text = PsiUnSaveUtils.getText(psiElement);
-        Matcher matcher = COMMENT_PATTERN.matcher(text);
+        @NotNull String text = PsiUnSaveUtils.getText(psiElement);
+        @NotNull Matcher matcher = COMMENT_PATTERN.matcher(text);
         return !matcher.find();
     }
 }

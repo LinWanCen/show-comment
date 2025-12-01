@@ -181,25 +181,25 @@ public abstract class BaseLangDoc extends EditorLinePainter {
      * static! byte to src, by language
      */
     public static @Nullable <T extends SettingsInfo> String resolveDoc(@NotNull T info,
-                                                                       @NotNull PsiElement psiElement) {
+                                                                       @NotNull PsiElement resolve) {
         try {
-            if (!psiElement.isValid()) {
+            if (!resolve.isValid()) {
                 return null;
             }
             // byte to src
-            PsiElement navElement = psiElement.getNavigationElement();
+            PsiElement navElement = resolve.getNavigationElement();
             if (navElement != null) {
-                psiElement = navElement;
+                resolve = navElement;
             }
         } catch (Throwable ignore) {
             // ignore
         }
         // support like java <-> kotlin
-        @Nullable BaseLangDoc langDoc = PsiElementTo.findLangDoc(psiElement);
+        @Nullable BaseLangDoc langDoc = PsiElementTo.findLangDoc(resolve);
         if (langDoc == null) {
             return null;
         }
-        return langDoc.resolveDocPrint(info, psiElement);
+        return langDoc.resolveDocPrint(info, resolve);
     }
 
     /**
