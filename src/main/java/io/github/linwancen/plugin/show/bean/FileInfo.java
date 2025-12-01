@@ -53,6 +53,9 @@ public class FileInfo extends SettingsInfo {
             return null;
         }
         @NotNull VirtualFile file = viewProvider.getVirtualFile();
+        if (!file.isValid()) {
+            return null;
+        }
         @NotNull Project project = psiFile.getProject();
         return new FileInfo(file, document, project, FuncEnum.LINE);
     }

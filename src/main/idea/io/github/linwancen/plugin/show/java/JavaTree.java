@@ -7,7 +7,14 @@ import com.intellij.ide.projectView.impl.nodes.PsiFieldNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.psi.JavaDirectoryService;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiField;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiPackage;
+import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
@@ -68,7 +75,7 @@ public class JavaTree {
 
         // On Packages View, Project Files View
         @Nullable VirtualFile virtualFile = node.getVirtualFile();
-        if (virtualFile == null || !virtualFile.isDirectory()) {
+        if (virtualFile == null || !virtualFile.isValid() || !virtualFile.isDirectory()) {
             return null;
         }
         @Nullable PsiDirectory psiDirectory = PsiManager.getInstance(project).findDirectory(virtualFile);

@@ -16,7 +16,7 @@ public class TreeExt {
 
     public static @Nullable String doc(@NotNull ProjectViewNode<?> node) {
         @Nullable VirtualFile file = node.getVirtualFile();
-        if (file == null) {
+        if (file == null || !file.isValid()) {
             return null;
         }
         return TreeExt.extDoc(file);

@@ -23,7 +23,7 @@ public class FileSelectChangeListener implements FileEditorManagerListener {
             return;
         }
         @Nullable VirtualFile file = event.getOldFile();
-        if (file == null) {
+        if (file == null || !file.isValid()) {
             return;
         }
         if (file.exists()) {

@@ -36,7 +36,7 @@ public class FileOptListener implements BulkFileListener {
     private static void forEvent(@NotNull VFileEvent event) {
         @NotNull List<FileLoader> list = FileLoader.EPN.getExtensionList();
         @Nullable VirtualFile file = event.getFile();
-        if (file == null) {
+        if (file == null || !file.isValid() || file.isDirectory()) {
             return;
         }
         if (event instanceof VFileMoveEvent) {

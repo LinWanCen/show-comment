@@ -43,7 +43,7 @@ public class PhpLangDoc extends BaseTagLangDoc<PhpDocComment> {
         Object value = node.getValue();
         if (value instanceof PsiElement) {
             @NotNull PsiElement psiElement = (PsiElement) value;
-            if (psiElement.getLanguage() == PhpLanguage.INSTANCE) {
+            if (psiElement.isValid() && psiElement.getLanguage() == PhpLanguage.INSTANCE) {
                 @NotNull PsiElement[] children = psiElement.getChildren();
                 for (PsiElement child : children) {
                     @Nullable PsiComment comment = PsiTreeUtil.getChildOfType(child, PsiComment.class);

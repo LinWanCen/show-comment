@@ -27,7 +27,7 @@ public class FirstDoc {
             return null;
         }
         @Nullable VirtualFile virtualFile = node.getVirtualFile();
-        if (virtualFile == null || virtualFile.isDirectory()) {
+        if (virtualFile == null || !virtualFile.isValid() || virtualFile.isDirectory()) {
             return null;
         }
         Project project = node.getProject();

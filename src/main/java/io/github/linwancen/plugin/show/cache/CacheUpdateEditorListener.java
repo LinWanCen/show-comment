@@ -20,7 +20,7 @@ public class CacheUpdateEditorListener implements FileEditorManagerListener {
     public void selectionChanged(@NotNull FileEditorManagerEvent event) {
         @NotNull Project project = event.getManager().getProject();
         @Nullable VirtualFile file = event.getNewFile();
-        if (file == null) {
+        if (file == null || !file.isValid()) {
             return;
         }
         ApplicationManager.getApplication().executeOnPooledThread(() -> {
