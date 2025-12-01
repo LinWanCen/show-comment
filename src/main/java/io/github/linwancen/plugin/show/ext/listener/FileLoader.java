@@ -2,6 +2,7 @@ package io.github.linwancen.plugin.show.ext.listener;
 
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -69,13 +70,14 @@ public abstract class FileLoader {
     protected abstract void loadFileImpl(@NotNull VirtualFile file, @Nullable Project project);
 
     public static void loadAll(@NotNull Project project) {
-        ApplicationManager.getApplication().executeOnPooledThread(() ->
-                DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+        DumbService.getInstance(project).runReadActionInSmartMode(() ->
+                ApplicationManager.getApplication().executeOnPooledThread(() ->
+                    ReadAction.nonBlocking(() -> {
                     if (!project.isDisposed()) {
                         FileLoader.EPN.getExtensionList().forEach(fileLoader -> fileLoader.loadAllImpl(project));
                         EdtExecutorService.getInstance().execute(() -> ProjectView.getInstance(project).refresh());
                     }
-                }));
+                })));
     }
 
     public void visitChildrenRecursively(@NotNull Project project, @NotNull VirtualFile dir, @NotNull StringBuilder sb) {
