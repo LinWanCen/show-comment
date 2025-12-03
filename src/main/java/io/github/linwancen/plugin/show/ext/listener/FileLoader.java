@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
+import com.intellij.util.concurrency.AppExecutorUtil;
 import com.intellij.util.concurrency.EdtExecutorService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,13 +72,15 @@ public abstract class FileLoader {
 
     public static void loadAll(@NotNull Project project) {
         DumbService.getInstance(project).runReadActionInSmartMode(() ->
-                ApplicationManager.getApplication().executeOnPooledThread(() ->
-                    ReadAction.nonBlocking(() -> {
-                    if (!project.isDisposed()) {
-                        FileLoader.EPN.getExtensionList().forEach(fileLoader -> fileLoader.loadAllImpl(project));
-                        EdtExecutorService.getInstance().execute(() -> ProjectView.getInstance(project).refresh());
-                    }
-                })));
+                ReadAction.nonBlocking(() -> {
+                            if (!project.isDisposed()) {
+                                FileLoader.EPN.getExtensionList()
+                                        .forEach(fileLoader -> fileLoader.loadAllImpl(project));
+                                EdtExecutorService.getInstance()
+                                        .execute(() -> ProjectView.getInstance(project).refresh());
+                            }
+                        }).inSmartMode(project)
+                        .submit(AppExecutorUtil.getAppExecutorService()));
     }
 
     public void visitChildrenRecursively(@NotNull Project project, @NotNull VirtualFile dir, @NotNull StringBuilder sb) {
