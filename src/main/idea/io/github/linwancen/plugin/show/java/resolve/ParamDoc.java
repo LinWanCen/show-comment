@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.java.doc;
+package io.github.linwancen.plugin.show.java.resolve;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
@@ -7,6 +7,7 @@ import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
 import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.util.PsiTreeUtil;
+import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

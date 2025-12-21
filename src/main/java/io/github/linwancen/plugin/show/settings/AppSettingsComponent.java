@@ -51,6 +51,7 @@ public class AppSettingsComponent {
     private final JBCheckBox skipBlank = new JBCheckBox(ShowBundle.message("skip.blank"));
     private final JBCheckBox skipAnnotation = new JBCheckBox(ShowBundle.message("skip.anno"));
     private final JBCheckBox getToSet = new JBCheckBox("get --> set ");
+    private final JBCheckBox fieldValue = new JBCheckBox("field value");
     private final JBCheckBox fromNew = new JBCheckBox("java new ");
     private final JBCheckBox fromParam = new JBCheckBox("java @param ");
     private final JBCheckBox enumDoc = new JBCheckBox("java enum ");
@@ -353,6 +354,14 @@ public class AppSettingsComponent {
         getToSet.setSelected(newStatus);
     }
 
+    public boolean getFieldValue() {
+        return fieldValue.isSelected();
+    }
+
+    public void setFieldValue(boolean newStatus) {
+        fieldValue.setSelected(newStatus);
+    }
+
     public boolean getFromNew() {
         return fromNew.isSelected();
     }
@@ -468,7 +477,7 @@ public class AppSettingsComponent {
                 new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
                 .addSeparator()
-                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet), 1)
+                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet, fieldValue), 1)
                 .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc), 1)
                 .addSeparator()
                 .addComponent(text)

@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.java.doc;
+package io.github.linwancen.plugin.show.java.resolve;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
@@ -11,6 +11,7 @@ import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiJvmModifiersOwner;
 import com.intellij.psi.PsiMethod;
+import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.lang.base.BaseAnnoDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

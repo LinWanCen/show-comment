@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.java.doc;
+package io.github.linwancen.plugin.show.java.resolve;
 
 import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiExpression;

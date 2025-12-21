@@ -1,4 +1,4 @@
-package io.github.linwancen.plugin.show.java.kt;
+package io.github.linwancen.plugin.show.java.resolve;
 
 import io.github.linwancen.plugin.show.lang.base.BaseAnnoDoc;
 import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;

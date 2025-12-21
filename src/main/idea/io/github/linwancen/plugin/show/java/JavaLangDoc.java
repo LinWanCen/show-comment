@@ -6,11 +6,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiEnumConstant;
+import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiJvmModifiersOwner;
+import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
@@ -18,20 +21,22 @@ import com.intellij.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.java.doc.AnnoDocJava;
-import io.github.linwancen.plugin.show.java.doc.EnumDoc;
 import io.github.linwancen.plugin.show.java.doc.NewDoc;
-import io.github.linwancen.plugin.show.java.doc.ParamDoc;
 import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
 import io.github.linwancen.plugin.show.java.line.SkipUtils;
+import io.github.linwancen.plugin.show.java.resolve.AnnoDocJava;
+import io.github.linwancen.plugin.show.java.resolve.EnumDoc;
+import io.github.linwancen.plugin.show.java.resolve.ParamDoc;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
@@ -82,6 +87,55 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Override
     public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
+        @Nullable String doc = resolveDocPrintSrc(info, resolve);
+        if (!(resolve instanceof PsiField)) {
+            return doc;
+        }
+        @NotNull PsiField psiField = (PsiField) resolve;
+        @Nullable PsiExpression initializer = psiField.getInitializer();
+        if (initializer == null) {
+            return doc;
+        }
+        // field init reference
+        @NotNull Set<PsiElement> loopCheck = new HashSet<>();
+        loopCheck.add(resolve);
+        while (initializer instanceof PsiReferenceExpression) {
+            try {
+                @Nullable PsiElement r = ((PsiReferenceExpression) initializer).resolve();
+                if (r == null || !loopCheck.add(r)) {
+                    break;
+                }
+                if (r instanceof PsiField) {
+                    initializer = ((PsiField) r).getInitializer();
+                }
+                if (doc == null) {
+                    doc = resolveDocPrintSrc(info, r);
+                }
+            } catch (Throwable ignore) {}
+        }
+        if (!info.appSettings.fieldValue) {
+            return doc;
+        }
+        if (!(initializer instanceof PsiLiteralExpression)) {
+            return doc;
+        }
+        @Nullable Object value = ((PsiLiteralExpression) initializer).getValue();
+        if (value == null) {
+            return doc;
+        }
+        String init = value.toString();
+        // use not ASCII space not skip
+        if (doc == null) {
+            return "　= " + init;
+        }
+        // skip like 1-YES
+        if (doc.contains(init) || psiField.getName().contains(init)) {
+            return doc;
+        }
+        return doc + "　= " + init;
+    }
+
+    private <T extends SettingsInfo> @Nullable String resolveDocPrintSrc(@NotNull T info, @NotNull PsiElement resolve) {
         if (SkipUtils.skipSign(info, resolve)) {
             return null;
         }

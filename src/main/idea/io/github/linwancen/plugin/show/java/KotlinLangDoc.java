@@ -5,7 +5,7 @@ import com.intellij.psi.impl.file.PsiPackageBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.java.kt.AnnoDocKt;
+import io.github.linwancen.plugin.show.java.resolve.AnnoDocKt;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import org.jetbrains.annotations.NotNull;
