@@ -72,7 +72,7 @@ Show doc comment in the Project view Tree, line End, json, other
 
 <h5>外部注释</h5>
 <a href="https://gitee.com/LinWanCen/show-comment/tree/main/src/test/java/io/github/linwancen/plugin/show/demo/ext">示例(Gitee)</a>
-：比如你要给 .go 的文件配置文件注释可以放在相同目录或父目录的 xxx.go.tree.tsv 中
+：比如你要给 .go 的文件配置文件注释可以放在相同目录或父目录的 xxx.go.tree.tsv 中，如果该文件夹没有索引就用 show_comment_plugin.tree.tsv
 <ul>
   <li>重新加载：工具 -> "🔄 // Reload External Comment"
   <li>path/[any][filename.]ext.tree.tsv // 文件(夹)注释 📝 📁

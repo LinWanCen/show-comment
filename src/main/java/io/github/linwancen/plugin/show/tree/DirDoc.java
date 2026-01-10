@@ -1,8 +1,11 @@
 package io.github.linwancen.plugin.show.tree;
 
 import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
+import io.github.linwancen.plugin.show.ext.conf.ConfCache;
+import io.github.linwancen.plugin.show.ext.listener.FileLoader;
 import io.github.linwancen.plugin.show.settings.AbstractSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +25,14 @@ class DirDoc {
         @Nullable PsiDirectory psiDirectory = node.getValue();
         if (psiDirectory == null) {
             return null;
+        }
+        PsiFile file = psiDirectory.findFile("show_comment_plugin.tree.tsv");
+        if (file != null) {
+            @Nullable ConfCache confCache = FileLoader.EPN.findExtension(ConfCache.class);
+            VirtualFile virtualFile = file.getVirtualFile();
+            if (confCache != null && virtualFile != null) {
+                confCache.loadFileImpl(virtualFile, node.getProject());
+            }
         }
         for (@NotNull Map.Entry<String, Pattern[]> patterns : patternMap.entrySet()) {
             @Nullable PsiFile psiFile = psiDirectory.findFile(patterns.getKey());
