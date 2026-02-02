@@ -56,7 +56,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showLineEndCommentHtml = true;
 
     @NotNull
-    public String[] treeTags = {"author"};
+    public String[] treeTags = {};
     @NotNull
     public String[] lineTags = {};
 

@@ -6,6 +6,7 @@ import com.intellij.psi.PsiMember;
 import com.intellij.psi.javadoc.PsiDocComment;
 import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.java.JavaLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocSkip;
 import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +59,7 @@ public class SkipUtils {
         if (doc == null) {
             return null;
         }
-        if (info.appSettings.skipBlank && isBlank(doc)) {
+        if (info.appSettings.skipBlank && isBlank(info, doc)) {
             return null;
         }
         @NotNull String text = PsiUnSaveUtils.getText(doc);
@@ -66,7 +67,7 @@ public class SkipUtils {
         return skip ? null : doc;
     }
 
-    private static boolean isBlank(@NotNull PsiDocComment doc) {
+    private static <T extends SettingsInfo> boolean isBlank(@NotNull T info, @NotNull PsiDocComment doc) {
         @NotNull PsiElement[] elements = doc.getDescriptionElements();
         for (@NotNull PsiElement element : elements) {
             @NotNull String text = PsiUnSaveUtils.getText(element);
@@ -74,6 +75,11 @@ public class SkipUtils {
                 return false;
             }
         }
-        return true;
+        @NotNull StringBuilder tagStrBuilder = new StringBuilder();
+        @NotNull String[] names = info.tagNames();
+        for (@NotNull String name : names) {
+            JavaLangDoc.staticAppendTag(tagStrBuilder, doc, name);
+        }
+        return tagStrBuilder.length() == 0;
     }
 }

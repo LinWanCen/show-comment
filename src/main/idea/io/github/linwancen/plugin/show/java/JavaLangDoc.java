@@ -220,6 +220,11 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     @Override
     protected <T extends SettingsInfo> void appendTag(@NotNull T info, @NotNull StringBuilder tagStrBuilder,
                                                       @NotNull PsiDocComment psiDocComment, @NotNull String name) {
+        staticAppendTag(tagStrBuilder, psiDocComment, name);
+    }
+
+    public static void staticAppendTag(@NotNull StringBuilder tagStrBuilder,
+                                        @NotNull PsiDocComment psiDocComment, @NotNull String name) {
         @NotNull PsiDocTag[] tags = psiDocComment.findTagsByName(name);
         for (@NotNull PsiDocTag tag : tags) {
             @Nullable PsiDocTagValue value = tag.getValueElement();
