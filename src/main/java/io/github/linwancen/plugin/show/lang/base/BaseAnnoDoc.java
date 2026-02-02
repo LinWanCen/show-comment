@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.lang.base;
 
+import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
 import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
@@ -15,13 +16,19 @@ public abstract class BaseAnnoDoc<O> {
         @NotNull GlobalSettingsState globalSettings = info.globalSettings;
         // annoDocEffect first because default false
         if (projectSettings.annoDocEffect && projectSettings.projectFilterEffective) {
-            @Nullable String doc = annoDocArr(owner, projectSettings.annoDoc);
+            String[][] annoDocTree = info.funcEnum == FuncEnum.TREE
+                    ? projectSettings.annoDocTree
+                    : projectSettings.annoDocLine;
+            @Nullable String doc = annoDocArr(owner, annoDocTree);
             if (StringUtils.isNotBlank(doc)) {
                 return doc;
             }
         }
         if (globalSettings.annoDocEffect && projectSettings.globalFilterEffective) {
-            return annoDocArr(owner, globalSettings.annoDoc);
+            String[][] annoDocTree = info.funcEnum == FuncEnum.TREE
+                    ? globalSettings.annoDocTree
+                    : globalSettings.annoDocLine;
+            return annoDocArr(owner, annoDocTree);
         }
         return null;
     }

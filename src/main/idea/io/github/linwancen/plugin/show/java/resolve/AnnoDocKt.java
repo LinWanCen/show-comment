@@ -22,6 +22,7 @@ public class AnnoDocKt extends BaseAnnoDoc<KtAnnotated> {
 
     private AnnoDocKt() {}
 
+    @Override
     @Nullable
     protected String annoDocMatch(@NotNull KtAnnotated owner, @NotNull String[] arr) {
         if (typeMatch(owner, arr[0])) {
@@ -43,6 +44,8 @@ public class AnnoDocKt extends BaseAnnoDoc<KtAnnotated> {
                 return owner instanceof KtFunction;
             case "class":
                 return owner instanceof KtPureClassOrObject;
+            case "class||field":
+                return owner instanceof KtProperty || owner instanceof KtPureClassOrObject;
             case "!doc":
             case "all":
                 return true;

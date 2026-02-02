@@ -23,6 +23,7 @@ public class AnnoDocJava extends BaseAnnoDoc<PsiJvmModifiersOwner> {
 
     private AnnoDocJava() {}
 
+    @Override
     @Nullable
     protected String annoDocMatch(@NotNull PsiJvmModifiersOwner owner, @NotNull String[] arr) {
         if (typeMatch(owner, arr[0])) {
@@ -45,6 +46,8 @@ public class AnnoDocJava extends BaseAnnoDoc<PsiJvmModifiersOwner> {
                 return owner instanceof PsiMethod;
             case "class":
                 return owner instanceof PsiClass;
+            case "class||field":
+                return owner instanceof PsiField || owner instanceof PsiClass;
             case "!doc":
                 return !(owner instanceof PsiDocCommentOwner);
             case "all":

@@ -32,7 +32,8 @@ public abstract class AbstractSettingsComponent {
     private final JBCheckBox docGetEffect = new JBCheckBox("");
     private final JBTextField docGet = new JBTextField();
     private final JBCheckBox annoDocEffect = new JBCheckBox("");
-    private final JBTextArea annoDoc = new JBTextArea();
+    private final JBTextArea annoDocTree = new JBTextArea();
+    private final JBTextArea annoDocLine = new JBTextArea();
 
     // region PatternMap: dirDoc fileDoc sqlSplit tableDoc columnDoc indexDoc
 
@@ -75,13 +76,16 @@ public abstract class AbstractSettingsComponent {
                 .addLabeledComponent(new JBLabel(ShowBundle.message("comment.exclude.regexp")), docExclude, 1, true)
                 .addSeparator();
         Border border = docGet.getBorder();
-        annoDoc.setBorder(border);
+        annoDocTree.setBorder(border);
+        annoDocLine.setBorder(border);
         dirDoc.setBorder(border);
         fileDoc.setBorder(border);
         @NotNull JPanel getLabel = JPanelFactory.of(docGetEffect, new JBLabel(ShowBundle.message("get.doc.regexp")));
         builder = builder.addLabeledComponent(getLabel, docGet, 1, true);
-        @NotNull JPanel annoLabel = JPanelFactory.of(annoDocEffect, new JBLabel(ShowBundle.message("anno.doc")));
-        builder = builder.addLabeledComponent(annoLabel, annoDoc, 1, true);
+        @NotNull JPanel annoLabel = JPanelFactory.of(annoDocEffect, new JBLabel(ShowBundle.message("anno.doc.tree")));
+        @NotNull JPanel annoLabelLine = JPanelFactory.of(new JBLabel(ShowBundle.message("anno.doc.line")));
+        builder = builder.addLabeledComponent(annoLabel, annoDocTree, 1, true);
+        builder = builder.addLabeledComponent(annoLabelLine, annoDocLine, 1, true);
         JPanel panel = builder.getPanel();
         panel.setBorder(IdeBorderFactory.createTitledBorder(ShowBundle.message("line.end.comment")));
         return panel;
@@ -247,12 +251,21 @@ public abstract class AbstractSettingsComponent {
     }
 
     @NotNull
-    public String getAnnoDoc() {
-        return annoDoc.getText();
+    public String getAnnoDocTree() {
+        return annoDocTree.getText();
     }
 
-    public void setAnnoDoc(@NotNull String newText) {
-        annoDoc.setText(newText);
+    public void setAnnoDocTree(@NotNull String newText) {
+        annoDocTree.setText(newText);
+    }
+
+    @NotNull
+    public String getAnnoDocLine() {
+        return annoDocLine.getText();
+    }
+
+    public void setAnnoDocLine(@NotNull String newText) {
+        annoDocLine.setText(newText);
     }
 
     // region PatternMap

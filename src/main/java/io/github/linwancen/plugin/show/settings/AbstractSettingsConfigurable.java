@@ -21,7 +21,8 @@ public class AbstractSettingsConfigurable {
         modified |= component.getDocGetEffect() != settings.docGetEffect;
         modified |= !component.getDocGet().equals(settings.getDocGet());
         modified |= component.getAnnoDocEffect() != settings.annoDocEffect;
-        modified |= !component.getAnnoDoc().equals(settings.getAnnoDoc());
+        modified |= !component.getAnnoDocTree().equals(settings.getAnnoDocTree());
+        modified |= !component.getAnnoDocLine().equals(settings.getAnnoDocLine());
         modified |= component.getDirDocEffect() != settings.dirDocEffect;
         modified |= !component.getDirDoc().equals(settings.getDirDoc());
         modified |= component.getFileDocEffect() != settings.fileDocEffect;
@@ -55,7 +56,8 @@ public class AbstractSettingsConfigurable {
         settings.docGetEffect = component.getDocGetEffect();
         settings.setDocGet(component.getDocGet());
         settings.annoDocEffect = component.getAnnoDocEffect();
-        settings.setAnnoDoc(component.getAnnoDoc());
+        settings.setAnnoDocTree(component.getAnnoDocTree());
+        settings.setAnnoDocLine(component.getAnnoDocLine());
         settings.dirDocEffect = component.getDirDocEffect();
         settings.setDirDoc(component.getDirDoc());
         settings.fileDocEffect = component.getFileDocEffect();
@@ -84,7 +86,8 @@ public class AbstractSettingsConfigurable {
         component.setDocGetEffect(settings.docGetEffect);
         component.setDocGet(settings.getDocGet());
         component.setAnnoDocEffect(settings.annoDocEffect);
-        component.setAnnoDoc(settings.getAnnoDoc());
+        component.setAnnoDocTree(settings.getAnnoDocTree());
+        component.setAnnoDocLine(settings.getAnnoDocLine());
         component.setDirDocEffect(settings.dirDocEffect);
         component.setDirDoc(settings.getDirDoc());
         component.setFileDocEffect(settings.fileDocEffect);

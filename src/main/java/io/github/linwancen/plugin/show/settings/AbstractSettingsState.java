@@ -36,12 +36,37 @@ public abstract class AbstractSettingsState {
     public transient Pattern docGet = Pattern.compile(".+?(?:[。\\r\\n]|\\. )");
 
     public boolean annoDocEffect = true;
+
+    /**
+     * tree
+     */
     @NotNull
-    public transient String[][] annoDoc = {
-            {"field", "io.swagger.annotations.ApiModelProperty", "value"},
-            {"field", "io.swagger.v3.oas.annotations.media.Schema", "title"},
-            {"field", "com.alibaba.excel.annotation.ExcelProperty", "value"},
-            {"field", "cn.idev.excel.annotation.ExcelProperty", "value"},
+    public transient String[][] annoDocTree = {
+            {"field", "com.alibaba.excel.annotation.ExcelProperty", "value"}, // EasyExcel
+            {"field", "cn.idev.excel.annotation.ExcelProperty", "value"}, // EasyExcel new
+            // swagger 3
+            {"class||field", "io.swagger.v3.oas.annotations.media.Schema", "description", "title", "name"},
+            {"method", "io.swagger.v3.oas.annotations.Operation", "summary", "description", "tags"},
+            {"class", "io.swagger.v3.oas.annotations.tags.Tag", "description", "name"},
+            // swagger 2
+            {"field", "io.swagger.annotations.ApiModelProperty", "value", "name"},
+            {"class", "io.swagger.annotations.ApiModel", "description", "value"},
+            {"method", "io.swagger.annotations.ApiOperation", "value"},
+            {"class", "io.swagger.annotations.Api", "value", "tags", "description"},
+    };
+
+    /**
+     * only be reference for pref
+     */
+    @NotNull
+    public transient String[][] annoDocLine = {
+            {"field", "com.alibaba.excel.annotation.ExcelProperty", "value"}, // EasyExcel
+            {"field", "cn.idev.excel.annotation.ExcelProperty", "value"}, // EasyExcel new
+            // swagger 3
+            {"class||field", "io.swagger.v3.oas.annotations.media.Schema", "description", "title", "name"},
+            // swagger 2
+            {"field", "io.swagger.annotations.ApiModelProperty", "value", "name"},
+            {"class", "io.swagger.annotations.ApiModel", "description", "value"},
     };
 
     // region PatternMap: dirDoc fileDoc sqlSplit tableDoc columnDoc indexDoc
@@ -198,22 +223,35 @@ public abstract class AbstractSettingsState {
 
 
     @NotNull
-    public String getAnnoDoc() {
-        return Arrays.stream(annoDoc)
+    public String getAnnoDocTree() {
+        return Arrays.stream(annoDocTree)
                 .map(a -> String.join("#", a))
+                .collect(Collectors.joining("\n"));
+    }
+
+    @NotNull
+    public String getAnnoDocLine() {
+        return Arrays.stream(annoDocLine)
+                .map(a -> String.join(".", a))
                 .collect(Collectors.joining("\n"));
     }
 
     public static final Pattern LINE_PATTERN = Pattern.compile("[\\r\\n]++");
     public static final Pattern METHOD_PATTERN = Pattern.compile("#");
 
-    public void setAnnoDoc(@NotNull String s) {
+    public void setAnnoDocTree(@NotNull String s) {
         String[] split = LINE_PATTERN.split(s);
-        this.annoDoc = Arrays.stream(split)
+        this.annoDocTree = Arrays.stream(split)
                 .map(METHOD_PATTERN::split)
                 .toArray(String[][]::new);
     }
 
+    public void setAnnoDocLine(@NotNull String s) {
+        String[] split = LINE_PATTERN.split(s);
+        this.annoDocLine = Arrays.stream(split)
+                .map(METHOD_PATTERN::split)
+                .toArray(String[][]::new);
+    }
 
     @NotNull
     public String getDirDoc() {
