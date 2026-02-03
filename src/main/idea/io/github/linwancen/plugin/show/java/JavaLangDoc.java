@@ -2,6 +2,7 @@ package io.github.linwancen.plugin.show.java;
 
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.lang.java.JavaLanguage;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
@@ -33,12 +34,16 @@ import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
+    private static final Logger LOG = LoggerFactory.getLogger(JavaLangDoc.class);
 
     public static final JavaLangDoc INSTANCE = new JavaLangDoc();
 
@@ -97,9 +102,15 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             return doc;
         }
         // field init reference
-        @NotNull Set<PsiElement> loopCheck = new HashSet<>();
+        @NotNull Set<PsiElement> loopCheck = new LinkedHashSet<>();
         loopCheck.add(resolve);
+        int i = 10;
         while (initializer instanceof PsiReferenceExpression) {
+            if (i-- <= 0) {
+                @NotNull String loopInfo = loopCheck.stream().map(PsiElement::getText).collect(Collectors.joining("\n"));
+                LOG.error("JavaLangDoc resolveDocPrint initializer too many:\n{}", loopInfo);
+                break;
+            }
             try {
                 @Nullable PsiElement r = ((PsiReferenceExpression) initializer).resolve();
                 if (r == null || !loopCheck.add(r)) {
@@ -111,6 +122,8 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
                 if (doc == null) {
                     doc = resolveDocPrintSrc(info, r);
                 }
+            } catch (ProcessCanceledException e) {
+                throw e;
             } catch (Throwable ignore) {}
         }
         if (!info.appSettings.fieldValue) {
