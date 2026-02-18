@@ -10,15 +10,32 @@ import com.intellij.psi.search.PsiShortNamesCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.regex.Matcher;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.regex.Pattern;
 
 public class PsiClassUtils {
 
     private PsiClassUtils() {}
 
-    private static final Pattern JSON_PATTERN = Pattern.compile("[\\w.]*+$");
+    private static final Pattern SPLIT_PATTERN = Pattern.compile("[^\\w.]");
 
+    /**
+     * only xxx-ClassName.xxx
+     */
+    @NotNull
+    public static PsiClass[] jsonFileToClasses(@NotNull VirtualFile virtualFile, @NotNull Project project) {
+        @NotNull String fileName = virtualFile.getNameWithoutExtension();
+        String[] split = SPLIT_PATTERN.split(fileName);
+        if (split.length < 2) {
+            return camelNameToClass(project, fileName);
+        }
+        return camelNameToClass(project, split[split.length - 1]);
+    }
+
+    /**
+     * ClassName-...-ClassName.json/xml
+     */
     @NotNull
     public static PsiClass[] fileToClasses(@NotNull VirtualFile virtualFile, @NotNull Project project) {
         @NotNull String fileName = virtualFile.getNameWithoutExtension();
@@ -26,11 +43,19 @@ public class PsiClassUtils {
         if (ext == null || (!ext.startsWith("json") && !ext.equals("xml"))) {
             return PsiClass.EMPTY_ARRAY;
         }
-        @NotNull Matcher matcher = JSON_PATTERN.matcher(fileName);
-        if (!matcher.find()) {
-            return PsiClass.EMPTY_ARRAY;
+        String[] split = SPLIT_PATTERN.split(fileName);
+        @NotNull PsiClass[] startClass = camelNameToClass(project, split[0]);
+        if (split.length < 2) {
+            return startClass;
         }
-        String className = matcher.group();
+        @NotNull PsiClass[] endClass = camelNameToClass(project, split[split.length - 1]);
+        @NotNull LinkedHashSet<PsiClass> psiClasses = new LinkedHashSet<>(Arrays.asList(startClass));
+        psiClasses.addAll(Arrays.asList(endClass));
+        return psiClasses.toArray(PsiClass.EMPTY_ARRAY);
+    }
+
+    @NotNull
+    public static PsiClass[] camelNameToClass(@NotNull Project project, @Nullable String className) {
         if (className == null) {
             return PsiClass.EMPTY_ARRAY;
         }
@@ -38,18 +63,14 @@ public class PsiClassUtils {
         if (psiClasses.length != 0) {
             return psiClasses;
         }
-        // issue #23
-        if (className.length() != fileName.length()) {
-            return PsiClass.EMPTY_ARRAY;
-        }
-        @NotNull char[] chars = fileName.toCharArray();
+        @NotNull char[] chars = className.toCharArray();
         if (chars.length < 1 || chars[0] < 97 || 122 < chars[0]) {
             return PsiClass.EMPTY_ARRAY;
         }
         // Upper Case
         chars[0] -= 32;
         @NotNull String name = String.valueOf(chars);
-        return nameToClass(name, project);
+        return simpleNameToClass(name, project);
     }
 
     @NotNull
@@ -66,7 +87,11 @@ public class PsiClassUtils {
     @NotNull
     private static PsiClass[] simpleNameToClass(@NotNull String className, @NotNull Project project) {
         PsiShortNamesCache namesCache = PsiShortNamesCache.getInstance(project);
-        return namesCache.getClassesByName(className, GlobalSearchScope.allScope(project));
+        try {
+            return namesCache.getClassesByName(className, GlobalSearchScope.allScope(project));
+        } catch (Throwable ignored) {
+            return PsiClass.EMPTY_ARRAY;
+        }
     }
 
     @NotNull
@@ -74,7 +99,7 @@ public class PsiClassUtils {
         JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
         try {
             return javaPsiFacade.findClasses(className, GlobalSearchScope.allScope(project));
-        } catch (Throwable e) {
+        } catch (Throwable ignored) {
             return PsiClass.EMPTY_ARRAY;
         }
     }

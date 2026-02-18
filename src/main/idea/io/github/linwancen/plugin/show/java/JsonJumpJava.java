@@ -64,7 +64,7 @@ public class JsonJumpJava extends PsiReferenceContributor {
                             if (DumbService.getInstance(project).isDumb()) {
                                 return PsiReference.EMPTY_ARRAY;
                             }
-                            @NotNull PsiClass[] psiClasses = PsiClassUtils.fileToClasses(virtualFile, project);
+                            @NotNull PsiClass[] psiClasses = PsiClassUtils.jsonFileToClasses(virtualFile, project);
                             @NotNull List<String> jsonPath = jsonPath(jsonProp);
                             put(project, psiFields, tips, psiClasses, jsonPath, jsonPath.size() - 1);
 

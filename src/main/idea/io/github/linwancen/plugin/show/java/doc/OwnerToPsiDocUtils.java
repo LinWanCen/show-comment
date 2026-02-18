@@ -62,7 +62,7 @@ public class OwnerToPsiDocUtils {
         if (!(psiFile instanceof PsiClassOwner)) {
             // for SPI
             @NotNull PsiClass[] psiClasses = PsiClassUtils.nameToClass(psiFile.getName(), psiFile.getProject());
-            // for "xxx ClassName.xxx"
+            // for "ClassName-...-ClassName.xxx"
             if (psiClasses.length == 0) {
                 VirtualFile virtualFile = psiFile.getVirtualFile();
                 psiClasses = PsiClassUtils.fileToClasses(virtualFile, psiFile.getProject());
