@@ -18,6 +18,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import io.github.linwancen.plugin.show.java.doc.PsiClassUtils;
 import io.github.linwancen.plugin.show.jump.JsonRef;
+import io.github.linwancen.util.StrStyleUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -98,7 +99,16 @@ public class JsonJumpJava extends PsiReferenceContributor {
             if (level == 1) {
                 tips.addAll(Arrays.asList(psiClass.getAllFields()));
             }
-            @Nullable PsiField psiField = psiClass.findFieldByName(name, true);
+            @Nullable PsiField psiField;
+            if (name.indexOf('_') < 0) {
+                psiField = psiClass.findFieldByName(name, true);
+            } else {
+                String s = StrStyleUtils.snakeToCamel(name);
+                psiField = psiClass.findFieldByName(s, true);
+                if (psiField == null) {
+                    psiField = psiClass.findFieldByName(name, true);
+                }
+            }
             if (psiField == null) {
                 continue;
             }
