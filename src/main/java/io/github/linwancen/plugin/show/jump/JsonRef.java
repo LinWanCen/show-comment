@@ -1,6 +1,10 @@
 package io.github.linwancen.plugin.show.jump;
 
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementResolveResult;
+import com.intellij.psi.PsiPolyVariantReference;
+import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.ResolveResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,12 +15,12 @@ public class JsonRef<T extends PsiElement> extends PsiReferenceBase<PsiElement> 
     @NotNull
     final T psiField;
     @NotNull
-    final List<T> tips;
+    final List<Object> variants;
 
-    public JsonRef(@NotNull PsiElement element, @NotNull T psiField, @NotNull List<T> tips) {
+    public JsonRef(@NotNull PsiElement element, @NotNull T psiField, @NotNull List<Object> variants) {
         super(element);
         this.psiField = psiField;
-        this.tips = tips;
+        this.variants = variants;
     }
 
     /**
@@ -37,6 +41,6 @@ public class JsonRef<T extends PsiElement> extends PsiReferenceBase<PsiElement> 
      */
     @Override
     public @NotNull Object[] getVariants() {
-        return tips.toArray();
+        return variants.toArray();
     }
 }

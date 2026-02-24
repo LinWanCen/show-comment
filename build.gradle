@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.31.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.32.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 patchPluginXml {
     // The performance of 2019.3 has been greatly improved.
@@ -15,7 +15,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
-<li>1.31  Add project-view-tree for "ClassNameOrSimpleName-xx-ClassNameOrSimpleName.json/xml"
+<li>2.32  Add line-end-comment  json value className or enum
 <li>2.31  Add project-view-tree for "ClassNameOrSimpleName-xx-ClassNameOrSimpleName.json/xml"
 <li>2.30  Add line-end-comment  json snake key to camel field
 <li>2.29  Add line-end-comment  java field value
@@ -76,6 +76,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.32  增加 行末注释   json 值支持类名或枚举
 <li>2.31  增加 文件树注释  "类全名或简名-...-类全名或简名.json/xml" 左边优先，右边字段用
 <li>2.30  增加 行末注释   json 下划线字段跳转小驼峰字段与读取注释
 <li>2.29  增加 行末注释   Java 字段值

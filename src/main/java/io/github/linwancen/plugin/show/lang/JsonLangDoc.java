@@ -68,6 +68,24 @@ public class JsonLangDoc extends BaseLangDoc {
             return extDoc;
         }
         @NotNull PsiReference[] references = jsonProperty.getNameElement().getReferences();
+        @Nullable String nameDoc = referencesDoc(info, references);
+        @Nullable JsonValue value = jsonProperty.getValue();
+        if (value == null) {
+            return nameDoc;
+        }
+        @NotNull PsiReference[] valueReferences = value.getReferences();
+        @Nullable String valueDoc = referencesDoc(info, valueReferences);
+        if (valueDoc == null) {
+            return nameDoc;
+        }
+        if (nameDoc == null) {
+            return valueDoc;
+        }
+        return nameDoc + ": " + valueDoc;
+    }
+
+    @Nullable
+    private static String referencesDoc(@NotNull LineInfo info, @NotNull PsiReference[] references) {
         for (@NotNull PsiReference reference : references) {
             @Nullable PsiElement resolve = null;
             try {
