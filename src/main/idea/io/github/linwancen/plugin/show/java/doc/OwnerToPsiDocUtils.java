@@ -9,6 +9,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.javadoc.PsiDocComment;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.java.JavaLangDoc;
+import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +61,10 @@ public class OwnerToPsiDocUtils {
     }
 
     @Nullable
-    public static PsiDocComment fileDoc(PsiFile psiFile) {
+    public static <T extends SettingsInfo> String fileDoc(@NotNull T info, @Nullable PsiFile psiFile) {
+        if (psiFile == null) {
+            return null;
+        }
         if (!(psiFile instanceof PsiClassOwner)) {
             // for SPI
             @NotNull PsiClass[] psiClasses = PsiClassUtils.nameToClass(psiFile.getName(), psiFile.getProject());
@@ -68,16 +74,18 @@ public class OwnerToPsiDocUtils {
                 psiClasses = PsiClassUtils.fileToClasses(virtualFile, psiFile.getProject());
             }
             for (@NotNull PsiClass psiClass : psiClasses) {
-                @Nullable PsiDocComment docComment = srcOrByteCodeDoc(psiClass);
-                if (docComment != null) {
+                // support to kotlin data class
+                @Nullable String doc = BaseLangDoc.resolveDoc(info, psiClass);
+                if (doc != null) {
                     // Inaccurate when there are classes with the same name
-                    return docComment;
+                    return doc;
                 }
             }
             return null;
         }
         if (PsiPackage.PACKAGE_INFO_FILE.equals(psiFile.getName())) {
-            return PackageFileToPsiDoc.fromPackageInfoFile(psiFile);
+            @Nullable PsiDocComment psiDocComment = PackageFileToPsiDoc.fromPackageInfoFile(psiFile);
+            return JavaLangDoc.INSTANCE.docElementToStr(info, psiDocComment);
         }
         @NotNull PsiClassOwner psiClassOwner = (PsiClassOwner) psiFile;
         @NotNull PsiClass[] classes = psiClassOwner.getClasses();
@@ -85,6 +93,7 @@ public class OwnerToPsiDocUtils {
             return null;
         }
         PsiClass psiClass = classes[0];
-        return srcOrByteCodeDoc(psiClass);
+        // support to kotlin data class
+        return BaseLangDoc.resolveDoc(info, psiClass);
     }
 }

@@ -32,11 +32,19 @@ public class JavaTree {
     @Nullable
     public static <T extends SettingsInfo> String treeDoc(@NotNull T info, ProjectViewNode<?> node,
                                                           @NotNull Project project) {
-        @Nullable PsiDocComment docComment = nodeDoc(info, node, project);
-        if (docComment == null) {
-            return null;
+        // refactor: JSON file doc return string
+        @Nullable String s = null;
+        if (node instanceof PsiFileNode) {
+            @Nullable PsiFile psiFile = ((PsiFileNode) node).getValue();
+            s = OwnerToPsiDocUtils.fileDoc(info, psiFile);
         }
-        @Nullable String s = JavaLangDoc.INSTANCE.docElementToStr(info, docComment);
+        if (s == null) {
+            @Nullable PsiDocComment docComment = nodeDoc(info, node, project);
+            if (docComment == null) {
+                return null;
+            }
+            s = JavaLangDoc.INSTANCE.docElementToStr(info, docComment);
+        }
         if (s != null && !DocSkip.skipDoc(info, s)) {
             return s;
         }
@@ -46,10 +54,6 @@ public class JavaTree {
     @Nullable
     static <T extends SettingsInfo> PsiDocComment nodeDoc(@NotNull T info, ProjectViewNode<?> node,
                                                           @NotNull Project project) {
-        if (node instanceof PsiFileNode) {
-            PsiFile psiFile = ((PsiFileNode) node).getValue();
-            return OwnerToPsiDocUtils.fileDoc(psiFile);
-        }
         if (node instanceof PsiDirectoryNode) {
             PsiDirectory psiDirectory = ((PsiDirectoryNode) node).getValue();
             return dirDoc(psiDirectory);
