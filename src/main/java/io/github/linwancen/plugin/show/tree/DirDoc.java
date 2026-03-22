@@ -26,7 +26,7 @@ class DirDoc {
         if (psiDirectory == null) {
             return null;
         }
-        PsiFile file = psiDirectory.findFile("show_comment_plugin.tree.tsv");
+        @Nullable PsiFile file = psiDirectory.findFile("show_comment_plugin.tree.tsv");
         if (file != null) {
             @Nullable ConfCache confCache = FileLoader.EPN.findExtension(ConfCache.class);
             VirtualFile virtualFile = file.getVirtualFile();

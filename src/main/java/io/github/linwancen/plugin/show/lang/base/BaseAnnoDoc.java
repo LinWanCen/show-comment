@@ -16,7 +16,7 @@ public abstract class BaseAnnoDoc<O> {
         @NotNull GlobalSettingsState globalSettings = info.globalSettings;
         // annoDocEffect first because default false
         if (projectSettings.annoDocEffect && projectSettings.projectFilterEffective) {
-            String[][] annoDocTree = info.funcEnum == FuncEnum.TREE
+            @NotNull String[][] annoDocTree = info.funcEnum == FuncEnum.TREE
                     ? projectSettings.annoDocTree
                     : projectSettings.annoDocLine;
             @Nullable String doc = annoDocArr(owner, annoDocTree);
@@ -25,7 +25,7 @@ public abstract class BaseAnnoDoc<O> {
             }
         }
         if (globalSettings.annoDocEffect && projectSettings.globalFilterEffective) {
-            String[][] annoDocTree = info.funcEnum == FuncEnum.TREE
+            @NotNull String[][] annoDocTree = info.funcEnum == FuncEnum.TREE
                     ? globalSettings.annoDocTree
                     : globalSettings.annoDocLine;
             return annoDocArr(owner, annoDocTree);

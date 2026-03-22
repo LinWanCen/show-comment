@@ -1,14 +1,17 @@
 package io.github.linwancen.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class StrStyleUtils {
     /**
      * @author DeepSeek
      */
-    public static String snakeToCamel(String snakeCase) {
+    public static String snakeToCamel(@Nullable String snakeCase) {
         if (snakeCase == null || snakeCase.isEmpty()) {
             return snakeCase;
         }
-        StringBuilder result = new StringBuilder();
+        @NotNull StringBuilder result = new StringBuilder();
         boolean nextUpperCase = false;
         for (int i = 0; i < snakeCase.length(); i++) {
             char currentChar = snakeCase.charAt(i);

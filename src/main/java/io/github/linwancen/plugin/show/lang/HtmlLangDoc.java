@@ -58,7 +58,7 @@ public class HtmlLangDoc extends JsLangDoc {
     /**
      * Override like Java/Json/Html
      */
-    @SuppressWarnings("UnstableApiUsage")
+    @Override
     @Nullable
     protected String refDoc(@NotNull LineInfo info, @NotNull PsiElement ref) {
         if (DocSkip.skipTagAttr(info, ref)) {

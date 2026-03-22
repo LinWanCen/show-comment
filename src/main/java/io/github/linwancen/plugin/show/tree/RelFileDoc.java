@@ -34,8 +34,7 @@ public class RelFileDoc {
     private static String relDoc(ProjectViewNode<?> node, @NotNull AbstractSettingsState settings) {
         if (node instanceof PsiFileNode) {
             return FileDoc.fileDoc((PsiFileNode) node, settings);
-        }
-        if (node instanceof PsiDirectoryNode) {
+        } else if (node instanceof PsiDirectoryNode) {
             return DirDoc.dirDoc((PsiDirectoryNode) node, settings);
         }
         return null;
