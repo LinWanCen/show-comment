@@ -17,7 +17,7 @@ public abstract class AbstractSettingsState {
     @NotNull
     public transient Pattern lineInclude = Pattern.compile("");
     @NotNull
-    public transient Pattern lineExclude = Pattern.compile("^(java)\\.");
+    public transient Pattern lineExclude = Pattern.compile("^(java|cn\\.hutool)");
     @NotNull
     public transient Pattern docInclude = Pattern.compile("");
     @NotNull
