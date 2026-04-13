@@ -21,6 +21,7 @@ public class AppSettingsComponent {
     private final JBCheckBox treeFirst = new JBCheckBox(ShowBundle.message("tree.first"));
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
     private final JBCheckBox lineEndCache = new JBCheckBox(ShowBundle.message("line.end.cache"));
+    private final JBCheckBox injected = new JBCheckBox(ShowBundle.message("injected"));
     private final JBCheckBox showLineEndCommentJava = new JBCheckBox("   Java ");
     private final JBCheckBox showLineEndCommentJavaBase = new JBCheckBox("// Java ");
     private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("   Kotlin ");
@@ -117,6 +118,14 @@ public class AppSettingsComponent {
 
     public void setLineEndCache(boolean newStatus) {
         lineEndCache.setSelected(newStatus);
+    }
+
+    public boolean getInjected() {
+        return injected.isSelected();
+    }
+
+    public void setInjected(boolean newStatus) {
+        injected.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentJava() {
@@ -429,7 +438,7 @@ public class AppSettingsComponent {
     private JPanel showPanel() {
         JPanel comment = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(showTreeComment, treeCache, compact, treeFirst), 1)
-                .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache), 1)
+                .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache, injected), 1)
                 .addComponent(JPanelFactory.of(
                         showLineEndCommentJava,
                         showLineEndCommentKotlin,

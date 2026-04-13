@@ -42,6 +42,7 @@ public class AppSettingsConfigurable implements Configurable {
 
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
         modified |= mySettingsComponent.getLineEndCache() != settings.lineEndCache;
+        modified |= mySettingsComponent.getInjected() != settings.injected;
         modified |= mySettingsComponent.getShowLineEndCommentJava() != settings.showLineEndCommentJava;
         modified |= mySettingsComponent.getShowLineEndCommentKotlin() != settings.showLineEndCommentKotlin;
         modified |= mySettingsComponent.getShowLineEndCommentScala() != settings.showLineEndCommentScala;
@@ -96,6 +97,7 @@ public class AppSettingsConfigurable implements Configurable {
 
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
         settings.lineEndCache = mySettingsComponent.getLineEndCache();
+        settings.injected = mySettingsComponent.getInjected();
         settings.showLineEndCommentJava = mySettingsComponent.getShowLineEndCommentJava();
         settings.showLineEndCommentKotlin = mySettingsComponent.getShowLineEndCommentKotlin();
         settings.showLineEndCommentScala = mySettingsComponent.getShowLineEndCommentScala();
@@ -153,6 +155,7 @@ public class AppSettingsConfigurable implements Configurable {
 
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
         mySettingsComponent.setLineEndCache(settings.lineEndCache);
+        mySettingsComponent.setInjected(settings.injected);
         mySettingsComponent.setShowLineEndCommentJava(settings.showLineEndCommentJava);
         mySettingsComponent.setShowLineEndCommentKotlin(settings.showLineEndCommentKotlin);
         mySettingsComponent.setShowLineEndCommentScala(settings.showLineEndCommentScala);
