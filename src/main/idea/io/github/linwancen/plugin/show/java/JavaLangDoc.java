@@ -137,6 +137,9 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             return doc;
         }
         String init = value.toString();
+        if (init.isEmpty()) {
+            init = "\"\"";
+        }
         // use not ASCII space not skip
         if (doc == null) {
             return "　= " + init;
