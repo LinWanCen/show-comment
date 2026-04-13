@@ -81,12 +81,13 @@ public abstract class AbstractSettingsState {
         put("build.gradle", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});
         put("build.gradle.kts", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});
         put("README.md", new Pattern[]{Pattern.compile("(?m)^#++ (.*)")});
+        put("SKILL.md", new Pattern[]{Pattern.compile("(?m)^description: *+(.*)")});
     }};
 
     public boolean fileDocEffect = true;
     @NotNull
     public transient Map<String, Pattern[]> fileDoc = new LinkedHashMap<>() {{
-        put("md", new Pattern[]{Pattern.compile("(?m)^#++ (.*)")});
+        put("md", new Pattern[]{Pattern.compile("(?m)^(?:#++ |description: *+)(.*)")});
         put("ad", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
         put("adoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
         put("asciidoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
