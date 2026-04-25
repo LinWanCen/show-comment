@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
 public class ProjectSettingsState extends AbstractSettingsState implements PersistentStateComponent<ProjectSettingsState> {
 
     public ProjectSettingsState() {
-        this.lineEndCount = 0;
+        this.lineEndCount = -1;
+        this.lineEndDocCount = -1;
         this.lineExclude = Pattern.compile("");
         this.tagExclude = Pattern.compile("");
         this.attrExclude = Pattern.compile("");

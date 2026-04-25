@@ -14,6 +14,7 @@ import javax.swing.border.Border;
 public abstract class AbstractSettingsComponent {
 
     protected final JBTextField lineEndCount = new JBTextField();
+    protected final JBTextField lineEndDocCount = new JBTextField();
 
     private final JBCheckBox onlySelectLine = new JBCheckBox(ShowBundle.message("only.select.line"));
 
@@ -140,6 +141,15 @@ public abstract class AbstractSettingsComponent {
 
     public void setLineEndCount(@NotNull String newText) {
         lineEndCount.setText(newText);
+    }
+
+    @NotNull
+    public String getLineEndDocCount() {
+        return lineEndDocCount.getText();
+    }
+
+    public void setLineEndDocCount(@NotNull String newText) {
+        lineEndDocCount.setText(newText);
     }
 
     public boolean getOnlySelectLine() {

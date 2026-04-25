@@ -1,17 +1,22 @@
 package io.github.linwancen.plugin.show.lang.base;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MergeDoc {
-    @NotNull
-    static String mergeDoc(@NotNull String beforeText, @NotNull String text,
-                           @NotNull String beforeDoc, @NotNull String doc, boolean getToSet) {
+    static void mergeDoc(@NotNull String beforeText, @NotNull String beforeDoc,
+                         @Nullable String text, @Nullable String doc,
+                         @NotNull StringBuilder builder, boolean getToSet) {
+        if (text == null || doc == null) {
+            builder.insert(0, beforeDoc);
+            return;
+        }
         if (!beforeText.startsWith("set")) {
-            // doc same
-            if (beforeDoc.equals(doc)) {
-                return doc;
+            // doc diff
+            if (!beforeDoc.equals(doc)) {
+                builder.insert(0, " | ").insert(0, beforeDoc);
             }
-            return beforeDoc + " | " + doc;
+            return;
         }
         beforeText = beforeText.substring(3);
         if (text.startsWith("get")) {
@@ -23,9 +28,9 @@ public class MergeDoc {
         boolean same = beforeText.equals(text);
         if (getToSet) {
             // because lambda is -> or =>
-            return doc + (same ? " ==> " : " --> ") + beforeDoc;
+            builder.append(same ? " ==> " : " --> ").append(beforeDoc);
         } else {
-            return beforeDoc + (same ? " <== " : " <-- ") + doc;
+            builder.insert(0, same ? " <== ": " <-- ").insert(0, beforeDoc);
         }
     }
 }

@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 public abstract class AbstractSettingsState {
 
     public int lineEndCount = 2;
-    public int lineEndLen = 0;
+    public int lineEndLen = -1;
+    public int lineEndDocCount = 99;
     public boolean onlySelectLine = false;
 
     @NotNull

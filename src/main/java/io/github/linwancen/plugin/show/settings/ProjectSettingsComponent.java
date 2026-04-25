@@ -21,6 +21,7 @@ public class ProjectSettingsComponent extends AbstractSettingsComponent {
         JPanel panel = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(resetDefault,
                         new JBLabel(ShowBundle.message("line.count")), lineEndCount,
+                        new JBLabel(ShowBundle.message("line.doc.count")), lineEndDocCount,
                         globalFilterEffective, projectFilterEffective
                 ), 1)
                 .addComponent(commonPanel(), 1)

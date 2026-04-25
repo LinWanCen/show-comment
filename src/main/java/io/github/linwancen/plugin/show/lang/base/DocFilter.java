@@ -68,8 +68,8 @@ public class DocFilter {
 
     private static boolean lineCountOrLenOverInfo(@NotNull AbstractSettingsState appSettings,
                                                   @NotNull StringBuilder sb, int lineCount) {
-        boolean countOver = appSettings.lineEndCount > 0 && lineCount >= appSettings.lineEndCount;
-        boolean lenOver = appSettings.lineEndLen > 0 && sb.length() >= appSettings.lineEndLen;
+        boolean countOver = appSettings.lineEndCount >= 0 && lineCount >= appSettings.lineEndCount;
+        boolean lenOver = appSettings.lineEndLen >= 0 && sb.length() >= appSettings.lineEndLen;
         return countOver || lenOver;
     }
 

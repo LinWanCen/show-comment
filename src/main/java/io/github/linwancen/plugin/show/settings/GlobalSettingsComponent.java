@@ -15,6 +15,7 @@ public class GlobalSettingsComponent extends AbstractSettingsComponent {
         myMainPanel = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(resetDefault,
                         new JBLabel(ShowBundle.message("line.count")), lineEndCount,
+                        new JBLabel(ShowBundle.message("line.doc.count")), lineEndDocCount,
                         JPanelFactory.of(sqlSplitEffect, new JBLabel(ShowBundle.message("sql.comment")))
                 ), 1)
                 .addComponent(commonPanel(), 1)

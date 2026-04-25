@@ -109,30 +109,23 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         @Nullable String doc = null;
         @Nullable String text = null;
         @Nullable PsiElement refElement = element;
-        while ((refElement = Prev.prevRefChild(info, refElement, refClass)) != null) {
+        int count = 0;
+        int limit = info.projectSettings.lineEndCount >= 0 ? info.projectSettings.lineEndDocCount
+                : info.globalSettings.lineEndDocCount >= 0 ? info.globalSettings.lineEndDocCount : 99;
+        @NotNull StringBuilder builder = new StringBuilder();
+        while ((count < limit) && (refElement = Prev.prevRefChild(info, refElement, refClass)) != null) {
             PsiElement parent = refElement.getParent();
-            @Nullable String filterDoc = refElementDoc(info, parent);
-            if (filterDoc != null) {
-                doc = filterDoc;
-                text = info.getText(refElement);
+            @Nullable String leftDoc = refElementDoc(info, parent);
+            if (leftDoc != null) {
+                String leftText = info.getText(refElement);
+                MergeDoc.mergeDoc(leftText, leftDoc, text, doc, builder, limit == 2 && info.appSettings.getToSet);
+                doc = leftDoc;
+                text = leftText;
                 refElement = parent;
-                break;
+                count++;
             }
         }
-        if (refElement == null) {
-            return null;
-        }
-        // before doc
-        @Nullable PsiElement beforeRefElement = Prev.prevRefChild(info, refElement, refClass);
-        if (beforeRefElement == null) {
-            return doc;
-        }
-        PsiElement parent = beforeRefElement.getParent();
-        @Nullable String beforeDoc = refElementDoc(info, parent);
-        if (beforeDoc != null) {
-            doc = MergeDoc.mergeDoc(info.getText(beforeRefElement), text, beforeDoc, doc, info.appSettings.getToSet);
-        }
-        return doc;
+        return builder.toString();
     }
 
     /**
