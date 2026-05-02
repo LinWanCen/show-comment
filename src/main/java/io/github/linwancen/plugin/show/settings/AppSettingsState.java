@@ -79,6 +79,9 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean init = true;
     public boolean initRef = true;
     public boolean initValue = true;
+    public boolean fromLineUp = true;
+    public boolean fromLineEnd = true;
+    public boolean fieldBase = false;
 
     @NotNull
     public static AppSettingsState getInstance() {

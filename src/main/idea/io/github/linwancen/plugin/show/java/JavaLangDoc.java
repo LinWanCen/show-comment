@@ -144,6 +144,10 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
                 return super.resolveDocPrint(info, psiField);
             }
         }
+        if (info.appSettings.fieldBase && resolve instanceof PsiField) {
+            @Nullable PsiField psiField = (PsiField) resolve;
+            return resolveDocPrintBase(info, psiField);
+        }
         if (info.appSettings.fromParam && resolve instanceof PsiParameter) {
             return ParamDoc.paramDoc((PsiParameter) resolve);
         } else if (info.appSettings.enumDoc && resolve instanceof PsiEnumConstant) {

@@ -18,6 +18,11 @@ public abstract class BaseTagLangDoc<DocElement> extends BaseLangDoc {
     }
 
     @Nullable
+    protected <T extends SettingsInfo> String resolveDocPrintBase(@NotNull T info, @NotNull PsiElement resolve) {
+        return super.resolveDocPrint(info, resolve);
+    }
+
+    @Nullable
     public <T extends SettingsInfo> String docElementToStr(@NotNull T info, @Nullable DocElement docElement) {
         if (docElement == null) {
             return null;

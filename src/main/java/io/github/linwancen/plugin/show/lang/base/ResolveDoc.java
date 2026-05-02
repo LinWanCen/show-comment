@@ -20,6 +20,9 @@ public class ResolveDoc {
     public static <T extends SettingsInfo> String fromLineEnd(@SuppressWarnings("unused") @NotNull T info,
                                                               @NotNull PsiElement resolve,
                                                               @NotNull FileViewProvider resolveViewProvider) {
+        if (!info.appSettings.fromLineEnd) {
+            return null;
+        }
         @Nullable Document document = resolveViewProvider.getDocument();
         if (document == null) {
             return null;
@@ -63,6 +66,9 @@ public class ResolveDoc {
                                                              @NotNull PsiElement resolve,
                                                              @NotNull FileViewProvider resolveViewProvider,
                                                              @NotNull List<String> keywords) {
+        if (!info.appSettings.fromLineUp) {
+            return null;
+        }
         @Nullable Document document = resolveViewProvider.getDocument();
         if (document == null) {
             return null;

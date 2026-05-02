@@ -61,6 +61,9 @@ public class AppSettingsComponent {
     private final ColorPanel lineEndColor = new ColorPanel();
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBTextField lineEndPrefix = new JBTextField();
+    private final JBCheckBox fromLineUp = new JBCheckBox("up //");
+    private final JBCheckBox fromLineEnd = new JBCheckBox("end //");
+    private final JBCheckBox fieldBase = new JBCheckBox("field //");
 
     // move get set near field for AI
 
@@ -413,6 +416,30 @@ public class AppSettingsComponent {
         initValue.setSelected(newStatus);
     }
 
+    public boolean getFromLineUp() {
+        return fromLineUp.isSelected();
+    }
+
+    public void setFromLineUp(boolean newStatus) {
+        fromLineUp.setSelected(newStatus);
+    }
+
+    public boolean getFromLineEnd() {
+        return fromLineEnd.isSelected();
+    }
+
+    public void setFromLineEnd(boolean newStatus) {
+        fromLineEnd.setSelected(newStatus);
+    }
+
+    public boolean getFieldBase() {
+        return fieldBase.isSelected();
+    }
+
+    public void setFieldBase(boolean newStatus) {
+        fieldBase.setSelected(newStatus);
+    }
+
     @Nullable
     public Color getLineEndColor() {
         return lineEndColor.getSelectedColor();
@@ -467,8 +494,10 @@ public class AppSettingsComponent {
                         showLineEndCommentJavaBase,
                         showLineEndCommentKotlinBase,
                         showLineEndCommentScalaBase,
-                        showLineEndCommentGroovyBase
-                ), 1)
+                        showLineEndCommentGroovyBase,
+
+                        JPanelFactory.of(fromLineUp, fromLineEnd, fieldBase)),
+                        1)
                 .addComponent(JPanelFactory.of(
                         showLineEndCommentJs,
                         showLineEndCommentPhp,

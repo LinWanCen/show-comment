@@ -87,6 +87,10 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getInit() != settings.init;
         modified |= mySettingsComponent.getInitRef() != settings.initRef;
         modified |= mySettingsComponent.getInitValue() != settings.initValue;
+
+        modified |= mySettingsComponent.getFromLineUp() != settings.fromLineUp;
+        modified |= mySettingsComponent.getFromLineEnd() != settings.fromLineEnd;
+        modified |= mySettingsComponent.getFieldBase() != settings.fieldBase;
         return modified;
     }
 
@@ -145,6 +149,10 @@ public class AppSettingsConfigurable implements Configurable {
         settings.init = mySettingsComponent.getInit();
         settings.initRef = mySettingsComponent.getInitRef();
         settings.initValue = mySettingsComponent.getInitValue();
+
+        settings.fromLineUp = mySettingsComponent.getFromLineUp();
+        settings.fromLineEnd = mySettingsComponent.getFromLineEnd();
+        settings.fieldBase = mySettingsComponent.getFieldBase();
     }
 
     @Override
@@ -206,6 +214,10 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setInit(settings.init);
         mySettingsComponent.setInitRef(settings.initRef);
         mySettingsComponent.setInitValue(settings.initValue);
+
+        mySettingsComponent.setFromLineUp(settings.fromLineUp);
+        mySettingsComponent.setFromLineEnd(settings.fromLineEnd);
+        mySettingsComponent.setFieldBase(settings.fieldBase);
     }
 
     @Override
