@@ -213,6 +213,11 @@ Show doc comment in the Project view Tree, line End, json, other
       <add-to-group group-id="ToolsMenu"/>
     </action>
     <action
+        id="io.github.linwancen.plugin.show.TreeCopy"
+        class="io.github.linwancen.plugin.show.TreeCopy">
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+    </action>
+    <action
         id="io.github.linwancen.plugin.show.LineEndAdd"
         class="io.github.linwancen.plugin.show.LineEndAdd">
       <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
