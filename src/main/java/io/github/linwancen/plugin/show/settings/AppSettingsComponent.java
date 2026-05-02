@@ -52,10 +52,12 @@ public class AppSettingsComponent {
     private final JBCheckBox skipBlank = new JBCheckBox(ShowBundle.message("skip.blank"));
     private final JBCheckBox skipAnnotation = new JBCheckBox(ShowBundle.message("skip.anno"));
     private final JBCheckBox getToSet = new JBCheckBox("get --> set ");
-    private final JBCheckBox fieldValue = new JBCheckBox("field value");
     private final JBCheckBox fromNew = new JBCheckBox("java new ");
     private final JBCheckBox fromParam = new JBCheckBox("java @param ");
     private final JBCheckBox enumDoc = new JBCheckBox("java enum ");
+    private final JBCheckBox init = new JBCheckBox("init");
+    private final JBCheckBox initRef = new JBCheckBox("init ref");
+    private final JBCheckBox initValue = new JBCheckBox("init value");
     private final ColorPanel lineEndColor = new ColorPanel();
     private final ColorPanel lineEndJsonColor = new ColorPanel();
     private final JBTextField lineEndPrefix = new JBTextField();
@@ -363,14 +365,6 @@ public class AppSettingsComponent {
         getToSet.setSelected(newStatus);
     }
 
-    public boolean getFieldValue() {
-        return fieldValue.isSelected();
-    }
-
-    public void setFieldValue(boolean newStatus) {
-        fieldValue.setSelected(newStatus);
-    }
-
     public boolean getFromNew() {
         return fromNew.isSelected();
     }
@@ -393,6 +387,30 @@ public class AppSettingsComponent {
 
     public void setEnumDoc(boolean newStatus) {
         enumDoc.setSelected(newStatus);
+    }
+
+    public boolean getInit() {
+        return init.isSelected();
+    }
+
+    public void setInit(boolean newStatus) {
+        init.setSelected(newStatus);
+    }
+
+    public boolean getInitRef() {
+        return initRef.isSelected();
+    }
+
+    public void setInitRef(boolean newStatus) {
+        initRef.setSelected(newStatus);
+    }
+
+    public boolean getInitValue() {
+        return initValue.isSelected();
+    }
+
+    public void setInitValue(boolean newStatus) {
+        initValue.setSelected(newStatus);
     }
 
     @Nullable
@@ -486,8 +504,8 @@ public class AppSettingsComponent {
                 new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
                 .addSeparator()
-                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet, fieldValue), 1)
-                .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc), 1)
+                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet), 1)
+                .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc, init, initRef, initValue), 1)
                 .addSeparator()
                 .addComponent(text)
                 .addSeparator();

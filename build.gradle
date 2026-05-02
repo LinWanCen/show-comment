@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.34.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.35.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 patchPluginXml {
     // The performance of 2019.3 has been greatly improved.
@@ -15,6 +15,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.35  Add line-end-comment  java init (a=b) doc
 <li>2.34  Add project-view-tree copy with tree comment
 <li>2.33  ★   line-end-comment  support multi doc (default 99)
 <li>2.32  Add line-end-comment  json value className or enum
@@ -78,6 +79,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.35  增加 行末注释    Java 初始化（赋值）注释
 <li>2.34  增加 文件树注释  带树注释复制
 <li>2.33  ★   行末注释     支持多个注释（默认99）
 <li>2.32  增加 行末注释    json 值支持类名或枚举

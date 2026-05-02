@@ -73,10 +73,12 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean skipBlank = true;
     public boolean skipAnnotation = true;
     public boolean getToSet = true;
-    public boolean fieldValue = true;
     public boolean fromNew = true;
     public boolean fromParam = false;
     public boolean enumDoc = true;
+    public boolean init = true;
+    public boolean initRef = true;
+    public boolean initValue = true;
 
     @NotNull
     public static AppSettingsState getInstance() {

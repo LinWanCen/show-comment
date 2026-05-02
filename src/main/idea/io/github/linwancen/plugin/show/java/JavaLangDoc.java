@@ -4,6 +4,7 @@ import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiCall;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiEnumConstant;
@@ -11,10 +12,10 @@ import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiJvmModifiersOwner;
-import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.javadoc.PsiDocComment;
 import com.intellij.psi.javadoc.PsiDocTag;
@@ -28,6 +29,7 @@ import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
 import io.github.linwancen.plugin.show.java.line.SkipUtils;
 import io.github.linwancen.plugin.show.java.resolve.AnnoDocJava;
 import io.github.linwancen.plugin.show.java.resolve.EnumDoc;
+import io.github.linwancen.plugin.show.java.resolve.InitDoc;
 import io.github.linwancen.plugin.show.java.resolve.ParamDoc;
 import io.github.linwancen.plugin.show.lang.base.BaseTagLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
@@ -37,10 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     private static final Logger LOG = LoggerFactory.getLogger(JavaLangDoc.class);
@@ -93,62 +92,41 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     @Override
     public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
         @Nullable String doc = resolveDocPrintSrc(info, resolve);
-        if (!(resolve instanceof PsiField)) {
+        if (!info.appSettings.init || !(resolve instanceof PsiVariable)) {
             return doc;
         }
-        @NotNull PsiField psiField = (PsiField) resolve;
-        @Nullable PsiExpression initializer = psiField.getInitializer();
+        @NotNull PsiVariable variable = (PsiVariable) resolve;
+        @Nullable PsiExpression initializer = variable.getInitializer();
         if (initializer == null) {
             return doc;
         }
-        // field init reference
-        @NotNull Set<PsiElement> loopCheck = new LinkedHashSet<>();
-        loopCheck.add(resolve);
-        int i = 10;
-        while (initializer instanceof PsiReferenceExpression) {
-            if (i-- <= 0) {
-                @NotNull String loopInfo = loopCheck.stream().map(PsiElement::getText).collect(Collectors.joining("\n"));
-                LOG.error("JavaLangDoc resolveDocPrint initializer too many:\n{}", loopInfo);
-                break;
-            }
+        if (info.appSettings.initRef) {
             try {
-                @Nullable PsiElement r = ((PsiReferenceExpression) initializer).resolve();
-                if (r == null || !loopCheck.add(r)) {
-                    break;
-                }
-                if (r instanceof PsiField) {
-                    initializer = ((PsiField) r).getInitializer();
-                }
-                if (doc == null) {
-                    doc = resolveDocPrintSrc(info, r);
+                if (initializer instanceof PsiReferenceExpression) {
+                    @Nullable PsiElement r = ((PsiReferenceExpression) initializer).resolve();
+                    if (r == null) {
+                        return doc;
+                    }
+                    if (r instanceof PsiVariable) {
+                        initializer = ((PsiVariable) r).getInitializer();
+                    }
+                    if (doc == null) {
+                        // initializer doc
+                        doc = resolveDocPrintSrc(info, r);
+                    }
+                } else if (doc == null && initializer instanceof PsiCall) {
+                    PsiMethod psiMethod = ((PsiCall) initializer).resolveMethod();
+                    if (psiMethod == null) {
+                        return null;
+                    }
+                    return resolveDocPrintSrc(info, psiMethod);
                 }
             } catch (ProcessCanceledException e) {
                 throw e;
-            } catch (Throwable ignore) {}
+            } catch (Throwable ignore) {
+            }
         }
-        if (!info.appSettings.fieldValue) {
-            return doc;
-        }
-        if (!(initializer instanceof PsiLiteralExpression)) {
-            return doc;
-        }
-        @Nullable Object value = ((PsiLiteralExpression) initializer).getValue();
-        if (value == null) {
-            return doc;
-        }
-        String init = value.toString();
-        if (init.isEmpty()) {
-            init = "\"\"";
-        }
-        // use not ASCII space not skip
-        if (doc == null) {
-            return "　= " + init;
-        }
-        // skip like 1-YES
-        if (doc.contains(init) || psiField.getName().contains(init)) {
-            return doc;
-        }
-        return doc + "　= " + init;
+        return InitDoc.initDoc(info, doc, initializer, variable);
     }
 
     private <T extends SettingsInfo> @Nullable String resolveDocPrintSrc(@NotNull T info, @NotNull PsiElement resolve) {
@@ -240,7 +218,7 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     public static void staticAppendTag(@NotNull StringBuilder tagStrBuilder,
-                                        @NotNull PsiDocComment psiDocComment, @NotNull String name) {
+                                       @NotNull PsiDocComment psiDocComment, @NotNull String name) {
         @NotNull PsiDocTag[] tags = psiDocComment.findTagsByName(name);
         for (@NotNull PsiDocTag tag : tags) {
             @Nullable PsiDocTagValue value = tag.getValueElement();

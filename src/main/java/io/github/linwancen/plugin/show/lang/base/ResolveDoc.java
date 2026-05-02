@@ -98,11 +98,9 @@ public class ResolveDoc {
                     break;
                 }
             }
-            if (text != null) {
-                sb.insert(0, "\n").insert(0, text);
-                if (text.contains("/*")) {
-                    break;
-                }
+            sb.insert(0, "\n").insert(0, text);
+            if (text.contains("/*")) {
+                break;
             }
         }
         if (sb.length() == 0) {

@@ -79,11 +79,14 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getSkipBlank() != settings.skipBlank;
         modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
         modified |= mySettingsComponent.getGetToSet() != settings.getToSet;
-        modified |= mySettingsComponent.getFieldValue() != settings.fieldValue;
 
         modified |= mySettingsComponent.getFromNew() != settings.fromNew;
         modified |= mySettingsComponent.getFromParam() != settings.fromParam;
         modified |= mySettingsComponent.getEnumDoc() != settings.enumDoc;
+
+        modified |= mySettingsComponent.getInit() != settings.init;
+        modified |= mySettingsComponent.getInitRef() != settings.initRef;
+        modified |= mySettingsComponent.getInitValue() != settings.initValue;
         return modified;
     }
 
@@ -134,11 +137,14 @@ public class AppSettingsConfigurable implements Configurable {
         settings.skipBlank = mySettingsComponent.getSkipBlank();
         settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
         settings.getToSet = mySettingsComponent.getGetToSet();
-        settings.fieldValue = mySettingsComponent.getFieldValue();
 
         settings.fromNew = mySettingsComponent.getFromNew();
         settings.fromParam = mySettingsComponent.getFromParam();
         settings.enumDoc = mySettingsComponent.getEnumDoc();
+
+        settings.init = mySettingsComponent.getInit();
+        settings.initRef = mySettingsComponent.getInitRef();
+        settings.initValue = mySettingsComponent.getInitValue();
     }
 
     @Override
@@ -192,11 +198,14 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setSkipBlank(settings.skipBlank);
         mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
         mySettingsComponent.setGetToSet(settings.getToSet);
-        mySettingsComponent.setFieldValue(settings.fieldValue);
 
         mySettingsComponent.setFromNew(settings.fromNew);
         mySettingsComponent.setFromParam(settings.fromParam);
         mySettingsComponent.setEnumDoc(settings.enumDoc);
+
+        mySettingsComponent.setInit(settings.init);
+        mySettingsComponent.setInitRef(settings.initRef);
+        mySettingsComponent.setInitValue(settings.initValue);
     }
 
     @Override
