@@ -70,11 +70,14 @@ public class SqlCache extends FileLoader {
 
     @Override
     public void loadFileImpl(@NotNull VirtualFile file, @Nullable Project project) {
+        @NotNull GlobalSettingsState g = GlobalSettingsState.getInstance();
+        if (!g.sqlSplitEffect) {
+            return;
+        }
         @Nullable String code = PsiUnSaveUtils.fileText(project, file);
         if (code == null) {
             return;
         }
-        @NotNull GlobalSettingsState g = GlobalSettingsState.getInstance();
         loadSqlDoc(code, TABLE_DOC_CACHE, g.tableDocEffect, g.tableDoc);
         loadSqlDoc(code, COLUMN_DOC_CACHE, g.columnDocEffect, g.columnDoc);
         loadSqlDoc(code, INDEX_DOC_CACHE, g.indexDocEffect, g.indexDoc);
@@ -82,6 +85,9 @@ public class SqlCache extends FileLoader {
             return;
         }
         @NotNull ProjectSettingsState p = ProjectSettingsState.getInstance(project);
+        if (!p.sqlSplitEffect) {
+            return;
+        }
         loadSqlDoc(code, TABLE_DOC_CACHE, p.tableDocEffect, p.tableDoc);
         loadSqlDoc(code, COLUMN_DOC_CACHE, p.columnDocEffect, p.columnDoc);
         loadSqlDoc(code, INDEX_DOC_CACHE, p.indexDocEffect, p.indexDoc);
