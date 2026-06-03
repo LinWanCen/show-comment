@@ -79,6 +79,7 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getSkipBlank() != settings.skipBlank;
         modified |= mySettingsComponent.getSkipAnnotation() != settings.skipAnnotation;
         modified |= mySettingsComponent.getGetToSet() != settings.getToSet;
+        modified |= mySettingsComponent.getTsvTab() != settings.tsvTab;
 
         modified |= mySettingsComponent.getFromNew() != settings.fromNew;
         modified |= mySettingsComponent.getFromParam() != settings.fromParam;
@@ -141,6 +142,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.skipBlank = mySettingsComponent.getSkipBlank();
         settings.skipAnnotation = mySettingsComponent.getSkipAnnotation();
         settings.getToSet = mySettingsComponent.getGetToSet();
+        settings.tsvTab = mySettingsComponent.getTsvTab();
 
         settings.fromNew = mySettingsComponent.getFromNew();
         settings.fromParam = mySettingsComponent.getFromParam();
@@ -206,6 +208,7 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setSkipBlank(settings.skipBlank);
         mySettingsComponent.setSkipAnnotation(settings.skipAnnotation);
         mySettingsComponent.setGetToSet(settings.getToSet);
+        mySettingsComponent.setTsvTab(settings.tsvTab);
 
         mySettingsComponent.setFromNew(settings.fromNew);
         mySettingsComponent.setFromParam(settings.fromParam);

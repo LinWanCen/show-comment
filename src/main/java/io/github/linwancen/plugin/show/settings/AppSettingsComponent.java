@@ -64,6 +64,7 @@ public class AppSettingsComponent {
     private final JBCheckBox fromLineUp = new JBCheckBox("up //");
     private final JBCheckBox fromLineEnd = new JBCheckBox("end //");
     private final JBCheckBox fieldBase = new JBCheckBox("field //");
+    private final JBCheckBox tsvTab = new JBCheckBox("*.tsv Tab \\t");
 
     // move get set near field for AI
 
@@ -368,6 +369,14 @@ public class AppSettingsComponent {
         getToSet.setSelected(newStatus);
     }
 
+    public boolean getTsvTab() {
+        return tsvTab.isSelected();
+    }
+
+    public void setTsvTab(boolean newStatus) {
+        tsvTab.setSelected(newStatus);
+    }
+
     public boolean getFromNew() {
         return fromNew.isSelected();
     }
@@ -533,7 +542,7 @@ public class AppSettingsComponent {
                 new JBLabel(ShowBundle.message("prefix")), lineEndPrefix);
         FormBuilder formBuilder = FormBuilder.createFormBuilder()
                 .addSeparator()
-                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet), 1)
+                .addComponent(JPanelFactory.of(skipAscii, skipBlank, skipAnnotation, getToSet, tsvTab), 1)
                 .addComponent(JPanelFactory.of(fromNew, fromParam, enumDoc, init, initRef, initValue), 1)
                 .addSeparator()
                 .addComponent(text)

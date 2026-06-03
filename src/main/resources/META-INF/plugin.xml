@@ -177,6 +177,7 @@ Show doc comment in the Project view Tree, line End, json, other
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
+    <postStartupActivity implementation="io.github.linwancen.plugin.show.ext.tab.TsvTabInitializer"/>
     <editor.linePainter implementation="io.github.linwancen.plugin.show.LineEnd"/>
     <editor.linePainter implementation="io.github.linwancen.plugin.show.lang.XmlLangDoc"/>
     <projectViewNodeDecorator implementation="io.github.linwancen.plugin.show.Tree"/>
