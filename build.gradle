@@ -23,7 +23,7 @@ patchPluginXml {
 <li>2.31  Add project-view-tree for "ClassNameOrSimpleName-xx-ClassNameOrSimpleName.json/xml"
 <li>2.30  Add line-end-comment  json snake key to camel field
 <li>2.29  Add line-end-comment  java field value
-<li>2.28  Add app-setting       Alt X switch line end comment
+<li>2.28  Add app-setting       Alt Q switch line end comment
 <li>2.27  Add project-view-tree use 1st or 2nd line to file comment
 <li>2.26  Add External Comment  load *.sql ddl comment
 <li>2.25  Add project-view-tree use xml/html/vue 1st or 2nd line comment
@@ -88,7 +88,7 @@ patchPluginXml {
 <li>2.31  增加 文件树注释  "类全名或简名-...-类全名或简名.json/xml" 左边优先，右边字段用
 <li>2.30  增加 行末注释    json 下划线字段跳转小驼峰字段与读取注释
 <li>2.29  增加 行末注释    Java 字段值
-<li>2.28  增加 全局设置    Alt + X 行末注释开关
+<li>2.28  增加 全局设置    Alt + Q 行末注释开关
 <li>2.27  增加 文件树注释  用第 1 或第 2 行注释当文件注释
 <li>2.26  增加 外部注释    读取 *.sql ddl 注释
 <li>2.25  增加 文件树注释  用 xml/html/vue 第 1 或第 2 行注释当文件注释

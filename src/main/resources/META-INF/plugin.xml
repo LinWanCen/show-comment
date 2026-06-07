@@ -238,7 +238,8 @@ Show doc comment in the Project view Tree, line End, json, other
     <action
         id="io.github.linwancen.plugin.show.settings.action.LineEndSwitchAction"
         class="io.github.linwancen.plugin.show.settings.action.LineEndSwitchAction">
-      <keyboard-shortcut first-keystroke="alt x" keymap="$default"/>
+      <!-- because Ctrl Q -->
+      <keyboard-shortcut first-keystroke="alt q" keymap="$default"/>
     </action>
   </actions>
 </idea-plugin>
