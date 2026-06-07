@@ -1,7 +1,6 @@
 package io.github.linwancen.plugin.show.lang.base;
 
 
-import groovy.json.JsonOutput;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -69,7 +68,7 @@ class DocSkipTest {
                 @NotNull Pattern exclude = excludes[excludeIndex];
                 boolean isSkip = DocSkip.skipText(name, include, exclude);
                 @NotNull String tip =
-                        name + "==" + JsonOutput.toJson(include) + "!=" + JsonOutput.toJson(exclude) + "=>" + isSkip;
+                        name + "==" + include.pattern() + "!=" + exclude.pattern() + "=>" + isSkip;
                 System.out.println(tip);
                 // o true include, x false skip, so use '!'
                 Assertions.assertEquals(!results[includeIndex][excludeIndex], isSkip, tip);
@@ -108,7 +107,7 @@ class DocSkipTest {
             for (int nameIndex = 0, namesLength = names.length; nameIndex < namesLength; nameIndex++) {
                 @NotNull String name = names[nameIndex];
                 boolean result = biPredicate.test(name, include);
-                @NotNull String tip = name + "==" + JsonOutput.toJson(include) + "=>" + result;
+                @NotNull String tip = name + "==" + include.pattern() + "=>" + result;
                 System.out.println(tip);
                 Assertions.assertEquals(results[includeIndex][nameIndex], result, tip);
             }
