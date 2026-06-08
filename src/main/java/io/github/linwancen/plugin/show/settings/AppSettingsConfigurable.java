@@ -36,6 +36,7 @@ public class AppSettingsConfigurable implements Configurable {
     public boolean isModified() {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
+        modified |= mySettingsComponent.getShowStructureComment() != settings.showStructureComment;
         modified |= mySettingsComponent.getCompact() != settings.compact;
         modified |= mySettingsComponent.getTreeCache() != settings.treeCache;
         modified |= mySettingsComponent.getTreeFirst() != settings.treeFirst;
@@ -99,6 +100,7 @@ public class AppSettingsConfigurable implements Configurable {
     public void apply() {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
+        settings.showStructureComment = mySettingsComponent.getShowStructureComment();
         settings.compact = mySettingsComponent.getCompact();
         settings.treeCache = mySettingsComponent.getTreeCache();
         settings.treeFirst = mySettingsComponent.getTreeFirst();
@@ -165,6 +167,7 @@ public class AppSettingsConfigurable implements Configurable {
 
     static void reset(@NotNull AppSettingsState settings, @NotNull AppSettingsComponent mySettingsComponent) {
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
+        mySettingsComponent.setShowStructureComment(settings.showStructureComment);
         mySettingsComponent.setCompact(settings.compact);
         mySettingsComponent.setTreeCache(settings.treeCache);
         mySettingsComponent.setTreeFirst(settings.treeFirst);

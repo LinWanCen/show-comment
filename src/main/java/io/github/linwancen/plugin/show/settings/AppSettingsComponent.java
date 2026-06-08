@@ -16,6 +16,7 @@ public class AppSettingsComponent {
 
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
+    private final JBCheckBox showStructureComment = new JBCheckBox(ShowBundle.message("show.structure.comment"));
     private final JBCheckBox compact = new JBCheckBox(ShowBundle.message("compact"));
     private final JBCheckBox treeCache = new JBCheckBox(ShowBundle.message("tree.cache"));
     private final JBCheckBox treeFirst = new JBCheckBox(ShowBundle.message("tree.first"));
@@ -74,6 +75,14 @@ public class AppSettingsComponent {
 
     public void setShowTreeComment(boolean newStatus) {
         showTreeComment.setSelected(newStatus);
+    }
+
+    public boolean getShowStructureComment() {
+        return showStructureComment.isSelected();
+    }
+
+    public void setShowStructureComment(boolean newStatus) {
+        showStructureComment.setSelected(newStatus);
     }
 
     public boolean getCompact() {
@@ -492,6 +501,7 @@ public class AppSettingsComponent {
     private JPanel showPanel() {
         JPanel comment = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(showTreeComment, treeCache, compact, treeFirst), 1)
+                .addComponent(JPanelFactory.of(showStructureComment), 1)
                 .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache, injected), 1)
                 .addComponent(JPanelFactory.of(
                         showLineEndCommentJava,

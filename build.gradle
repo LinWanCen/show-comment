@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.37.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.38.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 patchPluginXml {
     // The performance of 2019.3 has been greatly improved.
@@ -15,6 +15,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.38  ★                     structure view tree comment
 <li>2.37  Add External Comment  Select the folder and add to .tree.tsv
 <li>2.36  Add External Comment  *.tsv Tab \\t
 <li>2.35  Add line-end-comment  java init (a=b) doc
@@ -81,11 +82,12 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.38  ★                结构树注释
 <li>2.37  增加 外部注释    选择文件夹添加外部注释到 .tree.tsv
 <li>2.36  增加 外部注释    *.tsv 文件 Tab 键输入制表符
 <li>2.35  增加 行末注释    Java 初始化（赋值）注释
 <li>2.34  增加 文件树注释  带树注释复制
-<li>2.33  ★   行末注释     支持多个注释（默认99）
+<li>2.33  ★    行末注释    支持多个注释（默认99）
 <li>2.32  增加 行末注释    json 值支持类名或枚举
 <li>2.31  增加 文件树注释  "类全名或简名-...-类全名或简名.json/xml" 左边优先，右边字段用
 <li>2.30  增加 行末注释    json 下划线字段跳转小驼峰字段与读取注释
@@ -99,7 +101,7 @@ patchPluginXml {
 <li>2.22  增加 文件树注释  ollama models 文件夹从 manifests 获取 blobs 文件注释
 <li>2.21  增加 文件树注释  用 JS/TS/Vue "export default" 注释当文件注释
 <li>2.20  增加 外部注释    支持 Vue 路由标题文件树注释
-<li>2.19  ★   行末注释     支持 HTML(Vue) 标签/属性 注释从 2022.3.1 起
+<li>2.19  ★    行末注释    支持 HTML(Vue) 标签/属性 注释从 2022.3.1 起
 <li>2.18  增加 行末注释    支持注入语言如 SQL
 <li>2.17  增加 tsv 注释    支持 *.key.regexp 与 Mybatis xml 示例在 Git
 <li>2.16  增加 行末注释    支持 Rust, Ruby, PHP, C/C++/Object C, Scala, Groovy
@@ -131,16 +133,16 @@ patchPluginXml {
 <li>1.15  增加 行末注释    COBOL 拓展名支持 无拓展名、cbl、cob、cobol
 <li>1.14  增加 行末注释    忽略注解 与 忽略纯英文
 <li>1.13  增加 行末注释    带注释复制 和 添加注释
-<li>1.12  ★   tsv 注释     用于 COBOL 等
+<li>1.12  ★    tsv 注释    用于 COBOL 等
 <li>1.11  增加             json 跳转到字段
 <li>1.10  增加 文件树注释  在父包和其他项目的包中获取
 <li>1.9   增加 文件树注释  "xx-类全名或简名.json" 和 SPI
-<li>1.8   ★   行末注释     "xx-类全名或简名.json"
+<li>1.8   ★    行末注释    "xx-类全名或简名.json"
 <li>1.7   增加 行末注释    前缀和对象数设置
 <li>1.6   增加 行末调用    new，引用注释独立开关
 <li>1.5   增加 行末注释    没有注释时循环查找下一个对象
 <li>1.4   增加 行末注释    从右往左查找行末注释对象
-<li>1.3   ★   文件树注释   左侧项目导航文件和字段方法注释
+<li>1.3   ★    文件树注释  左侧项目导航文件和字段方法注释
 <li>1.2   增加 行末注释    类前缀配置
 <li>1.1   增加 行末注释    颜色配置
 </ul>
