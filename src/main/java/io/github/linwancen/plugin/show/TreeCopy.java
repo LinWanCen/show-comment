@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ide.CopyPasteManager;
+import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.DumbService;
@@ -72,7 +73,14 @@ public class TreeCopy extends CopyReferenceAction {
                                 indicator.setFraction(1.0 * i / totalNodes);
                                 String name = toName(inputEvent, node);
                                 sb.append(name);
-                                @Nullable String comment = Tree.treeDoc(node, project);
+                                @Nullable String comment = null;
+                                try {
+                                    comment = Tree.treeDoc(node, project);
+                                } catch (ProcessCanceledException e) {
+                                    throw e;
+                                } catch (Throwable e) {
+                                    LOG.info("TreeCopy.treeDoc() catch Throwable but log to record.", e);
+                                }
                                 if (comment != null && !comment.isBlank()) {
                                     sb.append("\t").append(comment);
                                 }

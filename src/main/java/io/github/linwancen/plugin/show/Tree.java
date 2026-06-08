@@ -67,8 +67,14 @@ public class Tree implements ProjectViewNodeDecorator {
                     if (DumbService.getInstance(project).isDumb()) {
                         return;
                     }
-                    @Nullable String doc = treeDoc(node, project);
-                    addText(data, doc);
+                    try {
+                        @Nullable String doc = treeDoc(node, project);
+                        addText(data, doc);
+                    } catch (ProcessCanceledException ignore) {
+                        // ignore
+                    } catch (Throwable e) {
+                        LOG.info("Tree.decorateImpl() catch Throwable but log to record.", e);
+                    }
                 }));
     }
 

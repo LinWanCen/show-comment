@@ -6,7 +6,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
@@ -34,10 +36,18 @@ public class FirstDoc {
         if (project == null) {
             return null;
         }
-        @Nullable FileViewProvider viewProvider = PsiManager.getInstance(project).findViewProvider(virtualFile);
-        if (viewProvider == null) {
+        PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
+        if (psiFile == null) {
             return null;
         }
+        PsiElement nav = psiFile.getNavigationElement();
+        if (nav instanceof PsiFile) {
+            psiFile = (PsiFile) nav;
+        }
+        if (psiFile instanceof PsiCompiledElement) {
+            return null;
+        }
+        @Nullable FileViewProvider viewProvider = psiFile.getViewProvider();
         @Nullable PsiElement psiElement = viewProvider.findElementAt(0);
         if (psiElement == null || notDoc(psiElement)) {
             @Nullable Document document = viewProvider.getDocument();
