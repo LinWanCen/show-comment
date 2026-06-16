@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show.tree;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.settings.AbstractSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +16,12 @@ class FileDoc {
 
     @Nullable
     static String fileDoc(@NotNull PsiFileNode node, @NotNull AbstractSettingsState settings) {
+        return fileDoc(node, settings, null);
+    }
+
+    @Nullable
+    static String fileDoc(@NotNull PsiFileNode node, @NotNull AbstractSettingsState settings,
+                          @Nullable SettingsInfo info) {
         if (!settings.fileDocEffect) {
             return null;
         }
@@ -35,6 +42,6 @@ class FileDoc {
         if (patterns == null) {
             return null;
         }
-        return FilePatternsDoc.filePatternsDoc(psiFile, patterns);
+        return FilePatternsDoc.filePatternsDoc(info, psiFile, patterns);
     }
 }

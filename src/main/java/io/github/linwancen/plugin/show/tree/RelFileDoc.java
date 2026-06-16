@@ -19,21 +19,27 @@ public class RelFileDoc {
         @NotNull ProjectSettingsState projectSettings = info.projectSettings;
         @NotNull GlobalSettingsState globalSettings = info.globalSettings;
         if (projectSettings.projectFilterEffective) {
-            @Nullable String doc = relDoc(node, projectSettings);
+            @Nullable String doc = relDoc(node, projectSettings, info);
             if (StringUtils.isNotBlank(doc)) {
                 return doc;
             }
         }
         if (projectSettings.globalFilterEffective) {
-            return relDoc(node, globalSettings);
+            return relDoc(node, globalSettings, info);
         }
         return null;
     }
 
     @Nullable
     private static String relDoc(ProjectViewNode<?> node, @NotNull AbstractSettingsState settings) {
+        return relDoc(node, settings, null);
+    }
+
+    @Nullable
+    private static String relDoc(ProjectViewNode<?> node, @NotNull AbstractSettingsState settings,
+                                 @Nullable SettingsInfo info) {
         if (node instanceof PsiFileNode) {
-            return FileDoc.fileDoc((PsiFileNode) node, settings);
+            return FileDoc.fileDoc((PsiFileNode) node, settings, info);
         } else if (node instanceof PsiDirectoryNode) {
             return DirDoc.dirDoc((PsiDirectoryNode) node, settings);
         }

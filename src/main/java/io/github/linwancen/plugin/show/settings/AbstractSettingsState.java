@@ -94,6 +94,7 @@ public abstract class AbstractSettingsState {
         put("asciidoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
         put("bpmn", new Pattern[]{Pattern.compile("(?m)name=\"([^\"]*)")});
         put("dmn", new Pattern[]{Pattern.compile("(?m)name=\"([^\"]*)")});
+        put("kt", new Pattern[]{Pattern.compile("(?s)\\R\\s*/\\*\\*(.*?)\\*/\\s*(?:@[\\w.]+(?:\\([^)]*\\))?\\s*)*(?:public\\s+|private\\s+|internal\\s+|protected\\s+|actual\\s+|expect\\s+|inline\\s+|tailrec\\s+|operator\\s+|infix\\s+|suspend\\s+|data\\s+|sealed\\s+|enum\\s+|annotation\\s+|value\\s+|fun\\s+|class\\s+|interface\\s+|object\\s+|val\\s+|var\\s+)")});
         put("sh", new Pattern[]{Pattern.compile("(?m)^#++ *([^!].*)")});
     }};
 

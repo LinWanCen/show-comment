@@ -160,11 +160,12 @@ dependencies {
 
 def system = org.gradle.internal.os.OperatingSystem.current()
 def ideTypeStr = String.valueOf(ideType)
+def useDownloadedIde = Boolean.parseBoolean(String.valueOf(project.findProperty('useDownloadedIdea')))
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     type = ideType
-    if (system.isMacOsX()) {
+    if (system.isMacOsX() && !useDownloadedIde) {
         localPath = "/Applications/IntelliJ IDEA.app"
     } else {
         version = ideaVersion
