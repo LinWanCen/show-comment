@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocName;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection;
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag;
 import org.jetbrains.kotlin.psi.KtAnnotated;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression;
 
 import java.util.List;
@@ -55,6 +56,9 @@ public class KotlinLangDoc extends BaseTagLangDoc<KDocSection> {
             return null;
         }
         @Nullable KDoc kDoc = PsiTreeUtil.getChildOfType(resolve, KDoc.class);
+        if (kDoc == null && resolve instanceof KtFile) {
+            kDoc = PsiTreeUtil.findChildOfType(resolve, KDoc.class);
+        }
         if (kDoc == null) {
             return null;
         }
