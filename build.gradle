@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.linwancen'
-version '2.38.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
+version '2.39.0.' + (new Date().format('yyyy.MM.dd_HH.mm'))
 
 patchPluginXml {
     // The performance of 2019.3 has been greatly improved.
@@ -15,6 +15,7 @@ patchPluginXml {
     changeNotes = """
 <h2>English Change Notes:</h2>
 <ul>
+<li>2.39  Add line-end-comment  sql table index & column attr 🔑PK🔗FK🔍INDEX⏫AUTO_GENERATED
 <li>2.38  ★                     structure view tree comment
 <li>2.37  Add External Comment  Select the folder and add to .tree.tsv
 <li>2.36  Add External Comment  *.tsv Tab \\t
@@ -82,6 +83,7 @@ patchPluginXml {
 
 <h2>中文更新说明:</h2>
 <ul>
+<li>2.39  增加 行末注释    SQL 表索引 和 列属性 🔑主键🔗外键🔍索引⏫自增（自动生成）
 <li>2.38  ★                结构树注释
 <li>2.37  增加 外部注释    选择文件夹添加外部注释到 .tree.tsv
 <li>2.36  增加 外部注释    *.tsv 文件 Tab 键输入制表符
