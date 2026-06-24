@@ -20,7 +20,7 @@ public class TsvLoader {
 
     public static final String EXT = "tsv";
     public static final String REGEXP_EXT = "regexp";
-    private static final Pattern LINE_PATTERN = Pattern.compile("[\\r\\n]++");
+    public static final Pattern LINE_PATTERN = Pattern.compile("[\\r\\n]++");
     public static final Pattern DEL_PATTERN = Pattern.compile("\\(\\?[^)]++\\)");
 
     @NotNull

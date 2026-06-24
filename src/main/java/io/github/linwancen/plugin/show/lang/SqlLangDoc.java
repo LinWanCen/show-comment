@@ -12,6 +12,7 @@ import com.intellij.sql.psi.SqlLanguage;
 import com.intellij.sql.psi.SqlReferenceExpression;
 import com.intellij.util.containers.JBIterable;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.ext.conf.ConfCache;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.lang.base.DocSkip;
 import org.jetbrains.annotations.NotNull;
@@ -85,6 +86,12 @@ public class SqlLangDoc extends BaseLangDoc {
             }
             if (dbElement instanceof DbTable) {
                 DbTable table = (DbTable) dbElement;
+                if (info.globalSettings.tableSize) {
+                    String size = ConfCache.TABLE_SIZE_CACHE.get(table.getName());
+                    if (size != null) {
+                        sb.append(" ").append(size);
+                    }
+                }
                 Object delegate = table.getDelegate();
                 if (delegate instanceof BasicTableOrView) {
                     BasicTableOrView tableOrView = (BasicTableOrView) delegate;
@@ -109,13 +116,13 @@ public class SqlLangDoc extends BaseLangDoc {
                 new EnumMap<>(DasColumn.Attribute.class);
 
         static {
-            ATTR_TO_EMOJI.put(DasColumn.Attribute.PRIMARY_KEY, "\uD83D\uDD11"); // 🔑
-            ATTR_TO_EMOJI.put(DasColumn.Attribute.CANDIDATE_KEY, "\uD83D\uDDDD️"); // 🗝️
-            ATTR_TO_EMOJI.put(DasColumn.Attribute.FOREIGN_KEY, "\uD83D\uDD17"); // 🔗
-            ATTR_TO_EMOJI.put(DasColumn.Attribute.INDEX, "\uD83D\uDD0D"); // 🔍
+            ATTR_TO_EMOJI.put(DasColumn.Attribute.PRIMARY_KEY, "🔑"); // 🔑
+            ATTR_TO_EMOJI.put(DasColumn.Attribute.CANDIDATE_KEY, "🗝️"); // 🗝️
+            ATTR_TO_EMOJI.put(DasColumn.Attribute.FOREIGN_KEY, "🔗"); // 🔗
+            ATTR_TO_EMOJI.put(DasColumn.Attribute.INDEX, "🔍"); // 🔍
             ATTR_TO_EMOJI.put(DasColumn.Attribute.AUTO_GENERATED, "⏫"); // ⏫
-            ATTR_TO_EMOJI.put(DasColumn.Attribute.COMPUTED, "\uD83D\uDCBB"); // 💻
-            ATTR_TO_EMOJI.put(DasColumn.Attribute.VERSION, "\uD83D\uDCCC"); // 📌
+            ATTR_TO_EMOJI.put(DasColumn.Attribute.COMPUTED, "💻"); // 💻
+            ATTR_TO_EMOJI.put(DasColumn.Attribute.VERSION, "📌"); // 📌
         }
     }
 }

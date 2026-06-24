@@ -43,7 +43,8 @@ public abstract class AbstractSettingsComponent {
     private final JBCheckBox fileDocEffect = new JBCheckBox("");
     private final JBTextArea fileDoc = new JBTextArea();
 
-    protected final JBCheckBox sqlSplitEffect = new JBCheckBox("");
+    protected final JBCheckBox tableSize = new JBCheckBox(ShowBundle.message("table.size"));
+    protected final JBCheckBox sqlSplitEffect = new JBCheckBox(ShowBundle.message("sql.comment"));
     private final JBTextArea sqlSplit = new JBTextArea();
     private final JBCheckBox tableDocEffect = new JBCheckBox("");
     private final JBTextArea tableDoc = new JBTextArea();
@@ -313,6 +314,14 @@ public abstract class AbstractSettingsComponent {
 
     public void setFileDoc(@NotNull String newText) {
         fileDoc.setText(newText);
+    }
+
+    public boolean getTableSize() {
+        return tableSize.isSelected();
+    }
+
+    public void setTableSize(boolean newStatus) {
+        tableSize.setSelected(newStatus);
     }
 
     public boolean getSqlSplitEffect() {

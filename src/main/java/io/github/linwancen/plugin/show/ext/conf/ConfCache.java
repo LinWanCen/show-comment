@@ -1,9 +1,11 @@
 package io.github.linwancen.plugin.show.ext.conf;
 
+import com.google.common.base.Splitter;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.FilenameIndex;
 import io.github.linwancen.plugin.show.ext.listener.FileLoader;
+import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -28,12 +30,14 @@ public class ConfCache extends FileLoader {
     static final String DOC_MID_EXT = ".doc";
     static final String TREE_MID_EXT = ".tree";
     static final String JSON_MID_EXT = ".json";
+    static final String TABLE_MID_EXT = ".table";
 
     private static final ConcurrentSkipListSet<String> EXT_IN_KEY_CACHE = new ConcurrentSkipListSet<>();
     private static final Map<VirtualFile, Map<String, List<String>>> KEY_CACHE = new ConcurrentHashMap<>();
     private static final Map<VirtualFile, Map<String, List<String>>> DOC_CACHE = new ConcurrentHashMap<>();
     private static final Map<VirtualFile, Map<String, List<String>>> TREE_CACHE = new ConcurrentHashMap<>();
     private static final Map<VirtualFile, Map<String, List<String>>> JSON_CACHE = new ConcurrentHashMap<>();
+    public static final Map<String, String> TABLE_SIZE_CACHE = new ConcurrentHashMap<>();
 
     private ConfCache() {}
 
@@ -167,6 +171,18 @@ public class ConfCache extends FileLoader {
             TREE_CACHE.put(file, TsvLoader.buildMap(file, false));
         } else if (name.endsWith(JSON_MID_EXT)) {
             JSON_CACHE.put(file, TsvLoader.buildMap(file, false));
+        } else if (name.endsWith(TABLE_MID_EXT)) {
+            @Nullable String text = PsiUnSaveUtils.fileText(project, file);
+            if (text == null) {
+                return;
+            }
+            String[] lines = TsvLoader.LINE_PATTERN.split(text);
+            for (String line : lines) {
+                @NotNull List<String> words = Splitter.on('\t').splitToList(line);
+                if (line.length() >= 2) {
+                    TABLE_SIZE_CACHE.put(words.get(0), words.get(1));
+                }
+            }
         }
     }
 }

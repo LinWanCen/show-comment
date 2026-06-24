@@ -28,6 +28,7 @@ public class AbstractSettingsConfigurable {
         modified |= !component.getDirDoc().equals(settings.getDirDoc());
         modified |= component.getFileDocEffect() != settings.fileDocEffect;
         modified |= !component.getFileDoc().equals(settings.getFileDoc());
+        modified |= component.getTableSize() != settings.tableSize;
         modified |= component.getSqlSplitEffect() != settings.sqlSplitEffect;
         modified |= !component.getSqlSplit().equals(settings.getSqlSplit());
         modified |= component.getTableDocEffect() != settings.tableDocEffect;
@@ -68,6 +69,7 @@ public class AbstractSettingsConfigurable {
         settings.setDirDoc(component.getDirDoc());
         settings.fileDocEffect = component.getFileDocEffect();
         settings.setFileDoc(component.getFileDoc());
+        settings.tableSize = component.getTableSize();
         settings.sqlSplitEffect = component.getSqlSplitEffect();
         settings.setSqlSplit(component.getSqlSplit());
         settings.tableDocEffect = component.getTableDocEffect();
@@ -99,6 +101,7 @@ public class AbstractSettingsConfigurable {
         component.setDirDoc(settings.getDirDoc());
         component.setFileDocEffect(settings.fileDocEffect);
         component.setFileDoc(settings.getFileDoc());
+        component.setTableSize(settings.tableSize);
         component.setSqlSplitEffect(settings.sqlSplitEffect);
         component.setSqlSplit(settings.getSqlSplit());
         component.setTableDocEffect(settings.tableDocEffect);

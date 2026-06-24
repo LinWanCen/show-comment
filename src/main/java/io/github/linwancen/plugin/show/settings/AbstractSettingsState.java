@@ -97,6 +97,7 @@ public abstract class AbstractSettingsState {
         put("sh", new Pattern[]{Pattern.compile("(?m)^#++ *([^!].*)")});
     }};
 
+    public boolean tableSize = true;
     public boolean sqlSplitEffect = false;
     @NotNull
     public transient Map<String, Pattern[]> sqlSplit = new LinkedHashMap<>() {{
