@@ -8,6 +8,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import io.github.linwancen.plugin.show.bean.FileInfo;
@@ -115,14 +116,24 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         @NotNull StringBuilder builder = new StringBuilder();
         while ((count < limit) && (refElement = Prev.prevRefChild(info, refElement, refClass)) != null) {
             PsiElement parent = refElement.getParent();
-            @Nullable String leftDoc = refElementDoc(info, parent);
-            if (leftDoc != null) {
-                String leftText = info.getText(refElement);
-                MergeDoc.mergeDoc(leftText, leftDoc, text, doc, builder, limit == 2 && info.appSettings.getToSet);
-                doc = leftDoc;
-                text = leftText;
-                refElement = parent;
-                count++;
+            if (parent instanceof PsiLiteralExpression) {
+                if (PsiUnSaveUtils.getText(parent).contains("\\u")) {
+                    Object value = ((PsiLiteralExpression) parent).getValue();
+                    if (value != null) {
+                        return value.toString();
+                    }
+                }
+                return null;
+            } else {
+                @Nullable String leftDoc = refElementDoc(info, parent);
+                if (leftDoc != null) {
+                    String leftText = info.getText(refElement);
+                    MergeDoc.mergeDoc(leftText, leftDoc, text, doc, builder, limit == 2 && info.appSettings.getToSet);
+                    doc = leftDoc;
+                    text = leftText;
+                    refElement = parent;
+                    count++;
+                }
             }
         }
         return builder.toString();
