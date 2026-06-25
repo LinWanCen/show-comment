@@ -16,6 +16,10 @@ public class InitDoc {
         if (!info.appSettings.initValue) {
             return doc;
         }
+        String name = variable.getName();
+        if (name != null && name.length() <= 1) {
+            return doc;
+        }
         if (!(initializer instanceof PsiLiteralExpression)) {
             return doc;
         }
@@ -32,7 +36,6 @@ public class InitDoc {
             return "　= " + init;
         }
         // skip like 1-YES
-        String name = variable.getName();
         if (doc.contains(init) || (name != null && name.contains(init))) {
             return doc;
         }
