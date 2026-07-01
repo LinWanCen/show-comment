@@ -8,7 +8,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiLiteralValue;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import io.github.linwancen.plugin.show.bean.FileInfo;
@@ -116,9 +116,9 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         @NotNull StringBuilder builder = new StringBuilder();
         while ((count < limit) && (refElement = Prev.prevRefChild(info, refElement, refClass)) != null) {
             PsiElement parent = refElement.getParent();
-            if (parent instanceof PsiLiteralExpression) {
+            if (parent instanceof PsiLiteralValue) {
                 if (PsiUnSaveUtils.getText(parent).contains("\\u")) {
-                    Object value = ((PsiLiteralExpression) parent).getValue();
+                    Object value = ((PsiLiteralValue) parent).getValue();
                     if (value != null) {
                         return value.toString();
                     }

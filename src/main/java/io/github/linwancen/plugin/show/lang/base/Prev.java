@@ -4,7 +4,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiLiteralValue;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
@@ -86,7 +86,7 @@ public class Prev {
     private static boolean notAssignableFrom(@NotNull List<Class<? extends PsiElement>> refClass,
                                              @NotNull PsiElement parent) {
         return refClass.stream().noneMatch(it ->
-                parent instanceof PsiLiteralExpression || it.isAssignableFrom(parent.getClass()));
+                parent instanceof PsiLiteralValue || it.isAssignableFrom(parent.getClass()));
     }
 
     public static @Nullable <T extends SettingsInfo> PsiElement prevCompactElement(
