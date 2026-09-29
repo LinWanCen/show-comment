@@ -35,7 +35,7 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(StructureViewDecorator.class);
 
-    private final Project project;
+    protected final Project project;
 
     public StructureViewDecorator(@NotNull Project project) {
         this.project = project;
@@ -47,15 +47,19 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
             return;
         }
         @NotNull AppSettingsState state = AppSettingsState.getInstance();
-        if (!state.showStructureComment) {
+        if (disable(state)) {
             return;
         }
         decorateStructureView();
     }
 
+    protected boolean disable(@NotNull AppSettingsState state) {
+        return !state.showStructureComment;
+    }
+
     private void decorateStructureView() {
         @NotNull ToolWindowManager twm = ToolWindowManager.getInstance(project);
-        @Nullable ToolWindow tw = twm.getToolWindow("Structure");
+        @Nullable ToolWindow tw = twm.getToolWindow(toolWindowId());
         if (tw == null || !tw.isVisible()) {
             return;
         }
@@ -63,12 +67,17 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
         decorateTreesInComponent(component);
     }
 
+    @NotNull
+    protected String toolWindowId() {
+        return "Structure";
+    }
+
     private void decorateTreesInComponent(@NotNull Component component) {
         if (component instanceof JTree) {
             @NotNull JTree tree = (JTree) component;
             @NotNull TreeCellRenderer renderer = tree.getCellRenderer();
-            if (!(renderer instanceof StructureCommentRenderer)) {
-                tree.setCellRenderer(new StructureCommentRenderer(renderer, project));
+            if (!(renderer instanceof CommentRenderer)) {
+                tree.setCellRenderer(commentRenderer(renderer));
             }
             return;
         }
@@ -79,28 +88,37 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
         }
     }
 
+    @NotNull
+    protected CommentRenderer commentRenderer(TreeCellRenderer renderer) {
+        return new CommentRenderer(renderer, project);
+    }
+
     /**
      * Custom TreeCellRenderer that wraps the original renderer and appends
      * doc comments to structure view tree nodes.
      */
-    static class StructureCommentRenderer implements TreeCellRenderer {
+    protected static class CommentRenderer implements TreeCellRenderer {
 
-        private final TreeCellRenderer delegate;
-        private final Project project;
+        protected final TreeCellRenderer delegate;
+        protected final Project project;
 
-        StructureCommentRenderer(@NotNull TreeCellRenderer delegate, @NotNull Project project) {
+        protected CommentRenderer(@NotNull TreeCellRenderer delegate, @NotNull Project project) {
             this.delegate = delegate;
             this.project = project;
         }
 
+        protected boolean disable(@NotNull AppSettingsState state) {
+            return !state.showStructureComment;
+        }
+
         @Override
-        public Component getTreeCellRendererComponent(@NotNull JTree tree, Object value,
+        public Component getTreeCellRendererComponent(@NotNull JTree tree, Object node,
                                                       boolean selected, boolean expanded,
                                                       boolean leaf, int row, boolean hasFocus) {
             @NotNull Component comp = delegate.getTreeCellRendererComponent(
-                    tree, value, selected, expanded, leaf, row, hasFocus);
+                    tree, node, selected, expanded, leaf, row, hasFocus);
             try {
-                if (!AppSettingsState.getInstance().showStructureComment) {
+                if (disable(AppSettingsState.getInstance())) {
                     return comp;
                 }
                 if (project.isDisposed()) {
@@ -109,43 +127,63 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
                 if (DumbService.getInstance(project).isDumb()) {
                     return comp;
                 }
-                if (comp instanceof ColoredTreeCellRenderer) {
-                    appendComment((ColoredTreeCellRenderer) comp, value);
-                }
+                appendComment(node, comp);
             } catch (ProcessCanceledException ignore) {
                 // ignore
             } catch (Throwable e) {
-                LOG.info("StructureCommentRenderer catch Throwable but log to record.", e);
+                LOG.info("{} getTreeCellRendererComponent catch Throwable but log to record.",
+                        this.getClass().getSimpleName(), e);
             }
             return comp;
         }
 
-        private void appendComment(@NotNull ColoredTreeCellRenderer renderer, Object value) {
-            @Nullable PsiElement element = extractPsiElement(value);
-            if (element == null) {
+        protected void appendComment(Object value, Component comp) {
+            if (comp instanceof ColoredTreeCellRenderer) {
+                appendCommentRenderer((ColoredTreeCellRenderer) comp, value);
+            }
+        }
+
+        protected void appendCommentRenderer(@NotNull ColoredTreeCellRenderer renderer, Object node) {
+            if (DumbService.getInstance(project).isDumb()) {
                 return;
             }
             DumbService.getInstance(project).runReadActionInSmartMode(() ->
                     ApplicationManager.getApplication().runReadAction(() -> {
-                        if (!element.isValid()) {
-                            return;
-                        }
-                        @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
                         if (DumbService.getInstance(project).isDumb()) {
                             return;
                         }
-                        @Nullable String comment = BaseLangDoc.resolveDoc(info, element);
-                        if (comment != null && !comment.isEmpty()) {
-                            renderer.append(" " + comment, SimpleTextAttributes.GRAY_ATTRIBUTES);
+                        try {
+                            String comment = toComment(node);
+                            if (comment != null && !comment.isEmpty()) {
+                                append(renderer, comment);
+                            }
+                        } catch (ProcessCanceledException ignore) {
+                            // ignore
+                        } catch (Throwable e) {
+                            LOG.info("{} appendCommentRenderer catch Throwable but log to record.",
+                                    this.getClass().getSimpleName(), e);
                         }
                     }));
         }
 
         @Nullable
-        private static PsiElement extractPsiElement(Object value) {
-            Object descriptor = value;
-            if (value instanceof DefaultMutableTreeNode) {
-                descriptor = ((DefaultMutableTreeNode) value).getUserObject();
+        protected String toComment(Object node) {
+            @Nullable PsiElement element = extractPsiElement(node);
+            if (element == null) {
+                return null;
+            }
+            if (!element.isValid()) {
+                return null;
+            }
+            @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
+            return BaseLangDoc.resolveDoc(info, element);
+        }
+
+        @Nullable
+        protected static PsiElement extractPsiElement(Object node) {
+            Object descriptor = node;
+            if (node instanceof DefaultMutableTreeNode) {
+                descriptor = ((DefaultMutableTreeNode) node).getUserObject();
             }
             if (descriptor instanceof AbstractTreeNode) {
                 Object treeElement = ((AbstractTreeNode<?>) descriptor).getValue();
@@ -160,6 +198,10 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
                 }
             }
             return null;
+        }
+
+        protected void append(@NotNull ColoredTreeCellRenderer renderer, String comment) {
+            renderer.append(" " + comment, SimpleTextAttributes.GRAY_ATTRIBUTES);
         }
     }
 }

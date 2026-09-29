@@ -37,6 +37,7 @@ public class AppSettingsConfigurable implements Configurable {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getShowStructureComment() != settings.showStructureComment;
+        modified |= mySettingsComponent.getShowCommitComment() != settings.showCommitComment;
         modified |= mySettingsComponent.getCompact() != settings.compact;
         modified |= mySettingsComponent.getTreeCache() != settings.treeCache;
         modified |= mySettingsComponent.getTreeFirst() != settings.treeFirst;
@@ -44,6 +45,10 @@ public class AppSettingsConfigurable implements Configurable {
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
         modified |= mySettingsComponent.getLineEndCache() != settings.lineEndCache;
         modified |= mySettingsComponent.getInjected() != settings.injected;
+
+        modified |= mySettingsComponent.getRefCache() != settings.refCache;
+        modified |= mySettingsComponent.getResolveCache() != settings.resolveCache;
+
         modified |= mySettingsComponent.getShowLineEndCommentJava() != settings.showLineEndCommentJava;
         modified |= mySettingsComponent.getShowLineEndCommentKotlin() != settings.showLineEndCommentKotlin;
         modified |= mySettingsComponent.getShowLineEndCommentScala() != settings.showLineEndCommentScala;
@@ -101,6 +106,8 @@ public class AppSettingsConfigurable implements Configurable {
         @NotNull AppSettingsState settings = AppSettingsState.getInstance();
         settings.showTreeComment = mySettingsComponent.getShowTreeComment();
         settings.showStructureComment = mySettingsComponent.getShowStructureComment();
+        // commit doc need resolve cache otherwise will hang
+        settings.showCommitComment = mySettingsComponent.getShowCommitComment() && mySettingsComponent.getResolveCache();
         settings.compact = mySettingsComponent.getCompact();
         settings.treeCache = mySettingsComponent.getTreeCache();
         settings.treeFirst = mySettingsComponent.getTreeFirst();
@@ -108,6 +115,10 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
         settings.lineEndCache = mySettingsComponent.getLineEndCache();
         settings.injected = mySettingsComponent.getInjected();
+
+        settings.refCache = mySettingsComponent.getRefCache();
+        settings.resolveCache = mySettingsComponent.getResolveCache();
+
         settings.showLineEndCommentJava = mySettingsComponent.getShowLineEndCommentJava();
         settings.showLineEndCommentKotlin = mySettingsComponent.getShowLineEndCommentKotlin();
         settings.showLineEndCommentScala = mySettingsComponent.getShowLineEndCommentScala();
@@ -157,6 +168,7 @@ public class AppSettingsConfigurable implements Configurable {
         settings.fromLineUp = mySettingsComponent.getFromLineUp();
         settings.fromLineEnd = mySettingsComponent.getFromLineEnd();
         settings.fieldBase = mySettingsComponent.getFieldBase();
+        settings.bumpModificationCount();
     }
 
     @Override
@@ -168,6 +180,7 @@ public class AppSettingsConfigurable implements Configurable {
     static void reset(@NotNull AppSettingsState settings, @NotNull AppSettingsComponent mySettingsComponent) {
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setShowStructureComment(settings.showStructureComment);
+        mySettingsComponent.setShowCommitComment(settings.showCommitComment);
         mySettingsComponent.setCompact(settings.compact);
         mySettingsComponent.setTreeCache(settings.treeCache);
         mySettingsComponent.setTreeFirst(settings.treeFirst);
@@ -175,6 +188,10 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);
         mySettingsComponent.setLineEndCache(settings.lineEndCache);
         mySettingsComponent.setInjected(settings.injected);
+
+        mySettingsComponent.setRefCache(settings.refCache);
+        mySettingsComponent.setResolveCache(settings.resolveCache);
+
         mySettingsComponent.setShowLineEndCommentJava(settings.showLineEndCommentJava);
         mySettingsComponent.setShowLineEndCommentKotlin(settings.showLineEndCommentKotlin);
         mySettingsComponent.setShowLineEndCommentScala(settings.showLineEndCommentScala);

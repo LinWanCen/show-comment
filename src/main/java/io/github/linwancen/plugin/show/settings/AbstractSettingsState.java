@@ -1,14 +1,16 @@
 package io.github.linwancen.plugin.show.settings;
 
+import com.intellij.openapi.util.ModificationTracker;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public abstract class AbstractSettingsState {
+public abstract class AbstractSettingsState implements ModificationTracker {
 
     public int lineEndCount = 2;
     public int lineEndLen = -1;
@@ -82,13 +84,13 @@ public abstract class AbstractSettingsState {
         put("build.gradle", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});
         put("build.gradle.kts", new Pattern[]{Pattern.compile("(?m)^description[^'\"]*+['\"]([^'\"]++)['\"]")});
         put("README.md", new Pattern[]{Pattern.compile("(?m)^#++ (.*)")});
-        put("SKILL.md", new Pattern[]{Pattern.compile("(?m)^description: *+(.*)")});
+        put("SKILL.md", new Pattern[]{Pattern.compile("(?m)^description:[\\s|]*+(.*)")});
     }};
 
     public boolean fileDocEffect = true;
     @NotNull
     public transient Map<String, Pattern[]> fileDoc = new LinkedHashMap<>() {{
-        put("md", new Pattern[]{Pattern.compile("(?m)^(?:#++ |description: *+)(.*)")});
+        put("md", new Pattern[]{Pattern.compile("(?m)^(?:#++ |description:[\\s|]*+)(.*)")});
         put("ad", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
         put("adoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
         put("asciidoc", new Pattern[]{Pattern.compile("(?m)^=++ (.*)")});
@@ -308,5 +310,16 @@ public abstract class AbstractSettingsState {
 
     public void setIndexDoc(@NotNull String indexDoc) {
         this.indexDoc = PatternMapUtils.toMap(indexDoc);
+    }
+
+    private final AtomicLong modCount = new AtomicLong();
+
+    @Override
+    public long getModificationCount() {
+        return modCount.get();
+    }
+
+    public void bumpModificationCount() {
+        modCount.incrementAndGet();
     }
 }

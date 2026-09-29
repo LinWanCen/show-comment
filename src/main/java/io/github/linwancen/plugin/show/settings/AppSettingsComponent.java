@@ -17,12 +17,19 @@ public class AppSettingsComponent {
     private final JPanel myMainPanel;
     private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
     private final JBCheckBox showStructureComment = new JBCheckBox(ShowBundle.message("show.structure.comment"));
+    private final JBCheckBox showCommitComment = new JBCheckBox(ShowBundle.message("show.commit.comment"));
     private final JBCheckBox compact = new JBCheckBox(ShowBundle.message("compact"));
     private final JBCheckBox treeCache = new JBCheckBox(ShowBundle.message("tree.cache"));
     private final JBCheckBox treeFirst = new JBCheckBox(ShowBundle.message("tree.first"));
+
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
     private final JBCheckBox lineEndCache = new JBCheckBox(ShowBundle.message("line.end.cache"));
     private final JBCheckBox injected = new JBCheckBox(ShowBundle.message("injected"));
+
+    // refCache resolveCache
+    private final JBCheckBox refCache = new JBCheckBox(ShowBundle.message("ref.cache"));
+    private final JBCheckBox resolveCache = new JBCheckBox(ShowBundle.message("resolve.cache"));
+
     private final JBCheckBox showLineEndCommentJava = new JBCheckBox("   Java ");
     private final JBCheckBox showLineEndCommentJavaBase = new JBCheckBox("// Java ");
     private final JBCheckBox showLineEndCommentKotlin = new JBCheckBox("   Kotlin ");
@@ -85,6 +92,14 @@ public class AppSettingsComponent {
         showStructureComment.setSelected(newStatus);
     }
 
+    public boolean getShowCommitComment() {
+        return showCommitComment.isSelected();
+    }
+
+    public void setShowCommitComment(boolean newStatus) {
+        showCommitComment.setSelected(newStatus);
+    }
+
     public boolean getCompact() {
         return compact.isSelected();
     }
@@ -141,6 +156,22 @@ public class AppSettingsComponent {
 
     public void setInjected(boolean newStatus) {
         injected.setSelected(newStatus);
+    }
+
+    public boolean getRefCache() {
+        return refCache.isSelected();
+    }
+
+    public void setRefCache(boolean newStatus) {
+        refCache.setSelected(newStatus);
+    }
+
+    public boolean getResolveCache() {
+        return resolveCache.isSelected();
+    }
+
+    public void setResolveCache(boolean newStatus) {
+        resolveCache.setSelected(newStatus);
     }
 
     public boolean getShowLineEndCommentJava() {
@@ -501,8 +532,9 @@ public class AppSettingsComponent {
     private JPanel showPanel() {
         JPanel comment = FormBuilder.createFormBuilder()
                 .addComponent(JPanelFactory.of(showTreeComment, treeCache, compact, treeFirst), 1)
-                .addComponent(JPanelFactory.of(showStructureComment), 1)
+                .addComponent(JPanelFactory.of(showStructureComment, showCommitComment), 1)
                 .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache, injected), 1)
+                .addComponent(JPanelFactory.of(refCache, resolveCache), 1)
                 .addComponent(JPanelFactory.of(
                         showLineEndCommentJava,
                         showLineEndCommentKotlin,

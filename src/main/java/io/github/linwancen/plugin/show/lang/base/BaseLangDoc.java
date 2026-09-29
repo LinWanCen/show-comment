@@ -14,6 +14,7 @@ import com.intellij.psi.PsiReference;
 import io.github.linwancen.plugin.show.bean.FileInfo;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.cache.PsiDocCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  *
@@ -125,7 +127,9 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 }
                 return null;
             } else {
-                @Nullable String leftDoc = refElementDoc(info, parent);
+                @Nullable String leftDoc = info.appSettings.refCache
+                        ? PsiDocCache.getCache(info, PsiDocCache.Kind.REF, parent, refComputer)
+                        : refElementDoc(info, parent);
                 if (leftDoc != null) {
                     String leftText = info.getText(refElement);
                     MergeDoc.mergeDoc(leftText, leftDoc, text, doc, builder, limit == 2 && info.appSettings.getToSet);
@@ -138,6 +142,11 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         }
         return builder.toString();
     }
+
+    private final BiFunction<SettingsInfo, PsiElement, String> refComputer = (i, e) -> {
+        if (!(i instanceof LineInfo)) return null;
+        return refElementDoc((LineInfo) i, e);
+    };
 
     /**
      * skip english and text
@@ -206,13 +215,25 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         } catch (Throwable ignore) {
             // ignore
         }
-        // support like java <-> kotlin
-        @Nullable BaseLangDoc langDoc = PsiElementTo.findLangDoc(resolve);
-        if (langDoc == null) {
-            return null;
+
+        if (info.appSettings.resolveCache) {
+            // support like java <-> kotlin
+            @Nullable BaseLangDoc langDoc = PsiElementTo.findLangDoc(resolve);
+            if (langDoc == null) {
+                return null;
+            }
+            return langDoc.resolveDocPrint(info, resolve);
         }
-        return langDoc.resolveDocPrint(info, resolve);
+
+        final PsiElement key = resolve;
+        return PsiDocCache.getCache(info, PsiDocCache.Kind.RESOLVE, key, RESOLVE_COMPUTER);
     }
+
+    private static final BiFunction<SettingsInfo, PsiElement, String> RESOLVE_COMPUTER = (i, e) -> {
+        BaseLangDoc langDoc = PsiElementTo.findLangDoc(e);
+        if (langDoc == null) return null;
+        return langDoc.resolveDocPrint(i, e);
+    };
 
     /**
      * line and delete /*#, filter by pattern

@@ -5,6 +5,7 @@ import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.util.xmlb.XmlSerializerUtil;
@@ -14,17 +15,19 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.math.BigInteger;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicLong;
 
 @State(
         name = "io.github.linwancen.plugin.show.settings.AppSettingsState",
         storages = @Storage("ShowCommentGlobal.xml")
 )
-public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {
+public class AppSettingsState implements PersistentStateComponent<AppSettingsState>, ModificationTracker {
 
     public static final AppSettingsState DEFAULT_SETTING = new AppSettingsState();
 
     public boolean showTreeComment = true;
     public boolean showStructureComment = true;
+    public boolean showCommitComment = true;
     public boolean compact = true;
     public boolean treeCache = false;
     public boolean treeFirst = true;
@@ -32,6 +35,10 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showLineEndComment = true;
     public boolean lineEndCache = true;
     public boolean injected = true;
+
+    public boolean refCache = true;
+    public boolean resolveCache = true;
+
     public boolean showLineEndCommentJava = true;
     public boolean showLineEndCommentJavaBase = false;
     public boolean showLineEndCommentKotlin = true;
@@ -103,6 +110,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     @Override
     public void loadState(@NotNull AppSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
+        bumpModificationCount();
     }
 
     @NotNull
@@ -123,5 +131,16 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public void setLineEndJsonColor(@NotNull String s) {
         int rgb = new BigInteger(s, 16).intValue();
         lineEndJsonTextAttr.setForegroundColor(new JBColor(new Color(rgb), new Color(rgb)));
+    }
+
+    private final AtomicLong modCount = new AtomicLong();
+
+    @Override
+    public long getModificationCount() {
+        return modCount.get();
+    }
+
+    public void bumpModificationCount() {
+        modCount.incrementAndGet();
     }
 }

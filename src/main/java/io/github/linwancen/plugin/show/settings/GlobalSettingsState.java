@@ -34,5 +34,6 @@ public class GlobalSettingsState extends AbstractSettingsState implements Persis
     @Override
     public void loadState(@NotNull GlobalSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
+        bumpModificationCount();
     }
 }

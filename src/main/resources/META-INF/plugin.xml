@@ -165,6 +165,10 @@ Show doc comment in the Project view Tree, line End, json, other
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
     <listener class="io.github.linwancen.plugin.show.tree.StructureViewDecorator"
               topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
+    <listener class="io.github.linwancen.plugin.show.tree.CommitViewDecorator"
+              topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
+    <listener class="io.github.linwancen.plugin.show.tree.FindViewDecorator"
+              topic="com.intellij.openapi.wm.ex.ToolWindowManagerListener"/>
   </projectListeners>
 
   <extensionPoints>

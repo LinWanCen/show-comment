@@ -61,5 +61,6 @@ public class ProjectSettingsState extends AbstractSettingsState implements Persi
     @Override
     public void loadState(@NotNull ProjectSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
+        bumpModificationCount();
     }
 }

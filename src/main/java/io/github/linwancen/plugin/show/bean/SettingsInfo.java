@@ -8,6 +8,7 @@ import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
 
 public class SettingsInfo {
+    public final @NotNull Project project;
     public final @NotNull AppSettingsState appSettings;
     public final @NotNull GlobalSettingsState globalSettings;
     public final @NotNull ProjectSettingsState projectSettings;
@@ -15,6 +16,7 @@ public class SettingsInfo {
     public final @NotNull DumbService dumbService;
 
     protected SettingsInfo(@NotNull Project project, @NotNull FuncEnum funcEnum) {
+        this.project = project;
         this.funcEnum = funcEnum;
         this.appSettings = AppSettingsState.getInstance();
         this.globalSettings = GlobalSettingsState.getInstance();

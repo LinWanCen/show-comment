@@ -18,13 +18,11 @@ import org.jetbrains.annotations.Nullable;
 public class FileInfo extends SettingsInfo {
     public final @NotNull VirtualFile file;
     public final @NotNull Document document;
-    public final @NotNull Project project;
     public final @NotNull InjectedLanguageManager inject;
 
     protected FileInfo(@NotNull VirtualFile file, @NotNull Document document, @NotNull Project project,
                        @NotNull FuncEnum funcEnum) {
         super(project, funcEnum);
-        this.project = project;
         this.file = file;
         this.document = document;
         this.inject = InjectedLanguageManager.getInstance(project);

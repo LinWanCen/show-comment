@@ -78,6 +78,7 @@ public class AbstractSettingsConfigurable {
         settings.setColumnDoc(component.getColumnDoc());
         settings.indexDocEffect = component.getIndexDocEffect();
         settings.setIndexDoc(component.getIndexDoc());
+        settings.bumpModificationCount();
     }
 
     static void reset(@NotNull AbstractSettingsState settings, @NotNull AbstractSettingsComponent component) {
