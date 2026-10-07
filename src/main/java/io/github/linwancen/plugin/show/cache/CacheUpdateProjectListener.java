@@ -14,7 +14,6 @@ public class CacheUpdateProjectListener implements ProjectManagerListener {
     public void projectClosed(@NotNull Project project) {
         try {
             LineEndCacheUtils.cache.remove(project);
-            TreeCacheUtils.cache.remove(project);
         } catch (Throwable e) {
             LOG.info("CacheUpdateProjectListener catch Throwable but log to record.", e);
         }

@@ -18,8 +18,8 @@ public class AppSettingsComponent {
     private final JBCheckBox showTreeComment = new JBCheckBox(ShowBundle.message("show.tree.comment"));
     private final JBCheckBox showStructureComment = new JBCheckBox(ShowBundle.message("show.structure.comment"));
     private final JBCheckBox showCommitComment = new JBCheckBox(ShowBundle.message("show.commit.comment"));
+    private final JBCheckBox showFindComment = new JBCheckBox(ShowBundle.message("show.find.comment"));
     private final JBCheckBox compact = new JBCheckBox(ShowBundle.message("compact"));
-    private final JBCheckBox treeCache = new JBCheckBox(ShowBundle.message("tree.cache"));
     private final JBCheckBox treeFirst = new JBCheckBox(ShowBundle.message("tree.first"));
 
     private final JBCheckBox showLineEndComment = new JBCheckBox(ShowBundle.message("show.line.end.comment"));
@@ -100,20 +100,20 @@ public class AppSettingsComponent {
         showCommitComment.setSelected(newStatus);
     }
 
+    public boolean getShowFindComment() {
+        return showFindComment.isSelected();
+    }
+
+    public void setShowFindComment(boolean newStatus) {
+        showFindComment.setSelected(newStatus);
+    }
+
     public boolean getCompact() {
         return compact.isSelected();
     }
 
     public void setCompact(boolean newStatus) {
         compact.setSelected(newStatus);
-    }
-
-    public boolean getTreeCache() {
-        return treeCache.isSelected();
-    }
-
-    public void setTreeCache(boolean newStatus) {
-        treeCache.setSelected(newStatus);
     }
 
     public boolean getTreeFirst() {
@@ -531,8 +531,8 @@ public class AppSettingsComponent {
     @NotNull
     private JPanel showPanel() {
         JPanel comment = FormBuilder.createFormBuilder()
-                .addComponent(JPanelFactory.of(showTreeComment, treeCache, compact, treeFirst), 1)
-                .addComponent(JPanelFactory.of(showStructureComment, showCommitComment), 1)
+                .addComponent(JPanelFactory.of(showTreeComment, compact, treeFirst), 1)
+                .addComponent(JPanelFactory.of(showStructureComment, showCommitComment, showFindComment), 1)
                 .addComponent(JPanelFactory.of(showLineEndComment, lineEndCache, injected), 1)
                 .addComponent(JPanelFactory.of(refCache, resolveCache), 1)
                 .addComponent(JPanelFactory.of(

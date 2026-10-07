@@ -71,16 +71,16 @@ public abstract class FileLoader {
     protected abstract void loadFileImpl(@NotNull VirtualFile file, @Nullable Project project);
 
     public static void loadAll(@NotNull Project project) {
-        DumbService.getInstance(project).runReadActionInSmartMode(() ->
-                ReadAction.nonBlocking(() -> {
-                            if (!project.isDisposed()) {
-                                FileLoader.EPN.getExtensionList()
-                                        .forEach(fileLoader -> fileLoader.loadAllImpl(project));
-                                EdtExecutorService.getInstance()
-                                        .execute(() -> ProjectView.getInstance(project).refresh());
-                            }
-                        }).inSmartMode(project)
-                        .submit(AppExecutorUtil.getAppExecutorService()));
+        // Never block the caller (may be EDT): nonBlocking + inSmartMode waits in background.
+        ReadAction.nonBlocking(() -> {
+                    if (!project.isDisposed()) {
+                        FileLoader.EPN.getExtensionList()
+                                .forEach(fileLoader -> fileLoader.loadAllImpl(project));
+                        EdtExecutorService.getInstance()
+                                .execute(() -> ProjectView.getInstance(project).refresh());
+                    }
+                }).inSmartMode(project)
+                .submit(AppExecutorUtil.getAppExecutorService());
     }
 
     public void visitChildrenRecursively(@NotNull Project project, @NotNull VirtualFile dir, @NotNull StringBuilder sb) {

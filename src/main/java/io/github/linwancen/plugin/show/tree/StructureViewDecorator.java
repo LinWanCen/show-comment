@@ -2,7 +2,6 @@ package io.github.linwancen.plugin.show.tree;
 
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
@@ -14,6 +13,7 @@ import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
+import io.github.linwancen.plugin.show.cache.RenderDocCache;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
@@ -102,6 +102,11 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
         protected final TreeCellRenderer delegate;
         protected final Project project;
 
+        /**
+         * Last painted tree, to repaint when a doc is computed async.
+         */
+        private JTree lastTree;
+
         protected CommentRenderer(@NotNull TreeCellRenderer delegate, @NotNull Project project) {
             this.delegate = delegate;
             this.project = project;
@@ -127,6 +132,7 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
                 if (DumbService.getInstance(project).isDumb()) {
                     return comp;
                 }
+                lastTree = tree;
                 appendComment(node, comp);
             } catch (ProcessCanceledException ignore) {
                 // ignore
@@ -143,27 +149,26 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
             }
         }
 
+        /**
+         * Non-blocking: only reads the memory cache of the per-project RenderDocCache service
+         * and schedules an async compute when missing.
+         * Never call runReadAction / runReadActionInSmartMode / waitForSmartMode here:
+         * this runs on EDT while painting (holding the AWTTreeLock) and a blocking wait can
+         * deadlock against a background write action waiting for the EDT (IDE freeze).
+         */
         protected void appendCommentRenderer(@NotNull ColoredTreeCellRenderer renderer, Object node) {
-            if (DumbService.getInstance(project).isDumb()) {
-                return;
+            @Nullable String comment = RenderDocCache.doc(project, node,
+                    () -> toComment(node), this::repaintTree);
+            if (comment != null && !comment.isEmpty()) {
+                append(renderer, comment);
             }
-            DumbService.getInstance(project).runReadActionInSmartMode(() ->
-                    ApplicationManager.getApplication().runReadAction(() -> {
-                        if (DumbService.getInstance(project).isDumb()) {
-                            return;
-                        }
-                        try {
-                            String comment = toComment(node);
-                            if (comment != null && !comment.isEmpty()) {
-                                append(renderer, comment);
-                            }
-                        } catch (ProcessCanceledException ignore) {
-                            // ignore
-                        } catch (Throwable e) {
-                            LOG.info("{} appendCommentRenderer catch Throwable but log to record.",
-                                    this.getClass().getSimpleName(), e);
-                        }
-                    }));
+        }
+
+        private void repaintTree() {
+            @Nullable JTree tree = lastTree;
+            if (tree != null) {
+                tree.repaint();
+            }
         }
 
         @Nullable

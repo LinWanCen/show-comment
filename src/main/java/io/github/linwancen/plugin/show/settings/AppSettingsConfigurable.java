@@ -38,8 +38,8 @@ public class AppSettingsConfigurable implements Configurable {
         boolean modified = mySettingsComponent.getShowTreeComment() != settings.showTreeComment;
         modified |= mySettingsComponent.getShowStructureComment() != settings.showStructureComment;
         modified |= mySettingsComponent.getShowCommitComment() != settings.showCommitComment;
+        modified |= mySettingsComponent.getShowFindComment() != settings.showFindComment;
         modified |= mySettingsComponent.getCompact() != settings.compact;
-        modified |= mySettingsComponent.getTreeCache() != settings.treeCache;
         modified |= mySettingsComponent.getTreeFirst() != settings.treeFirst;
 
         modified |= mySettingsComponent.getShowLineEndComment() != settings.showLineEndComment;
@@ -108,8 +108,8 @@ public class AppSettingsConfigurable implements Configurable {
         settings.showStructureComment = mySettingsComponent.getShowStructureComment();
         // commit doc need resolve cache otherwise will hang
         settings.showCommitComment = mySettingsComponent.getShowCommitComment() && mySettingsComponent.getResolveCache();
+        settings.showFindComment = mySettingsComponent.getShowFindComment() && mySettingsComponent.getResolveCache();
         settings.compact = mySettingsComponent.getCompact();
-        settings.treeCache = mySettingsComponent.getTreeCache();
         settings.treeFirst = mySettingsComponent.getTreeFirst();
 
         settings.showLineEndComment = mySettingsComponent.getShowLineEndComment();
@@ -181,8 +181,8 @@ public class AppSettingsConfigurable implements Configurable {
         mySettingsComponent.setShowTreeComment(settings.showTreeComment);
         mySettingsComponent.setShowStructureComment(settings.showStructureComment);
         mySettingsComponent.setShowCommitComment(settings.showCommitComment);
+        mySettingsComponent.setShowFindComment(settings.showFindComment);
         mySettingsComponent.setCompact(settings.compact);
-        mySettingsComponent.setTreeCache(settings.treeCache);
         mySettingsComponent.setTreeFirst(settings.treeFirst);
 
         mySettingsComponent.setShowLineEndComment(settings.showLineEndComment);

@@ -1,12 +1,11 @@
 package io.github.linwancen.plugin.show;
 
 import com.intellij.ide.projectView.PresentationData;
+import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.ide.projectView.ProjectViewNodeDecorator;
 import com.intellij.ide.util.treeView.PresentableNodeDescriptor.ColoredFragment;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.packageDependencies.ui.PackageDependenciesNode;
 import com.intellij.psi.PsiElement;
@@ -14,7 +13,7 @@ import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.cache.TreeCacheUtils;
+import io.github.linwancen.plugin.show.cache.RenderDocCache;
 import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
@@ -57,25 +56,13 @@ public class Tree implements ProjectViewNodeDecorator {
             addText(data, extDoc);
             return;
         }
-        if (state.treeCache) {
-            @Nullable String doc = TreeCacheUtils.treeDoc(node, project);
-            addText(data, doc);
-            return;
-        }
-        DumbService.getInstance(project).runReadActionInSmartMode(() ->
-                ApplicationManager.getApplication().runReadAction(() -> {
-                    if (DumbService.getInstance(project).isDumb()) {
-                        return;
-                    }
-                    try {
-                        @Nullable String doc = treeDoc(node, project);
-                        addText(data, doc);
-                    } catch (ProcessCanceledException ignore) {
-                        // ignore
-                    } catch (Throwable e) {
-                        LOG.info("Tree.decorateImpl() catch Throwable but log to record.", e);
-                    }
-                }));
+        @Nullable String doc = RenderDocCache.doc(project, node,
+                () -> treeDoc(node, project), () -> refreshProjectView(project));
+        addText(data, doc);
+    }
+
+    private static void refreshProjectView(@NotNull Project project) {
+        ProjectView.getInstance(project).refresh();
     }
 
     static void addText(@NotNull PresentationData data, @Nullable String text) {

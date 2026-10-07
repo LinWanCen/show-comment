@@ -28,8 +28,8 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean showTreeComment = true;
     public boolean showStructureComment = true;
     public boolean showCommitComment = true;
+    public boolean showFindComment = true;
     public boolean compact = true;
-    public boolean treeCache = false;
     public boolean treeFirst = true;
 
     public boolean showLineEndComment = true;
