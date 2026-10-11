@@ -13,6 +13,7 @@ import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.cache.LineEndCacheUtils;
+import io.github.linwancen.plugin.show.cache.LineEndDocCache;
 import io.github.linwancen.plugin.show.ext.LineExt;
 import io.github.linwancen.plugin.show.ext.sql.SqlDoc;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
@@ -23,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.function.Consumer;
 
 public class LineEnd extends EditorLinePainter {
@@ -58,11 +58,10 @@ public class LineEnd extends EditorLinePainter {
         if (settingsInfo.appSettings.lineEndCache) {
             return LineEndCacheUtils.get(info);
         } else {
-            @Nullable LineExtensionInfo lineExt = lineExt(info);
-            if (lineExt == null) {
-                return null;
-            }
-            return Collections.singleton(lineExt);
+            // Even with the cache option off, this runs on EDT while painting: never resolve
+            // PSI here. LineEndDocCache reads memory on EDT, computes on a pooled thread and
+            // repaints the editors when the doc is ready (a miss paints nothing for a moment).
+            return LineEndDocCache.getLineExtensions(info);
         }
     }
 

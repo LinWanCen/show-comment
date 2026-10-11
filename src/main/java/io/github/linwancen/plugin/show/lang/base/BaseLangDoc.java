@@ -1,6 +1,7 @@
 package io.github.linwancen.plugin.show.lang.base;
 
 import com.intellij.ide.projectView.ProjectViewNode;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
 import com.intellij.openapi.project.Project;
@@ -77,7 +78,7 @@ public abstract class BaseLangDoc extends EditorLinePainter {
                 return null;
             }
         }
-        if (info.appSettings.injected) {
+        if (info.appSettings.injected && !ApplicationManager.getApplication().isDispatchThread()) {
             try {
                 @Nullable PsiElement injectedElement = info.inject.findInjectedElementAt(element.getContainingFile(), info.endOffset);
                 if (injectedElement != null) {

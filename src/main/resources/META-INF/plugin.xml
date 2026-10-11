@@ -207,6 +207,7 @@ Show doc comment in the Project view Tree, line End, json, other
                          displayName="// Show Comment Project"/>
     <projectService serviceImplementation="io.github.linwancen.plugin.show.settings.ProjectSettingsState"/>
     <projectService serviceImplementation="io.github.linwancen.plugin.show.cache.RenderDocCache"/>
+    <projectService serviceImplementation="io.github.linwancen.plugin.show.cache.LineEndDocCache"/>
   </extensions>
 
   <actions>

@@ -33,7 +33,7 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     public boolean treeFirst = true;
 
     public boolean showLineEndComment = true;
-    public boolean lineEndCache = true;
+    public boolean lineEndCache = false;
     public boolean injected = true;
 
     public boolean refCache = true;
