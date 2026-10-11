@@ -15,6 +15,7 @@ import io.github.linwancen.plugin.show.bean.FileInfo;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.cache.PsiDocCache;
+import io.github.linwancen.plugin.show.cache.SkipResolveWhileJsGraphInit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -170,6 +171,10 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         if (info.isDumb()) {
             return null;
         }
+        if (SkipResolveWhileJsGraphInit.resolveCoolingDown(ref)) {
+            // config graph still being built: give up now, retry after the skip window
+            return null;
+        }
         // kotlin ref.getReference() == null but ref.getReferences().length == 2
         @NotNull PsiReference[] references = ref.getReferences();
         if (references.length < 1) {
@@ -177,16 +182,22 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         }
         for (@NotNull PsiReference reference : references) {
             @Nullable PsiElement resolve;
+            long startNano = System.nanoTime();
             try {
                 if (info.isDumb()) {
                     return null;
                 }
                 resolve = reference.resolve();
             } catch (Throwable e) {
+                // a cancelled/broken resolve throws instead of returning, so mark here too:
+                // otherwise a timeout inside resolve() would never be detected as slow
+                SkipResolveWhileJsGraphInit.markIfSlow(ref, startNano);
                 // 2021.3: Slow operations are prohibited on EDT.
                 // See SlowOperations.assertSlowOperationsAreAllowed javadoc.
                 return null;
             }
+            // also mark when it returned normally: the JS/TS config graph init can finish on its own
+            SkipResolveWhileJsGraphInit.markIfSlow(ref, startNano);
             if (resolve == null) {
                 continue;
             }
@@ -217,16 +228,16 @@ public abstract class BaseLangDoc extends EditorLinePainter {
         }
 
         if (info.appSettings.resolveCache) {
-            // support like java <-> kotlin
-            @Nullable BaseLangDoc langDoc = PsiElementTo.findLangDoc(resolve);
-            if (langDoc == null) {
-                return null;
-            }
-            return langDoc.resolveDocPrint(info, resolve);
+            final PsiElement key = resolve;
+            return PsiDocCache.getCache(info, PsiDocCache.Kind.RESOLVE, key, RESOLVE_COMPUTER);
         }
 
-        final PsiElement key = resolve;
-        return PsiDocCache.getCache(info, PsiDocCache.Kind.RESOLVE, key, RESOLVE_COMPUTER);
+        // support like java <-> kotlin
+        @Nullable BaseLangDoc langDoc = PsiElementTo.findLangDoc(resolve);
+        if (langDoc == null) {
+            return null;
+        }
+        return langDoc.resolveDocPrint(info, resolve);
     }
 
     private static final BiFunction<SettingsInfo, PsiElement, String> RESOLVE_COMPUTER = (i, e) -> {

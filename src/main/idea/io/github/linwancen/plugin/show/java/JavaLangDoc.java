@@ -15,6 +15,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiJvmModifiersOwner;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiPackage;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiVariable;
@@ -98,6 +99,11 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
             return OwnerToPsiDocUtils.fileDoc(info, (PsiFile) resolve);
         } else if (resolve instanceof PsiDirectory) {
             PsiDocComment psiDocComment = JavaTree.dirDoc((PsiDirectory) resolve);
+            return docElementToStr(info, psiDocComment);
+        } else if (resolve instanceof PsiPackage) {
+            // "group by package" row in the Find view: a PsiPackage has no containing file,
+            // so the generic doc lookup finds nothing - read package-info directly
+            PsiDocComment psiDocComment = OwnerToPsiDocUtils.packageDoc((PsiPackage) resolve);
             return docElementToStr(info, psiDocComment);
         }
         @Nullable String doc = resolveDocPrintSrc(info, resolve);

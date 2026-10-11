@@ -28,6 +28,10 @@ public class FileInfo extends SettingsInfo {
         this.inject = InjectedLanguageManager.getInstance(project);
     }
 
+    public static @NotNull FileInfo of(@NotNull VirtualFile file, @NotNull Document document, @NotNull Project project) {
+        return new FileInfo(file, document, project, FuncEnum.LINE);
+    }
+
     public static @Nullable FileInfo of(@NotNull VirtualFile file, @NotNull Project project) {
         @Nullable Document document = ReadAction.compute(() -> FileDocumentManager.getInstance().getDocument(file));
         if (document == null) {
