@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.tree;
 
-import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import io.github.linwancen.plugin.show.settings.AbstractSettingsState;
@@ -14,15 +13,11 @@ class FileDoc {
     private FileDoc() {}
 
     @Nullable
-    static String fileDoc(@NotNull PsiFileNode node, @NotNull AbstractSettingsState settings) {
+    static String fileDoc(@NotNull PsiFile psiFile, @NotNull AbstractSettingsState settings) {
         if (!settings.fileDocEffect) {
             return null;
         }
         @NotNull Map<String, Pattern[]> patternMap = settings.fileDoc;
-        @Nullable PsiFile psiFile = node.getValue();
-        if (psiFile == null) {
-            return null;
-        }
         @Nullable VirtualFile virtualFile = psiFile.getVirtualFile();
         if (virtualFile == null) {
             return null;

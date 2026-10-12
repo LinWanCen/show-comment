@@ -6,15 +6,9 @@ import com.intellij.openapi.vcs.changes.Change;
 import com.intellij.openapi.vcs.changes.ui.ChangesBrowserChangeNode;
 import com.intellij.openapi.vcs.changes.ui.ChangesBrowserFilePathNode;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.SimpleTextAttributes;
-import io.github.linwancen.plugin.show.bean.FuncEnum;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.ext.TreeExt;
-import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -97,16 +91,7 @@ public class CommitViewDecorator extends StructureViewDecorator {
             if (file == null || !file.isValid()) {
                 return null;
             }
-            String s = TreeExt.extDoc(file);
-            if (s != null) {
-                return s;
-            }
-            PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-            if (psiFile == null) {
-                return null;
-            }
-            @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
-            return BaseLangDoc.resolveDoc(info, psiFile);
+            return TreeDoc.treeElementDoc(project, TreeElements.ofFile(file, project));
         }
 
         @Nullable

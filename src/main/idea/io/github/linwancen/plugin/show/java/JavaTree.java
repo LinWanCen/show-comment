@@ -1,19 +1,11 @@
 package io.github.linwancen.plugin.show.java;
 
-import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.ide.projectView.impl.nodes.PackageElement;
-import com.intellij.ide.projectView.impl.nodes.PackageElementNode;
-import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
-import com.intellij.ide.projectView.impl.nodes.PsiFieldNode;
-import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiPackage;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
@@ -26,21 +18,24 @@ import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Java file / directory / package / member doc for tree views.
+ * Dispatches on the node's representative {@link PsiElement} instead of the node type,
+ * so Project View, Commit, Structure and Find can all reuse it.
+ */
 public class JavaTree {
 
     private JavaTree() {}
 
     @Nullable
-    public static <T extends SettingsInfo> String treeDoc(@NotNull T info, ProjectViewNode<?> node,
-                                                          @NotNull Project project) {
+    public static <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull PsiElement element) {
         // refactor: JSON file doc return string
         @Nullable String s = null;
-        if (node instanceof PsiFileNode) {
-            @Nullable PsiFile psiFile = ((PsiFileNode) node).getValue();
-            s = OwnerToPsiDocUtils.fileDoc(info, psiFile);
+        if (element instanceof PsiFile) {
+            s = OwnerToPsiDocUtils.fileDoc(info, (PsiFile) element);
         }
         if (s == null) {
-            @Nullable PsiDocComment docComment = nodeDoc(info, node, project);
+            @Nullable PsiDocComment docComment = nodeDoc(info, element);
             if (docComment == null) {
                 return null;
             }
@@ -53,48 +48,28 @@ public class JavaTree {
     }
 
     @Nullable
-    static <T extends SettingsInfo> PsiDocComment nodeDoc(@NotNull T info, ProjectViewNode<?> node,
-                                                          @NotNull Project project) {
-        if (node instanceof PsiDirectoryNode) {
-            PsiDirectory psiDirectory = ((PsiDirectoryNode) node).getValue();
-            if (psiDirectory != null) {
-                return dirDoc(psiDirectory);
-            }
+    static <T extends SettingsInfo> PsiDocComment nodeDoc(@NotNull T info, @NotNull PsiElement element) {
+        if (element instanceof PsiDirectory) {
+            return dirDoc((PsiDirectory) element);
         }
 
-        if (node instanceof PsiFieldNode) {
+        if (element instanceof PsiField) {
             // On Show Members
-            PsiField psiField = ((PsiFieldNode) node).getValue();
-            if (psiField != null) {
-                // for @Autowire Bean
-                @NotNull PsiType type = psiField.getType();
-                if (type instanceof PsiClassReferenceType) {
-                    @NotNull PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) type;
-                    @NotNull PsiJavaCodeReferenceElement reference = psiClassReferenceType.getReference();
-                    return NewCallRefToPsiDoc.javaCodeDoc(info, reference);
-                }
+            @NotNull PsiType type = ((PsiField) element).getType();
+            if (type instanceof PsiClassReferenceType) {
+                @NotNull PsiClassReferenceType psiClassReferenceType = (PsiClassReferenceType) type;
+                @NotNull PsiJavaCodeReferenceElement reference = psiClassReferenceType.getReference();
+                return NewCallRefToPsiDoc.javaCodeDoc(info, reference);
             }
+            return null;
         }
 
-        if (node instanceof PackageElementNode) {
+        if (element instanceof PsiPackage) {
             // On Packages View
-            PackageElement packageElement = ((PackageElementNode) node).getValue();
-            if (packageElement != null) {
-                @NotNull PsiPackage psiPackage = packageElement.getPackage();
-                return OwnerToPsiDocUtils.packageDoc(psiPackage);
-            }
+            return OwnerToPsiDocUtils.packageDoc((PsiPackage) element);
         }
 
-        // On Packages View, Project Files View
-        @Nullable VirtualFile virtualFile = node.getVirtualFile();
-        if (virtualFile == null || !virtualFile.isValid() || !virtualFile.isDirectory()) {
-            return null;
-        }
-        @Nullable PsiDirectory psiDirectory = PsiManager.getInstance(project).findDirectory(virtualFile);
-        if (psiDirectory == null) {
-            return null;
-        }
-        return dirDoc(psiDirectory);
+        return null;
     }
 
     @Nullable

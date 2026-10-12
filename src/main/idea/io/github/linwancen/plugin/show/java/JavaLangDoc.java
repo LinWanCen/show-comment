@@ -1,21 +1,16 @@
 package io.github.linwancen.plugin.show.java;
 
-import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiCall;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiJvmModifiersOwner;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiPackage;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiVariable;
@@ -27,7 +22,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.java.doc.NewDoc;
-import io.github.linwancen.plugin.show.java.doc.OwnerToPsiDocUtils;
 import io.github.linwancen.plugin.show.java.doc.PsiMethodToPsiDoc;
 import io.github.linwancen.plugin.show.java.line.OwnerToPsiDocSkip;
 import io.github.linwancen.plugin.show.java.line.SkipUtils;
@@ -65,9 +59,8 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, ProjectViewNode<?> node,
-                                                             @NotNull Project project) {
-        return JavaTree.treeDoc(info, node, project);
+    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull PsiElement element) {
+        return JavaTree.treeDoc(info, element);
     }
 
     @Override
@@ -95,17 +88,8 @@ public class JavaLangDoc extends BaseTagLangDoc<PsiDocComment> {
 
     @Override
     public @Nullable <T extends SettingsInfo> String resolveDocPrint(@NotNull T info, @NotNull PsiElement resolve) {
-        if (resolve instanceof PsiFile) {
-            return OwnerToPsiDocUtils.fileDoc(info, (PsiFile) resolve);
-        } else if (resolve instanceof PsiDirectory) {
-            PsiDocComment psiDocComment = JavaTree.dirDoc((PsiDirectory) resolve);
-            return docElementToStr(info, psiDocComment);
-        } else if (resolve instanceof PsiPackage) {
-            // "group by package" row in the Find view: a PsiPackage has no containing file,
-            // so the generic doc lookup finds nothing - read package-info directly
-            PsiDocComment psiDocComment = OwnerToPsiDocUtils.packageDoc((PsiPackage) resolve);
-            return docElementToStr(info, psiDocComment);
-        }
+        // PsiFile / PsiDirectory / PsiPackage now resolve via treeDoc (JavaTree#treeDoc),
+        // reached from every tree-family view through TreeDoc#treeElementDoc.
         @Nullable String doc = resolveDocPrintSrc(info, resolve);
         if (!info.appSettings.init || !(resolve instanceof PsiVariable)) {
             return doc;

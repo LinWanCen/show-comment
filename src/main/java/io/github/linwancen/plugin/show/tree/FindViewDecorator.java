@@ -4,16 +4,12 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.usages.UsageInfo2UsageAdapter;
 import com.intellij.usages.impl.rules.FileGroupingRule;
 import com.intellij.usages.rules.UsageInFile;
 import io.github.linwancen.plugin.show.bean.FileInfo;
-import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.LineInfo;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
-import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import io.github.linwancen.plugin.show.tree.find.FindGroupElementUtils;
@@ -91,22 +87,7 @@ public class FindViewDecorator extends StructureViewDecorator {
             }
 
             PsiElement element = extractPsiElementFromUsage(node, descriptor);
-            if (element == null || !element.isValid()) {
-                return null;
-            }
-
-            if (element instanceof PsiFile) {
-                VirtualFile virtualFile = ((PsiFile) element).getVirtualFile();
-                if (virtualFile != null) {
-                    String s = TreeExt.extDoc(virtualFile);
-                    if (s != null) {
-                        return s;
-                    }
-                }
-            }
-
-            @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
-            return BaseLangDoc.resolveDoc(info, element);
+            return TreeDoc.treeElementDoc(project, element);
         }
 
         @Nullable

@@ -1,16 +1,13 @@
 package io.github.linwancen.plugin.show.lang;
 
-import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.lang.ecmascript6.psi.ES6ExportDefaultAssignment;
 import com.intellij.lang.javascript.JavascriptLanguage;
 import com.intellij.lang.javascript.documentation.JSDocumentationUtils;
 import com.intellij.lang.javascript.psi.JSPsiReferenceElement;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
@@ -40,14 +37,13 @@ public class JsLangDoc extends BaseLangDoc {
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull ProjectViewNode<?> node,
-                                                             @NotNull Project project) {
-        @Nullable VirtualFile virtualFile = node.getVirtualFile();
-        if (virtualFile == null || !virtualFile.isValid()) {
+    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull PsiElement element) {
+        if (!(element instanceof PsiFile)) {
             return null;
         }
-        @Nullable PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
-        if (psiFile == null) {
+        @NotNull PsiFile psiFile = (PsiFile) element;
+        @Nullable VirtualFile virtualFile = psiFile.getVirtualFile();
+        if (virtualFile == null || !virtualFile.isValid()) {
             return null;
         }
         @Nullable ES6ExportDefaultAssignment export = PsiTreeUtil.findChildOfType(psiFile,

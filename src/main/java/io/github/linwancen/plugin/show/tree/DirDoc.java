@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.tree;
 
-import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
@@ -17,21 +16,17 @@ class DirDoc {
     private DirDoc() {}
 
     @Nullable
-    static String dirDoc(@NotNull PsiDirectoryNode node, @NotNull AbstractSettingsState settings) {
+    static String dirDoc(@NotNull PsiDirectory psiDirectory, @NotNull AbstractSettingsState settings) {
         if (!settings.dirDocEffect) {
             return null;
         }
         @NotNull Map<String, Pattern[]> patternMap = settings.dirDoc;
-        @Nullable PsiDirectory psiDirectory = node.getValue();
-        if (psiDirectory == null) {
-            return null;
-        }
         @Nullable PsiFile file = psiDirectory.findFile("show_comment_plugin.tree.tsv");
         if (file != null) {
             @Nullable ConfCache confCache = FileLoader.EPN.findExtension(ConfCache.class);
             VirtualFile virtualFile = file.getVirtualFile();
             if (confCache != null && virtualFile != null) {
-                confCache.loadFileImpl(virtualFile, node.getProject());
+                confCache.loadFileImpl(virtualFile, psiDirectory.getProject());
             }
         }
         for (@NotNull Map.Entry<String, Pattern[]> patterns : patternMap.entrySet()) {

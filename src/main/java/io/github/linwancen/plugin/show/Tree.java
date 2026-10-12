@@ -11,20 +11,15 @@ import com.intellij.packageDependencies.ui.PackageDependenciesNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import io.github.linwancen.plugin.show.bean.FuncEnum;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.cache.RenderDocCache;
-import io.github.linwancen.plugin.show.ext.TreeExt;
-import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
-import io.github.linwancen.plugin.show.tree.RelFileDoc;
-import io.github.linwancen.plugin.show.tree.first.FirstDoc;
+import io.github.linwancen.plugin.show.tree.TreeDoc;
+import io.github.linwancen.plugin.show.tree.TreeElements;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
 import java.util.List;
 
 public class Tree implements ProjectViewNodeDecorator {
@@ -51,11 +46,6 @@ public class Tree implements ProjectViewNodeDecorator {
         if (project == null) {
             return;
         }
-        @Nullable String extDoc = TreeExt.doc(node);
-        if (extDoc != null) {
-            addText(data, extDoc);
-            return;
-        }
         @Nullable String doc = RenderDocCache.doc(project, node,
                 () -> treeDoc(node, project), () -> refreshProjectView(project));
         addText(data, doc);
@@ -76,29 +66,15 @@ public class Tree implements ProjectViewNodeDecorator {
         data.addText(" " + text, SimpleTextAttributes.GRAY_ATTRIBUTES);
     }
 
+    /**
+     * Project View entry: node -> representative element -> shared tree doc.
+     * Also used by TreeCopy. All precedence (ext / pattern / resolve / treeDoc / first)
+     * lives in {@link TreeDoc#treeElementDoc}.
+     */
     @Nullable
     public static String treeDoc(@NotNull ProjectViewNode<?> node, @NotNull Project project) {
-        @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
-        @Nullable String relFileDoc = RelFileDoc.relFileDoc(node, info);
-        if (relFileDoc != null) {
-            return relFileDoc;
-        }
-        Object value = node.getValue();
-        if (value instanceof PsiElement) {
-            @NotNull PsiElement psiElement = (PsiElement) value;
-            @Nullable String docPrint = BaseLangDoc.resolveDoc(info, psiElement);
-            if (docPrint != null) {
-                return docPrint;
-            }
-        }
-        @NotNull Collection<BaseLangDoc> langDocs = BaseLangDoc.LANG_DOC_MAP.values();
-        for (@NotNull BaseLangDoc langDoc : langDocs) {
-            @Nullable String s = langDoc.treeDoc(info, node, project);
-            if (s != null) {
-                return s;
-            }
-        }
-        return FirstDoc.firstDoc(node, info);
+        @Nullable PsiElement element = TreeElements.of(node, project);
+        return TreeDoc.treeElementDoc(project, element);
     }
 
     @Override

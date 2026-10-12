@@ -1,15 +1,12 @@
 package io.github.linwancen.plugin.show.tree.first;
 
-import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiCompiledElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.lang.base.DocFilter;
 import io.github.linwancen.plugin.show.lang.base.PsiUnSaveUtils;
@@ -24,20 +21,12 @@ public class FirstDoc {
     private FirstDoc() {}
 
     @Nullable
-    public static String firstDoc(@NotNull ProjectViewNode<?> node, @NotNull SettingsInfo info) {
+    public static String firstDoc(@NotNull PsiFile psiFile, @NotNull SettingsInfo info) {
         if (!info.appSettings.treeFirst) {
             return null;
         }
-        @Nullable VirtualFile virtualFile = node.getVirtualFile();
+        @Nullable VirtualFile virtualFile = psiFile.getVirtualFile();
         if (virtualFile == null || !virtualFile.isValid() || virtualFile.isDirectory()) {
-            return null;
-        }
-        @Nullable Project project = node.getProject();
-        if (project == null) {
-            return null;
-        }
-        PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
-        if (psiFile == null) {
             return null;
         }
         PsiElement nav = psiFile.getNavigationElement();

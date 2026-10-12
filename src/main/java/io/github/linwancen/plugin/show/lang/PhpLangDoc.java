@@ -1,7 +1,5 @@
 package io.github.linwancen.plugin.show.lang;
 
-import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -38,20 +36,16 @@ public class PhpLangDoc extends BaseTagLangDoc<PhpDocComment> {
     }
 
     @Override
-    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull ProjectViewNode<?> node,
-                                                             @NotNull Project project) {
-        Object value = node.getValue();
-        if (value instanceof PsiElement) {
-            @NotNull PsiElement psiElement = (PsiElement) value;
-            if (psiElement.isValid() && psiElement.getLanguage() == PhpLanguage.INSTANCE) {
-                @NotNull PsiElement[] children = psiElement.getChildren();
-                for (PsiElement child : children) {
-                    @Nullable PsiComment comment = PsiTreeUtil.getChildOfType(child, PsiComment.class);
-                    if (comment != null) {
-                        @NotNull String text = PsiUnSaveUtils.getText(comment);
-                        return DocFilter.cutDoc(text, info, true);
-                    }
-                }
+    public @Nullable <T extends SettingsInfo> String treeDoc(@NotNull T info, @NotNull PsiElement element) {
+        if (!element.isValid() || element.getLanguage() != PhpLanguage.INSTANCE) {
+            return null;
+        }
+        @NotNull PsiElement[] children = element.getChildren();
+        for (PsiElement child : children) {
+            @Nullable PsiComment comment = PsiTreeUtil.getChildOfType(child, PsiComment.class);
+            if (comment != null) {
+                @NotNull String text = PsiUnSaveUtils.getText(comment);
+                return DocFilter.cutDoc(text, info, true);
             }
         }
         return null;

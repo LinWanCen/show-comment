@@ -11,10 +11,7 @@ import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.ColoredTreeCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import io.github.linwancen.plugin.show.bean.FuncEnum;
-import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.cache.RenderDocCache;
-import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.settings.AppSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -173,15 +170,7 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
 
         @Nullable
         protected String toComment(Object node) {
-            @Nullable PsiElement element = extractPsiElement(node);
-            if (element == null) {
-                return null;
-            }
-            if (!element.isValid()) {
-                return null;
-            }
-            @NotNull SettingsInfo info = SettingsInfo.of(project, FuncEnum.TREE);
-            return BaseLangDoc.resolveDoc(info, element);
+            return TreeDoc.treeElementDoc(project, extractPsiElement(node));
         }
 
         @Nullable

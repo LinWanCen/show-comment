@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.lang.base;
 
-import com.intellij.ide.projectView.ProjectViewNode;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.EditorLinePainter;
 import com.intellij.openapi.editor.LineExtensionInfo;
@@ -46,8 +45,14 @@ public abstract class BaseLangDoc extends EditorLinePainter {
 
     public abstract boolean show(@NotNull LineInfo info);
 
+    /**
+     * File/directory/package-level doc for a tree node's representative element.
+     * Called after {@link #resolveDoc} finds nothing; the element is a PsiFile,
+     * PsiDirectory, PsiPackage or the node's own element. Project / Commit / Structure /
+     * Find views all reach this via {@code TreeDoc#treeElementDoc}.
+     */
     @Nullable
-    public <T extends SettingsInfo> String treeDoc(T info, ProjectViewNode<?> node, Project project) {
+    public <T extends SettingsInfo> String treeDoc(T info, PsiElement element) {
         return null;
     }
 
