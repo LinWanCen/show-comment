@@ -32,14 +32,38 @@ public class PsiDocCache {
     public static final class CachedResult {
         public final String value;
 
+        /**
+         * true = the compute ended on a nested {@link PsiDocCache#getCache} that had not finished yet:
+         * this null means "not computed yet", not "this element has no doc".
+         * Such a result must never be read back as a final empty value, see getCache().
+         */
+        public final boolean notReady;
+
         public CachedResult(@Nullable String value) {
+            this(value, false);
+        }
+
+        public CachedResult(@Nullable String value, boolean notReady) {
             this.value = value;
+            this.notReady = notReady;
         }
     }
 
     public enum Kind {REF, RESOLVE}
 
     private static final Key<SettingsInfo> INFO_KEY = new Key<>(PsiDocCache.class.getName() + "-INFO");
+
+    /**
+     * Set by {@link #getCache} on the calling thread whenever it returns null because something
+     * is not ready yet (first miss, stale value, a compute already scheduled) instead of a real
+     * empty value. Read by {@link DocProvider#compute} after its compute function returned, on
+     * the same thread, to tell "not computed" from "computed and there is no doc".
+     */
+    private static final ThreadLocal<Boolean> NESTED_MISS = ThreadLocal.withInitial(() -> Boolean.FALSE);
+
+    private static void markNestedMiss() {
+        NESTED_MISS.set(Boolean.TRUE);
+    }
 
     private static final class DocProvider implements CachedValueProvider<CachedResult> {
         private final PsiElement element;
@@ -70,7 +94,19 @@ public class PsiDocCache {
                     deps.add(file);
                 }
             }
-            return Result.create(new CachedResult(compute.apply(currentInfo, element)), deps.toArray());
+            // stale flag from a previous user of this pooled thread
+            NESTED_MISS.remove();
+            try {
+                String value = compute.apply(currentInfo, element);
+                // refCache nests resolveCache: this compute called getCache() again for the
+                // resolved element, which schedules and returns null the first time. Caching that
+                // null as a real value would hide the doc forever (the real value is stored under
+                // the resolved element, this one is never asked again), so mark it not ready.
+                boolean notReady = value == null && Boolean.TRUE.equals(NESTED_MISS.get());
+                return Result.create(new CachedResult(value, notReady), deps.toArray());
+            } finally {
+                NESTED_MISS.remove();
+            }
         }
     }
 
@@ -98,12 +134,22 @@ public class PsiDocCache {
             Getter<CachedResult> upToDate = cachedValue.getUpToDateOrNull();
             if (upToDate != null) {
                 CachedResult result = upToDate.get();
-                return result == null ? null : result.value;
+                if (result != null && result.notReady) {
+                    // the previous compute ended on a getCache() that had not finished yet, so this
+                    // null is "not ready" and not "no doc". Dropping the whole CachedValue (not just
+                    // its value) makes getCachedValue() below build a fresh one and run the compute
+                    // again, otherwise this empty value would be returned on every paint forever.
+                    element.putUserData(cacheKey, null);
+                } else {
+                    // a real value, including a real "this element has no doc"
+                    return result == null ? null : result.value;
+                }
             }
         }
 
         if (!markPending(element, keyStr)) {
             // compute already scheduled for this element and key
+            markNestedMiss();
             return null;
         }
         try {
@@ -112,6 +158,8 @@ public class PsiDocCache {
         } catch (Throwable e) {
             clearPending(element, keyStr);
         }
+        // null here always means not ready yet: scheduled, stale or already pending
+        markNestedMiss();
         return null;
     }
 
