@@ -1,6 +1,10 @@
 package io.github.linwancen.plugin.show.cache;
 
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
+import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Getter;
 import com.intellij.openapi.util.Key;
@@ -20,10 +24,10 @@ import org.jetbrains.concurrency.CancellablePromise;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 
@@ -63,6 +67,21 @@ public class PsiDocCache {
 
     private static void markNestedMiss() {
         NESTED_MISS.set(Boolean.TRUE);
+    }
+
+    /**
+     * Read and clear the "not ready" flag {@link #getCache} set on the calling thread.
+     * <p>
+     * The render caches ({@link RenderDocCache} / {@link LineEndDocCache}) call this right after
+     * their compute supplier returned on the same pooled thread: a null result with this flag true
+     * means "a nested compute was still running", not "this element has no doc", and one delayed
+     * repaint is then worth scheduling so the view shows the doc right away instead of waiting for
+     * the next external repaint (opening a file, moving the mouse over the tree, ...).
+     */
+    public static boolean consumeNotReadyFlag() {
+        boolean notReady = Boolean.TRUE.equals(NESTED_MISS.get());
+        NESTED_MISS.remove();
+        return notReady;
     }
 
     private static final class DocProvider implements CachedValueProvider<CachedResult> {
@@ -130,7 +149,7 @@ public class PsiDocCache {
         CachedValue<CachedResult> cachedValue = element.getUserData(cacheKey);
         if (cachedValue != null) {
             // getUpToDateOrNull() does not recompute: a stale value must not be recomputed on the
-            // caller thread, which may be EDT while painting. Stale falls through to the schedule below.
+            // caller thread, which may be EDT while painting. Stale falls through to the compute below.
             Getter<CachedResult> upToDate = cachedValue.getUpToDateOrNull();
             if (upToDate != null) {
                 CachedResult result = upToDate.get();
@@ -154,13 +173,68 @@ public class PsiDocCache {
         }
         try {
             element.putUserData(INFO_KEY, info);
+            if (canComputeHere(info.project)) {
+                // Already inside a background read action in smart mode (the pooled computes of
+                // LineEndDocCache / RenderDocCache / the line end cache task). Compute here instead
+                // of submitting a nested NonBlockingReadAction: one submission per painted line or
+                // tree node was exactly what made the platform log
+                // "Too many non blocking read actions submitted at once".
+                @Nullable CachedResult here = computeHere(info.project, element, cacheKey, compute);
+                clearPending(element, keyStr);
+                if (here == null || here.notReady) {
+                    // nested getCache inside this compute was not ready: same contract as below
+                    markNestedMiss();
+                    return null;
+                }
+                return here.value;
+            }
             schedule(info.project, element, cacheKey, keyStr, compute);
+        } catch (ProcessCanceledException e) {
+            // a write action or indexing started: abort so the caller retries, never swallow it
+            clearPending(element, keyStr);
+            throw e;
         } catch (Throwable e) {
             clearPending(element, keyStr);
         }
         // null here always means not ready yet: scheduled, stale or already pending
         markNestedMiss();
         return null;
+    }
+
+    /**
+     * true when a full compute can run right here on this thread: already inside a read action in
+     * smart mode on a pooled thread.
+     * <p>
+     * Never on EDT (or on a thread without read access): a first resolve can initialize whole
+     * subsystems and freeze the IDE for seconds, such callers must get the async schedule below.
+     */
+    private static boolean canComputeHere(@NotNull Project project) {
+        @Nullable Application app = ApplicationManager.getApplication();
+        if (app == null || app.isDispatchThread() || !app.isReadAccessAllowed()) {
+            return false;
+        }
+        if (project.isDisposed()) {
+            return false;
+        }
+        // DumbService.isDumb instead of isInSmartMode: exists on every IDE version since 201.1
+        return !DumbService.isDumb(project);
+    }
+
+    private static @Nullable CachedResult computeHere(
+            @NotNull Project project,
+            @NotNull PsiElement element,
+            @NotNull Key<CachedValue<CachedResult>> cacheKey,
+            @NotNull BiFunction<SettingsInfo, PsiElement, String> compute) {
+        if (!element.isValid()) {
+            return null;
+        }
+        // The static getCachedValue(PsiElement, Key, provider) stopped storing a CachedValue under the
+        // key: since 2024.x it stores a ParameterizedCachedValue, which only extends CachedValueBase
+        // and is not a CachedValue, so getCache() above could never read it back and threw
+        // ClassCastException. This overload stores a real CachedValue under the key on every IDE
+        // version, which is exactly what getCache() reads.
+        return CachedValuesManager.getManager(project)
+                .getCachedValue(element, cacheKey, new DocProvider(element, compute), false);
     }
 
     /**
@@ -207,6 +281,17 @@ public class PsiDocCache {
     private static final long TIMEOUT_MS = 10_000L;
 
     /**
+     * Cap on how many non blocking read actions this plugin keeps submitted at once.
+     * <p>
+     * The platform logs {@code "Too many non blocking read actions submitted at once"} once too
+     * many similar submissions are active, so the number of outstanding submissions is limited
+     * here, not only the number of running threads. Callers get null (doc not ready) and the next
+     * paint retries. 6 is far below the platform limit, and the common painters never reach this
+     * path at all because they compute inline, see {@link #canComputeHere}.
+     */
+    private static final Semaphore SUBMISSIONS = new Semaphore(6, true);
+
+    /**
      * NonBlockingReadAction instead of a bare pooled thread + runReadActionInSmartMode:
      * it is cancelled when a write action starts or the project is disposed, so it cannot
      * pin the read lock for long and freeze the EDT.
@@ -216,35 +301,39 @@ public class PsiDocCache {
                                  @NotNull Key<CachedValue<CachedResult>> cacheKey,
                                  @NotNull String keyStr,
                                  @NotNull BiFunction<SettingsInfo, PsiElement, String> compute) {
-        Callable<CachedResult> task = () -> {
-            if (!element.isValid()) {
-                return null;
-            }
-            // The static getCachedValue(PsiElement, Key, provider) stopped storing a CachedValue under the
-            // key: since 2024.x it stores a ParameterizedCachedValue, which only extends CachedValueBase
-            // and is not a CachedValue, so getCache() above could never read it back and threw
-            // ClassCastException. This overload stores a real CachedValue under the key on every IDE
-            // version, which is exactly what getCache() reads.
-            return CachedValuesManager.getManager(project)
-                    .getCachedValue(element, cacheKey, new DocProvider(element, compute), false);
-        };
-        CancellablePromise<CachedResult> promise = ReadAction.nonBlocking(task)
-                .inSmartMode(project)
-                .expireWhen(project::isDisposed)
-                .submit(AppExecutorUtil.getAppExecutorService());
-
-        // cancels e.g. a wait inside the JS config graph init, the read lock is released;
-        // BaseLangDoc.refDoc detects the slow resolve itself and skips the next ones
-        ScheduledFuture<?> watchdog = AppExecutorUtil.getAppScheduledExecutorService().schedule(
-                () -> {
-                    if (!promise.isDone()) {
-                        promise.cancel();
-                    }
-                }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
-
-        promise.onProcessed(ignored -> {
-            watchdog.cancel(false);
+        if (!SUBMISSIONS.tryAcquire()) {
+            // too many resolves already in flight: give up now, the next paint schedules again
             clearPending(element, keyStr);
-        });
+            return;
+        }
+        boolean submitted = false;
+        try {
+            CancellablePromise<CachedResult> promise = ReadAction.nonBlocking(() ->
+                            computeHere(project, element, cacheKey, compute))
+                    .inSmartMode(project)
+                    .expireWhen(project::isDisposed)
+                    .submit(AppExecutorUtil.getAppExecutorService());
+            submitted = true;
+
+            // cancels e.g. a wait inside the JS config graph init, the read lock is released;
+            // BaseLangDoc.refDoc detects the slow resolve itself and skips the next ones
+            ScheduledFuture<?> watchdog = AppExecutorUtil.getAppScheduledExecutorService().schedule(
+                    () -> {
+                        if (!promise.isDone()) {
+                            promise.cancel();
+                        }
+                    }, TIMEOUT_MS, TimeUnit.MILLISECONDS);
+
+            promise.onProcessed(ignored -> {
+                watchdog.cancel(false);
+                clearPending(element, keyStr);
+                SUBMISSIONS.release();
+            });
+        } finally {
+            if (!submitted) {
+                SUBMISSIONS.release();
+                clearPending(element, keyStr);
+            }
+        }
     }
 }

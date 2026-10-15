@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.concurrency.AppExecutorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
@@ -81,16 +83,35 @@ public final class RenderDocCache implements Disposable {
     private static final long PENDING_HARD_TTL_MS = 60_000L;
 
     /**
+     * How long to wait before re-running {@code onComputed} once a compute ended on a nested doc
+     * compute that was still running (see {@link PsiDocCache#consumeNotReadyFlag}).
+     */
+    private static final long NOT_READY_RETRY_DELAY_MS = 300L;
+
+    /**
      * Cache value. See the contract on {@link #docs}: it may hold the doc text and its
      * timestamp, nothing that can reach back to the key (no PsiElement, node or lambda).
      */
     private static final class Entry {
         @Nullable
         final String doc;
+        /**
+         * true = the compute ended on a nested doc compute that had not finished yet, so this null
+         * is "not computed yet" and not "no doc". Such an entry is recomputed on the next paint
+         * instead of being served as a final empty value.
+         */
+        final boolean notReady;
+        /**
+         * true = the one delayed {@code onComputed} retry of this entry was already requested,
+         * so a permanently not ready compute can never turn into a refresh loop.
+         */
+        final boolean retried;
         final long time;
 
-        Entry(@Nullable String doc, long time) {
+        Entry(@Nullable String doc, boolean notReady, boolean retried, long time) {
             this.doc = doc;
+            this.notReady = notReady;
+            this.retried = retried;
             this.time = time;
         }
     }
@@ -150,9 +171,10 @@ public final class RenderDocCache implements Disposable {
         synchronized (this) {
             entry = docs.get(key);
         }
-        if (entry != null && now - entry.time < ttl(entry.doc)) {
+        if (entry != null && !entry.notReady && now - entry.time < ttl(entry.doc)) {
             return entry.doc;
         }
+        // a notReady entry is always recomputed: its null means "not computed yet", never "no doc"
         schedule(project, key, compute, onComputed, now);
         // stale value while refreshing, to avoid flicker
         return entry == null ? null : entry.doc;
@@ -229,9 +251,14 @@ public final class RenderDocCache implements Disposable {
                 return;
             }
             DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+                // a pooled thread may still carry the flag of the task that used it before
+                PsiDocCache.consumeNotReadyFlag();
                 @Nullable String result = computeSafe(project, compute);
+                // true = the compute ended on a nested doc compute that had not finished yet:
+                // this null is "not computed yet" and not "no doc"
+                boolean notReady = PsiDocCache.consumeNotReadyFlag();
                 ApplicationManager.getApplication().invokeLater(() ->
-                        finish(project, key, result, onComputed, token));
+                        finish(project, key, result, notReady, onComputed, token));
             });
         } catch (ProcessCanceledException e) {
             // aborted (PSI changed or indexing started), retry on next paint
@@ -263,24 +290,53 @@ public final class RenderDocCache implements Disposable {
     /**
      * EDT: stores the result and re-stamps the entry, so a node that keeps being painted always
      * has a fresh timestamp and is never hit by {@link #sweep}.
+     * <p>
+     * A null result with {@code notReady} true does NOT mean "no doc": a nested doc compute
+     * (usually the resolve cache under this doc) was still running. Without a follow up refresh the
+     * view kept showing nothing until the next external repaint (opening a file, moving the mouse
+     * over the tree ...), so the very first compute of a node asks for one more refresh.
      *
      * @param token the value this schedule put into {@link #pending}; the remove is conditional
      *              so a late task cannot clear a marker of a newer schedule
      */
     private void finish(@NotNull Project project, @NotNull Object key, @Nullable String result,
-                        @NotNull Runnable onComputed, long token) {
+                        boolean notReady, @NotNull Runnable onComputed, long token) {
+        boolean retry;
         boolean changed;
         synchronized (this) {
-            @Nullable Entry old = docs.put(key, new Entry(result, System.currentTimeMillis()));
+            @Nullable Entry old = docs.get(key);
             changed = !Objects.equals(old == null ? null : old.doc, result);
+            // one delayed refresh per notReady episode: repeated not ready must not loop forever
+            boolean retriedBefore = old != null && old.retried;
+            retry = result == null && notReady && !retriedBefore;
+            docs.put(key, new Entry(result, notReady, retry || (notReady && retriedBefore),
+                    System.currentTimeMillis()));
         }
         pending.remove(key, token);
-        if (!changed) {
+        if (!changed && !retry) {
             // stable doc: avoid repaint/refresh churn on every recompute
             return;
         }
         if (project.isDisposed()) {
             // the common guard of every onComputed, callbacks need not check again
+            return;
+        }
+        if (retry) {
+            // the nested compute has very likely finished by then: refresh once more so the node
+            // shows its doc right away instead of waiting for the next repaint
+            AppExecutorUtil.getAppScheduledExecutorService().schedule(() ->
+                    ApplicationManager.getApplication().invokeLater(() -> runOnEdt(project, onComputed)),
+                    NOT_READY_RETRY_DELAY_MS, TimeUnit.MILLISECONDS);
+            return;
+        }
+        runOnEdt(project, onComputed);
+    }
+
+    /**
+     * EDT: the common guard and try/catch of every onComputed (refresh / repaint) call.
+     */
+    private static void runOnEdt(@NotNull Project project, @NotNull Runnable onComputed) {
+        if (project.isDisposed()) {
             return;
         }
         try {

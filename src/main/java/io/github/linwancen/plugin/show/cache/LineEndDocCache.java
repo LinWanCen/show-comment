@@ -11,6 +11,7 @@ import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.concurrency.AppExecutorUtil;
 import io.github.linwancen.plugin.show.LineEnd;
 import io.github.linwancen.plugin.show.bean.LineInfo;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -79,6 +81,12 @@ public final class LineEndDocCache implements Disposable {
     private static final long PENDING_HARD_TTL_MS = 60_000L;
 
     /**
+     * How long to wait before repainting once a compute ended on a nested doc compute that was
+     * still running (see {@link PsiDocCache#consumeNotReadyFlag}).
+     */
+    private static final long NOT_READY_RETRY_DELAY_MS = 300L;
+
+    /**
      * Cache value. Contract: must never reference the key (the key is a plain string, and the
      * value is only a LineExtensionInfo: text + attributes from settings).
      */
@@ -88,10 +96,23 @@ public final class LineEndDocCache implements Disposable {
          */
         @Nullable
         final LineExtensionInfo ext;
+        /**
+         * true = the compute ended on a nested doc compute that had not finished yet, so this null
+         * is "not computed yet" and not "no doc". Such an entry is recomputed on the next paint
+         * instead of being served as a final empty value.
+         */
+        final boolean notReady;
+        /**
+         * true = the one delayed repaint retry of this entry was already requested, so a
+         * permanently not ready compute can never turn into a repaint loop.
+         */
+        final boolean retried;
         final long time;
 
-        Entry(@Nullable LineExtensionInfo ext, long time) {
+        Entry(@Nullable LineExtensionInfo ext, boolean notReady, boolean retried, long time) {
             this.ext = ext;
+            this.notReady = notReady;
+            this.retried = retried;
             this.time = time;
         }
     }
@@ -137,9 +158,10 @@ public final class LineEndDocCache implements Disposable {
         sweep(now);
         @NotNull String key = key(info);
         @Nullable Entry entry = docs.get(key);
-        if (entry != null && now - entry.time < ttl(entry.ext)) {
+        if (entry != null && !entry.notReady && now - entry.time < ttl(entry.ext)) {
             return entry.ext == null ? null : Collections.singleton(entry.ext);
         }
+        // a notReady entry is always recomputed: its null means "not computed yet", never "no doc"
         schedule(info, key, now);
         // stale value while refreshing, to avoid flicker
         return entry == null || entry.ext == null ? null : Collections.singleton(entry.ext);
@@ -183,9 +205,14 @@ public final class LineEndDocCache implements Disposable {
                 return;
             }
             DumbService.getInstance(project).runReadActionInSmartMode(() -> {
+                // a pooled thread may still carry the flag of the task that used it before
+                PsiDocCache.consumeNotReadyFlag();
                 @Nullable LineExtensionInfo result = computeSafe(info);
+                // true = the compute ended on a nested doc compute that had not finished yet:
+                // this null is "not computed yet" and not "no doc"
+                boolean notReady = PsiDocCache.consumeNotReadyFlag();
                 ApplicationManager.getApplication().invokeLater(() ->
-                        finish(project, info.file, key, result, token));
+                        finish(project, info.file, key, result, notReady, token));
             });
         } catch (ProcessCanceledException e) {
             // aborted (PSI changed or indexing started), retry on next paint
@@ -219,21 +246,46 @@ public final class LineEndDocCache implements Disposable {
     /**
      * EDT: stores the result and re-stamps the entry, so a line that keeps being painted always
      * has a fresh timestamp and is never hit by {@link #sweep}.
+     * <p>
+     * A null result with {@code notReady} true does NOT mean "no doc": a nested doc compute
+     * (usually the resolve cache under this doc) was still running. Without a follow up repaint the
+     * line kept showing nothing until the next repaint, so the very first compute of a line asks
+     * for one more repaint.
      *
      * @param token the value this schedule put into {@link #pending}; the remove is conditional
      *              so a late task cannot clear a marker of a newer schedule
      */
     private void finish(@NotNull Project project, @NotNull VirtualFile file, @NotNull String key,
-                        @Nullable LineExtensionInfo result, long token) {
-        @Nullable Entry old = docs.put(key, new Entry(result, System.currentTimeMillis()));
-        pending.remove(key, token);
-        boolean changed = !Objects.equals(old == null ? null : old.ext, result);
-        if (!changed) {
-            // stable doc: avoid repaint churn on every recompute
-            return;
+                        @Nullable LineExtensionInfo result, boolean notReady, long token) {
+        boolean retry;
+        boolean changed;
+        synchronized (this) {
+            @Nullable Entry old = docs.get(key);
+            changed = !Objects.equals(old == null ? null : old.ext, result);
+            // one delayed repaint per notReady episode: repeated not ready must not loop forever
+            boolean retriedBefore = old != null && old.retried;
+            retry = result == null && notReady && !retriedBefore;
+            docs.put(key, new Entry(result, notReady, retry || (notReady && retriedBefore),
+                    System.currentTimeMillis()));
         }
+        pending.remove(key, token);
         if (project.isDisposed()) {
             // the common guard of every callback, callers need not check again
+            return;
+        }
+        if (retry) {
+            // the nested compute has very likely finished by then: repaint once more so the line
+            // shows its doc right away instead of waiting for the next repaint
+            AppExecutorUtil.getAppScheduledExecutorService().schedule(() ->
+                    ApplicationManager.getApplication().invokeLater(() -> {
+                        if (!project.isDisposed()) {
+                            repaintEditors(project, file);
+                        }
+                    }), NOT_READY_RETRY_DELAY_MS, TimeUnit.MILLISECONDS);
+            return;
+        }
+        if (!changed) {
+            // stable doc: avoid repaint churn on every recompute
             return;
         }
         repaintEditors(project, file);
