@@ -19,10 +19,17 @@ public class DocSkip {
                 info.projectSettings.lineInclude, info.projectSettings.lineExclude);
     }
 
-    private static final Pattern NOT_ASCII_PATTERN = Pattern.compile("[^\u0000-\u007f]");
+    private static boolean containsNonAscii(@NotNull CharSequence text) {
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) > 0x7F) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static <T extends SettingsInfo> boolean skipDoc(@NotNull T info, @NotNull String text) {
-        if (info.appSettings.skipAscii && !NOT_ASCII_PATTERN.matcher(text).find()) {
+        if (info.appSettings.skipAscii && !containsNonAscii(text)) {
             return true;
         }
         return skipText(info, text,

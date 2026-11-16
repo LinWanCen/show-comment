@@ -237,7 +237,7 @@ public abstract class AbstractSettingsState implements ModificationTracker {
     @NotNull
     public String getAnnoDocLine() {
         return Arrays.stream(annoDocLine)
-                .map(a -> String.join(".", a))
+                .map(a -> String.join("#", a))
                 .collect(Collectors.joining("\n"));
     }
 

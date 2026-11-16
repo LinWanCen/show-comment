@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class Prev {
 
@@ -54,30 +53,31 @@ public class Prev {
         return false;
     }
 
-    private static final Pattern SYMBOL_PATTERN = Pattern.compile("[^" +
-            ":-@" +
-            "\\[-`" +
-            "{-~" +
-            "]++");
+    private static boolean hasNonSymbolChar(@NotNull CharSequence text) {
+        for (int i = 0, len = text.length(); i < len; i++) {
+            char c = text.charAt(i);
+            if (!((c >= ':' && c <= '@') || (c >= '[' && c <= '`') || (c >= '{' && c <= '~'))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Nullable
     private static PsiElement refClassParent(@NotNull PsiElement element,
                                              @NotNull List<Class<? extends PsiElement>> refClass) {
-        @NotNull String text = PsiUnSaveUtils.getText(element);
-        if (!SYMBOL_PATTERN.matcher(text).find()) {
-            return null;
-        }
         PsiElement parent = element.getParent();
         if (parent == null) {
             return null;
         }
         if (notAssignableFrom(refClass, parent)) {
             parent = parent.getParent();
-            if (parent == null) {
+            if (parent == null || notAssignableFrom(refClass, parent)) {
                 return null;
             }
         }
-        if (notAssignableFrom(refClass, parent)) {
+        @NotNull String text = PsiUnSaveUtils.getText(element);
+        if (!hasNonSymbolChar(text)) {
             return null;
         }
         return parent;
@@ -85,8 +85,16 @@ public class Prev {
 
     private static boolean notAssignableFrom(@NotNull List<Class<? extends PsiElement>> refClass,
                                              @NotNull PsiElement parent) {
-        return refClass.stream().noneMatch(it ->
-                parent instanceof PsiLiteralValue || it.isAssignableFrom(parent.getClass()));
+        if (parent instanceof PsiLiteralValue) {
+            return false;
+        }
+        Class<? extends PsiElement> parentClass = parent.getClass();
+        for (int i = 0, size = refClass.size(); i < size; i++) {
+            if (refClass.get(i).isAssignableFrom(parentClass)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static @Nullable <T extends SettingsInfo> PsiElement prevCompactElement(
@@ -107,8 +115,8 @@ public class Prev {
         } catch (Exception e) {
             return null;
         }
-        @NotNull String replace = spaceText.replace("\n", "");
-        if (spaceText.length() - replace.length() > 1) {
+        int firstNewLine = spaceText.indexOf('\n');
+        if (firstNewLine >= 0 && spaceText.indexOf('\n', firstNewLine + 1) >= 0) {
             return null;
         }
         return element;

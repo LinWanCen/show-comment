@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.tree;
 
-import com.intellij.lang.FileASTNode;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,11 +12,10 @@ class FilePatternsDoc {
 
     @Nullable
     static String filePatternsDoc(@NotNull PsiFile psiFile, @NotNull Pattern[] patterns) {
-        @Nullable FileASTNode fileNode = psiFile.getNode();
-        if (fileNode == null) {
+        @NotNull CharSequence text = psiFile.getViewProvider().getContents();
+        if (text.length() == 0) {
             return null;
         }
-        @NotNull String text = fileNode.getText();
         for (@NotNull Pattern pattern : patterns) {
             @NotNull Matcher matcher = pattern.matcher(text);
             if (matcher.find()) {

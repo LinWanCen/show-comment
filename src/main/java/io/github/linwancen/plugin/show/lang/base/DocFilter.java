@@ -31,18 +31,29 @@ public class DocFilter {
             "|\\s*-->.*"
     );
 
-    private static final Pattern LINE_SEPARATOR_PATTERN = Pattern.compile("[\r\n]");
-
     /**
      * line and delete /*# in resolveDocPrint()
      * end with space
      */
     @NotNull
     public static <T extends SettingsInfo> String cutDoc(@NotNull String text, @NotNull T info, boolean deletePrefix) {
-        String[] split = LINE_SEPARATOR_PATTERN.split(text);
+        int length = text.length();
+        if (length == 0) {
+            return "";
+        }
         int lineCount = 0;
         @NotNull StringBuilder sb = new StringBuilder();
-        for (@NotNull String s : split) {
+        int start = 0;
+        while (start < length) {
+            int end = start;
+            while (end < length) {
+                char c = text.charAt(end);
+                if (c == '\r' || c == '\n') {
+                    break;
+                }
+                end++;
+            }
+            String s = text.substring(start, end);
             if (deletePrefix) {
                 s = DOC_PATTERN.matcher(s).replaceAll("");
             }
@@ -52,7 +63,14 @@ public class DocFilter {
                 sb.append(" ");
             }
             lineCount++;
-            if (lineCountOrLenOver(info, sb, lineCount)) break;
+            if (lineCountOrLenOver(info, sb, lineCount)) {
+                break;
+            }
+            if (end < length && text.charAt(end) == '\r' && end + 1 < length && text.charAt(end + 1) == '\n') {
+                start = end + 2;
+            } else {
+                start = end + 1;
+            }
         }
         return sb.toString();
     }
