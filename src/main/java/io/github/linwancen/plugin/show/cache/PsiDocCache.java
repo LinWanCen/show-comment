@@ -129,13 +129,19 @@ public class PsiDocCache {
         }
     }
 
-    /**
-     * Key.create() makes a new instance on every call, and Key equality is instance identity,
-     * so a key created inside getCache() could never find the value stored by a previous call.
-     * The key must be created once per name and reused, otherwise the cache always misses,
-     * and every call spawns a new background read action doing the full resolve again.
-     */
-    private static final ConcurrentMap<String, Key<CachedValue<CachedResult>>> KEYS = new ConcurrentHashMap<>();
+    @SuppressWarnings("unchecked")
+    private static final Key<CachedValue<CachedResult>>[][] CACHE_KEYS = new Key[Kind.values().length][io.github.linwancen.plugin.show.bean.FuncEnum.values().length];
+    private static final String[][] KEY_STRINGS = new String[Kind.values().length][io.github.linwancen.plugin.show.bean.FuncEnum.values().length];
+
+    static {
+        for (Kind kind : Kind.values()) {
+            for (io.github.linwancen.plugin.show.bean.FuncEnum func : io.github.linwancen.plugin.show.bean.FuncEnum.values()) {
+                String str = PsiDocCache.class.getName() + "-" + kind.name() + "-" + func.name();
+                KEY_STRINGS[kind.ordinal()][func.ordinal()] = str;
+                CACHE_KEYS[kind.ordinal()][func.ordinal()] = Key.create(str);
+            }
+        }
+    }
 
     public static @Nullable String getCache(
             @NotNull SettingsInfo info,
@@ -143,8 +149,10 @@ public class PsiDocCache {
             @NotNull PsiElement element,
             @NotNull BiFunction<SettingsInfo, PsiElement, String> compute) {
 
-        String keyStr = PsiDocCache.class.getName() + "-" + kind.name() + "-" + info.funcEnum.name();
-        Key<CachedValue<CachedResult>> cacheKey = KEYS.computeIfAbsent(keyStr, Key::create);
+        int kindIdx = kind.ordinal();
+        int funcIdx = info.funcEnum.ordinal();
+        String keyStr = KEY_STRINGS[kindIdx][funcIdx];
+        Key<CachedValue<CachedResult>> cacheKey = CACHE_KEYS[kindIdx][funcIdx];
 
         CachedValue<CachedResult> cachedValue = element.getUserData(cacheKey);
         if (cachedValue != null) {

@@ -84,6 +84,13 @@ public class CommitViewDecorator extends StructureViewDecorator {
             }
         }
 
+        @NotNull
+        @Override
+        protected Object cacheKey(@NotNull Object node) {
+            @Nullable VirtualFile file = toVirtualFile(node);
+            return file != null ? file : super.cacheKey(node);
+        }
+
         @Nullable
         @Override
         protected String toComment(Object node) {

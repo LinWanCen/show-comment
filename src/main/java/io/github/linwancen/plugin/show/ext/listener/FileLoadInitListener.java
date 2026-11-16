@@ -4,7 +4,9 @@ import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.project.ProjectManagerListener;
+import io.github.linwancen.plugin.show.cache.RenderDocCache;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +26,13 @@ public class FileLoadInitListener implements DumbService.DumbModeListener, Proje
         try {
             @NotNull Project[] projects = ProjectManager.getInstance().getOpenProjects();
             for (@NotNull Project project : projects) {
+                if (project.isDisposed()) {
+                    continue;
+                }
+                @Nullable RenderDocCache renderCache = project.getService(RenderDocCache.class);
+                if (renderCache != null) {
+                    renderCache.onExitDumbMode(project);
+                }
                 PROJECT_LOAD_MAP.computeIfAbsent(project, k -> {
                     FileLoader.loadAll(project);
                     return true;

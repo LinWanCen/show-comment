@@ -154,11 +154,22 @@ public class StructureViewDecorator implements ToolWindowManagerListener {
          * deadlock against a background write action waiting for the EDT (IDE freeze).
          */
         protected void appendCommentRenderer(@NotNull ColoredTreeCellRenderer renderer, Object node) {
-            @Nullable String comment = RenderDocCache.doc(project, node,
+            @Nullable String comment = RenderDocCache.doc(project, cacheKey(node),
                     () -> toComment(node), this::repaintTree);
             if (comment != null && !comment.isEmpty()) {
                 append(renderer, comment);
             }
+        }
+
+        @NotNull
+        protected Object cacheKey(@NotNull Object node) {
+            if (node instanceof DefaultMutableTreeNode) {
+                @Nullable Object userObject = ((DefaultMutableTreeNode) node).getUserObject();
+                if (userObject != null) {
+                    return userObject;
+                }
+            }
+            return node;
         }
 
         private void repaintTree() {

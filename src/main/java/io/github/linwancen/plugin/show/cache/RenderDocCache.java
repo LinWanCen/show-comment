@@ -6,6 +6,10 @@ import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.concurrency.AppExecutorUtil;
+import io.github.linwancen.plugin.show.Tree;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
+import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -48,10 +52,11 @@ public final class RenderDocCache implements Disposable {
     private static final AtomicBoolean SERVICE_MISSING_LOGGED = new AtomicBoolean();
 
     /**
-     * A doc found (or a doc proved absent) is reused for a while to avoid recompute on every paint.
+     * A doc found (or a doc proved absent) is reused for a while when PSI/settings changed,
+     * and reused indefinitely while PSI and settings modification counts remain unchanged.
      */
-    private static final long TTL_HAS_DOC_MS = 5_000L;
-    private static final long TTL_EMPTY_DOC_MS = 1_000L;
+    private static final long TTL_HAS_DOC_MS = 15_000L;
+    private static final long TTL_EMPTY_DOC_MS = 3_000L;
     /**
      * A pending compute should finish in time, otherwise allow a retry
      * (the task may be dropped on project dispose or by a ProcessCanceledException).
@@ -61,17 +66,7 @@ public final class RenderDocCache implements Disposable {
     /**
      * How often {@link #sweep} may actually run (throttle, EDT only).
      */
-    private static final long SWEEP_INTERVAL_MS = 10_000L;
-    /**
-     * Hard cap on how long a doc entry may stay in {@link #docs}.
-     * <p>
-     * {@link #ttl} only controls reuse, not eviction: an expired entry stays until its weak key
-     * is collected, so a long-lived key would keep its value forever. {@link #finish} re-stamps
-     * the entry on every recompute, so a node that is actually painted never reaches this age;
-     * only entries nobody painted for this long are dropped (the next paint then behaves like a
-     * normal cache miss and recomputes).
-     */
-    private static final long ENTRY_HARD_TTL_MS = 60_000L;
+    private static final long SWEEP_INTERVAL_MS = 30_000L;
     /**
      * Hard cap on how long a marker may stay in {@link #pending}.
      * <p>
@@ -107,12 +102,14 @@ public final class RenderDocCache implements Disposable {
          */
         final boolean retried;
         final long time;
+        final long modCount;
 
-        Entry(@Nullable String doc, boolean notReady, boolean retried, long time) {
+        Entry(@Nullable String doc, boolean notReady, boolean retried, long time, long modCount) {
             this.doc = doc;
             this.notReady = notReady;
             this.retried = retried;
             this.time = time;
+            this.modCount = modCount;
         }
     }
 
@@ -171,13 +168,42 @@ public final class RenderDocCache implements Disposable {
         synchronized (this) {
             entry = docs.get(key);
         }
-        if (entry != null && !entry.notReady && now - entry.time < ttl(entry.doc)) {
-            return entry.doc;
+        if (entry != null && !entry.notReady) {
+            if (entry.doc != null && !entry.doc.isEmpty()) {
+                if (entry.modCount == currentSettingsModCount(project) || now - entry.time < TTL_HAS_DOC_MS) {
+                    return entry.doc;
+                }
+            } else {
+                // Empty docs must never be kept forever by settings modCount: transient startup
+                // misses must be allowed to retry once TTL_EMPTY_DOC_MS expires.
+                if (now - entry.time < TTL_EMPTY_DOC_MS) {
+                    return null;
+                }
+            }
         }
         // a notReady entry is always recomputed: its null means "not computed yet", never "no doc"
         schedule(project, key, compute, onComputed, now);
         // stale value while refreshing, to avoid flicker
         return entry == null ? null : entry.doc;
+    }
+
+    /**
+     * Called when the project finishes indexing and leaves dumb mode. Transient empty results
+     * recorded during startup/indexing are purged and the project view is refreshed so nodes
+     * that loaded before PSI indices were ready show their docs automatically.
+     */
+    public void onExitDumbMode(@NotNull Project project) {
+        synchronized (this) {
+            docs.entrySet().removeIf(e -> e.getValue().doc == null || e.getValue().notReady);
+        }
+        pending.clear();
+        Tree.refreshProjectView(project);
+    }
+
+    private static long currentSettingsModCount(@NotNull Project project) {
+        return AppSettingsState.getInstance().getModificationCount()
+                + GlobalSettingsState.getInstance().getModificationCount()
+                + ProjectSettingsState.getInstance(project).getModificationCount();
     }
 
     /**
@@ -213,10 +239,8 @@ public final class RenderDocCache implements Disposable {
             return;
         }
         nextSweep = now + SWEEP_INTERVAL_MS;
-        synchronized (this) {
-            docs.entrySet().removeIf(entry -> now - entry.getValue().time > ENTRY_HARD_TTL_MS);
-        }
-        // ConcurrentHashMap: weakly consistent iteration, safe against pooled thread removes
+        // docs uses WeakHashMap so live tree nodes must never be evicted by time (which caused whole-tree blanking);
+        // only clean up stuck strong-keyed markers in pending.
         pending.entrySet().removeIf(since -> now - since.getValue() > PENDING_HARD_TTL_MS);
     }
 
@@ -253,12 +277,13 @@ public final class RenderDocCache implements Disposable {
             DumbService.getInstance(project).runReadActionInSmartMode(() -> {
                 // a pooled thread may still carry the flag of the task that used it before
                 PsiDocCache.consumeNotReadyFlag();
+                long modCount = currentSettingsModCount(project);
                 @Nullable String result = computeSafe(project, compute);
                 // true = the compute ended on a nested doc compute that had not finished yet:
                 // this null is "not computed yet" and not "no doc"
                 boolean notReady = PsiDocCache.consumeNotReadyFlag();
                 ApplicationManager.getApplication().invokeLater(() ->
-                        finish(project, key, result, notReady, onComputed, token));
+                        finish(project, key, result, notReady, modCount, onComputed, token));
             });
         } catch (ProcessCanceledException e) {
             // aborted (PSI changed or indexing started), retry on next paint
@@ -300,17 +325,19 @@ public final class RenderDocCache implements Disposable {
      *              so a late task cannot clear a marker of a newer schedule
      */
     private void finish(@NotNull Project project, @NotNull Object key, @Nullable String result,
-                        boolean notReady, @NotNull Runnable onComputed, long token) {
+                        boolean notReady, long modCount, @NotNull Runnable onComputed, long token) {
         boolean retry;
         boolean changed;
         synchronized (this) {
             @Nullable Entry old = docs.get(key);
-            changed = !Objects.equals(old == null ? null : old.doc, result);
+            @Nullable String oldDoc = old == null ? null : old.doc;
+            @Nullable String effectiveDoc = (notReady && oldDoc != null) ? oldDoc : result;
+            changed = !Objects.equals(oldDoc, effectiveDoc);
             // one delayed refresh per notReady episode: repeated not ready must not loop forever
             boolean retriedBefore = old != null && old.retried;
-            retry = result == null && notReady && !retriedBefore;
-            docs.put(key, new Entry(result, notReady, retry || (notReady && retriedBefore),
-                    System.currentTimeMillis()));
+            retry = effectiveDoc == null && notReady && !retriedBefore;
+            docs.put(key, new Entry(effectiveDoc, notReady, retry || (notReady && retriedBefore),
+                    System.currentTimeMillis(), modCount));
         }
         pending.remove(key, token);
         if (!changed && !retry) {

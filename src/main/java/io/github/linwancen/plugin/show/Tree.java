@@ -8,6 +8,7 @@ import com.intellij.ide.util.treeView.PresentableNodeDescriptor.ColoredFragment;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.packageDependencies.ui.PackageDependenciesNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.ColoredTreeCellRenderer;
@@ -63,9 +64,25 @@ public class Tree implements ProjectViewNodeDecorator {
         if (project == null) {
             return;
         }
-        @Nullable String doc = RenderDocCache.doc(project, node,
+        @NotNull Object key = cacheKey(node);
+        @Nullable String doc = RenderDocCache.doc(project, key,
                 () -> treeDoc(node, project), () -> refreshProjectView(project));
         addText(data, doc);
+    }
+
+    /**
+     * Extracts a stable identity across tree rebuilds. ProjectViewNode instances are recreated
+     * on ProjectView.refresh(), but the underlying VirtualFile (or value) is stable and keeps
+     * WeakHashMap entries alive and matchable.
+     */
+    @NotNull
+    public static Object cacheKey(@NotNull ProjectViewNode<?> node) {
+        @Nullable VirtualFile file = node.getVirtualFile();
+        if (file != null) {
+            return file;
+        }
+        @Nullable Object value = node.getValue();
+        return value != null ? value : node;
     }
 
     /**
@@ -75,7 +92,7 @@ public class Tree implements ProjectViewNodeDecorator {
      * Refreshes are delayed and coalesced: after a project view rebuild the whole tree computes at
      * once, and hundreds of immediate refreshes would rebuild the tree hundreds of times.
      */
-    private static void refreshProjectView(@NotNull Project project) {
+    public static void refreshProjectView(@NotNull Project project) {
         if (!REFRESH_QUEUED.add(project)) {
             // a refresh of this project is already queued: it repaints the whole view anyway
             return;
@@ -108,6 +125,12 @@ public class Tree implements ProjectViewNodeDecorator {
     @Nullable
     public static String treeDoc(@NotNull ProjectViewNode<?> node, @NotNull Project project) {
         @Nullable PsiElement element = TreeElements.of(node, project);
+        if (element == null) {
+            @Nullable VirtualFile file = node.getVirtualFile();
+            if (file != null && file.isValid()) {
+                element = TreeElements.ofFile(file, project);
+            }
+        }
         return TreeDoc.treeElementDoc(project, element);
     }
 

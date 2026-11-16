@@ -8,6 +8,7 @@ import io.github.linwancen.plugin.show.bean.FuncEnum;
 import io.github.linwancen.plugin.show.bean.SettingsInfo;
 import io.github.linwancen.plugin.show.ext.TreeExt;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
+import io.github.linwancen.plugin.show.lang.base.PsiElementTo;
 import io.github.linwancen.plugin.show.tree.first.FirstDoc;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +52,17 @@ public final class TreeDoc {
             return doc;
         }
 
+        @Nullable BaseLangDoc matchedLangDoc = PsiElementTo.findLangDoc(element);
+        if (matchedLangDoc != null) {
+            @Nullable String s = matchedLangDoc.treeDoc(info, element);
+            if (s != null) {
+                return s;
+            }
+        }
         for (@NotNull BaseLangDoc langDoc : BaseLangDoc.LANG_DOC_MAP.values()) {
+            if (langDoc == matchedLangDoc) {
+                continue;
+            }
             @Nullable String s = langDoc.treeDoc(info, element);
             if (s != null) {
                 return s;
