@@ -1,6 +1,5 @@
 package io.github.linwancen.plugin.show.ext.listener;
 
-import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.extensions.ExtensionPointName;
@@ -10,7 +9,7 @@ import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.util.concurrency.AppExecutorUtil;
-import com.intellij.util.concurrency.EdtExecutorService;
+import io.github.linwancen.plugin.show.Tree;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,8 +75,7 @@ public abstract class FileLoader {
                     if (!project.isDisposed()) {
                         FileLoader.EPN.getExtensionList()
                                 .forEach(fileLoader -> fileLoader.loadAllImpl(project));
-                        EdtExecutorService.getInstance()
-                                .execute(() -> ProjectView.getInstance(project).refresh());
+                        Tree.refreshProjectView(project);
                     }
                 }).inSmartMode(project)
                 .submit(AppExecutorUtil.getAppExecutorService());
@@ -104,7 +102,7 @@ public abstract class FileLoader {
                 ApplicationManager.getApplication().runReadAction(() -> {
                     loadFileImpl(file, project);
                     if (project != null && !project.isDisposed()) {
-                        EdtExecutorService.getInstance().execute(() -> ProjectView.getInstance(project).refresh());
+                        Tree.refreshProjectView(project);
                     }
                 }));
     }

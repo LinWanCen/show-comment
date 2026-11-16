@@ -24,6 +24,11 @@ public class FirstDocToDirCache extends FileLoader {
     }
 
     @Override
+    public boolean skipFile(@NotNull VirtualFile file) {
+        return true;
+    }
+
+    @Override
     protected void loadAllImpl(Project project) {}
 
     @Override

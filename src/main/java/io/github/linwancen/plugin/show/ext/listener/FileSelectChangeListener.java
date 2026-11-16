@@ -1,5 +1,6 @@
 package io.github.linwancen.plugin.show.ext.listener;
 
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
@@ -26,7 +27,7 @@ public class FileSelectChangeListener implements FileEditorManagerListener {
         if (file == null || !file.isValid()) {
             return;
         }
-        if (file.exists()) {
+        if (file.exists() && FileDocumentManager.getInstance().isFileModified(file)) {
             try {
                 FileLoader.EPN.getExtensionList().forEach(fileLoader -> fileLoader.loadFile(file, project));
             } catch (Throwable e) {

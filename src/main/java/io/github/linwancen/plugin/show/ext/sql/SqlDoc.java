@@ -34,7 +34,10 @@ public class SqlDoc {
             return null;
         }
         for (@NotNull Pattern pattern : patterns) {
-            return sqlDocPattern(pattern, code);
+            @Nullable String s = sqlDocPattern(pattern, code);
+            if (s != null) {
+                return s;
+            }
         }
         return null;
     }

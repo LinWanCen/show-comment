@@ -88,6 +88,8 @@ public class ConfCache extends FileLoader {
         DOC_CACHE.clear();
         TREE_CACHE.clear();
         JSON_CACHE.clear();
+        TABLE_SIZE_CACHE.clear();
+        SpiltKeyWordPatternFactory.clearAll();
     }
 
     @Override
@@ -179,7 +181,7 @@ public class ConfCache extends FileLoader {
             String[] lines = TsvLoader.LINE_PATTERN.split(text);
             for (String line : lines) {
                 @NotNull List<String> words = Splitter.on('\t').splitToList(line);
-                if (line.length() >= 2) {
+                if (words.size() >= 2) {
                     TABLE_SIZE_CACHE.put(words.get(0), words.get(1));
                 }
             }

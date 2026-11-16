@@ -35,7 +35,7 @@ public class VueRouterCache extends FileLoader {
     @Override
     public boolean skipFile(@NotNull VirtualFile file) {
         @Nullable String ext = file.getExtension();
-        return !file.getPath().contains("src/router") && !"js".equals(ext) && !"ts".equals(ext);
+        return !file.getPath().contains("src/router") || (!"js".equals(ext) && !"ts".equals(ext));
     }
 
     @Override
@@ -109,8 +109,11 @@ public class VueRouterCache extends FileLoader {
                     virtualFile = file;
                     fileDoc.put(virtualFile, title);
                     if ("index.vue".equals(virtualFile.getName())) {
-                        virtualFile = virtualFile.getParent();
-                        fileDoc.put(virtualFile, title);
+                        VirtualFile parent = virtualFile.getParent();
+                        if (parent != null) {
+                            virtualFile = parent;
+                            fileDoc.put(virtualFile, title);
+                        }
                     }
                 }
             }

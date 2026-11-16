@@ -20,6 +20,10 @@ class SpiltKeyWordPatternFactory {
     private static final Map<String, Pattern> PATTERN_CACHE = new ConcurrentHashMap<>();
     private SpiltKeyWordPatternFactory() {}
 
+    static void clearAll() {
+        PATTERN_CACHE.clear();
+    }
+
     @Nullable
     static Pattern from(@SuppressWarnings("unused") @Nullable Project project, @NotNull String path,
                         @NotNull Map<String, Map<String, List<String>>> map) {

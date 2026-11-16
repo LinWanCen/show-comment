@@ -3,8 +3,8 @@ package io.github.linwancen.plugin.show.ext.conf;
 import com.google.common.base.Splitter;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +41,7 @@ public class TsvLoader {
                     continue;
                 }
                 if (patternKey) {
-                    key = StringEscapeUtils.unescapeJava(key);
+                    key = StringUtil.unescapeStringCharacters(key);
                     String del = DEL_PATTERN.matcher(key).replaceAll("");
                     if (!del.isEmpty()) {
                         key = del;

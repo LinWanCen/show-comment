@@ -30,6 +30,11 @@ public class SqlCache extends FileLoader {
 
     private SqlCache() {}
 
+    @Override
+    public boolean skipExt(@Nullable String ext) {
+        return !"sql".equals(ext);
+    }
+
     @Nullable
     @Override
     public String treeDoc(@NotNull VirtualFile virtualFile) {
@@ -41,6 +46,7 @@ public class SqlCache extends FileLoader {
     public void clearAll() {
         TABLE_DOC_CACHE.clear();
         COLUMN_DOC_CACHE.clear();
+        INDEX_DOC_CACHE.clear();
     }
 
     @Override
@@ -71,26 +77,24 @@ public class SqlCache extends FileLoader {
     @Override
     public void loadFileImpl(@NotNull VirtualFile file, @Nullable Project project) {
         @NotNull GlobalSettingsState g = GlobalSettingsState.getInstance();
-        if (!g.sqlSplitEffect) {
+        @Nullable ProjectSettingsState p = project == null ? null : ProjectSettingsState.getInstance(project);
+        if (!g.sqlSplitEffect && (p == null || !p.sqlSplitEffect)) {
             return;
         }
         @Nullable String code = PsiUnSaveUtils.fileText(project, file);
         if (code == null) {
             return;
         }
-        loadSqlDoc(code, TABLE_DOC_CACHE, g.tableDocEffect, g.tableDoc);
-        loadSqlDoc(code, COLUMN_DOC_CACHE, g.columnDocEffect, g.columnDoc);
-        loadSqlDoc(code, INDEX_DOC_CACHE, g.indexDocEffect, g.indexDoc);
-        if (project == null) {
-            return;
+        if (g.sqlSplitEffect) {
+            loadSqlDoc(code, TABLE_DOC_CACHE, g.tableDocEffect, g.tableDoc);
+            loadSqlDoc(code, COLUMN_DOC_CACHE, g.columnDocEffect, g.columnDoc);
+            loadSqlDoc(code, INDEX_DOC_CACHE, g.indexDocEffect, g.indexDoc);
         }
-        @NotNull ProjectSettingsState p = ProjectSettingsState.getInstance(project);
-        if (!p.sqlSplitEffect) {
-            return;
+        if (p != null && p.sqlSplitEffect) {
+            loadSqlDoc(code, TABLE_DOC_CACHE, p.tableDocEffect, p.tableDoc);
+            loadSqlDoc(code, COLUMN_DOC_CACHE, p.columnDocEffect, p.columnDoc);
+            loadSqlDoc(code, INDEX_DOC_CACHE, p.indexDocEffect, p.indexDoc);
         }
-        loadSqlDoc(code, TABLE_DOC_CACHE, p.tableDocEffect, p.tableDoc);
-        loadSqlDoc(code, COLUMN_DOC_CACHE, p.columnDocEffect, p.columnDoc);
-        loadSqlDoc(code, INDEX_DOC_CACHE, p.indexDocEffect, p.indexDoc);
     }
 
     public static final Pattern KEY_PATTERN = Pattern.compile("`?, *`?");
@@ -121,10 +125,8 @@ public class SqlCache extends FileLoader {
         }
     }
 
-    private static final Pattern IGNORE_KEY_PATTERN = Pattern.compile("(?i)^(id|name)$");
-
     private static void putComment(@NotNull Map<String, String> map, @NotNull String k, @NotNull String comment) {
-        if (IGNORE_KEY_PATTERN.matcher(k).find()) {
+        if ("id".equalsIgnoreCase(k) || "name".equalsIgnoreCase(k)) {
             return;
         }
         String s = map.get(k);
