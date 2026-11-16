@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -86,21 +86,15 @@ public class LineEndCacheUtils {
                         if (info2 == null || !info2.text.equals(info.text)) {
                             return;
                         }
-                        if (list != null) {
-                            list.clear();
-                        }
                         // fix delete line get doc from before line because PsiFile be not updated
                         if ("}".equals(info.text.trim())) {
+                            lineCache.map.remove(info.text);
                             return;
                         }
                         if (lineExt != null) {
-                            if (list != null) {
-                                list.add(lineExt);
-                            } else {
-                                @NotNull ArrayList<LineExtensionInfo> lineExtList = new ArrayList<>(1);
-                                lineExtList.add(lineExt);
-                                lineCache.map.put(info.text, lineExtList);
-                            }
+                            lineCache.map.put(info.text, Collections.singletonList(lineExt));
+                        } else {
+                            lineCache.map.remove(info.text);
                         }
                         lineCache.updated();
                     } catch (ProcessCanceledException ignored) {

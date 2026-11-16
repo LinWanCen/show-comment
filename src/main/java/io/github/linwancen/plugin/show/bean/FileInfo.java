@@ -3,6 +3,7 @@ package io.github.linwancen.plugin.show.bean;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
@@ -33,7 +34,16 @@ public class FileInfo extends SettingsInfo {
     }
 
     public static @Nullable FileInfo of(@NotNull VirtualFile file, @NotNull Project project) {
-        @Nullable Document document = ReadAction.compute(() -> FileDocumentManager.getInstance().getDocument(file));
+        @Nullable Document document = FileDocumentManager.getInstance().getCachedDocument(file);
+        if (document == null) {
+            try {
+                document = ReadAction.compute(() -> FileDocumentManager.getInstance().getDocument(file));
+            } catch (Throwable ignored) {
+                // 在最新版 IDEA paint (UI渲染) 周期内禁止请求读写锁 (LockingForbiddenException)。
+                // 此时若未命中缓存文档，不可且无法同步从磁盘加载，安全返回 null。
+                return null;
+            }
+        }
         if (document == null) {
             return null;
         }
@@ -65,9 +75,7 @@ public class FileInfo extends SettingsInfo {
     public String getText(@NotNull PsiElement element) {
         try {
             TextRange range = element.getTextRange();
-            int startOffset = range.getStartOffset();
-            int endOffset = range.getEndOffset();
-            return document.getText().substring(startOffset, endOffset);
+            return document.getText(range);
         } catch (Exception ignored) {
             return element.getText();
         }

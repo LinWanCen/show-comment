@@ -18,6 +18,8 @@ import io.github.linwancen.plugin.show.ext.LineExt;
 import io.github.linwancen.plugin.show.ext.sql.SqlDoc;
 import io.github.linwancen.plugin.show.lang.base.BaseLangDoc;
 import io.github.linwancen.plugin.show.line.LineSelect;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -44,18 +46,19 @@ public class LineEnd extends EditorLinePainter {
     @Nullable
     private static Collection<LineExtensionInfo> getLineExtensionInfos(@NotNull Project project,
                                                                        @NotNull VirtualFile file, int lineNumber) {
-        @NotNull SettingsInfo settingsInfo = SettingsInfo.of(project, FuncEnum.LINE);
-        if (!settingsInfo.appSettings.showLineEndComment) {
+        AppSettingsState appSettings = AppSettingsState.getInstance();
+        if (!appSettings.showLineEndComment) {
             return null;
         }
-        if (settingsInfo.globalSettings.onlySelectLine && LineSelect.notSelectLine(project, lineNumber)) {
+        GlobalSettingsState globalSettings = GlobalSettingsState.getInstance();
+        if (globalSettings.onlySelectLine && LineSelect.notSelectLine(project, lineNumber)) {
             return null;
         }
         @Nullable LineInfo info = LineInfo.of(file, project, lineNumber);
         if (info == null) {
             return null;
         }
-        if (settingsInfo.appSettings.lineEndCache) {
+        if (info.appSettings.lineEndCache) {
             return LineEndCacheUtils.get(info);
         } else {
             // Even with the cache option off, this runs on EDT while painting: never resolve

@@ -18,26 +18,7 @@ public class CacheUpdateEditorListener implements FileEditorManagerListener {
 
     @Override
     public void selectionChanged(@NotNull FileEditorManagerEvent event) {
-        @NotNull Project project = event.getManager().getProject();
-        @Nullable VirtualFile file = event.getNewFile();
-        if (file == null || !file.isValid()) {
-            return;
-        }
-        ApplicationManager.getApplication().executeOnPooledThread(() -> {
-            if (project.isDisposed()) {
-                LineEndCacheUtils.cache.remove(project);
-                return;
-            }
-            @Nullable Map<VirtualFile, Map<Integer, LineEndCache>> fileMap = LineEndCacheUtils.cache.get(project);
-            if (fileMap == null) {
-                return;
-            }
-            @Nullable Map<Integer, LineEndCache> lineMap = fileMap.get(file);
-            if (lineMap == null) {
-                return;
-            }
-            lineMap.forEach((integer, lineEndCache) -> lineEndCache.selectChanged = true);
-        });
+        // Switching tabs on unedited files must not mark line caches dirty or trigger reloads.
     }
 
     @Override

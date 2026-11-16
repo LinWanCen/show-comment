@@ -14,6 +14,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.concurrency.AppExecutorUtil;
 import io.github.linwancen.plugin.show.LineEnd;
 import io.github.linwancen.plugin.show.bean.LineInfo;
+import io.github.linwancen.plugin.show.settings.AppSettingsState;
+import io.github.linwancen.plugin.show.settings.GlobalSettingsState;
+import io.github.linwancen.plugin.show.settings.ProjectSettingsState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -23,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,11 +56,6 @@ public final class LineEndDocCache implements Disposable {
     private static final AtomicBoolean SERVICE_MISSING_LOGGED = new AtomicBoolean();
 
     /**
-     * A doc found (or a doc proved absent) is reused for a while to avoid recompute on every paint.
-     */
-    private static final long TTL_HAS_DOC_MS = 5_000L;
-    private static final long TTL_EMPTY_DOC_MS = 1_000L;
-    /**
      * A pending compute should finish in time, otherwise allow a retry
      * (the task may be dropped on project dispose or by a ProcessCanceledException).
      */
@@ -65,15 +64,15 @@ public final class LineEndDocCache implements Disposable {
     /**
      * How often {@link #sweep} may actually run (throttle, EDT only).
      */
-    private static final long SWEEP_INTERVAL_MS = 10_000L;
+    private static final long SWEEP_INTERVAL_MS = 60_000L;
     /**
-     * Hard cap on how long a doc entry may stay in {@link #docs}.
+     * Idle time cap on how long an unvisited doc entry may stay in {@link #docs}.
      * <p>
      * Unlike {@link RenderDocCache} the keys here are plain strings (file path + line + text),
-     * not weak tree nodes, so nothing collects them: editing produces new keys and the old ones
-     * must be dropped by this sweep.
+     * not weak tree nodes, so nothing collects them: editing produces new keys and old unvisited
+     * ones are dropped after 30 minutes of inactivity.
      */
-    private static final long ENTRY_HARD_TTL_MS = 60_000L;
+    private static final long ENTRY_HARD_TTL_MS = 30 * 60_000L;
     /**
      * Hard cap on how long a marker may stay in {@link #pending} (safety net, same idea as
      * {@link RenderDocCache}: a missed remove must not hold a strong key until project close).
@@ -87,6 +86,11 @@ public final class LineEndDocCache implements Disposable {
     private static final long NOT_READY_RETRY_DELAY_MS = 300L;
 
     /**
+     * Delay to coalesce repaint requests for a file, preventing repaint storms when many lines finish computing.
+     */
+    private static final long REPAINT_DELAY_MS = 50L;
+
+    /**
      * Cache value. Contract: must never reference the key (the key is a plain string, and the
      * value is only a LineExtensionInfo: text + attributes from settings).
      */
@@ -96,6 +100,8 @@ public final class LineEndDocCache implements Disposable {
          */
         @Nullable
         final LineExtensionInfo ext;
+        @Nullable
+        final Collection<LineExtensionInfo> extList;
         /**
          * true = the compute ended on a nested doc compute that had not finished yet, so this null
          * is "not computed yet" and not "no doc". Such an entry is recomputed on the next paint
@@ -108,12 +114,20 @@ public final class LineEndDocCache implements Disposable {
          */
         final boolean retried;
         final long time;
+        final long fileModStamp;
+        final long settingsModCount;
+        volatile long lastAccess;
 
-        Entry(@Nullable LineExtensionInfo ext, boolean notReady, boolean retried, long time) {
+        Entry(@Nullable LineExtensionInfo ext, boolean notReady, boolean retried, long time,
+              long fileModStamp, long settingsModCount) {
             this.ext = ext;
+            this.extList = ext == null ? null : Collections.singleton(ext);
             this.notReady = notReady;
             this.retried = retried;
             this.time = time;
+            this.fileModStamp = fileModStamp;
+            this.settingsModCount = settingsModCount;
+            this.lastAccess = time;
         }
     }
 
@@ -127,6 +141,14 @@ public final class LineEndDocCache implements Disposable {
      * the same miss does not start a second compute).
      */
     private final Map<String, Long> pending = new ConcurrentHashMap<>();
+    /**
+     * Files with a scheduled coalesced repaint.
+     */
+    private final Set<VirtualFile> repaintQueued = ConcurrentHashMap.newKeySet();
+    /**
+     * Files that received further line updates during the debounce delay window and need a trailing repaint.
+     */
+    private final Set<VirtualFile> repaintAgain = ConcurrentHashMap.newKeySet();
     /**
      * Next time {@link #sweep} may run; EDT only ({@link #getLineExtensions} is EDT only).
      */
@@ -158,21 +180,28 @@ public final class LineEndDocCache implements Disposable {
         sweep(now);
         @NotNull String key = key(info);
         @Nullable Entry entry = docs.get(key);
-        if (entry != null && !entry.notReady && now - entry.time < ttl(entry.ext)) {
-            return entry.ext == null ? null : Collections.singleton(entry.ext);
+        if (entry != null) {
+            entry.lastAccess = now;
+            if (!entry.notReady
+                    && entry.fileModStamp == info.file.getModificationStamp()
+                    && entry.settingsModCount == currentSettingsModCount(info.project)) {
+                return entry.extList;
+            }
         }
         // a notReady entry is always recomputed: its null means "not computed yet", never "no doc"
         schedule(info, key, now);
         // stale value while refreshing, to avoid flicker
-        return entry == null || entry.ext == null ? null : Collections.singleton(entry.ext);
+        return entry == null ? null : entry.extList;
+    }
+
+    private static long currentSettingsModCount(@NotNull Project project) {
+        return AppSettingsState.getInstance().getModificationCount()
+                + GlobalSettingsState.getInstance().getModificationCount()
+                + ProjectSettingsState.getInstance(project).getModificationCount();
     }
 
     private static @NotNull String key(@NotNull LineInfo info) {
         return info.file.getPath() + '\u0000' + info.lineNumber + '\u0000' + info.text;
-    }
-
-    private static long ttl(@Nullable LineExtensionInfo ext) {
-        return ext == null ? TTL_EMPTY_DOC_MS : TTL_HAS_DOC_MS;
     }
 
     private void schedule(@NotNull LineInfo info, @NotNull String key, long now) {
@@ -207,12 +236,14 @@ public final class LineEndDocCache implements Disposable {
             DumbService.getInstance(project).runReadActionInSmartMode(() -> {
                 // a pooled thread may still carry the flag of the task that used it before
                 PsiDocCache.consumeNotReadyFlag();
+                long fileModStamp = info.file.getModificationStamp();
+                long settingsModCount = currentSettingsModCount(project);
                 @Nullable LineExtensionInfo result = computeSafe(info);
                 // true = the compute ended on a nested doc compute that had not finished yet:
                 // this null is "not computed yet" and not "no doc"
                 boolean notReady = PsiDocCache.consumeNotReadyFlag();
                 ApplicationManager.getApplication().invokeLater(() ->
-                        finish(project, info.file, key, result, notReady, token));
+                        finish(project, info.file, key, result, notReady, fileModStamp, settingsModCount, token));
             });
         } catch (ProcessCanceledException e) {
             // aborted (PSI changed or indexing started), retry on next paint
@@ -256,17 +287,26 @@ public final class LineEndDocCache implements Disposable {
      *              so a late task cannot clear a marker of a newer schedule
      */
     private void finish(@NotNull Project project, @NotNull VirtualFile file, @NotNull String key,
-                        @Nullable LineExtensionInfo result, boolean notReady, long token) {
+                        @Nullable LineExtensionInfo result, boolean notReady,
+                        long fileModStamp, long settingsModCount, long token) {
         boolean retry;
         boolean changed;
         synchronized (this) {
             @Nullable Entry old = docs.get(key);
-            changed = !Objects.equals(old == null ? null : old.ext, result);
+            @Nullable LineExtensionInfo oldExt = old == null ? null : old.ext;
+            // If a nested compute is notReady and we already have a rendered doc, keep the old doc
+            // on screen instead of overwriting it with null or a partial string.
+            @Nullable LineExtensionInfo effectiveExt = (notReady && oldExt != null) ? oldExt : result;
+            changed = !sameExt(oldExt, effectiveExt);
+            // Reuse oldExt instance when content is identical
+            if (!changed && oldExt != null) {
+                effectiveExt = oldExt;
+            }
             // one delayed repaint per notReady episode: repeated not ready must not loop forever
             boolean retriedBefore = old != null && old.retried;
-            retry = result == null && notReady && !retriedBefore;
-            docs.put(key, new Entry(result, notReady, retry || (notReady && retriedBefore),
-                    System.currentTimeMillis()));
+            retry = notReady && !retriedBefore;
+            docs.put(key, new Entry(effectiveExt, notReady, retry || (notReady && retriedBefore),
+                    System.currentTimeMillis(), fileModStamp, settingsModCount));
         }
         pending.remove(key, token);
         if (project.isDisposed()) {
@@ -276,19 +316,54 @@ public final class LineEndDocCache implements Disposable {
         if (retry) {
             // the nested compute has very likely finished by then: repaint once more so the line
             // shows its doc right away instead of waiting for the next repaint
-            AppExecutorUtil.getAppScheduledExecutorService().schedule(() ->
-                    ApplicationManager.getApplication().invokeLater(() -> {
-                        if (!project.isDisposed()) {
-                            repaintEditors(project, file);
-                        }
-                    }), NOT_READY_RETRY_DELAY_MS, TimeUnit.MILLISECONDS);
+            scheduleRepaint(project, file, NOT_READY_RETRY_DELAY_MS);
             return;
         }
         if (!changed) {
             // stable doc: avoid repaint churn on every recompute
             return;
         }
-        repaintEditors(project, file);
+        scheduleRepaint(project, file, REPAINT_DELAY_MS);
+    }
+
+    /**
+     * LineExtensionInfo does not override equals(), so compare its rendered fields directly.
+     */
+    private static boolean sameExt(@Nullable LineExtensionInfo a, @Nullable LineExtensionInfo b) {
+        if (a == b) {
+            return true;
+        }
+        if (a == null || b == null) {
+            return false;
+        }
+        return Objects.equals(a.getText(), b.getText())
+                && Objects.equals(a.getColor(), b.getColor())
+                && Objects.equals(a.getBgColor(), b.getBgColor())
+                && Objects.equals(a.getEffectType(), b.getEffectType())
+                && Objects.equals(a.getEffectColor(), b.getEffectColor())
+                && a.getFontType() == b.getFontType();
+    }
+
+    /**
+     * Coalesce repaint requests for a file: hundreds of lines completing close together
+     * are aggregated into a single editor repaint, with a trailing repaint if more lines finish during delay.
+     */
+    private void scheduleRepaint(@NotNull Project project, @NotNull VirtualFile file, long delayMs) {
+        if (!repaintQueued.add(file)) {
+            repaintAgain.add(file);
+            return;
+        }
+        AppExecutorUtil.getAppScheduledExecutorService().schedule(() ->
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    boolean again = repaintAgain.remove(file);
+                    repaintQueued.remove(file);
+                    if (!project.isDisposed()) {
+                        repaintEditors(project, file);
+                    }
+                    if (again && !project.isDisposed()) {
+                        scheduleRepaint(project, file, delayMs);
+                    }
+                }), delayMs, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -298,7 +373,10 @@ public final class LineEndDocCache implements Disposable {
     private static void repaintEditors(@NotNull Project project, @NotNull VirtualFile file) {
         try {
             // getEditors(VirtualFile, Project) does not exist in the 2020.1 API
-            @Nullable Document document = FileDocumentManager.getInstance().getDocument(file);
+            @Nullable Document document = FileDocumentManager.getInstance().getCachedDocument(file);
+            if (document == null) {
+                document = FileDocumentManager.getInstance().getDocument(file);
+            }
             if (document == null) {
                 return;
             }
@@ -323,7 +401,7 @@ public final class LineEndDocCache implements Disposable {
             return;
         }
         nextSweep = now + SWEEP_INTERVAL_MS;
-        docs.entrySet().removeIf(entry -> now - entry.getValue().time > ENTRY_HARD_TTL_MS);
+        docs.entrySet().removeIf(entry -> now - entry.getValue().lastAccess > ENTRY_HARD_TTL_MS);
         pending.entrySet().removeIf(since -> now - since.getValue() > PENDING_HARD_TTL_MS);
     }
 
@@ -338,5 +416,7 @@ public final class LineEndDocCache implements Disposable {
     public void dispose() {
         docs.clear();
         pending.clear();
+        repaintQueued.clear();
+        repaintAgain.clear();
     }
 }
