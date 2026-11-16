@@ -102,14 +102,17 @@ public final class RenderDocCache implements Disposable {
          */
         final boolean retried;
         final long time;
-        final long modCount;
+        final long dataModStamp;
+        final long settingsModCount;
 
-        Entry(@Nullable String doc, boolean notReady, boolean retried, long time, long modCount) {
+        Entry(@Nullable String doc, boolean notReady, boolean retried, long time,
+              long dataModStamp, long settingsModCount) {
             this.doc = doc;
             this.notReady = notReady;
             this.retried = retried;
             this.time = time;
-            this.modCount = modCount;
+            this.dataModStamp = dataModStamp;
+            this.settingsModCount = settingsModCount;
         }
     }
 
@@ -168,15 +171,17 @@ public final class RenderDocCache implements Disposable {
         synchronized (this) {
             entry = docs.get(key);
         }
+        long currentDataStamp = CacheStampResolver.getModificationStamp(project, key);
+        long currentSettingsStamp = currentSettingsModCount(project);
         if (entry != null && !entry.notReady) {
             if (entry.doc != null && !entry.doc.isEmpty()) {
-                if (entry.modCount == currentSettingsModCount(project) || now - entry.time < TTL_HAS_DOC_MS) {
+                if (entry.dataModStamp == currentDataStamp && entry.settingsModCount == currentSettingsStamp) {
                     return entry.doc;
                 }
             } else {
                 // Empty docs must never be kept forever by settings modCount: transient startup
                 // misses must be allowed to retry once TTL_EMPTY_DOC_MS expires.
-                if (now - entry.time < TTL_EMPTY_DOC_MS) {
+                if (entry.dataModStamp == currentDataStamp && now - entry.time < TTL_EMPTY_DOC_MS) {
                     return null;
                 }
             }
@@ -185,6 +190,50 @@ public final class RenderDocCache implements Disposable {
         schedule(project, key, compute, onComputed, now);
         // stale value while refreshing, to avoid flicker
         return entry == null ? null : entry.doc;
+    }
+
+    /**
+     * Invalidate cached doc for a specific key (e.g. VirtualFile or tree node).
+     */
+    public static void invalidate(@NotNull Project project, @NotNull Object key) {
+        if (project.isDisposed()) {
+            return;
+        }
+        @Nullable RenderDocCache cache = project.getService(RenderDocCache.class);
+        if (cache != null) {
+            cache.evict(key);
+        }
+    }
+
+    /**
+     * Invalidate cached docs for a specific virtual file across all key representations.
+     */
+    public static void invalidateFile(@NotNull Project project, @NotNull com.intellij.openapi.vfs.VirtualFile file) {
+        if (project.isDisposed()) {
+            return;
+        }
+        @Nullable RenderDocCache cache = project.getService(RenderDocCache.class);
+        if (cache != null) {
+            cache.evictFile(file);
+        }
+    }
+
+    private void evict(@NotNull Object key) {
+        pending.remove(key);
+        synchronized (this) {
+            docs.remove(key);
+        }
+    }
+
+    private void evictFile(@NotNull com.intellij.openapi.vfs.VirtualFile file) {
+        pending.remove(file);
+        synchronized (this) {
+            docs.remove(file);
+            docs.entrySet().removeIf(e -> {
+                com.intellij.openapi.vfs.VirtualFile f = CacheStampResolver.resolveVirtualFile(e.getKey());
+                return file.equals(f);
+            });
+        }
     }
 
     /**
@@ -277,13 +326,12 @@ public final class RenderDocCache implements Disposable {
             DumbService.getInstance(project).runReadActionInSmartMode(() -> {
                 // a pooled thread may still carry the flag of the task that used it before
                 PsiDocCache.consumeNotReadyFlag();
-                long modCount = currentSettingsModCount(project);
                 @Nullable String result = computeSafe(project, compute);
                 // true = the compute ended on a nested doc compute that had not finished yet:
                 // this null is "not computed yet" and not "no doc"
                 boolean notReady = PsiDocCache.consumeNotReadyFlag();
                 ApplicationManager.getApplication().invokeLater(() ->
-                        finish(project, key, result, notReady, modCount, onComputed, token));
+                        finish(project, key, result, notReady, onComputed, token));
             });
         } catch (ProcessCanceledException e) {
             // aborted (PSI changed or indexing started), retry on next paint
@@ -325,9 +373,11 @@ public final class RenderDocCache implements Disposable {
      *              so a late task cannot clear a marker of a newer schedule
      */
     private void finish(@NotNull Project project, @NotNull Object key, @Nullable String result,
-                        boolean notReady, long modCount, @NotNull Runnable onComputed, long token) {
+                        boolean notReady, @NotNull Runnable onComputed, long token) {
         boolean retry;
         boolean changed;
+        long dataModStamp = CacheStampResolver.getModificationStamp(project, key);
+        long settingsModCount = currentSettingsModCount(project);
         synchronized (this) {
             @Nullable Entry old = docs.get(key);
             @Nullable String oldDoc = old == null ? null : old.doc;
@@ -337,7 +387,7 @@ public final class RenderDocCache implements Disposable {
             boolean retriedBefore = old != null && old.retried;
             retry = effectiveDoc == null && notReady && !retriedBefore;
             docs.put(key, new Entry(effectiveDoc, notReady, retry || (notReady && retriedBefore),
-                    System.currentTimeMillis(), modCount));
+                    System.currentTimeMillis(), dataModStamp, settingsModCount));
         }
         pending.remove(key, token);
         if (!changed && !retry) {
